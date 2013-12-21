@@ -18,3 +18,4 @@ env
 jmeter.log
 .transifexrc
 locale/en/
+raw-data/

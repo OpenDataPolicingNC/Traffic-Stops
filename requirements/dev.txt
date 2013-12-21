@@ -7,3 +7,4 @@ flake8==2.1.0
 Jinja2==2.7.1
 mock==1.0.1
 pylint==1.0.0
+csvkit==0.6.1
