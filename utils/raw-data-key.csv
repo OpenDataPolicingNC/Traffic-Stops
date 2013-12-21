@@ -1,0 +1,63 @@
+DATA TABLE/ELEMENT,,DESCRIPTION,ASSOCIATED REF TABLE,ASSOCIATED REF ELEMENT,YES/NO FIELD,COLUMN WIDTH
+,,,,,,
+STOPS Data,,,,,,
+,StopID,Unique Stop ID,,,,12
+,AgencyDescription,Agency Name,,,,100
+,StopDate,Date/Time of Stop,,,,24
+,Purpose,Initial Purpose of Stop,refStopsCodeNumber,StopPurpose,,5
+,Action,Enforcement Action Taken,refStopsCodeNumber,Action,,5
+,DriverArrest,Was Driver Arrested,,,"0= No, 1= Yes",3
+,PassengerArrest,Was Passenger Arrested,,,"0= No, 1= Yes",3
+,EncounterForce,Did Officer Encounter Physical Resistance,,,"0= No, 1= Yes",3
+,EngageForce,Did Officer Engage in the use of Force,,,"0= No, 1= Yes",3
+,OfficerInjury,Did Injuries Occur to Officer,,,"0= No, 1= Yes",3
+,DriverInjury,Did Injuries Occur to Driver,,,"0= No, 1= Yes",3
+,PassengerInjury,Did Injuries Occur to Passenger,,,"0= No, 1= Yes",3
+,OfficerId,Unique Officer ID,,,,10
+,StopLocation,County of Stop,refCommonCode,County,,15
+,StopCity,City of Stop,,,,20
+,,,,,,
+PERSON Data,,,,,,
+,PersonID,Unique Person ID,,,,12
+,StopID,Unique Stop ID,,,,12
+,Type,Driver or Passenger,refCommonCode,PersonType,,1
+,Age,Age of Person,,,,5
+,Gender,Gender,refCommonCode,Gender,,1
+,Ethnicity,Ethnicity,refCommonCode,Ethnicity,,1
+,Race,Race,refCommonCode,Race,,1
+,,,,,,
+SEARCH Data,,,,,,
+,SearchID,Unique Search ID,,,,12
+,StopID,Unique Stop ID,,,,12
+,PersonID,Unique Person ID,,,,12
+,Type,Type of Search,refStopsCodeNumber,SearchType,,5
+,VehicleSearch,Was Vehicle Searched,,,"0= No, 1= Yes",3
+,DriverSearch,Was Driver Searched,,,"0= No, 1= Yes",3
+,PassengerSearch,Was Passenger Searched,,,"0= No, 1= Yes",3
+,PropertySearch,Were Personal Effects Searched,,,"0= No, 1= Yes",3
+,VehicleSeized,Was Vehicle Seized,,,"0= No, 1= Yes",3
+,PersonalPropertySeized,Was Personal Property Seized,,,"0= No, 1= Yes",3
+,OtherPropertySeized,Was Other Property Seized,,,"0= No, 1= Yes",3
+,,,,,,
+CONTRABAND Data,,,,,,
+,ContrabandID,Unique Contraband ID,,,,12
+,SearchID,Unique Search ID,,,,12
+,PersonID,Unique Person ID,,,,12
+,StopID,Unique Stop ID,,,,12
+,Ounces,Ounces of Drugs,,,,41
+,Pounds,Pounds of Drugs,,,,41
+,Pints,Pints of Alcohol,,,,41
+,Gallons,Gallons of Alcohol,,,,41
+,Dosages,Dosages of Drugs,,,,41
+,Grams,Grams of Drugs,,,,41
+,Kilos,Kilos of Drugs,,,,41
+,Money,Dollar Amount of Money,,,,41
+,Weapons,Number of Weapons,,,,41
+,DollarAmt,Dollar Amount of Other Contraband,,,,41
+,,,,,,
+SEARCHBASIS Data,,,,,,
+,SearchBasisID,Unique Search Basis ID,,,,12
+,SearchID,Unique Search ID,,,,12
+,PersonID,Unique Person ID,,,,12
+,StopID,Unique Stop ID,,,,12
+,Basis,Basis of Search,refCommonCode,SearchBasis,,10
