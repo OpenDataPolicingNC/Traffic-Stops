@@ -1,0 +1,3 @@
+postgresql-client:
+  pkg:
+    - installed

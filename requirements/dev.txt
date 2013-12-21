@@ -1,0 +1,8 @@
+-r base.txt
+coverage==3.6
+django-debug-toolbar==0.10.2
+factory_boy==2.2.1
+flake8==2.1.0
+Jinja2==2.7.1
+mock==1.0.1
+pylint==1.0.0

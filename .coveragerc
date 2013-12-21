@@ -1,0 +1,7 @@
+[run]
+branch = true
+source = users,events
+omit = */tests/*, */migrations/*, */admin.py, */management/*
+
+[report]
+show_missing = true

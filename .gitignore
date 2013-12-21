@@ -11,8 +11,8 @@
 public/static/
 public/media/
 secrets.sls
-rsvp.log
-rsvp.log.1
+traffic_stops.log
+traffic_stops.log.1
 reports
 env
 jmeter.log

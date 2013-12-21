@@ -1,0 +1,1 @@
+"{{ pillar['project_name'] }}" "{{ pillar['secrets']['db_password'] }}"

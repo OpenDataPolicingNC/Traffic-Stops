@@ -1,0 +1,4 @@
+-r base.txt
+gunicorn==0.17.4
+python-memcached==1.51
+newrelic==2.0.0.1
