@@ -4,7 +4,7 @@ environment: staging
 # git project repository
 repo:
   url: git@github.com:copelco/NC-Traffic-Stops.git
-  branch: develop
+  branch: master
 
 environment_variables:
   db_host: localhost
