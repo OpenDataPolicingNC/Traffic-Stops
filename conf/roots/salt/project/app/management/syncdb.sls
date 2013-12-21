@@ -21,13 +21,13 @@ syncdb:
       - supervisord: supervisor_pgbouncer
 
 # Set the domain and site name in this site's Site object to its domain
-set_site:
-  cmd.run:
-    - name: . {{ vars.venv_dir }}/bin/activate && django-admin.py set_site --settings={{ pillar['project_name'] }}.settings.{{ pillar['environment'] }} {{ pillar['domain'] }}
-    - user: {{ pillar['project_name'] }}
-    - group: {{ pillar['project_name'] }}
-    - env:
-      - {{ pillar.get('environment_variables') }}
-      - {{ pillar.get('secrets') }}
-    - require:
-      - cmd: syncdb
+# set_site:
+#   cmd.run:
+#     - name: . {{ vars.venv_dir }}/bin/activate && django-admin.py set_site --settings={{ pillar['project_name'] }}.settings.{{ pillar['environment'] }} {{ pillar['domain'] }}
+#     - user: {{ pillar['project_name'] }}
+#     - group: {{ pillar['project_name'] }}
+#     - env:
+#       - {{ pillar.get('environment_variables') }}
+#       - {{ pillar.get('secrets') }}
+#     - require:
+#       - cmd: syncdb
