@@ -1,4 +1,4 @@
-domain: events-staging.discovery.com
+domain: 54.208.65.43
 environment: staging
 
 # git project repository

@@ -5,7 +5,7 @@ Below you will find basic setup and deployment instructions for the NC Traffic
 Stops project. To begin you should have the following applications installed on
 your local development system:
 
-- Python >= 3.2 (3.3 recommended)
+- Python 2.7
 - `pip >= 1.1 <http://www.pip-installer.org/>`_
 - `virtualenv >= 1.9 <http://www.virtualenv.org/>`_
 - `virtualenvwrapper >= 3.0 <http://pypi.python.org/pypi/virtualenvwrapper>`_

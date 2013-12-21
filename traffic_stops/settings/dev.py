@@ -16,7 +16,7 @@ INSTALLED_APPS += (
 INTERNAL_IPS = ('127.0.0.1', )
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-DEFAULT_FROM_EMAIL = 'noreply@events-dev.discovery.com'
+DEFAULT_FROM_EMAIL = 'noreply@foobar.com'
 
 DEBUG_TOOLBAR_CONFIG = {
     'INTERCEPT_REDIRECTS': False
