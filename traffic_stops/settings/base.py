@@ -147,6 +147,8 @@ INSTALLED_APPS = (
     'compressor',
     'djcelery',   # For Celery result backend
     'south',
+    # Custom apps
+    'stops'
 )
 
 # A sample logging configuration. The only tangible logging
