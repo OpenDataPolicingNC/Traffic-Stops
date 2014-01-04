@@ -1,3 +1,4 @@
+import argparse
 import os
 import sys
 
@@ -8,18 +9,19 @@ from collections import OrderedDict
 from datetime import datetime
 
 from django.conf import settings
-
 from stops.models import Stop, Person, Search, Contraband, SearchBasis
 
 
 def _date_converter(txt):
     return datetime.strptime(r'2000-01-03 20:35:00.000', '%Y-%m-%d %H:%M:%S.%f')
 
+
 def _float_converter(txt):
     try:
         return float(txt)
     except:
         return 0.
+
 
 class StopConverter(object):
 
@@ -43,11 +45,11 @@ class StopConverter(object):
                                 ("StopCity", txt[192:212].strip())])
 
     def get_django_object(self):
-        obj = Stop(stop_id = self.raw["StopID"],
+        obj = Stop(stop_id = int(self.raw["StopID"]),
                    agency_description = self.raw["AgencyDescription"],
                    date = _date_converter(self.raw["StopDate"]),
-                   purpose = self.raw["Purpose"],
-                   action = self.raw["Action"],
+                   purpose = int(self.raw["Purpose"]),
+                   action = int(self.raw["Action"]),
                    driver_arrest = bool(int(self.raw["DriverArrest"])),
                    passenger_arrest = bool(int(self.raw["PassengerArrest"])),
                    encounter_force = bool(int(self.raw["EncounterForce"])),
@@ -75,8 +77,8 @@ class PersonConverter(object):
                                 ("Race", txt[32:33].strip())])
 
     def get_django_object(self):
-        obj = Person(person_id = self.raw["PersonID"],
-                     stop = Stop.objects.get(stop_id=self.raw["StopID"]),
+        obj = Person(person_id = int(self.raw["PersonID"]),
+                     stop = Stop.objects.get(pk=int(self.raw["StopID"])),
                      type = self.raw["Type"],
                      age = self.raw["Age"],
                      gender = self.raw["Gender"],
@@ -103,9 +105,9 @@ class SearchConverter(object):
                                 ("OtherPropertySeized", txt[59:62].strip())])
 
     def get_django_object(self):
-        obj = Search(search_id = self.raw["SearchID"],
-                     stop = Stop.objects.get(stop_id=self.raw["StopID"]),
-                     person = Stop.objects.get(stop_id=self.raw["PersonID"]),
+        obj = Search(search_id = int(self.raw["SearchID"]),
+                     stop= Stop.objects.get(pk=int(self.raw["StopID"])),
+                     person= Person.objects.get(pk=int(self.raw["PersonID"])),
                      type = self.raw["Type"],
                      vehicle_search=bool(int(self.raw["VehicleSearch"])),
                      driver_search=bool(int(self.raw["DriverSearch"])),
@@ -139,9 +141,9 @@ class ContrabandConverter(object):
 
     def get_django_object(self):
         obj = Contraband(contraband_id=self.raw["ContrabandID"],
-                         search=Search.objects.get(search_id=self.raw["SearchID"]),
-                         person=Person.objects.get(person_id=self.raw["PersonID"]),
-                         stop=Stop.objects.get(stop_id=self.raw["StopID"]),
+                         search=Search.objects.get(pk=self.raw["SearchID"]),
+                         person=Person.objects.get(pk=self.raw["PersonID"]),
+                         stop=Stop.objects.get(pk=self.raw["StopID"]),
                          ounces=_float_converter(self.raw["Ounces"]),
                          pounds=_float_converter(self.raw["Pounds"]),
                          pints=_float_converter(self.raw["Pints"]),
@@ -168,35 +170,64 @@ class SearchBasisConverter(object):
 
     def get_django_object(self):
         obj = SearchBasis(search_basis_id=self.raw["SearchBasisID"],
-                          search=Search.objects.get(search_id=self.raw["SearchID"]),
-                          person=Person.objects.get(person_id=self.raw["PersonID"]),
-                          stop=Stop.objects.get(stop_id=self.raw["StopID"]),
+                          search=Search.objects.get(pk=self.raw["SearchID"]),
+                          person=Person.objects.get(pk=self.raw["PersonID"]),
+                          stop=Stop.objects.get(pk=self.raw["StopID"]),
                           basis=self.raw["Basis"])
         return obj
 
 
-def load_files(fn, converter_class, save_interval=10000):
+def load_files(fn, converter_class, start_line, number_lines, save_interval=10000):
+    max_line = start_line+number_lines-1 #fencepost
     with open(fn, 'rb') as txtfile:
         objects = []
         for i, line in enumerate(txtfile):
-            conv = converter_class(line)
-            objects.append(conv.get_django_object())
-            if i%save_interval==0:
-                print 'Saving rows {i}'.format(i=i)
-                converter_class.django_class.objects.bulk_create(objects)
-                objects = []
+            if i>max_line:
+                break
+            if i>=start_line:
+                #encoding: SQL_Latin1_General_CP1_CI_AS
+                conv = converter_class(line.decode('latin-1').encode('utf-8'))
+                objects.append(conv.get_django_object())
+                if i%save_interval==0:
+                    print 'Saving rows {i}'.format(i=i)
+                    converter_class.django_class.objects.bulk_create(objects)
+                    objects = []
 
     # save final objects at the end of the loop
     converter_class.django_class.objects.bulk_create(objects)
-    print 'Objects succesfully loaded'
-
+    print 'Objects {s} to {e} successfully loaded'.format(s=start_line, e=i-1)
 
 def main():
-    load_files(os.path.join(RAW_DATA_DIR, 'STOP.txt'), StopConverter)
-    load_files(os.path.join(RAW_DATA_DIR, 'PERSON.txt'), PersonConverter)
-    load_files(os.path.join(RAW_DATA_DIR, 'SEARCH.txt'), SearchConverter)
-    load_files(os.path.join(RAW_DATA_DIR, 'CONTRABAND.txt'), ContrabandConverter)
-    load_files(os.path.join(RAW_DATA_DIR, 'SEARCHBASIS.txt'), SearchBasisConverter)
+
+    parser = argparse.ArgumentParser(description='Import flat files into database.')
+    parser.add_argument("file_type", help="st = stop, pe = person, se=search, cb = contraband, sb = search basis",
+                        type=str)
+    parser.add_argument("start_line", help="Start row for import", type=int)
+    parser.add_argument("number_lines", help="Number of lines for import", type=int)
+    parser.add_argument("-lps", help="Number of save in django", type=int, default=10000)
+    args = parser.parse_args()
+
+    if args.file_type=="st":
+        fn = os.path.join(RAW_DATA_DIR, 'STOP.txt')
+        conv = StopConverter
+    elif args.file_type=="pe":
+        fn = os.path.join(RAW_DATA_DIR, 'PERSON.txt')
+        conv = PersonConverter
+    elif args.file_type=="se":
+        fn = os.path.join(RAW_DATA_DIR, 'SEARCH.txt')
+        conv = SearchConverter
+    elif args.file_type=="cb":
+        fn = os.path.join(RAW_DATA_DIR, 'CONTRABAND.txt')
+        conv = ContrabandConverter
+    elif args.file_type=="sb":
+        fn = os.path.join(RAW_DATA_DIR, 'SEARCHBASIS.txt')
+        conv = SearchBasisConverter
+    else:
+        print 'Unknown file-type specified for import'
+        return
+
+    load_files(fn, conv, args.start_line, args.number_lines, args.lps)
+
 
 if __name__ == "__main__":
     main()
