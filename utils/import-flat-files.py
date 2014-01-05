@@ -2,7 +2,6 @@ import argparse
 import os
 import sys
 
-RAW_DATA_DIR = '../raw-data'
 sys.path.append(os.path.abspath('.'))
 
 from collections import OrderedDict
@@ -10,6 +9,8 @@ from datetime import datetime
 
 from django.conf import settings
 from stops.models import Stop, Person, Search, Contraband, SearchBasis
+
+RAW_DATA_DIR = os.path.join(settings.PROJECT_ROOT, 'raw-data')
 
 
 def _date_converter(txt):
