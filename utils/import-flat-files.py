@@ -6,9 +6,6 @@ import sys
 
 sys.path.append(os.path.abspath('.')) # require for imports below
 
-from collections import OrderedDict
-from datetime import datetime
-
 from django.conf import settings
 from django.utils.timezone import get_default_timezone, make_aware
 from stops.models import Stop, Person, Search, Contraband, SearchBasis
