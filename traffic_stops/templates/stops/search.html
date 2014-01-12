@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load selectable_tags %}
+
+{% block extra-js %}
+    {% include_ui_theme %}
+    {% include_jquery_libs %}
+    {{ form.media }}
+{% endblock extra-js %}
+
+{% block content %}
+
+<form>
+{{ form }}
+</form>
+
+
+{% endblock %}
