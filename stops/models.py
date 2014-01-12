@@ -111,3 +111,10 @@ class SearchBasis(models.Model):
     person = models.ForeignKey(Person)
     stop = models.ForeignKey(Stop)
     basis = models.CharField(max_length=4, choices=SEARCH_BASIS_CHOICES)
+
+
+class Agency(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __unicode__(self):
+        return self.name
