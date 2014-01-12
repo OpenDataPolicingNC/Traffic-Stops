@@ -3,6 +3,7 @@ from collections import OrderedDict
 import datetime
 import os
 import sys
+import time
 
 sys.path.append(os.path.abspath('.')) # require for imports below
 
@@ -11,7 +12,7 @@ from django.utils.timezone import get_default_timezone, make_aware
 from stops.models import Stop, Person, Search, Contraband, SearchBasis
 
 
-RAW_DATA_DIR = '../raw-data'
+RAW_DATA_DIR = os.path.join(settings.PROJECT_ROOT, 'raw-data')
 logfn = os.path.join(RAW_DATA_DIR, 'import-log.txt')
 tz = get_default_timezone()
 
@@ -224,6 +225,7 @@ def load_files(fn, converter_class, start_line, number_lines, save_interval=1000
     max_line = start_line+number_lines-1 #fencepost
     with open(fn, 'rb') as txtfile:
         objects = []
+        start_time = time.time()
         for i, line in enumerate(txtfile):
             if i>max_line:
                 break
@@ -233,9 +235,11 @@ def load_files(fn, converter_class, start_line, number_lines, save_interval=1000
                 obj = conv.get_django_object()
                 if obj:
                     objects.append(obj)
-                if i%save_interval==0:
-                    print 'Saving rows {i}'.format(i=i)
+                if i>0 and i%save_interval==0:
                     converter_class.django_class.objects.bulk_create(objects)
+                    elapsed_time = time.time() - start_time
+                    print "Saved rows {i} ({s:.2f} records/sec)".format(i=i, s=len(objects)/elapsed_time)
+                    start_time = time.time()
                     objects = []
 
     # save final objects at the end of the loop
