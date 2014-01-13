@@ -22,6 +22,7 @@ ACTION_CHOICES = (('1', 'Verbal Warning'),
 class Stop(models.Model):
     stop_id = models.PositiveIntegerField(primary_key=True)
     agency_description = models.CharField(max_length=100)
+    agency = models.ForeignKey('Agency', null=True)
     date = models.DateTimeField()
     purpose = models.PositiveSmallIntegerField(choices=PURPOSE_CHOICES)
     action = models.PositiveSmallIntegerField(choices=ACTION_CHOICES)
