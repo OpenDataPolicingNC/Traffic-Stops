@@ -148,8 +148,9 @@ INSTALLED_APPS = (
     'djcelery',   # For Celery result backend
     'south',
     'selectable',
+    'bootstrap3',
     # Custom apps
-    'stops' 
+    'stops'
 )
 
 # A sample logging configuration. The only tangible logging

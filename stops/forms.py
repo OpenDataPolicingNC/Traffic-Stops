@@ -1,4 +1,5 @@
 from django import forms
+from django.db.models import Q
 from selectable.forms import AutoCompleteWidget
 
 
@@ -12,3 +13,29 @@ class SearchForm(forms.Form):
         widget=AutoCompleteWidget(AgencyLookup),
         required=False,
     )
+    driver_arrest = forms.BooleanField(required=False)
+    passenger_arrest = forms.BooleanField(required=False)
+    encounter_force = forms.BooleanField(required=False)
+    engage_force = forms.BooleanField(required=False)
+    officer_injury = forms.BooleanField(required=False)
+    driver_injury = forms.BooleanField(required=False)
+    passenger_injury = forms.BooleanField(required=False)
+    purpose = forms.MultipleChoiceField(required=False,
+                                        choices=stops.PURPOSE_CHOICES,
+                                        widget=forms.CheckboxSelectMultiple)
+    action = forms.MultipleChoiceField(required=False,
+                                       choices=stops.ACTION_CHOICES,
+                                       widget=forms.CheckboxSelectMultiple)
+
+    def get_query(self):
+        query = Q()
+        agency = self.cleaned_data['agency']
+        if agency:
+            query &= Q(agency__in=agency)
+        purpose = self.cleaned_data['purpose']
+        if purpose:
+            query &= Q(purpose__in=purpose)
+        action = self.cleaned_data['action']
+        if action:
+            query &= Q(action__in=action)
+        return query
