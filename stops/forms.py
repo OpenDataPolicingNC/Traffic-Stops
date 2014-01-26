@@ -2,7 +2,6 @@ from django import forms
 from django.db.models import Q
 from selectable.forms import AutoCompleteWidget
 
-
 from stops import models as stops
 from stops.lookups import AgencyLookup
 
@@ -35,6 +34,9 @@ class SearchForm(forms.Form):
         purpose = self.cleaned_data['purpose']
         if purpose:
             query &= Q(purpose__in=purpose)
+        driver_arrest = self.cleaned_data['driver_arrest']
+        if driver_arrest:
+            query &= Q(driver_arrest=True)
         action = self.cleaned_data['action']
         if action:
             query &= Q(action__in=action)
