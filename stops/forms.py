@@ -26,11 +26,20 @@ class SearchForm(forms.Form):
                                        choices=stops.ACTION_CHOICES,
                                        widget=forms.CheckboxSelectMultiple)
 
+    def clean_agency(self):
+        agency = self.cleaned_data['agency']
+        if agency:
+            try:
+                agency = stops.Agency.objects.get(name=agency)
+            except stops.Agency.DoesNotExist:
+                agency = None
+        return agency
+
     def get_query(self):
         query = Q()
         agency = self.cleaned_data['agency']
         if agency:
-            query &= Q(agency__in=agency)
+            query &= Q(agency=agency)
         purpose = self.cleaned_data['purpose']
         if purpose:
             query &= Q(purpose__in=purpose)
