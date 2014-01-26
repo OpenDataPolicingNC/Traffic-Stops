@@ -1,18 +1,33 @@
 # -*- coding: utf-8 -*-
 import datetime
 from south.db import db
-from south.v2 import DataMigration
+from south.v2 import SchemaMigration
 from django.db import models
 
-class Migration(DataMigration):
+
+class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        "Write your forwards methods here."
-        for agency in orm.Agency.objects.all():
-            orm.Stop.objects.filter(agency_description=agency.name).update(agency=agency)
+        # Adding model 'Agency'
+        db.create_table(u'stops_agency', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
+        ))
+        db.send_create_signal(u'stops', ['Agency'])
+
+        # Adding field 'Stop.agency'
+        db.add_column(u'stops_stop', 'agency',
+                      self.gf('django.db.models.fields.related.ForeignKey')(to=orm['stops.Agency'], null=True),
+                      keep_default=False)
+
 
     def backwards(self, orm):
-        "Write your backwards methods here."
+        # Deleting model 'Agency'
+        db.delete_table(u'stops_agency')
+
+        # Deleting field 'Stop.agency'
+        db.delete_column(u'stops_stop', 'agency_id')
+
 
     models = {
         u'stops.agency': {
@@ -23,19 +38,19 @@ class Migration(DataMigration):
         u'stops.contraband': {
             'Meta': {'object_name': 'Contraband'},
             'contraband_id': ('django.db.models.fields.IntegerField', [], {'primary_key': 'True'}),
-            'dollar_amount': ('django.db.models.fields.FloatField', [], {'default': '0'}),
-            'dosages': ('django.db.models.fields.FloatField', [], {'default': '0'}),
-            'gallons': ('django.db.models.fields.FloatField', [], {'default': '0'}),
-            'grams': ('django.db.models.fields.FloatField', [], {'default': '0'}),
-            'kilos': ('django.db.models.fields.FloatField', [], {'default': '0'}),
-            'money': ('django.db.models.fields.FloatField', [], {'default': '0'}),
-            'ounces': ('django.db.models.fields.FloatField', [], {'default': '0'}),
+            'dollar_amount': ('django.db.models.fields.FloatField', [], {'default': '0', 'null': 'True'}),
+            'dosages': ('django.db.models.fields.FloatField', [], {'default': '0', 'null': 'True'}),
+            'gallons': ('django.db.models.fields.FloatField', [], {'default': '0', 'null': 'True'}),
+            'grams': ('django.db.models.fields.FloatField', [], {'default': '0', 'null': 'True'}),
+            'kilos': ('django.db.models.fields.FloatField', [], {'default': '0', 'null': 'True'}),
+            'money': ('django.db.models.fields.FloatField', [], {'default': '0', 'null': 'True'}),
+            'ounces': ('django.db.models.fields.FloatField', [], {'default': '0', 'null': 'True'}),
             'person': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['stops.Person']"}),
-            'pints': ('django.db.models.fields.FloatField', [], {'default': '0'}),
-            'pounds': ('django.db.models.fields.FloatField', [], {'default': '0'}),
+            'pints': ('django.db.models.fields.FloatField', [], {'default': '0', 'null': 'True'}),
+            'pounds': ('django.db.models.fields.FloatField', [], {'default': '0', 'null': 'True'}),
             'search': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['stops.Search']"}),
             'stop': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['stops.Stop']"}),
-            'weapons': ('django.db.models.fields.FloatField', [], {'default': '0'})
+            'weapons': ('django.db.models.fields.FloatField', [], {'default': '0', 'null': 'True'})
         },
         u'stops.person': {
             'Meta': {'object_name': 'Person'},
@@ -91,4 +106,3 @@ class Migration(DataMigration):
     }
 
     complete_apps = ['stops']
-    symmetrical = True
