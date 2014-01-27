@@ -12,6 +12,7 @@
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li><a href='{% url "stops-search" %}'>Search</a></li>
+        <li><a href='{% url "agency-list" %}'>Agencies</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         {% if not user.is_authenticated %}

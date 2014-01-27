@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from stops.models import Stop
-
+from django.views.generic import ListView, DetailView
+from stops.models import Stop, Agency
 from stops import forms
 
 
@@ -14,13 +14,20 @@ def search(request):
         form = forms.SearchForm()
 
     if query:
-        stops = Stop.objects.filter(query)[:20]
+        stops = Stop.objects.filter(query)
     else:
-        stops = None
-    # if stops:
-    #     stops = stops.order_by('-date')
+        stops = Stop.objects.none()
+    stops = stops.order_by('-date')[:20]
     context = {
         'form': form,
         'stops': stops,
     }
     return render(request, 'stops/search.html', context)
+
+
+class AgencyList(ListView):
+    model = Agency
+
+
+class AgencyDetail(DetailView):
+    model = Agency
