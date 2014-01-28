@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block content %}
+<h2>{{ object }}</h2>
+
+<p>Total Stops: {{ object.stops.count|intcomma }}</p>
+
+<h3>Officers ({{ officers.count|intcomma }} total)</h3>
+
+<div class="row">
+    <ul>
+        {% for officer in officers %}
+        <li><a href="">{{ officer.officer_id }} ({{ officer.total_stops|intcomma }})</a></li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

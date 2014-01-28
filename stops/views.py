@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
+from django.db.models import Count
 from stops.models import Stop, Agency
 from stops import forms
 
@@ -31,3 +32,11 @@ class AgencyList(ListView):
 
 class AgencyDetail(DetailView):
     model = Agency
+
+    def get_context_data(self, **kwargs):
+        context = super(AgencyDetail, self).get_context_data(**kwargs)
+        agency = context['object']
+        officers = Stop.objects.filter(agency=agency).values('officer_id')
+        officers = officers.annotate(total_stops=Count('officer_id'))
+        context['officers'] = officers.order_by('-total_stops')
+        return context
