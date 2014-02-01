@@ -1,8 +1,0 @@
-state_output: mixed
-
-fileserver_backend:
-  - roots
-  - git
-
-gitfs_remotes:
-  - git://github.com/caktus/margarita.git

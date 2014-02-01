@@ -1,1 +1,0 @@
-{{ pillar['pg_replication_master'] }}:5432:replication:{{ pillar['pg_replication_user'] }}:{{ pillar['pg_replication_password'] }}

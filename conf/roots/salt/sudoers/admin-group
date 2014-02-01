@@ -1,2 +1,0 @@
-# grant users of admin group passwordless sudo functionality
-%admin ALL=(ALL) NOPASSWD:ALL
