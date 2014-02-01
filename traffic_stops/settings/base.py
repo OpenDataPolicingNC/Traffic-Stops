@@ -199,8 +199,6 @@ COMPRESS_PRECOMPILERS = (
     ('text/less', 'lessc {infile} {outfile}'),
 )
 
-CELERY_RESULT_BACKEND = 'djcelery.backends.cache:CacheBackend'
-
 LOGIN_URL = 'account_login'
 LOGIN_REDIRECT_URL = 'home'
 ENDLESS_PAGINATION_PER_PAGE = 30
