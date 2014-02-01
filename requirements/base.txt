@@ -5,8 +5,7 @@ django_compressor==1.3
 # Required by django-compressor
 django-appconf==0.6
 six==1.4.1
-# Use django-selectable master until a new release has Django 1.6 compatibility
-git+https://github.com/mlavin/django-selectable.git@master#egg=django_selectable
+django-selectable==0.8.0
 Pillow==2.3.0
 psycopg2==2.5.1
 PyYAML==3.10
