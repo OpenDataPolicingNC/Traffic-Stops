@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load selectable_tags bootstrap3 %}
+{% load selectable_tags bootstrap3 endless humanize %}
 
 {% block extra-js %}
     {% include_ui_theme %}
@@ -22,7 +22,7 @@
         </form>
     </div>
     <div class="col-md-9">
-        <h2>Stops</h2>
+        <h2>Stops ({{ stops.count|intcomma }} total)</h2>
         <table class="table">
             <tr>
                 <th>ID</th>
@@ -32,6 +32,7 @@
                 <th>Officer ID</th>
                 <th>Agency</th>
             </tr>
+            {% paginate stops %}
             {% for stop in stops %}
             <tr>
                 <td>{{ stop.stop_id }}</td>
@@ -43,6 +44,7 @@
             </tr>
             {% endfor %}
         </table>
+        {% show_pages %}
     </div>
 </div>
 {% endblock %}

@@ -18,7 +18,7 @@ def search(request):
         stops = Stop.objects.filter(query)
     else:
         stops = Stop.objects.none()
-    stops = stops.order_by('-date')[:20]
+    stops = stops.order_by('-date')
     context = {
         'form': form,
         'stops': stops,
