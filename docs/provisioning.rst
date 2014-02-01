@@ -143,6 +143,8 @@ EC2 uses a private key. These credentials will be passed as command line argumen
     fab -H <fresh-server-ip> -u <root-user> setup_master
     # Example of provisioning 33.33.33.10 as the Salt Master
     fab -H 33.33.33.10 -u root setup_master
+    # Example EC2 setup
+    fab -H 54.208.65.43 -u ubuntu -i ~/.ssh/traffic-stops.pem setup_master
 
 This will install salt-master and update the master configuration file. The master will use a
 set of base states from https://github.com/caktus/margarita using the gitfs root. Once the master
@@ -159,6 +161,8 @@ is set.
 Additional states and pillar information are contained in this repo and must be rsync'd to the master via::
 
     fab -u <root-user> sync
+    # Example EC2
+    fab -u ubuntu -i ~/.ssh/traffic-stops.pem sync
 
 This must be done each time a state or pillar is updated. This will be called on each deploy to
 ensure they are always up to date.
@@ -168,6 +172,10 @@ To provision the master server itself with salt you need to create a minion on t
     fab -H <ip-of-new-master> -u <root-user> --set environment=master setup_minion:salt-master
     fab -u <root-user> accept_key:<server-name>
     fab -u <root-user> --set environment=master deploy
+    # Example EC2
+    fab -H 54.208.65.43 -u ubuntu -i ~/.ssh/traffic-stops.pem --set environment=master setup_minion:salt-master
+    fab -u ubuntu -i ~/.ssh/traffic-stops.pem accept_key:<server-name>
+    fab -u ubuntu -i ~/.ssh/traffic-stops.pem --set environment=master deploy
 
 This will create developer users on the master server so you will no longer have to connect
 as the root user.
@@ -182,7 +190,7 @@ as a root user. This is to install the Salt Minion which will connect to the Mas
 to complete the provisioning. To setup a minion you call the Fabric command::
 
     fab <environment> setup_minion:<roles> -H <ip-of-new-server> -u <root-user>
-    fab production setup_minion:web,balancer,db-master,cache,worker,queue,salt-master -H 54.208.65.43 -u root
+    fab production setup_minion:web,balancer,db-master,cache,worker,queue,salt-master -H 54.208.65.43
 
 The available roles are ``salt-master``, ``web``, ``worker``, ``balancer``, ``db-master``,
 ``queue`` and ``cache``. If you are running everything on a single server you need to enable
