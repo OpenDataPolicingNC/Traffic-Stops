@@ -1,14 +1,14 @@
-"""
-Django integration for Celery 3.1+
-"""
 from __future__ import absolute_import
 
+import os
+
 from celery import Celery
-from celery.utils.log import get_task_logger
 
 from django.conf import settings
 
-logger = get_task_logger(__name__)
+# set the default Django settings module for the 'celery' program.
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'traffic_stops.settings')
+
 app = Celery('traffic_stops')
 
 # Using a string here means the worker will not have to
@@ -19,5 +19,4 @@ app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 
 @app.task(bind=True)
 def debug_task(self):
-    logger.info('Running the debug_task task.')
     print('Request: {0!r}'.format(self.request))

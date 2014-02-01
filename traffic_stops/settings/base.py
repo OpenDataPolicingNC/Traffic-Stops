@@ -91,13 +91,6 @@ STATICFILES_FINDERS = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'a-wv-x8(e&z!3kry8zq2-apy(u8%6m7k2b80%h8wb57zmo&6v0'
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-    # 'django.template.loaders.eggs.Loader',
-)
-
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.contrib.messages.context_processors.messages',
@@ -145,7 +138,6 @@ INSTALLED_APPS = (
     'django.contrib.sitemaps',
     # External apps
     'compressor',
-    'djcelery',   # For Celery result backend
     'south',
     'selectable',
     'bootstrap3',
@@ -161,7 +153,7 @@ INSTALLED_APPS = (
 # more details on how to customize your logging configuration.
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': True,
+    'disable_existing_loggers': False,
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
@@ -200,7 +192,6 @@ LOGGING = {
         },
     }
 }
-
 # Application settings
 SKIP_SOUTH_TESTS = True
 

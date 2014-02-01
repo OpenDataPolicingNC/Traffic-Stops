@@ -5,55 +5,51 @@ Vagrant Testing
 Starting the VM
 ------------------------
 
-You can test the provisioning/deployment using `Vagrant <http://vagrantup.com/>`_. Using the
-included Vagrantfile you can start up the VM. This requires Vagrant 1.3+ and the ``precise32`` box.
-The box will be installed if you don't have it already.::
+You can test the provisioning/deployment using `Vagrant
+<http://vagrantup.com/>`_. Using the included Vagrantfile you can start up the
+VM. This requires Vagrant 1.3+ and the ``precise32`` box. The box will be
+installed if you don't have it already.::
 
-    $ vagrant up
+    vagrant up
+
+The general provision workflow is the same as in the previous
+:doc:`provisioning guide </provisioning>` so here are notes of the Vagrant
+specifics.
 
 
 Provisioning the VM
 ------------------------
 
-The ``fabfile.py`` contains a ``vagrant`` environment with the VM's IP already added. Make sure that
-the ``conf/pillar/vagrant/env.sls`` and ``conf/pillar/vagrant/secrets.sls`` files are up-to-date.
-The ``env.sls`` file should be in git, so just make sure you have the latest version of the develop
-branch checked out (unless you are specifically trying out a different branch). Get a copy of the
-``secrets.sls`` file from another developer or by copying a version that is already on the staging
-branch.
+The Vagrantfile is configured to install the Salt Master and Minion inside the
+VM once you've run ``vagrant up``. To finalize the provisioning you simply need
+to run::
 
-To provision the VM for the first time, you need to connect using the private key which ships with
-the Vagrant install. There's a fab command which will work if your installation of vagrant is
-reasonably standard::
+    fab vagrant salt:saltutil.sync_all
+    fab vagrant highstate
 
-    $ fab vagrant setup_server:app,vagrant
+The Vagrant box will use the current working copy of the project and the
+local.py settings. If you want to use this for development/testing it is
+helpful to change your local settings to extend from staging instead of dev::
 
-The parameter ``app`` in the command above refers to the name of the server in the
-``conf/servers.yaml`` file.
+    # Example local.py
+    from traffic_stops.settings.staging import *
 
-If the above command doesn't work with your vagrant install you'll have to supply the path to
-vagrant's private key as an additional parameter. Use ``locate`` to find it::
+    # Override settings here
+    DATABASES['default']['NAME'] = 'traffic_stops_local'
+    DATABASES['default']['USER'] = 'traffic_stops_local'
+    
+    DEBUG = True
 
-    $ locate keys/vagrant
-        /opt/vagrant/embedded/gems/gems/vagrant-1.2.2/keys/vagrant
-        /opt/vagrant/embedded/gems/gems/vagrant-1.2.2/keys/vagrant.pub
-    $ fab vagrant setup_server:app,vagrant,/opt/vagrant/embedded/gems/gems/vagrant-1.2.2/keys/vagrant
-
-Once the machine has been successfully provision, you can do all subsequent deploys from with your
-own user account::
-
-    $ fab vagrant minion:app highstate
-
-When you are done using vagrant, you can turn it off with ``vagrant halt`` or delete the VM with
-``vagrant destroy``.
+This won't have the same nice features of the development server such as auto-
+reloading but it will run with a stack which is much closer to the production
+environment.
 
 
 Testing on the VM
 ------------------------
 
 With the VM fully provisioned and deployed, you can access the VM at the IP address specified in the
-``Vagrantfile``, which is 33.33.33.10 by default. It will also be available on localhost port 8089 via
-port forwarding. Since the Nginx configuration will only listen for the domain name in
+``Vagrantfile``, which is 33.33.33.10 by default. Since the Nginx configuration will only listen for the domain name in
 ``conf/pillar/staging/env.sls``, you will need to modify your ``/etc/hosts`` configuration to view it
 at one of those IP addresses. I recommend 33.33.33.10, otherwise the ports in the localhost URL cause
 the CSRF middleware to complain ``REASON_BAD_REFERER`` when testing over SSL. You will need to add::

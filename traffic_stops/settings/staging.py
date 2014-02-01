@@ -1,20 +1,27 @@
-from traffic_stops.settings.base import *  # noqa
+from traffic_stops.settings.base import *
+
+os.environ.setdefault('CACHE_HOST', '127.0.0.1:11211')
+os.environ.setdefault('BROKER_HOST', '127.0.0.1:5672')
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 DATABASES['default']['NAME'] = 'traffic_stops_staging'
+DATABASES['default']['USER'] = 'traffic_stops_staging'
+DATABASES['default']['HOST'] = os.environ.get('DB_HOST', '')
+DATABASES['default']['PORT'] = os.environ.get('DB_PORT', '')
+DATABASES['default']['PASSWORD'] = os.environ['DB_PASSWORD']
 
-PROVISION_ROOT = os.path.dirname(PROJECT_ROOT)
-PUBLIC_ROOT = os.path.join(PROVISION_ROOT, 'public')
+PUBLIC_ROOT = '/var/www/traffic_stops/public/'
+
 STATIC_ROOT = os.path.join(PUBLIC_ROOT, 'static')
+
 MEDIA_ROOT = os.path.join(PUBLIC_ROOT, 'media')
-LOG_ROOT = os.path.join(PROVISION_ROOT, 'log')
 
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
+        'LOCATION': '%(CACHE_HOST)s' % os.environ,
     }
 }
 
@@ -32,30 +39,9 @@ SESSION_COOKIE_SECURE = True
 
 SESSION_COOKIE_HTTPONLY = True
 
-ALLOWED_HOSTS = ('*',)
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(';')
 
-SECRET_KEY = os.environ['SECRET_KEY']
+# Uncomment if using celery worker configuration
+BROKER_URL = 'amqp://traffic_stops_staging:%(BROKER_PASSWORD)s@%(BROKER_HOST)s/traffic_stops_staging' % os.environ
 
-BROKER_URL = 'amqp://traffic_stops:%s@127.0.0.1:5672/traffic_stops_staging' % os.environ['BROKER_PASSWORD']
-
-LOGGING['handlers']['file']['filename'] = os.path.join(LOG_ROOT, 'traffic-stops-django.log')
-LOGGING['loggers']['celery'] = {
-    # mail_admins will only accept ERROR and higher
-    'handlers': ['mail_admins', 'file'],
-    'level': 'INFO',
-}
-# 'django' is the catch-all logger
-LOGGING['loggers']['django'] = {
-    # mail_admins will only accept ERROR and higher
-    'handlers': ['mail_admins', 'file'],
-    'level': 'INFO',
-}
-
-
-# A simple task to make sure Celery is running
-CELERYBEAT_SCHEDULE = {
-    'test-celery-health': {
-        'task': 'traffic_stops.celery.debug_task',
-        'schedule': 30  # seconds
-    }
-}
+LOGGING['handlers']['file']['filename'] = '/var/www/traffic_stops/log/traffic_stops.log'
