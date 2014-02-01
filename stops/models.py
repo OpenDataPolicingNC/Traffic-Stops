@@ -1,27 +1,28 @@
 from django.db import models
 
 
-PURPOSE_CHOICES = (('1', 'Speed Limit Violation'),
-                   ('2', 'Stop Light/Sign Violation'),
-                   ('3', 'Driving While Impaired'),
-                   ('4', 'Safe Movement Violation'),
-                   ('5', 'Vehicle Equipment Violation'),
-                   ('6', 'Vehicle Regulatory Violation'),
-                   ('7', 'Seat Belt Violation'),
-                   ('8', 'Investigation'),
-                   ('9', 'Other Motor Vehicle Violation'),
-                   ('10', 'Checkpoint'))
+PURPOSE_CHOICES = ((1, 'Speed Limit Violation'),
+                   (2, 'Stop Light/Sign Violation'),
+                   (3, 'Driving While Impaired'),
+                   (4, 'Safe Movement Violation'),
+                   (5, 'Vehicle Equipment Violation'),
+                   (6, 'Vehicle Regulatory Violation'),
+                   (7, 'Seat Belt Violation'),
+                   (8, 'Investigation'),
+                   (9, 'Other Motor Vehicle Violation'),
+                   (10, 'Checkpoint'))
 
-ACTION_CHOICES = (('1', 'Verbal Warning'),
-                  ('2', 'Written Warning'),
-                  ('3', 'Citation Issued'),
-                  ('4', 'On-View Arrest'),
-                  ('5', 'No Action Taken'))
+ACTION_CHOICES = ((1, 'Verbal Warning'),
+                  (2, 'Written Warning'),
+                  (3, 'Citation Issued'),
+                  (4, 'On-View Arrest'),
+                  (5, 'No Action Taken'))
 
 
 class Stop(models.Model):
     stop_id = models.PositiveIntegerField(primary_key=True)
     agency_description = models.CharField(max_length=100)
+    agency = models.ForeignKey('Agency', null=True, related_name='stops')
     date = models.DateTimeField()
     purpose = models.PositiveSmallIntegerField(choices=PURPOSE_CHOICES)
     action = models.PositiveSmallIntegerField(choices=ACTION_CHOICES)
@@ -32,10 +33,9 @@ class Stop(models.Model):
     officer_injury = models.BooleanField()
     driver_injury = models.BooleanField()
     passenger_injury = models.BooleanField()
-    officer_id = models.CharField(max_length=15) # todo: keys
-    stop_location = models.CharField(max_length=15) # todo: keys
+    officer_id = models.CharField(max_length=15)  # todo: keys
+    stop_location = models.CharField(max_length=15)  # todo: keys
     stop_city = models.CharField(max_length=20)
-
 
 
 PERSON_TYPE_CHOICES = (("Dr", "Driver"),
@@ -44,7 +44,7 @@ PERSON_TYPE_CHOICES = (("Dr", "Driver"),
 GENDER_CHOICES = (("M", "Male"),
                   ("F", "Female"))
 
-ETHNICITY_CHOICES = (('H' , 'Hispanic'),
+ETHNICITY_CHOICES = (('H', 'Hispanic'),
                      ('NH', 'Non-Hispanic'))
 
 
@@ -54,17 +54,19 @@ RACE_CHOICES = (('A', 'Asian'),
                 ('U', 'Other/Unknown'),
                 ('W', 'White'))
 
+
 class Person(models.Model):
     person_id = models.IntegerField(primary_key=True)
     stop = models.ForeignKey(Stop)
     type = models.CharField(max_length=2, choices=PERSON_TYPE_CHOICES)
-    age  = models.PositiveSmallIntegerField()
+    age = models.PositiveSmallIntegerField()
     gender = models.CharField(max_length=2, choices=GENDER_CHOICES)
     ethnicity = models.CharField(max_length=2, choices=ETHNICITY_CHOICES)
     race = models.CharField(max_length=2, choices=RACE_CHOICES)
 
 
 SEARCH_TYPE_CHOICES = ()
+
 
 class Search(models.Model):
     search_id = models.IntegerField(primary_key=True)
@@ -111,3 +113,10 @@ class SearchBasis(models.Model):
     person = models.ForeignKey(Person)
     stop = models.ForeignKey(Stop)
     basis = models.CharField(max_length=4, choices=SEARCH_BASIS_CHOICES)
+
+
+class Agency(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __unicode__(self):
+        return self.name

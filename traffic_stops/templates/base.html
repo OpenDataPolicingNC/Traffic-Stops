@@ -11,7 +11,7 @@
     {% block extra-meta %}{% endblock %}
     {% if debug %}
     <link rel="stylesheet/less" type="text/css" media="all" href="{{ STATIC_URL }}less/site.less">
-    <script src="{{ STATIC_URL }}js/libs/less-1.5.0.min.js"></script>
+    <script src="{{ STATIC_URL }}js/libs/less-1.6.1.min.js"></script>
     {% else %}
     {% compress css %}
     <link rel="stylesheet" type="text/less" media="all" href="{{ STATIC_URL }}less/site.less">
@@ -65,10 +65,10 @@
     <script charset="utf-8" src="{{ STATIC_URL }}bootstrap/js/collapse.js"></script>
     <script charset="utf-8" src="{{ STATIC_URL }}bootstrap/js/dropdown.js"></script>
     <script charset="utf-8" src="{{ STATIC_URL }}bootstrap/js/modal.js"></script>
+    <script charset="utf-8" src="{{ STATIC_URL }}bootstrap/js/tooltip.js"></script>
     <script charset="utf-8" src="{{ STATIC_URL }}bootstrap/js/popover.js"></script>
     <script charset="utf-8" src="{{ STATIC_URL }}bootstrap/js/scrollspy.js"></script>
     <script charset="utf-8" src="{{ STATIC_URL }}bootstrap/js/tab.js"></script>
-    <script charset="utf-8" src="{{ STATIC_URL }}bootstrap/js/tooltip.js"></script>
     <script charset="utf-8" src="{{ STATIC_URL }}bootstrap/js/transition.js"></script>
     <script charset="utf-8" src="{{ STATIC_URL }}js/site.js"></script>
     {% endcompress %}

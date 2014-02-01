@@ -147,6 +147,9 @@ INSTALLED_APPS = (
     'compressor',
     'djcelery',   # For Celery result backend
     'south',
+    'selectable',
+    'bootstrap3',
+    'endless_pagination',
     # Custom apps
     'stops'
 )
@@ -209,3 +212,4 @@ CELERY_RESULT_BACKEND = 'djcelery.backends.cache:CacheBackend'
 
 LOGIN_URL = 'account_login'
 LOGIN_REDIRECT_URL = 'home'
+ENDLESS_PAGINATION_PER_PAGE = 30
