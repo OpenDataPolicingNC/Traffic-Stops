@@ -190,6 +190,10 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
+        '': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+        },
     }
 }
 # Application settings
