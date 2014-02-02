@@ -11,7 +11,7 @@
 <div class="row">
     <ul>
         {% for officer in officers %}
-        <li><a href="">{{ officer.officer_id }} ({{ officer.total_stops|intcomma }})</a></li>
+        <li><a href="{% url 'stops-search' %}?agency={{ object.name }}&officer={{ officer.officer_id }}">{{ officer.officer_id }} ({{ officer.total_stops|intcomma }})</a></li>
         {% endfor %}
     </ul>
 </div>

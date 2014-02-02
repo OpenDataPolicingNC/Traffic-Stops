@@ -12,6 +12,7 @@ class SearchForm(forms.Form):
         widget=AutoCompleteWidget(AgencyLookup),
         required=False,
     )
+    officer = forms.CharField(required=False)
     driver_arrest = forms.BooleanField(required=False)
     passenger_arrest = forms.BooleanField(required=False)
     encounter_force = forms.BooleanField(required=False)
@@ -49,4 +50,7 @@ class SearchForm(forms.Form):
         action = self.cleaned_data['action']
         if action:
             query &= Q(action__in=action)
+        officer = self.cleaned_data['officer']
+        if officer:
+            query &= Q(officer_id=officer)
         return query
