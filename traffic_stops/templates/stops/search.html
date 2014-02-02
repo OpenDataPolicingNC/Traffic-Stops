@@ -36,7 +36,7 @@
             {% for stop in stops %}
             <tr>
                 <td>{{ stop.stop_id }}</td>
-                <td>{{ stop.date|date:"j/n/Y P" }}</td>
+                <td>{{ stop.date|date:"n/j/Y P" }}</td>
                 <td>{{ stop.get_purpose_display }}</td>
                 <td>{{ stop.get_action_display }}</td>
                 <td>{{ stop.officer_id }} </td>
