@@ -7,8 +7,8 @@ from stops import forms
 
 def search(request):
     query = None
-    if request.method == 'POST':
-        form = forms.SearchForm(request.POST)
+    if request.method == 'GET':
+        form = forms.SearchForm(request.GET)
         if form.is_valid():
             query = form.get_query()
     else:
