@@ -145,6 +145,8 @@ EC2 uses a private key. These credentials will be passed as command line argumen
     fab -H 33.33.33.10 -u root setup_master
     # Example EC2 setup
     fab -H 54.208.65.43 -u ubuntu -i ~/.ssh/traffic-stops.pem setup_master
+    # Example DO setup
+    fab -H 162.243.232.86 -u root setup_master
 
 This will install salt-master and update the master configuration file. The master will use a
 set of base states from https://github.com/caktus/margarita using the gitfs root. Once the master
@@ -190,7 +192,7 @@ as a root user. This is to install the Salt Minion which will connect to the Mas
 to complete the provisioning. To setup a minion you call the Fabric command::
 
     fab <environment> setup_minion:<roles> -H <ip-of-new-server> -u <root-user>
-    fab production setup_minion:web,balancer,db-master,cache,worker,queue,salt-master -H 54.208.65.43
+    fab production setup_minion:web,balancer,db-master,cache,salt-master -H  162.243.232.86
 
 The available roles are ``salt-master``, ``web``, ``worker``, ``balancer``, ``db-master``,
 ``queue`` and ``cache``. If you are running everything on a single server you need to enable
