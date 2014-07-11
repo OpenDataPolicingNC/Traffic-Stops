@@ -37,26 +37,35 @@ to this::
       url: git@github.com:account/reponame.git
       branch: master
 
-The repo will also need a deployment key generated so that the Salt minion can access the repository.
-See the Github docs on managing deploy keys: https://help.github.com/articles/managing-deploy-keys
-Once generated the private key should be added to `conf/pillar/<environment>/secrets.sls`` under the
-label `github_deploy_key`::
+The repo will also need a deployment key generated so that the Salt minion can
+access the repository. You can generate a deployment key locally for the new
+server like so::
+
+    ssh-keygen -t rsa -b 4096 -f <servername>
+
+This will generate two files named ``<servername>`` and ``<servername>.pub``.
+The first file contains the private key and the second file contains the public
+key. The public key needs to be added to the "Deploy keys" in the GitHub repository.
+For more information, see the Github docs on managing deploy keys:
+https://help.github.com/articles/managing-deploy-keys
+
+The text in the private key file should be added to `conf/pillar/<environment>/secrets.sls``
+under the label `github_deploy_key`, e.g.::
 
     github_deploy_key: |
       -----BEGIN RSA PRIVATE KEY-----
       foobar
       -----END RSA PRIVATE KEY-----
 
-There will be more information on the secrets in a later section. You may choose to include the public
-SSH key in the repo as well but this is not strictly required.
+There will be more information on the secrets in a later section. You may choose
+to include the public SSH key inside the repo itself as well, but this is not
+strictly required.
 
 You also need to set ``project_name`` and ``python_version`` in ``conf/pillar/project.sls``.
 Currently we support using Python 2.7 or Python 3.3. The project template is set up for 2.7 by
 default. If you want to use 3.3, you will need to change ``python_version`` and make a few changes
-to requirements. In ``requirements/base.txt``, you need to change django-compressor to use a forked
-version (``-e git://github.com/vkurup/django_compressor.git@develop#egg=django_compressor``). In
-``requirements/production.txt``, change python-memcached to python3-memcached. Finally, in
-``requirements/dev.txt``, remove Fabric and all its dependencies. Instead you will need Fabric
+to requirements. In ``requirements/production.txt``, change python-memcached to python3-memcached.
+In ``requirements/dev.txt``, remove Fabric and all its dependencies. Instead you will need Fabric
 installed on your laptop "globally" so that when you run ``fab``, it will not be found in your
 virtualenv, but will then be found in your global environment.
 
@@ -64,7 +73,7 @@ For the environment you want to setup you will need to set the ``domain`` in
 ``conf/pillar/<environment>/env.sls``.
 
 You will also need add the developer's user names and SSH keys to ``conf/pillar/devs.sls``. Each
-user record should match the format::
+user record (under the parent ``users:`` key) should match the format::
 
     example-user:
       public_key:
@@ -192,7 +201,7 @@ as a root user. This is to install the Salt Minion which will connect to the Mas
 to complete the provisioning. To setup a minion you call the Fabric command::
 
     fab <environment> setup_minion:<roles> -H <ip-of-new-server> -u <root-user>
-    fab production setup_minion:web,balancer,db-master,cache,salt-master -H  162.243.232.86
+    fab staging setup_minion:web,balancer,db-master,cache -H 162.243.232.86 -u root
 
 The available roles are ``salt-master``, ``web``, ``worker``, ``balancer``, ``db-master``,
 ``queue`` and ``cache``. If you are running everything on a single server you need to enable
@@ -215,6 +224,11 @@ After that you can run the deploy/highstate to provision the new server::
 
     fab <environment> deploy
 
+The first time you run this command, it may complete before the server is set up.
+It is most likely still completing in the background. If the server does not become
+accessible or if you encounter errors during the process, review the Salt logs for
+any hints in ``/var/log/salt`` on the minion and/or master. For more information about
+deployment, see the `server setup </server-setup>` documentation.
 
 Optional Configuration
 ------------------------

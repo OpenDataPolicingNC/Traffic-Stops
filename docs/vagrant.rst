@@ -5,31 +5,28 @@ Vagrant Testing
 Starting the VM
 ------------------------
 
-You can test the provisioning/deployment using `Vagrant
-<http://vagrantup.com/>`_. Using the included Vagrantfile you can start up the
-VM. This requires Vagrant 1.3+ and the ``precise32`` box. The box will be
-installed if you don't have it already.::
+You can test the provisioning/deployment using `Vagrant <http://vagrantup.com/>`_. This requires
+Vagrant 1.3+. The Vagrantfile is configured to install the Salt Master and Minion inside the VM once
+you've run ``vagrant up``. The box will be installed if you don't have it already.::
 
     vagrant up
 
-The general provision workflow is the same as in the previous
-:doc:`provisioning guide </provisioning>` so here are notes of the Vagrant
-specifics.
+The general provision workflow is the same as in the previous :doc:`provisioning guide </provisioning>`
+so here are notes of the Vagrant specifics.
 
 
 Provisioning the VM
 ------------------------
 
-The Vagrantfile is configured to install the Salt Master and Minion inside the
-VM once you've run ``vagrant up``. To finalize the provisioning you simply need
-to run::
+Set your environment variables and secrets in ``conf/pillar/local.sls``. It is OK for this to
+be checked into version control because it can only be used on the developer's local machine. To
+finalize the provisioning you simply need to run::
 
-    fab vagrant salt:saltutil.sync_all
-    fab vagrant highstate
+    fab vagrant deploy
 
-The Vagrant box will use the current working copy of the project and the
-local.py settings. If you want to use this for development/testing it is
-helpful to change your local settings to extend from staging instead of dev::
+The Vagrant box will use the current working copy of the project and the local.py settings. If you
+want to use this for development/testing it is helpful to change your local settings to extend from
+staging instead of dev::
 
     # Example local.py
     from traffic_stops.settings.staging import *
@@ -40,9 +37,10 @@ helpful to change your local settings to extend from staging instead of dev::
     
     DEBUG = True
 
-This won't have the same nice features of the development server such as auto-
-reloading but it will run with a stack which is much closer to the production
-environment.
+This won't have the same nice features of the development server such as auto-reloading but it will
+run with a stack which is much closer to the production environment. Also beware that while
+``conf/pillar/local.sls`` is checked into version control, ``local.py`` generally isn't, so it will
+be up to you to keep them in sync.
 
 
 Testing on the VM
@@ -57,11 +55,11 @@ the CSRF middleware to complain ``REASON_BAD_REFERER`` when testing over SSL. Yo
     33.33.33.10 <domain>
 
 where ``<domain>`` matches the domain in ``conf/pillar/staging/env.sls``. For example, let's use
-staging.example.com::
+dev.example.com::
 
-    33.33.33.10 staging.example.com
+    33.33.33.10 dev.example.com
 
-In your browser you can now view https://staging.example.com and see the VM running the full web stack.
+In your browser you can now view https://dev.example.com and see the VM running the full web stack.
 
-Note that this ``/etc/hosts`` entry will prevent you from accessing the true staging.example.com.
+Note that this ``/etc/hosts`` entry will prevent you from accessing the true dev.example.com.
 When your testing is complete, you should remove or comment out this entry.
