@@ -1,3 +1,3 @@
 project_name: traffic_stops
 
-python_version: 2.7
+python_version: 3.3
