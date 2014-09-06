@@ -68,6 +68,9 @@ def main():
         create_schema(format_path, schema_path)
         print("in2csv -e iso-8859-1 -f fixed -s {} {} > {}".format(schema_path, data_path, csv_path))
         subprocess.call("in2csv -e iso-8859-1 -f fixed -s {} {} > {}".format(schema_path, data_path, csv_path), shell=True)
+        print(r"sed -i 's/\x0//g' {}".format(csv_path))
+        subprocess.call(r"sed -i 's/\x0//g' {}".format(csv_path), shell=True)
+        
 
 if __name__ == "__main__":
     main()
