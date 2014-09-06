@@ -183,10 +183,9 @@ To provision the master server itself with salt you need to create a minion on t
     fab -H <ip-of-new-master> -u <root-user> --set environment=master setup_minion:salt-master
     fab -u <root-user> accept_key:<server-name>
     fab -u <root-user> --set environment=master deploy
-    # Example EC2
-    fab -H 54.208.65.43 -u ubuntu -i ~/.ssh/traffic-stops.pem --set environment=master setup_minion:salt-master
-    fab -u ubuntu -i ~/.ssh/traffic-stops.pem accept_key:<server-name>
-    fab -u ubuntu -i ~/.ssh/traffic-stops.pem --set environment=master deploy
+    # Example DO (may have to run a second time to catch key)
+    fab -H 107.170.136.182 -u root --set environment=master setup_minion:salt-master
+    fab -u root --set environment=master deploy
 
 This will create developer users on the master server so you will no longer have to connect
 as the root user.
@@ -201,7 +200,9 @@ as a root user. This is to install the Salt Minion which will connect to the Mas
 to complete the provisioning. To setup a minion you call the Fabric command::
 
     fab <environment> setup_minion:<roles> -H <ip-of-new-server> -u <root-user>
-    fab staging setup_minion:web,balancer,db-master,cache -H 162.243.232.86 -u root
+    fab staging setup_minion:web,balancer,db-master,cache -H  33.33.33.10 -u root
+    # Example DO
+    fab production setup_minion:web,balancer,db-master,cache,queue,worker -H 107.170.136.182
 
 The available roles are ``salt-master``, ``web``, ``worker``, ``balancer``, ``db-master``,
 ``queue`` and ``cache``. If you are running everything on a single server you need to enable

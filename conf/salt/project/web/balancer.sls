@@ -78,6 +78,13 @@ auth_file:
       - file: clear_auth_file
 {% endif %}
 
+/etc/nginx/nginx.conf:
+  file.sed:
+    - before: "(# )?server_names_hash_bucket_size .+;"
+    - after: "server_names_hash_bucket_size 64;"
+    - require_in:
+      - service: nginx
+
 nginx_conf:
   file.managed:
     - name: /etc/nginx/sites-enabled/{{ pillar['project_name'] }}.conf

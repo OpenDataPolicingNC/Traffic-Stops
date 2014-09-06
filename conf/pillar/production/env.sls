@@ -1,10 +1,10 @@
 environment: production
 
-domain: 162.243.232.86
+domain: 107.170.136.182
 
 repo:
   url: git@github.com:copelco/NC-Traffic-Stops.git
-  branch: master
+  branch: upgrade-template
 
 # Addtional public environment variables to set for the project
 env:
