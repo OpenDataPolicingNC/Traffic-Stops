@@ -1,0 +1,377 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Server Provisioning &mdash; NC Traffic Stops 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="NC Traffic Stops 0.1 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="index.html">NC Traffic Stops 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="server-provisioning">
+<h1>Server Provisioning<a class="headerlink" href="#server-provisioning" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>traffic_stops is deployed on the following stack.</p>
+<ul class="simple">
+<li>OS: Ubuntu 12.04 LTS</li>
+<li>Python: 3.3</li>
+<li>Database: Postgres 9.1</li>
+<li>Application Server: Gunicorn</li>
+<li>Frontend Server: Nginx</li>
+<li>Cache: Memcached</li>
+</ul>
+<p>These services can configured to run together on a single machine or on different machines.
+<a class="reference external" href="http://supervisord.org/">Supervisord</a> manages the application server process.</p>
+</div>
+<div class="section" id="initial-setup">
+<h2>Initial Setup<a class="headerlink" href="#initial-setup" title="Permalink to this headline">¶</a></h2>
+<p>Before your project can be deployed to a server, the code needs to be
+accessible in a git repository. Once that is done you should update
+<tt class="docutils literal"><span class="pre">conf/pillar/&lt;environment&gt;/env.sls</span></tt> to set the repo and branch for the environment.
+E.g., change this:</p>
+<div class="highlight-python"><div class="highlight"><pre># FIXME: Update to the correct project repo
+repo:
+  url: git@github.com:CHANGEME/CHANGEME.git
+  branch: master
+</pre></div>
+</div>
+<p>to this:</p>
+<div class="highlight-python"><div class="highlight"><pre>repo:
+  url: git@github.com:account/reponame.git
+  branch: master
+</pre></div>
+</div>
+<p>The repo will also need a deployment key generated so that the Salt minion can
+access the repository. You can generate a deployment key locally for the new
+server like so:</p>
+<div class="highlight-python"><div class="highlight"><pre>ssh-keygen -t rsa -b 4096 -f &lt;servername&gt;
+</pre></div>
+</div>
+<p>This will generate two files named <tt class="docutils literal"><span class="pre">&lt;servername&gt;</span></tt> and <tt class="docutils literal"><span class="pre">&lt;servername&gt;.pub</span></tt>.
+The first file contains the private key and the second file contains the public
+key. The public key needs to be added to the &#8220;Deploy keys&#8221; in the GitHub repository.
+For more information, see the Github docs on managing deploy keys:
+<a class="reference external" href="https://help.github.com/articles/managing-deploy-keys">https://help.github.com/articles/managing-deploy-keys</a></p>
+<p>The text in the private key file should be added to <cite>conf/pillar/&lt;environment&gt;/secrets.sls`</cite>
+under the label <cite>github_deploy_key</cite>, e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre>github_deploy_key: |
+  -----BEGIN RSA PRIVATE KEY-----
+  foobar
+  -----END RSA PRIVATE KEY-----
+</pre></div>
+</div>
+<p>There will be more information on the secrets in a later section. You may choose
+to include the public SSH key inside the repo itself as well, but this is not
+strictly required.</p>
+<p>You also need to set <tt class="docutils literal"><span class="pre">project_name</span></tt> and <tt class="docutils literal"><span class="pre">python_version</span></tt> in <tt class="docutils literal"><span class="pre">conf/pillar/project.sls</span></tt>.
+Currently we support using Python 2.7 or Python 3.3. The project template is set up for 2.7 by
+default. If you want to use 3.3, you will need to change <tt class="docutils literal"><span class="pre">python_version</span></tt> and make a few changes
+to requirements. In <tt class="docutils literal"><span class="pre">requirements/production.txt</span></tt>, change python-memcached to python3-memcached.
+In <tt class="docutils literal"><span class="pre">requirements/dev.txt</span></tt>, remove Fabric and all its dependencies. Instead you will need Fabric
+installed on your laptop &#8220;globally&#8221; so that when you run <tt class="docutils literal"><span class="pre">fab</span></tt>, it will not be found in your
+virtualenv, but will then be found in your global environment.</p>
+<p>For the environment you want to setup you will need to set the <tt class="docutils literal"><span class="pre">domain</span></tt> in
+<tt class="docutils literal"><span class="pre">conf/pillar/&lt;environment&gt;/env.sls</span></tt>.</p>
+<p>You will also need add the developer&#8217;s user names and SSH keys to <tt class="docutils literal"><span class="pre">conf/pillar/devs.sls</span></tt>. Each
+user record (under the parent <tt class="docutils literal"><span class="pre">users:</span></tt> key) should match the format:</p>
+<div class="highlight-python"><div class="highlight"><pre>example-user:
+  public_key:
+   - ssh-rsa &lt;Full SSH Public Key would go here&gt;
+</pre></div>
+</div>
+<p>Additional developers can be added later, but you will need to create at least one user for
+yourself.</p>
+</div>
+<div class="section" id="managing-secrets">
+<h2>Managing Secrets<a class="headerlink" href="#managing-secrets" title="Permalink to this headline">¶</a></h2>
+<p>Secret information such as passwords and API keys should never be committed to the
+source repository. Instead, each environment manages its secrets in <tt class="docutils literal"><span class="pre">conf/pillar/&lt;environment&gt;/secrets.sls</span></tt>.
+These <tt class="docutils literal"><span class="pre">secrets.sls</span></tt> files are excluded from the source control and need to be passed
+to the developers out of band. There are example files given in <tt class="docutils literal"><span class="pre">conf/pillar/&lt;environment&gt;/secrets.ex</span></tt>.
+They have the format:</p>
+<div class="highlight-python"><div class="highlight"><pre>secrets:
+  DB_PASSWORD: XXXXXX
+</pre></div>
+</div>
+<p>Each key/value pair given in the <tt class="docutils literal"><span class="pre">secrets</span></tt> dictionary will be added to the OS environment
+and can retrieved in the Python code via:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">password</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;DB_PASSWORD&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Secrets for other environments will not be available. That is, the staging server
+will not have access to the production secrets. As such there is no need to namespace the
+secrets by their environment.</p>
+</div>
+<div class="section" id="environment-variables">
+<h2>Environment Variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h2>
+<p>Other environment variables which need to be configured but aren&#8217;t secret can be added
+to the <tt class="docutils literal"><span class="pre">env</span></tt> dictionary in <tt class="docutils literal"><span class="pre">conf/pillar/&lt;environment&gt;/env.sls</span></tt>:</p>
+<blockquote>
+<div><p># Additional public environment variables to set for the project
+env:</p>
+<blockquote>
+<div>FOO: BAR</div></blockquote>
+</div></blockquote>
+<p>For instance the default layout expects the cache server to listen at <tt class="docutils literal"><span class="pre">127.0.0.1:11211</span></tt>
+but if there is a dedicated cache server this can be changed via <tt class="docutils literal"><span class="pre">CACHE_HOST</span></tt>. Similarly
+the <tt class="docutils literal"><span class="pre">DB_HOST/DB_PORT</span></tt> defaults to <tt class="docutils literal"><span class="pre">''/''</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre>env:
+  DB_HOST: 10.10.20.2
+  CACHE_HOST: 10.10.20.1:11211
+</pre></div>
+</div>
+</div>
+<div class="section" id="setup-checklist">
+<h2>Setup Checklist<a class="headerlink" href="#setup-checklist" title="Permalink to this headline">¶</a></h2>
+<p>To summarize the steps above, you can use the following checklist</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">repo</span></tt> is set in <tt class="docutils literal"><span class="pre">conf/pillar/&lt;environment&gt;/env.sls</span></tt></li>
+<li>Developer user names and SSH keys have been added to <tt class="docutils literal"><span class="pre">conf/pillar/devs.sls</span></tt></li>
+<li>Project name has been set in <tt class="docutils literal"><span class="pre">conf/pillar/project.sls</span></tt></li>
+<li>Environment domain name has been set in <tt class="docutils literal"><span class="pre">conf/pillar/&lt;environment&gt;/env.sls</span></tt></li>
+<li>Environment secrets including the deploy key have been set in <tt class="docutils literal"><span class="pre">conf/pillar/&lt;environment&gt;/secrets.sls</span></tt></li>
+</ul>
+</div>
+<div class="section" id="salt-master">
+<h2>Salt Master<a class="headerlink" href="#salt-master" title="Permalink to this headline">¶</a></h2>
+<p>Each project needs to have at least one Salt Master. There can be one per environment or
+a single Master which manages both staging and production. The master is configured with Fabric.
+You will need to be able to connect to the server as a root user.
+How this is done will depend on where the server is hosted.
+VPS providers such as Linode will give you a username/password combination. Amazon&#8217;s
+EC2 uses a private key. These credentials will be passed as command line arguments.:</p>
+<div class="highlight-python"><div class="highlight"><pre># Template of the command
+fab -H &lt;fresh-server-ip&gt; -u &lt;root-user&gt; setup_master
+# Example of provisioning 33.33.33.10 as the Salt Master
+fab -H 33.33.33.10 -u root setup_master
+# Example EC2 setup
+fab -H 54.208.65.43 -u ubuntu -i ~/.ssh/traffic-stops.pem setup_master
+# Example DO setup
+fab -H 162.243.232.86 -u root setup_master
+</pre></div>
+</div>
+<p>This will install salt-master and update the master configuration file. The master will use a
+set of base states from <a class="reference external" href="https://github.com/caktus/margarita">https://github.com/caktus/margarita</a> using the gitfs root. Once the master
+has been provisioned you should set:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">env</span><span class="o">.</span><span class="n">master</span> <span class="o">=</span> <span class="s">&#39;&lt;ip-of-master&gt;&#39;</span>
+</pre></div>
+</div>
+<p>in the top of the fabfile.</p>
+<p>If each environment has its own master then it should be set with the environment setup function <tt class="docutils literal"><span class="pre">staging</span></tt> or <tt class="docutils literal"><span class="pre">production</span></tt>.
+In these case most commands will need to be preceded with the environment to ensure that <tt class="docutils literal"><span class="pre">env.master</span></tt>
+is set.</p>
+<p>Additional states and pillar information are contained in this repo and must be rsync&#8217;d to the master via:</p>
+<div class="highlight-python"><div class="highlight"><pre>fab -u &lt;root-user&gt; sync
+# Example EC2
+fab -u ubuntu -i ~/.ssh/traffic-stops.pem sync
+</pre></div>
+</div>
+<p>This must be done each time a state or pillar is updated. This will be called on each deploy to
+ensure they are always up to date.</p>
+<p>To provision the master server itself with salt you need to create a minion on the master:</p>
+<div class="highlight-python"><div class="highlight"><pre>fab -H &lt;ip-of-new-master&gt; -u &lt;root-user&gt; --set environment=master setup_minion:salt-master
+fab -u &lt;root-user&gt; accept_key:&lt;server-name&gt;
+fab -u &lt;root-user&gt; --set environment=master deploy
+# Example DO (may have to run a second time to catch key)
+fab -H 107.170.136.182 -u root --set environment=master setup_minion:salt-master
+fab -u root --set environment=master deploy
+</pre></div>
+</div>
+<p>This will create developer users on the master server so you will no longer have to connect
+as the root user.</p>
+</div>
+<div class="section" id="provision-a-minion">
+<h2>Provision a Minion<a class="headerlink" href="#provision-a-minion" title="Permalink to this headline">¶</a></h2>
+<p>Once you have completed the above steps, you are ready to provision a new server
+for a given environment. Again you will need to be able to connect to the server
+as a root user. This is to install the Salt Minion which will connect to the Master
+to complete the provisioning. To setup a minion you call the Fabric command:</p>
+<div class="highlight-python"><div class="highlight"><pre>fab &lt;environment&gt; setup_minion:&lt;roles&gt; -H &lt;ip-of-new-server&gt; -u &lt;root-user&gt;
+fab staging setup_minion:web,balancer,db-master,cache -H  33.33.33.10 -u root
+# Example DO
+fab production setup_minion:web,balancer,db-master,cache,queue,worker -H 107.170.136.182
+</pre></div>
+</div>
+<p>The available roles are <tt class="docutils literal"><span class="pre">salt-master</span></tt>, <tt class="docutils literal"><span class="pre">web</span></tt>, <tt class="docutils literal"><span class="pre">worker</span></tt>, <tt class="docutils literal"><span class="pre">balancer</span></tt>, <tt class="docutils literal"><span class="pre">db-master</span></tt>,
+<tt class="docutils literal"><span class="pre">queue</span></tt> and <tt class="docutils literal"><span class="pre">cache</span></tt>. If you are running everything on a single server you need to enable
+the <tt class="docutils literal"><span class="pre">web</span></tt>, <tt class="docutils literal"><span class="pre">balancer</span></tt>, <tt class="docutils literal"><span class="pre">db-master</span></tt>, and <tt class="docutils literal"><span class="pre">cache</span></tt> roles. The <tt class="docutils literal"><span class="pre">worker</span></tt>
+and <tt class="docutils literal"><span class="pre">queue</span></tt> roles are only needed to run Celery which is explained in more detail later.</p>
+<p>Additional roles can be added later to a server via <tt class="docutils literal"><span class="pre">add_role</span></tt>. Note that there is no
+corresponding <tt class="docutils literal"><span class="pre">delete_role</span></tt> command because deleting a role does not disable the services or
+remove the configuration files of the deleted role:</p>
+<div class="highlight-python"><div class="highlight"><pre>fab add_role:web -H  33.33.33.10
+</pre></div>
+</div>
+<p>This configures the Minion to point the Master but the server cannot connect until its key
+has been accepted on the Master. To accept the key you need to know the hostname of the
+new server and run:</p>
+<div class="highlight-python"><div class="highlight"><pre>fab accept_key:&lt;hostname&gt;
+</pre></div>
+</div>
+<p>After that you can run the deploy/highstate to provision the new server:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fab</span> <span class="o">&lt;</span><span class="n">environment</span><span class="o">&gt;</span> <span class="n">deploy</span>
+</pre></div>
+</div>
+<p>The first time you run this command, it may complete before the server is set up.
+It is most likely still completing in the background. If the server does not become
+accessible or if you encounter errors during the process, review the Salt logs for
+any hints in <tt class="docutils literal"><span class="pre">/var/log/salt</span></tt> on the minion and/or master. For more information about
+deployment, see the <cite>server setup &lt;/server-setup&gt;</cite> documentation.</p>
+</div>
+<div class="section" id="optional-configuration">
+<h2>Optional Configuration<a class="headerlink" href="#optional-configuration" title="Permalink to this headline">¶</a></h2>
+<p>The default template contains setup to help manage common configuration needs which
+are not enabled by default.</p>
+<div class="section" id="http-auth">
+<h3>HTTP Auth<a class="headerlink" href="#http-auth" title="Permalink to this headline">¶</a></h3>
+<p>The <tt class="docutils literal"><span class="pre">secrets.sls</span></tt> can also contain a section to enable HTTP basic authentication. This
+is useful for staging environments where you want to limit who can see the site before it
+is ready. This will also prevent bots from crawling and indexing the pages. To enable basic
+auth simply add a section called <tt class="docutils literal"><span class="pre">http_auth</span></tt> in the relevant <tt class="docutils literal"><span class="pre">conf/pillar/&lt;environment&gt;/secrets.sls</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre>http_auth:
+  admin: 123456
+</pre></div>
+</div>
+<p>This should be a list of key/value pairs. The keys will serve as the usernames and
+the values will be the password. As with all password usage please pick a strong
+password.</p>
+</div>
+<div class="section" id="celery">
+<h3>Celery<a class="headerlink" href="#celery" title="Permalink to this headline">¶</a></h3>
+<p>Many Django projects make use of <a class="reference external" href="http://celery.readthedocs.org/en/latest/">Celery</a>
+for handling long running task outside of request/response cycle. Enabling a worker
+makes use of <a class="reference external" href="http://celery.readthedocs.org/en/latest/django/first-steps-with-django.html">Django setup for Celery</a>.
+As documented you should create/import your Celery app in <tt class="docutils literal"><span class="pre">traffic_stops/__init__.py</span></tt> so that you
+can run the worker via:</p>
+<div class="highlight-python"><div class="highlight"><pre>python celery -A traffic_stops worker
+</pre></div>
+</div>
+<p>Additionally you will need to configure the project settings for Celery:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># traffic_stops.settings.staging.py</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">traffic_stops.settings.base</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c"># Other settings would be here</span>
+<span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&#39;amqp://traffic_stops_staging:</span><span class="si">%(BROKER_PASSWORD)s</span><span class="s">@</span><span class="si">%(BROKER_HOST)s</span><span class="s">/traffic_stops_staging&#39;</span> <span class="o">%</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span>
+</pre></div>
+</div>
+<p>You will also need to add the <tt class="docutils literal"><span class="pre">BROKER_URL</span></tt> to the <tt class="docutils literal"><span class="pre">traffic_stops.settings.production</span></tt> so
+that the vhost is set correctly. These are the minimal settings to make Celery work. Refer to the
+<a class="reference external" href="http://docs.celeryproject.org/en/latest/configuration.html">Celery documentation</a> for additional
+configuration options.</p>
+<p><tt class="docutils literal"><span class="pre">BROKER_HOST</span></tt> defaults to <tt class="docutils literal"><span class="pre">127.0.0.1:5672</span></tt>. If the queue server is configured on a separate host
+that will need to be reflected in the <tt class="docutils literal"><span class="pre">BROKER_URL</span></tt> setting. This is done by setting the <tt class="docutils literal"><span class="pre">BROKER_HOST</span></tt>
+environment variable in the <tt class="docutils literal"><span class="pre">env</span></tt> dictionary of <tt class="docutils literal"><span class="pre">conf/pillar/&lt;environment&gt;/env.sls</span></tt>.</p>
+<p>To add the states you should add the <tt class="docutils literal"><span class="pre">worker</span></tt> role when provisioning the minion.
+At least one server in the stack should be provisioned with the <tt class="docutils literal"><span class="pre">queue</span></tt> role as well.
+This will use RabbitMQ as the broker by default. The
+RabbitMQ user will be named traffic_stops_&lt;environment&gt; and the vhost will be named traffic_stops_&lt;environment&gt;
+for each environment. It requires that you add a password for the RabbitMQ user to each of
+the <tt class="docutils literal"><span class="pre">conf/pillar/&lt;environment&gt;/secrets.sls</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre>secrets:
+  BROKER_PASSWORD: thisisapasswordforrabbitmq
+</pre></div>
+</div>
+<p>The worker will run also run the <tt class="docutils literal"><span class="pre">beat</span></tt> process which allows for running periodic tasks.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Server Provisioning</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#initial-setup">Initial Setup</a></li>
+<li><a class="reference internal" href="#managing-secrets">Managing Secrets</a></li>
+<li><a class="reference internal" href="#environment-variables">Environment Variables</a></li>
+<li><a class="reference internal" href="#setup-checklist">Setup Checklist</a></li>
+<li><a class="reference internal" href="#salt-master">Salt Master</a></li>
+<li><a class="reference internal" href="#provision-a-minion">Provision a Minion</a></li>
+<li><a class="reference internal" href="#optional-configuration">Optional Configuration</a><ul>
+<li><a class="reference internal" href="#http-auth">HTTP Auth</a></li>
+<li><a class="reference internal" href="#celery">Celery</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/provisioning.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="index.html">NC Traffic Stops 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Dylan, Andy, and Colin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

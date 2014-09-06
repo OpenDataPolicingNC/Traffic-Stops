@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Server Setup &mdash; NC Traffic Stops 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="NC Traffic Stops 0.1 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="index.html">NC Traffic Stops 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="server-setup">
+<h1>Server Setup<a class="headerlink" href="#server-setup" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="provisioning">
+<h2>Provisioning<a class="headerlink" href="#provisioning" title="Permalink to this headline">¶</a></h2>
+<p>The server provisioning is managed using <a class="reference external" href="http://saltstack.com/">Salt Stack</a>. The base
+states are managed in a <a class="reference external" href="https://github.com/caktus/margarita">common repo</a> and additional
+states specific to this project are contained within the <tt class="docutils literal"><span class="pre">conf</span></tt> directory at the root
+of the repository.</p>
+<p>For more information see the doc:<cite>provisioning guide &lt;/provisioning&gt;</cite>.</p>
+</div>
+<div class="section" id="layout">
+<h2>Layout<a class="headerlink" href="#layout" title="Permalink to this headline">¶</a></h2>
+<p>Below is the server layout created by this provisioning process:</p>
+<div class="highlight-python"><div class="highlight"><pre>/var/www/traffic_stops/
+    source/
+    env/
+    log/
+    public/
+        static/
+        media/
+    ssl/
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">source</span></tt> contains the source code of the project. <tt class="docutils literal"><span class="pre">env</span></tt>
+is the <a class="reference external" href="http://www.virtualenv.org/">virtualenv</a> for Python requirements. <tt class="docutils literal"><span class="pre">log</span></tt>
+stores the Nginx, Gunicorn and other logs used by the project. <tt class="docutils literal"><span class="pre">public</span></tt>
+holds the static resources (css/js) for the project and the uploaded user media.
+<tt class="docutils literal"><span class="pre">public/static/</span></tt> and <tt class="docutils literal"><span class="pre">public/media/</span></tt> map to the <tt class="docutils literal"><span class="pre">STATIC_ROOT</span></tt> and
+<tt class="docutils literal"><span class="pre">MEDIA_ROOT</span></tt> settings. <tt class="docutils literal"><span class="pre">ssl</span></tt> contains the SSL key and certificate pair.</p>
+</div>
+<div class="section" id="deployment">
+<h2>Deployment<a class="headerlink" href="#deployment" title="Permalink to this headline">¶</a></h2>
+<p>For deployment, each developer connects to the Salt master as their own user. Each developer
+has SSH access via their public key. These users are created/managed by the Salt
+provisioning. The deployment itself is automated with <a class="reference external" href="http://docs.fabfile.org/">Fabric</a>.
+To deploy, a developer simply runs:</p>
+<div class="highlight-python"><div class="highlight"><pre># Deploy updates to staging
+fab staging deploy
+# Deploy updates to production
+fab production deploy
+</pre></div>
+</div>
+<p>This runs the Salt highstate for the given environment. This handles both the configuration
+of the server as well as updating the latest source code. This can take a few minutes and
+does not produce any output while it is running. Once it has finished the output should be
+checked for errors.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Server Setup</a><ul>
+<li><a class="reference internal" href="#provisioning">Provisioning</a></li>
+<li><a class="reference internal" href="#layout">Layout</a></li>
+<li><a class="reference internal" href="#deployment">Deployment</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/server-setup.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="index.html">NC Traffic Stops 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Dylan, Andy, and Colin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>
