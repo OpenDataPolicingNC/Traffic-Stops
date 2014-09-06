@@ -1,16 +1,17 @@
 -r base.txt
-django-debug-toolbar==1.0.1
+django-debug-toolbar==1.2.1
 # Required by django-debug-toolbar
 sqlparse==0.1.11
 
 coverage==3.7.1
 factory_boy==2.2.1
-flake8==2.1.0
+flake8==2.2.3
 mock==1.0.1
 pylint==1.1.0
 # Required by pylint
 logilab-common==0.60.1
 astroid==1.0.1
+coveralls==0.4.2
 
 # disable Fabric when using Python 3.3
 # Fabric==1.8.2

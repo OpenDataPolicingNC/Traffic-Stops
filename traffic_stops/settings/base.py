@@ -138,7 +138,7 @@ INSTALLED_APPS = (
     'django.contrib.sitemaps',
     # External apps
     'compressor',
-    'south',
+    # 'south',
     'selectable',
     'bootstrap3',
     'endless_pagination',
@@ -196,6 +196,9 @@ LOGGING = {
         },
     }
 }
+
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
 # Application settings
 SKIP_SOUTH_TESTS = True
 

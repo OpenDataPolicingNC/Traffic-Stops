@@ -19,10 +19,22 @@ forwarding if it is not already by adding ``ForwardAgent yes`` to your SSH confi
 Getting Started
 ------------------------
 
+If you need Python 3.4 installed, you can use this PPA::
+
+    sudo add-apt-repository ppa:fkrull/deadsnakes
+    sudo apt-get update
+    sudo apt-get install python3.4-dev
+
+The tool that we use to deploy code is called `Fabric
+<http://docs.fabfile.org/>`_, which is not yet Python3 compatible. So,
+we need to install that globally in our Python2 environment::
+
+    sudo pip install fabric==1.10.0
+
 To setup your local environment you should create a virtualenv and install the
 necessary requirements::
 
-    mkvirtualenv nc-traffic-stops
+    mkvirtualenv --python=/usr/bin/python3.4 nc-traffic-stops
     $VIRTUAL_ENV/bin/pip install -r $PWD/requirements/dev.txt
 
 Then create a local settings file and set your ``DJANGO_SETTINGS_MODULE`` to

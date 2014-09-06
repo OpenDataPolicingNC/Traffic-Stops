@@ -26,13 +26,13 @@ class Stop(models.Model):
     date = models.DateTimeField()
     purpose = models.PositiveSmallIntegerField(choices=PURPOSE_CHOICES)
     action = models.PositiveSmallIntegerField(choices=ACTION_CHOICES)
-    driver_arrest = models.BooleanField()
-    passenger_arrest = models.BooleanField()
-    encounter_force = models.BooleanField()
-    engage_force = models.BooleanField()
-    officer_injury = models.BooleanField()
-    driver_injury = models.BooleanField()
-    passenger_injury = models.BooleanField()
+    driver_arrest = models.BooleanField(default=False)
+    passenger_arrest = models.BooleanField(default=False)
+    encounter_force = models.BooleanField(default=False)
+    engage_force = models.BooleanField(default=False)
+    officer_injury = models.BooleanField(default=False)
+    driver_injury = models.BooleanField(default=False)
+    passenger_injury = models.BooleanField(default=False)
     officer_id = models.CharField(max_length=15)  # todo: keys
     stop_location = models.CharField(max_length=15)  # todo: keys
     stop_city = models.CharField(max_length=20)
@@ -73,13 +73,13 @@ class Search(models.Model):
     stop = models.ForeignKey(Stop)
     person = models.ForeignKey(Person)
     type = models.PositiveSmallIntegerField(choices=SEARCH_TYPE_CHOICES)
-    vehicle_search = models.BooleanField()
-    driver_search = models.BooleanField()
-    passenger_search = models.BooleanField()
-    property_search = models.BooleanField()
-    vehicle_siezed = models.BooleanField()
-    personal_property_siezed = models.BooleanField()
-    other_property_sized = models.BooleanField()
+    vehicle_search = models.BooleanField(default=False)
+    driver_search = models.BooleanField(default=False)
+    passenger_search = models.BooleanField(default=False)
+    property_search = models.BooleanField(default=False)
+    vehicle_siezed = models.BooleanField(default=False)
+    personal_property_siezed = models.BooleanField(default=False)
+    other_property_sized = models.BooleanField(default=False)
 
 
 class Contraband(models.Model):
@@ -118,5 +118,5 @@ class SearchBasis(models.Model):
 class Agency(models.Model):
     name = models.CharField(max_length=255)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
