@@ -9,7 +9,8 @@ import os
 import subprocess
 import sys
 
-RAW_DATA_DIR = '../raw-data'
+RAW_DATA_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), 'nc'))
+print(RAW_DATA_DIR)
 CSV_DIR = os.path.join(RAW_DATA_DIR, 'csv')
 
 mapping = {'length': (36, 44),
@@ -45,7 +46,7 @@ def create_schema(format_path, schema_path):
 def main():
     """Find all _format.txt files and convert their data files to CSV"""
     if not os.path.exists(RAW_DATA_DIR):
-        print "First unpack raw data into ../raw-data"
+        print("First unpack raw data into ../raw-data")
         exit()
     files = filter(lambda x: x.endswith('format.txt'),
                    os.listdir(RAW_DATA_DIR))
@@ -60,13 +61,13 @@ def main():
         if len(sys.argv) > 1 and sys.argv[1] == 'count':
             data_count = line_count(data_path)
             csv_count = line_count(csv_path)
-            print name
-            print 'DAT', data_count
-            print 'CSV', csv_count
+            print(name)
+            print('DAT', data_count)
+            print('CSV', csv_count)
             continue
         create_schema(format_path, schema_path)
-        print "in2csv -e iso-8859-1 -f fixed -s %s %s > %s" % (schema_path, data_path, csv_path)
-        subprocess.call("in2csv -e iso-8859-1 -f fixed -s %s %s > %s" % (schema_path, data_path, csv_path), shell=True)
+        print("in2csv -e iso-8859-1 -f fixed -s {} {} > {}".format(schema_path, data_path, csv_path))
+        subprocess.call("in2csv -e iso-8859-1 -f fixed -s {} {} > {}".format(schema_path, data_path, csv_path), shell=True)
 
 if __name__ == "__main__":
     main()
