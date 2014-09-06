@@ -27,7 +27,8 @@ Convert space-delineated files to CSVs with the help of `csvkit`_ and
     time python create-schema.py
     python create-schema.py count
 
-The output will show the line counts of each file. The CSV files should have an extra line for the header.
+The output will show the line counts of each file. The CSV files should have an
+extra line for the header.
 
 .. code-block:: bash
 
@@ -63,7 +64,8 @@ Now use PostgreSQL's ``COPY`` command to load our data:
 
     time psql --set=data_dir="$PWD/nc/csv" -f import.sql traffic_stops
 
-The output should match the line count from above:
+This took ~25 minutes on my laptop. The output should match the line count from
+above:
 
 .. code-block:: bash
 
@@ -97,5 +99,18 @@ The output should match the line count from above:
     real    25m42.752s
     user    0m0.036s
     sys 0m0.012s
+
+Apply the latest migrations:
+
+.. code-block:: bash
+
+    python manage.py syncdb --noinput
+
+Now you should be able to view data with ``runserver``:
+
+.. code-block:: bash
+
+    python manage.py runserver
+
 
 .. _csvkit: https://csvkit.readthedocs.org/

@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Agency',
             fields=[
-                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=255)),
             ],
             options={
@@ -23,17 +23,17 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Contraband',
             fields=[
-                ('contraband_id', models.IntegerField(primary_key=True, serialize=False)),
-                ('ounces', models.FloatField(null=True, default=0)),
-                ('pounds', models.FloatField(null=True, default=0)),
-                ('pints', models.FloatField(null=True, default=0)),
-                ('gallons', models.FloatField(null=True, default=0)),
-                ('dosages', models.FloatField(null=True, default=0)),
-                ('grams', models.FloatField(null=True, default=0)),
-                ('kilos', models.FloatField(null=True, default=0)),
-                ('money', models.FloatField(null=True, default=0)),
-                ('weapons', models.FloatField(null=True, default=0)),
-                ('dollar_amount', models.FloatField(null=True, default=0)),
+                ('contraband_id', models.IntegerField(serialize=False, primary_key=True)),
+                ('ounces', models.FloatField(default=0, null=True)),
+                ('pounds', models.FloatField(default=0, null=True)),
+                ('pints', models.FloatField(default=0, null=True)),
+                ('gallons', models.FloatField(default=0, null=True)),
+                ('dosages', models.FloatField(default=0, null=True)),
+                ('grams', models.FloatField(default=0, null=True)),
+                ('kilos', models.FloatField(default=0, null=True)),
+                ('money', models.FloatField(default=0, null=True)),
+                ('weapons', models.FloatField(default=0, null=True)),
+                ('dollar_amount', models.FloatField(default=0, null=True)),
             ],
             options={
             },
@@ -42,12 +42,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Person',
             fields=[
-                ('person_id', models.IntegerField(primary_key=True, serialize=False)),
-                ('type', models.CharField(max_length=2, choices=[('Dr', 'Driver'), ('Pa', 'Passenger')])),
+                ('person_id', models.IntegerField(serialize=False, primary_key=True)),
+                ('type', models.CharField(choices=[('Dr', 'Driver'), ('Pa', 'Passenger')], max_length=2)),
                 ('age', models.PositiveSmallIntegerField()),
-                ('gender', models.CharField(max_length=2, choices=[('M', 'Male'), ('F', 'Female')])),
-                ('ethnicity', models.CharField(max_length=2, choices=[('H', 'Hispanic'), ('NH', 'Non-Hispanic')])),
-                ('race', models.CharField(max_length=2, choices=[('A', 'Asian'), ('B', 'Black'), ('I', 'Native American'), ('U', 'Other/Unknown'), ('W', 'White')])),
+                ('gender', models.CharField(choices=[('M', 'Male'), ('F', 'Female')], max_length=2)),
+                ('ethnicity', models.CharField(choices=[('H', 'Hispanic'), ('NH', 'Non-Hispanic')], max_length=2)),
+                ('race', models.CharField(choices=[('A', 'Asian'), ('B', 'Black'), ('I', 'Native American'), ('U', 'Other/Unknown'), ('W', 'White')], max_length=2)),
             ],
             options={
             },
@@ -56,7 +56,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Search',
             fields=[
-                ('search_id', models.IntegerField(primary_key=True, serialize=False)),
+                ('search_id', models.IntegerField(serialize=False, primary_key=True)),
                 ('type', models.PositiveSmallIntegerField()),
                 ('vehicle_search', models.BooleanField(default=False)),
                 ('driver_search', models.BooleanField(default=False)),
@@ -74,8 +74,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='SearchBasis',
             fields=[
-                ('search_basis_id', models.IntegerField(primary_key=True, serialize=False)),
-                ('basis', models.CharField(max_length=4, choices=[('ER', 'Erratic/Suspicious Behavior'), ('OB', 'Observation of Suspected Contraband'), ('OI', 'Other Official Information'), ('SM', 'Suspicious Movement'), ('TIP', 'Informant Tip'), ('WTNS', 'Witness Observation')])),
+                ('search_basis_id', models.IntegerField(serialize=False, primary_key=True)),
+                ('basis', models.CharField(choices=[('ER', 'Erratic/Suspicious Behavior'), ('OB', 'Observation of Suspected Contraband'), ('OI', 'Other Official Information'), ('SM', 'Suspicious Movement'), ('TIP', 'Informant Tip'), ('WTNS', 'Witness Observation')], max_length=4)),
                 ('person', models.ForeignKey(to='stops.Person')),
                 ('search', models.ForeignKey(to='stops.Search')),
             ],
@@ -86,7 +86,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Stop',
             fields=[
-                ('stop_id', models.PositiveIntegerField(primary_key=True, serialize=False)),
+                ('stop_id', models.PositiveIntegerField(serialize=False, primary_key=True)),
                 ('agency_description', models.CharField(max_length=100)),
                 ('date', models.DateTimeField()),
                 ('purpose', models.PositiveSmallIntegerField(choices=[(1, 'Speed Limit Violation'), (2, 'Stop Light/Sign Violation'), (3, 'Driving While Impaired'), (4, 'Safe Movement Violation'), (5, 'Vehicle Equipment Violation'), (6, 'Vehicle Regulatory Violation'), (7, 'Seat Belt Violation'), (8, 'Investigation'), (9, 'Other Motor Vehicle Violation'), (10, 'Checkpoint')])),
@@ -101,7 +101,6 @@ class Migration(migrations.Migration):
                 ('officer_id', models.CharField(max_length=15)),
                 ('stop_location', models.CharField(max_length=15)),
                 ('stop_city', models.CharField(max_length=20)),
-                ('agency', models.ForeignKey(null=True, related_name='stops', to='stops.Agency')),
             ],
             options={
             },
