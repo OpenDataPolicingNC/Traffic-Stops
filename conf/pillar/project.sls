@@ -1,3 +1,6 @@
 project_name: traffic_stops
 
-python_version: 3.3
+python_version: 3.4
+
+postgresql_version: 9.3
+postgresql_extensions: [postgis]
