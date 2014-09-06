@@ -10,7 +10,6 @@ import subprocess
 import sys
 
 RAW_DATA_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), 'nc'))
-print(RAW_DATA_DIR)
 CSV_DIR = os.path.join(RAW_DATA_DIR, 'csv')
 
 mapping = {'length': (36, 44),
