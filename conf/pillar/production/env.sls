@@ -1,6 +1,6 @@
 environment: production
 
-domain: 107.170.136.182
+domain: 54.208.65.43
 
 repo:
   url: git@github.com:copelco/NC-Traffic-Stops.git

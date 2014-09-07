@@ -8,7 +8,7 @@ Overview
 traffic_stops is deployed on the following stack.
 
 - OS: Ubuntu 12.04 LTS
-- Python: 3.3
+- Python: 3.4
 - Database: Postgres 9.1
 - Application Server: Gunicorn
 - Frontend Server: Nginx
@@ -34,7 +34,7 @@ E.g., change this::
 to this::
 
     repo:
-      url: git@github.com:account/reponame.git
+      url: git@github.com:codefordurham/school-inspector.git
       branch: master
 
 The repo will also need a deployment key generated so that the Salt minion can
@@ -152,10 +152,10 @@ EC2 uses a private key. These credentials will be passed as command line argumen
     fab -H <fresh-server-ip> -u <root-user> setup_master
     # Example of provisioning 33.33.33.10 as the Salt Master
     fab -H 33.33.33.10 -u root setup_master
-    # Example EC2 setup
-    fab -H 54.208.65.43 -u ubuntu -i ~/.ssh/traffic-stops.pem setup_master
     # Example DO setup
-    fab -H 162.243.232.86 -u root setup_master
+    fab -H X.X.X.X -u root setup_master
+    # Example AWS setup
+    fab -H 54.208.65.43 -u ubuntu -i ~/.ssh/traffic-stops.pem setup_master
 
 This will install salt-master and update the master configuration file. The master will use a
 set of base states from https://github.com/caktus/margarita using the gitfs root. Once the master
@@ -172,8 +172,6 @@ is set.
 Additional states and pillar information are contained in this repo and must be rsync'd to the master via::
 
     fab -u <root-user> sync
-    # Example EC2
-    fab -u ubuntu -i ~/.ssh/traffic-stops.pem sync
 
 This must be done each time a state or pillar is updated. This will be called on each deploy to
 ensure they are always up to date.
@@ -184,8 +182,11 @@ To provision the master server itself with salt you need to create a minion on t
     fab -u <root-user> accept_key:<server-name>
     fab -u <root-user> --set environment=master deploy
     # Example DO (may have to run a second time to catch key)
-    fab -H 107.170.136.182 -u root --set environment=master setup_minion:salt-master
-    fab -u root --set environment=master deploy
+    fab -H X.X.X.X -u root --set environment=master setup_minion:salt-master
+    fab -H X.X.X.X -u root --set environment=master deploy
+    # Example AWS setup
+    fab -H 54.208.65.43 -u ubuntu -i ~/.ssh/traffic-stops.pem --set environment=master setup_minion:salt-master
+    fab -H 54.208.65.43 -u ubuntu -i ~/.ssh/traffic-stops.pem --set environment=master deploy
 
 This will create developer users on the master server so you will no longer have to connect
 as the root user.
@@ -202,7 +203,9 @@ to complete the provisioning. To setup a minion you call the Fabric command::
     fab <environment> setup_minion:<roles> -H <ip-of-new-server> -u <root-user>
     fab staging setup_minion:web,balancer,db-master,cache -H  33.33.33.10 -u root
     # Example DO
-    fab production setup_minion:web,balancer,db-master,cache,queue,worker -H 107.170.136.182
+    fab production setup_minion:web,balancer,db-master,cache,queue,worker -H X.X.X.X
+    # Example AWS setup
+    fab production setup_minion:web,balancer,db-master,cache,queue,worker -H 54.208.65.43
 
 The available roles are ``salt-master``, ``web``, ``worker``, ``balancer``, ``db-master``,
 ``queue`` and ``cache``. If you are running everything on a single server you need to enable
@@ -214,12 +217,6 @@ corresponding ``delete_role`` command because deleting a role does not disable t
 remove the configuration files of the deleted role::
 
     fab add_role:web -H  33.33.33.10
-
-This configures the Minion to point the Master but the server cannot connect until its key
-has been accepted on the Master. To accept the key you need to know the hostname of the
-new server and run::
-
-    fab accept_key:<hostname>
 
 After that you can run the deploy/highstate to provision the new server::
 
@@ -263,7 +260,7 @@ makes use of `Django setup for Celery <http://celery.readthedocs.org/en/latest/d
 As documented you should create/import your Celery app in ``traffic_stops/__init__.py`` so that you
 can run the worker via::
 
-    python celery -A traffic_stops worker
+    celery -A traffic_stops worker
 
 Additionally you will need to configure the project settings for Celery::
 

@@ -23,7 +23,7 @@ VALID_ROLES = (
 )
 
 # This assumes a single master for both staging and production
-env.master = '107.170.136.182'
+env.master = '54.208.65.43'
 
 
 @task
