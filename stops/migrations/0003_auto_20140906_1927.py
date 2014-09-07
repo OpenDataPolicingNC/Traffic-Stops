@@ -16,6 +16,10 @@ def add_agencies(apps, schema_editor):
         Stop.objects.filter(agency_description=agency.name).update(agency=agency)
 
 
+def backwards(apps, schema_editor):
+    pass
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -23,5 +27,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(add_agencies),
+        migrations.RunPython(add_agencies, backwards),
     ]
