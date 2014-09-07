@@ -8,8 +8,8 @@ Overview
 traffic_stops is deployed on the following stack.
 
 - OS: Ubuntu 12.04 LTS
-- Python: 3.3
-- Database: Postgres 9.1
+- Python: 3.4
+- Database: Postgres 9.3, PostGIS 2.1
 - Application Server: Gunicorn
 - Frontend Server: Nginx
 - Cache: Memcached
@@ -34,29 +34,38 @@ E.g., change this::
 to this::
 
     repo:
-      url: git@github.com:account/reponame.git
+      url: git@github.com:codefordurham/school-inspector.git
       branch: master
 
-The repo will also need a deployment key generated so that the Salt minion can access the repository.
-See the Github docs on managing deploy keys: https://help.github.com/articles/managing-deploy-keys
-Once generated the private key should be added to `conf/pillar/<environment>/secrets.sls`` under the
-label `github_deploy_key`::
+The repo will also need a deployment key generated so that the Salt minion can
+access the repository. You can generate a deployment key locally for the new
+server like so::
+
+    ssh-keygen -t rsa -b 4096 -f <servername>
+
+This will generate two files named ``<servername>`` and ``<servername>.pub``.
+The first file contains the private key and the second file contains the public
+key. The public key needs to be added to the "Deploy keys" in the GitHub repository.
+For more information, see the Github docs on managing deploy keys:
+https://help.github.com/articles/managing-deploy-keys
+
+The text in the private key file should be added to `conf/pillar/<environment>/secrets.sls``
+under the label `github_deploy_key`, e.g.::
 
     github_deploy_key: |
       -----BEGIN RSA PRIVATE KEY-----
       foobar
       -----END RSA PRIVATE KEY-----
 
-There will be more information on the secrets in a later section. You may choose to include the public
-SSH key in the repo as well but this is not strictly required.
+There will be more information on the secrets in a later section. You may choose
+to include the public SSH key inside the repo itself as well, but this is not
+strictly required.
 
 You also need to set ``project_name`` and ``python_version`` in ``conf/pillar/project.sls``.
 Currently we support using Python 2.7 or Python 3.3. The project template is set up for 2.7 by
 default. If you want to use 3.3, you will need to change ``python_version`` and make a few changes
-to requirements. In ``requirements/base.txt``, you need to change django-compressor to use a forked
-version (``-e git://github.com/vkurup/django_compressor.git@develop#egg=django_compressor``). In
-``requirements/production.txt``, change python-memcached to python3-memcached. Finally, in
-``requirements/dev.txt``, remove Fabric and all its dependencies. Instead you will need Fabric
+to requirements. In ``requirements/production.txt``, change python-memcached to python3-memcached.
+In ``requirements/dev.txt``, remove Fabric and all its dependencies. Instead you will need Fabric
 installed on your laptop "globally" so that when you run ``fab``, it will not be found in your
 virtualenv, but will then be found in your global environment.
 
@@ -64,7 +73,7 @@ For the environment you want to setup you will need to set the ``domain`` in
 ``conf/pillar/<environment>/env.sls``.
 
 You will also need add the developer's user names and SSH keys to ``conf/pillar/devs.sls``. Each
-user record should match the format::
+user record (under the parent ``users:`` key) should match the format::
 
     example-user:
       public_key:
@@ -102,7 +111,7 @@ Environment Variables
 ------------------------
 
 Other environment variables which need to be configured but aren't secret can be added
-to the ``env`` dictionary in ``conf/pillar/<environment>/env.sls``:
+to the ``env`` dictionary in ``conf/pillar/<environment>/env.sls``::
 
   # Additional public environment variables to set for the project
   env:
@@ -143,10 +152,10 @@ EC2 uses a private key. These credentials will be passed as command line argumen
     fab -H <fresh-server-ip> -u <root-user> setup_master
     # Example of provisioning 33.33.33.10 as the Salt Master
     fab -H 33.33.33.10 -u root setup_master
-    # Example EC2 setup
-    fab -H 54.208.65.43 -u ubuntu -i ~/.ssh/traffic-stops.pem setup_master
     # Example DO setup
-    fab -H 162.243.232.86 -u root setup_master
+    fab -H X.X.X.X -u root setup_master
+    # Example AWS setup
+    fab -H 54.208.65.43 -u ubuntu -i ~/.ssh/traffic-stops.pem setup_master
 
 This will install salt-master and update the master configuration file. The master will use a
 set of base states from https://github.com/caktus/margarita using the gitfs root. Once the master
@@ -163,8 +172,6 @@ is set.
 Additional states and pillar information are contained in this repo and must be rsync'd to the master via::
 
     fab -u <root-user> sync
-    # Example EC2
-    fab -u ubuntu -i ~/.ssh/traffic-stops.pem sync
 
 This must be done each time a state or pillar is updated. This will be called on each deploy to
 ensure they are always up to date.
@@ -174,10 +181,12 @@ To provision the master server itself with salt you need to create a minion on t
     fab -H <ip-of-new-master> -u <root-user> --set environment=master setup_minion:salt-master
     fab -u <root-user> accept_key:<server-name>
     fab -u <root-user> --set environment=master deploy
-    # Example EC2
+    # Example DO (may have to run a second time to catch key)
+    fab -H X.X.X.X -u root --set environment=master setup_minion:salt-master
+    fab -H X.X.X.X -u root --set environment=master deploy
+    # Example AWS setup
     fab -H 54.208.65.43 -u ubuntu -i ~/.ssh/traffic-stops.pem --set environment=master setup_minion:salt-master
-    fab -u ubuntu -i ~/.ssh/traffic-stops.pem accept_key:<server-name>
-    fab -u ubuntu -i ~/.ssh/traffic-stops.pem --set environment=master deploy
+    fab -H 54.208.65.43 -u ubuntu -i ~/.ssh/traffic-stops.pem --set environment=master deploy
 
 This will create developer users on the master server so you will no longer have to connect
 as the root user.
@@ -192,7 +201,11 @@ as a root user. This is to install the Salt Minion which will connect to the Mas
 to complete the provisioning. To setup a minion you call the Fabric command::
 
     fab <environment> setup_minion:<roles> -H <ip-of-new-server> -u <root-user>
-    fab production setup_minion:web,balancer,db-master,cache,salt-master -H  162.243.232.86
+    fab staging setup_minion:web,balancer,db-master,cache -H  33.33.33.10 -u root
+    # Example DO
+    fab production setup_minion:web,balancer,db-master,cache,queue,worker -H X.X.X.X
+    # Example AWS setup
+    fab production setup_minion:web,balancer,db-master,cache,queue,worker -H 54.208.65.43
 
 The available roles are ``salt-master``, ``web``, ``worker``, ``balancer``, ``db-master``,
 ``queue`` and ``cache``. If you are running everything on a single server you need to enable
@@ -205,16 +218,15 @@ remove the configuration files of the deleted role::
 
     fab add_role:web -H  33.33.33.10
 
-This configures the Minion to point the Master but the server cannot connect until its key
-has been accepted on the Master. To accept the key you need to know the hostname of the
-new server and run::
-
-    fab accept_key:<hostname>
-
 After that you can run the deploy/highstate to provision the new server::
 
     fab <environment> deploy
 
+The first time you run this command, it may complete before the server is set up.
+It is most likely still completing in the background. If the server does not become
+accessible or if you encounter errors during the process, review the Salt logs for
+any hints in ``/var/log/salt`` on the minion and/or master. For more information about
+deployment, see the `server setup </server-setup>` documentation.
 
 Optional Configuration
 ------------------------
@@ -248,7 +260,7 @@ makes use of `Django setup for Celery <http://celery.readthedocs.org/en/latest/d
 As documented you should create/import your Celery app in ``traffic_stops/__init__.py`` so that you
 can run the worker via::
 
-    python celery -A traffic_stops worker
+    celery -A traffic_stops worker
 
 Additionally you will need to configure the project settings for Celery::
 

@@ -15,13 +15,13 @@ broker-user:
 broker-vhost:
   rabbitmq_vhost.present:
     - name: {{ pillar['project_name'] }}_{{ pillar['environment'] }}
-    - user: {{ pillar['project_name'] }}_{{ pillar['environment'] }}
+    - owner: {{ pillar['project_name'] }}_{{ pillar['environment'] }}
     - require:
       - rabbitmq_user: broker-user
 
-queue_firewall:
 {% for host, ifaces in salt['mine.get']('roles:web|worker', 'network.interfaces', expr_form='grain_pcre').items() %}
 {% set host_addr = vars.get_primary_ip(ifaces) %}
+queue_allow-{{ host_addr }}:
   ufw.allow:
     - name: '5672'
     - enabled: true

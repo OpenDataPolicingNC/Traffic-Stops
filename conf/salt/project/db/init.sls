@@ -1,4 +1,5 @@
 {% import 'project/_vars.sls' as vars with context %}
+{% set version=pillar.get("postgresql_version", "9.3") %}
 
 include:
   - postgresql
@@ -26,42 +27,12 @@ database-{{ pillar['project_name'] }}:
     - lc_ctype: en_US.UTF-8
     - require:
       - postgres_user: user-{{ pillar['project_name'] }}
-      - file: /var/lib/postgresql/configure_utf-8.sh
       - file: hba_conf
       - file: postgresql_conf
 
-{% if salt['pillar.get']('spatial_database', '') %}
-ubuntugis:
-  pkgrepo.managed:
-    - humanname: UbuntuGIS PPA
-    - ppa: ubuntugis/ppa
-
-postgis-packages:
-  pkg:
-    - installed
-    - names:
-      - postgresql-9.1-postgis
-    - require:
-      - pkgrepo: ubuntugis
-      - pkg: db-packages
-    - require_in:
-      - virtualenv: venv
-
-create-postgis-extension:
-  cmd.run:
-    - name: psql -U postgres {{ pillar['project_name'] }}_{{ pillar['environment'] }} -c "CREATE EXTENSION postgis;"
-    - unless: psql -U postgres {{ pillar['project_name'] }}_{{ pillar['environment'] }} -c "\dx+" | grep postgis
-    - user: postgres
-    - require:
-      - pkg: postgis-packages
-      - postgres_database: database-{{ pillar['project_name'] }}
-    - require_in:
-      - virtualenv: venv
-{% endif %}
-
 hba_conf:
   file.managed:
-    - name: /etc/postgresql/9.1/main/pg_hba.conf
+    - name: /etc/postgresql/{{ version }}/main/pg_hba.conf
     - source: salt://project/db/pg_hba.conf
     - user: postgres
     - group: postgres
@@ -75,29 +46,46 @@ hba_conf:
 {% endfor %}
     - require:
       - pkg: postgresql
+      - cmd: /var/lib/postgresql/configure_utf-8.sh
     - watch_in:
       - service: postgresql
 
 postgresql_conf:
   file.managed:
-    - name: /etc/postgresql/9.1/main/postgresql.conf
+    - name: /etc/postgresql/{{ version }}/main/postgresql.conf
     - source: salt://project/db/postgresql.conf
     - user: postgres
     - group: postgres
     - mode: 0644
     - template: jinja
+    - context:
+      version: {{ version }}
     - require:
       - pkg: postgresql
+      - cmd: /var/lib/postgresql/configure_utf-8.sh
     - watch_in:
       - service: postgresql
 
-db_firewall:
 {% for host, ifaces in salt['mine.get']('roles:web|worker', 'network.interfaces', expr_form='grain_pcre').items() %}
 {% set host_addr = vars.get_primary_ip(ifaces) %}
+db_allow-{{ host_addr }}:
   ufw.allow:
     - name: '5432'
     - enabled: true
     - from: {{ host_addr }}
     - require:
       - pkg: ufw
+{% endfor %}
+
+{% for extension in pillar.get('postgresql_extensions', []) %}
+create-{{ extension }}-extension:
+  cmd.run:
+    - name: psql -U postgres {{ pillar['project_name'] }}_{{ pillar['environment'] }} -c "CREATE EXTENSION postgis;"
+    - unless: psql -U postgres {{ pillar['project_name'] }}_{{ pillar['environment'] }} -c "\dx+" | grep postgis
+    - user: postgres
+    - require:
+      - pkg: postgis-packages
+      - postgres_database: database-{{ pillar['project_name'] }}
+    - require_in:
+      - virtualenv: venv
 {% endfor %}

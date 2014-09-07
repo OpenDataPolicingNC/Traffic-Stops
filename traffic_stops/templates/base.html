@@ -11,8 +11,7 @@
     {% block extra-meta %}{% endblock %}
     {% if debug %}
     <link rel="stylesheet/less" type="text/css" media="all" href="{{ STATIC_URL }}less/site.less">
-    <script src="{{ STATIC_URL }}js/libs/less-1.6.1.min.js"></script>
-    {% else %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.3/less.min.js"></script>    {% else %}
     {% compress css %}
     <link rel="stylesheet" type="text/less" media="all" href="{{ STATIC_URL }}less/site.less">
     {% endcompress %}
