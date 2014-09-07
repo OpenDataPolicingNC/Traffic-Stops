@@ -1,6 +1,28 @@
 Data Import 
 ===========
 
+
+Database Dump
+-------------
+
+To load the database dump, run:
+
+.. code-block:: bash
+
+    sudo -u postgres dropdb traffic_stops_production
+    sudo -u postgres createdb -O traffic_stops_production traffic_stops_production
+    sudo -u postgres pg_restore --role=traffic_stops_production -Oxa -d traffic_stops_production /var/www/traffic_stops/traffic_stops.tar
+
+To create the database dump, run:
+
+.. code-block:: bash
+
+    pg_dump -Ox -Ft traffic_stops > traffic_stops.tar
+
+
+Raw Data
+--------
+
 Make sure our database is in the right state before importing:
 
 .. code-block:: bash

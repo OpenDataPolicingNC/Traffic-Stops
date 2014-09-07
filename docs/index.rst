@@ -12,8 +12,8 @@ Contents:
    :maxdepth: 2
 
    data-import
-   provisioning
    server-setup
+   provisioning
    vagrant
 
 

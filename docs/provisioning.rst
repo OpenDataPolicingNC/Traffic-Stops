@@ -9,7 +9,7 @@ traffic_stops is deployed on the following stack.
 
 - OS: Ubuntu 12.04 LTS
 - Python: 3.4
-- Database: Postgres 9.1
+- Database: Postgres 9.3, PostGIS 2.1
 - Application Server: Gunicorn
 - Frontend Server: Nginx
 - Cache: Memcached
@@ -111,7 +111,7 @@ Environment Variables
 ------------------------
 
 Other environment variables which need to be configured but aren't secret can be added
-to the ``env`` dictionary in ``conf/pillar/<environment>/env.sls``:
+to the ``env`` dictionary in ``conf/pillar/<environment>/env.sls``::
 
   # Additional public environment variables to set for the project
   env:
