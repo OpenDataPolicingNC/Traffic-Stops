@@ -12,5 +12,5 @@ organization.
 
 Please see the `documentation`_ for more information.
 
-.. _documentation: https://readthedocs.org/projects/nc-traffic-stops/
+.. _documentation: http://nc-traffic-stops.readthedocs.org/en/latest/
 .. _Southern Coalition for Social Justice: http://www.scsj.org/
