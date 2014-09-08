@@ -6,6 +6,21 @@
 Welcome to NC Traffic Stops's documentation!
 ============================================
 
+NC Traffic Stops is a website to monitor and identify racial profiling
+practices by North Carolina law enforcement agencies. This project is lead by
+the `Southern Coalition for Social Justice`_, a Durham-based civil rights
+organization.
+
+The development team consists of:
+
+* Ian Mance
+* Dylan Young
+* Andy Shapiro
+* Colin Copeland
+
+.. _Southern Coalition for Social Justice: http://www.scsj.org/
+
+
 Contents:
 
 .. toctree::
@@ -16,7 +31,6 @@ Contents:
    server-setup
    provisioning
    vagrant
-
 
 
 Indices and tables
