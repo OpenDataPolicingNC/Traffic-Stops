@@ -1,3 +1,6 @@
+.. image:: https://badge.waffle.io/copelco/NC-Traffic-Stops.png?label=ready&title=Ready 
+ :target: https://waffle.io/copelco/NC-Traffic-Stops
+ :alt: 'Stories in Ready'
 NC Traffic Stops
 ================
 
