@@ -1,4 +1,4 @@
-Data Import 
+Data Import
 ===========
 
 
@@ -9,9 +9,9 @@ To load the database dump, run:
 
 .. code-block:: bash
 
-    sudo -u postgres dropdb traffic_stops_production
-    sudo -u postgres createdb -O traffic_stops_production traffic_stops_production
-    sudo -u postgres pg_restore --role=traffic_stops_production -Oxa -d traffic_stops_production /var/www/traffic_stops/traffic_stops.tar
+    sudo -u postgres dropdb traffic_stops
+    sudo -u postgres createdb -E UTF-8 traffic_stops
+    sudo -u postgres pg_restore -d traffic_stops /path/to/traffic_stops.tar
 
 To create the database dump, run:
 
@@ -41,9 +41,9 @@ Download the extract the latest North Carolina data dump into
     unzip -d nc raw-data.zip
     sudo chmod 666 nc/*
 
-Convert space-delineated files to CSVs with the help of `csvkit`_ and 
+Convert space-delineated files to CSVs with the help of `csvkit`_ and
 ``create-schema.py`` (this will create ``data/nc/csv``):
- 
+
 .. code-block:: bash
 
     time python create-schema.py
