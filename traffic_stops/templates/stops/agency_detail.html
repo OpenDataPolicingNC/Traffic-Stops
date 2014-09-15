@@ -4,15 +4,77 @@
 {% block content %}
 <h2>{{ object }}</h2>
 
-<p>Total Stops: {{ object.stops.count|intcomma }}</p>
+  <div class="row">
+      <div class="col-md-4">
+          <h3>Stop ratio by race</h3>
+          <svg id="srr"></svg>
+          <p class="help-block">
+            Pie chart showing the annual average stop-ratio by
+            race, in pie-chart format.
+          </p>
+      </div>
+      <div class="col-md-8">
+          <h3>Stop ratio by year</h3>
+          <svg id="sry"></svg>
+          <p class="help-block">
+            Line-chart showing annual stop-ratio for blacks, whites, and for the
+            full time-series where data are available. One value per race per year.
+          </p>
+      </div>
+  </div>
 
-<h3>Officers ({{ officers.count|intcomma }} total)</h3>
+  <div class="row">
+    <div class="col-md-offset-2 col-md-8">
+      <h3>Use of force ratio</h3>
+      <svg id="fry"></svg>
+      <p class="help-block">
+        Line-chart showing annual use-of-ratio for blacks, whites, and for the
+        full time-series where data are available. This is the ratio of times that
+        force was used for a stop. One value per race per year.
+      </p>
+    </div>
+  </div>
 
-<div class="row">
+  <div class="row">
+    <div class="col-md-offset-2 col-md-8">
+      <h3>Contraband hit-rate by race</h3>
+      <svg id="chr"></svg>
+      <p class="help-block">
+        Contraband hit-rate by race, splitting by consent searches and probable cause searches.
+      </p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-offset-2 col-md-8">
+      <h3>Likelihood of search by stop-cause</h3>
+      <svg id="lsb"></svg>
+      <p class="help-block">
+        Likelihood of stop by various stop-causes.
+      </p>
+    </div>
+  </div>
+
+  <div class="row">
+    <h3>Officers ({{ officers.count|intcomma }} total)</h3>
     <ul>
-        {% for officer in officers %}
-        <li><a href="{% url 'stops-search' %}?agency={{ object.name }}&officer={{ officer.officer_id }}">{{ officer.officer_id }} ({{ officer.total_stops|intcomma }})</a></li>
-        {% endfor %}
+      {% for officer in officers %}
+      <li><a href="{% url 'stops-search' %}?agency={{ object.name }}&officer={{ officer.officer_id }}">{{ officer.officer_id }} ({{ officer.total_stops|intcomma }})</a></li>
+      {% endfor %}
     </ul>
-</div>
+  </div>
+
 {% endblock %}
+
+
+{% block extra-js %}
+  <script type="text/javascript">
+      $(document).ready(function(){
+        new StopRatioDonut("#srr");
+        new StopRatioTimeSeries("#sry");
+        new UseOfForceTimeSeries("#fry");
+        new ContrabandHitRateBar("#chr")
+        new LikelihoodOfStop("#lsb");
+      });
+  </script>
+{% endblock extra-js %}

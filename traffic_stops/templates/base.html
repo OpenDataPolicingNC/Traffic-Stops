@@ -9,6 +9,7 @@
     <meta name="author" content="{% block meta-author %}{% endblock %}">
     <meta name="keywords" content="{% block meta-keywords %}{% endblock %}">
     {% block extra-meta %}{% endblock %}
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/nvd3/1.1.15-beta/nv.d3.min.css">
     {% if debug %}
     <link rel="stylesheet/less" type="text/css" media="all" href="{{ STATIC_URL }}less/site.less">
     <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.3/less.min.js"></script>    {% else %}
@@ -56,6 +57,8 @@
 
     {% block js %}
     <script charset="utf-8" src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script charset="utf-8" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js"></script>
+    <script charset="utf-8" src="//cdnjs.cloudflare.com/ajax/libs/nvd3/1.1.15-beta/nv.d3.min.js"></script>
     {% compress js %}
     <script charset="utf-8" src="{{ STATIC_URL }}bootstrap/js/affix.js"></script>
     <script charset="utf-8" src="{{ STATIC_URL }}bootstrap/js/alert.js"></script>
