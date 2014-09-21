@@ -36,6 +36,7 @@
 {% block content-outer %}
 <div id="map"></div>
 <div id="quick-search">
+    <h1>NC Traffic Stops</h1>
     <form role="form" id="agency_search" action='{% url "home" %}' method="post" accept-charset="utf-8">
         <div class="form-group">
         {% csrf_token %}

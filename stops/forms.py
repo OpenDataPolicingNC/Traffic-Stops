@@ -58,5 +58,5 @@ class SearchForm(forms.Form):
 
 class AgencySearchForm(forms.Form):
     agency = AutoCompleteSelectField(AgencyLookup, required=False)
-    agency.widget.attrs['placeholder'] = 'Enter agency name...'
+    agency.widget.attrs['placeholder'] = "Search for police or sheriff's department..."
     agency.widget.attrs['class'] = 'form-control'
