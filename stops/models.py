@@ -38,8 +38,8 @@ class Stop(models.Model):
     stop_city = models.CharField(max_length=20)
 
 
-PERSON_TYPE_CHOICES = (("Dr", "Driver"),
-                       ("Pa", "Passenger"))
+PERSON_TYPE_CHOICES = (("D", "Driver"),
+                       ("P", "Passenger"))
 
 GENDER_CHOICES = (("M", "Male"),
                   ("F", "Female"))
