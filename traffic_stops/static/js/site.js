@@ -175,24 +175,24 @@ ContrabandHitRateBar.prototype.getData = function(agencyID){
 };
 
 
-var LikelihoodOfStop = function(selector, agencyID){
+var LikelihoodOfStop = function(selector, whichChart){
     var self = this;
 
     nv.addGraph(function() {
       var chart = nv.models.multiBarHorizontalChart()
           .x(function(d) { return d.label; })
           .y(function(d) { return d.value; })
-          .margin({top: 20, right: 50, bottom: 20, left: 50})
+          .margin({top: 20, right: 50, bottom: 20, left: 150})
           .showValues(true)
           .tooltips(true)
           .transitionDuration(350)
-          .showControls(true);
+          .showControls(false);
 
       chart.yAxis
           .tickFormat(d3.format(',.2f'));
 
       d3.select(selector)
-          .datum(self.getData(agencyID))
+          .datum(self.getData(whichChart))
           .call(chart);
 
       nv.utils.windowResize(chart.update);
@@ -201,9 +201,13 @@ var LikelihoodOfStop = function(selector, agencyID){
   });
 };
 
-LikelihoodOfStop.prototype.getData = function(agencyID){
+LikelihoodOfStop.prototype.getData = function(whichChart){
     // should execute a GET call to fetch data
-    return barData;
+    if (whichChart){
+      return barData;
+    } else {
+      return barData2;
+    }
 };
 
 /*
@@ -224,84 +228,117 @@ var stop_data_donut  = [
     }
 ], sinAndCos = function(){
   var sin = [],
-        sin2 = [],
-      cos = [];
+      cos = [],
+      baseline =[];
 
   //Data is represented as an array of {x,y} pairs.
   for (var i = 2000; i < 2015; i++) {
     sin.push({x: i, y: Math.sin(i/10)});
-    sin2.push({x: i, y: Math.sin(i/10) *0.25 + 0.5});
+    baseline.push({x: i, y: 0})
     cos.push({x: i, y: 0.5 * Math.cos(i/10)});
   }
 
   //Line chart data should be sent as an array of series objects.
   return [
     {
-      values: sin,
-      key: 'White',
-      color: '#ff7f0e'
-    },
-    {
       values: cos,
-      key: 'Black',
+      key: 'Black vs Whites',
       color: '#2ca02c'
     },
     {
-      values: sin2,
-      key: 'Hispanic',
+      values: baseline,
+      key: 'Baseline',
+      color: '#696969'
+    },
+    {
+      values: sin,
+      key: 'Hispanic vs Whites',
       color: '#7777ff',
     }
   ];
 }, barData = [
   {
-    "key": "Blacks",
+    "key": "Blacks vs Whites",
     "color": "#d67777",
     "values": [
       {
-        "label" : "Group A" ,
+        "label" : "Driving impaired" ,
         "value" : 1.8746444827653
       } ,
       {
-        "label" : "Group B" ,
+        "label" : "Safe movement" ,
         "value" : 8.0961543492239
       } ,
       {
-        "label" : "Group C" ,
+        "label" : "Vehicle equipment" ,
         "value" : 0.57072943117674
       } ,
       {
-        "label" : "Group D" ,
+        "label" : "Other violation" ,
         "value" : -2.4174010336624
       } ,
       {
-        "label" : "Group E" ,
+        "label" : "Investigation" ,
+        "value" : -0.72009071426284
+      } ,
+      {
+        "label" : "Stop light/sign" ,
+        "value" : -0.72009071426284
+      } ,
+      {
+        "label" : "Speed limit" ,
+        "value" : -0.72009071426284
+      } ,
+      {
+        "label" : "Vehicle regulatory" ,
+        "value" : -0.72009071426284
+      } ,
+      {
+        "label" : "Seatbelt" ,
         "value" : -0.72009071426284
       }
     ]
-  },
+  }
+], barData2 = [
   {
-    "key": "Whites",
-    "color": "#b6a7c1",
+    "key": "Hispanics vs. Non-hispanics",
+    "color": "#16A720",
     "values": [
       {
-        "label" : "Group A" ,
-        "value" : 1.1746444827653
+        "label" : "Driving impaired" ,
+        "value" : 1.8746444827653
       } ,
       {
-        "label" : "Group B" ,
-        "value" : 3.0961543492239
+        "label" : "Safe movement" ,
+        "value" : 8.0961543492239
       } ,
       {
-        "label" : "Group C" ,
-        "value" : 2.57072943117674
+        "label" : "Vehicle equipment" ,
+        "value" : 0.57072943117674
       } ,
       {
-        "label" : "Group D" ,
-        "value" : -4.4174010336624
+        "label" : "Other violation" ,
+        "value" : -2.4174010336624
       } ,
       {
-        "label" : "Group E" ,
-        "value" : 0.22009071426284
+        "label" : "Investigation" ,
+        "value" : -0.72009071426284
+      } ,
+      {
+        "label" : "Stop light/sign" ,
+        "value" : -0.72009071426284
+      } ,
+      {
+        "label" : "Speed limit" ,
+        "value" : -0.72009071426284
+      } ,
+      {
+        "label" : "Vehicle regulatory" ,
+        "value" : -0.72009071426284
+      } ,
+      {
+        "label" : "Seatbelt" ,
+        "value" : -0.72009071426284
       }
     ]
   }
