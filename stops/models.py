@@ -65,7 +65,11 @@ class Person(models.Model):
     race = models.CharField(max_length=2, choices=RACE_CHOICES)
 
 
-SEARCH_TYPE_CHOICES = ()
+SEARCH_TYPE_CHOICES = ((1, 'Consent'),
+                       (2, 'Search Warrant'),
+                       (3, 'Probable Cause'),
+                       (4, 'Search Incident to Arrest'),
+                       (5, 'Protective Frisk'))
 
 
 class Search(models.Model):
