@@ -1,8 +1,20 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
 from django.db.models import Count
 from stops.models import Stop, Agency
 from stops import forms
+
+
+def home(request):
+    if request.method == 'POST':
+        form = forms.AgencySearchForm(request.POST)
+        if form.is_valid():
+            agency = form.cleaned_data['agency']
+            return redirect('agency-detail', agency.pk)
+    else:
+        form = forms.AgencySearchForm()
+    context = {'agency_form': form}
+    return render(request, 'home.html', context)
 
 
 def search(request):
