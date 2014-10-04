@@ -11,8 +11,8 @@ admin.autodiscover()
 
 
 urlpatterns = patterns('',  # noqa
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^stops/', include('stops.urls')),
-    url(r'^selectable/', include('selectable.urls')),
     url(r'^$', home, name='home'),
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^selectable/', include('selectable.urls')),
+    url(r'^', include('stops.urls')),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

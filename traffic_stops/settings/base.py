@@ -142,6 +142,7 @@ INSTALLED_APPS = (
     'selectable',
     'bootstrap3',
     'endless_pagination',
+    'rest_framework',
     # Custom apps
     'stops'
 )

@@ -13,3 +13,4 @@ django-selectable==0.8.0
 PyYAML==3.10
 django-bootstrap3==4.8.2
 django-endless-pagination==2.0
+djangorestframework==2.4.3
