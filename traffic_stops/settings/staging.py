@@ -45,3 +45,7 @@ ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(';')
 BROKER_URL = 'amqp://traffic_stops_staging:%(BROKER_PASSWORD)s@%(BROKER_HOST)s/traffic_stops_staging' % os.environ
 
 LOGGING['handlers']['file']['filename'] = '/var/www/traffic_stops/log/traffic_stops.log'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': []
+}

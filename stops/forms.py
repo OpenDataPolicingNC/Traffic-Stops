@@ -1,6 +1,6 @@
 from django import forms
 from django.db.models import Q
-from selectable.forms import AutoCompleteWidget
+from selectable.forms import AutoCompleteWidget, AutoCompleteSelectField
 
 from stops import models as stops
 from stops.lookups import AgencyLookup
@@ -54,3 +54,9 @@ class SearchForm(forms.Form):
         if officer:
             query &= Q(officer_id=officer)
         return query
+
+
+class AgencySearchForm(forms.Form):
+    agency = AutoCompleteSelectField(AgencyLookup, required=False)
+    agency.widget.attrs['placeholder'] = "Search for police or sheriff's department..."
+    agency.widget.attrs['class'] = 'form-control'

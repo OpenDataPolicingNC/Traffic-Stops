@@ -1,11 +1,47 @@
 {% extends "base.html" %}
+{% load selectable_tags %}
 
-{% block content %}
+{% block body_id %}home{% endblock %}
 
-<div class="page-header">
-  <h1>Welcome to NC Traffic Stops!</h1>
+{% block extra-css %}
+    {% include_ui_theme %}
+    {{ agency_form.media.css }}
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
+{% endblock %}
+
+{% block extra-js %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
+{{ agency_form.media.js }}
+<script type="text/javascript">
+    var map = L.map('map', {
+        zoomControl: false
+    }).setView([35.5, -80], 8);
+    L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+            '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+            'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        id: 'copelco.jiaa6ahn'
+    }).addTo(map);
+    $(document).ready(function() {
+        var quick_search = $('#agency_search :input[name=agency_0]');
+        quick_search.bind('djselectableselect', function(event, ui) {
+            $(this).parents("form").submit();
+        });
+    });
+</script>
+{% endblock %}
+
+{% block content-outer %}
+<div id="map"></div>
+<div id="quick-search">
+    <h1>NC Traffic Stops</h1>
+    <form role="form" id="agency_search" action='{% url "home" %}' method="post" accept-charset="utf-8">
+        <div class="form-group">
+        {% csrf_token %}
+        {{ agency_form.agency }}
+        </div>
+    </form>
 </div>
-<p class="lead">Hello!</p>
-<p>Testing 1, 2, 3</p>
-
 {% endblock %}

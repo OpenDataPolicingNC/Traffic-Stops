@@ -23,6 +23,7 @@ html,
 body {
   height: 100%;
   /* The html and body elements cannot have any padding or margin. */
+  font-family: 'Droid Sans', sans-serif;
 }
 
 /* Wrapper for page content to push down footer */
@@ -51,8 +52,46 @@ body {
 #footer > .container {
   padding-left: 15px;
   padding-right: 15px;
+  p {
+    text-align: center;
+  }
 }
 
 code {
   font-size: 80%;
+}
+
+/* Homepage
+==================== */
+
+body#home {
+  #map {
+    position: fixed;
+    width: 100%;
+    min-height: 100%;
+    margin-top: 50px;
+    margin-bottom: 60px;
+    z-index: -1;
+    opacity: 0.3;
+  }
+  .ui-autocomplete {
+    font-family: 'Droid Sans', sans-serif;
+  }
+  #quick-search {
+    position: fixed;
+    margin-top: 80px;
+    margin-left: 30px;
+    width: 100%;
+    #agency_search {
+      #id_agency_0 {
+        font-size: 20px;
+        @media (min-width: @screen-desktop) {
+          width: 40%;
+        }
+        width: 85%;
+        height: 60px;
+        font-family: 'Droid Sans', sans-serif;
+      }
+    }
+  }
 }
