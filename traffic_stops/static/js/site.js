@@ -15,80 +15,252 @@ String.prototype.printf = function(){
     });
 };
 
+
+// global website defaults
+var Stops = {};
+
+Stops.start_year = 2001;
+Stops.max_year = new Date().getFullYear();
+Stops.years = Stops.max_year - Stops.start_year + 1;
+Stops.races = {
+  'A': 'Asian',
+  'B': 'Black',
+  'I': 'Native American',
+  'U': 'Other/Unknown',
+  'W': 'White'
+};
+Stops.colors = ["#d7191c", "#fdae61", "#ffffbf", "#a6d96a", "#1a9641"];
+
+var StopsHandler = function(url){
+  var self = this;
+
+  this.data = {};
+  this.observers = [];
+
+  d3.json(url, function(error, data) {
+    if(error) return console.warn(error);
+    self.data = data;
+    self.clean_data();
+    self.notify_observers();
+  });
+};
+
+StopsHandler.prototype.add_observer = function(observer){
+  this.observers.push(observer);
+};
+
+StopsHandler.prototype.notify_observers = function(){
+  var self = this;
+  this.observers.forEach(function(v){
+    v.update(self);
+  });
+};
+
+StopsHandler.prototype.clean_data = function(){
+  // make sure all years represented, and counts for each race exist
+  var years = [],
+      by_year = {},
+      totals = {},
+      by_race = {};
+
+  // make a blank-template for totals
+  for(var key in Stops.races){
+    totals[Stops.races[key]] = 0;
+    by_race[Stops.races[key]] = Array.apply(null, new Array(Stops.years)).map(Number.prototype.valueOf,0);
+  }
+  by_race["Total"] = Array.apply(null, new Array(Stops.years)).map(Number.prototype.valueOf,0);
+
+  // copy blank-template to all years
+  for(var i = Stops.start_year; i<=Stops.max_year; i++){
+    years.push(i);
+    by_year[i] = $.extend({}, totals);
+  }
+
+  // apply data to template
+  this.data.forEach(function(v){
+
+    var obj = by_year[v.year];
+    for(var key in v){
+      var match = Stops.races[key];
+      if (match){
+        obj[match] = v[key];
+        by_race[match][v.year-Stops.start_year] = v[key];
+        by_race["Total"][v.year-Stops.start_year] += v[key];
+        totals[match] += v[key];
+      }
+    }
+
+  });
+  by_year["Total"] = totals;
+
+  this.years = years;
+  this.by_year = by_year;
+  this.by_race = by_race;
+};
+
+
 /*
  * Dashboard plot-objects
  */
-var StopRatioDonut = function(selector, agencyID){
-    var self = this,
-        w = 300,
-        h = 300;
+var StopRatioDonut = function(selector, options){
+  options = options || {};
+  this.w = options.width || 300;
+  this.h = options.height || 300;
 
-    nv.addGraph(function() {
-        var chart = nv.models.pie()
-            .values(function(d) { return d; })
-            .width(w)
-            .height(h)
-            .showLabels(true)
-            .labelType("percent")
-            .donutRatio(0.35)
-            .donut(true);
+  this.selector = selector;
+  this.svg = $(selector);
+  this.div = $(this.svg).parent();
+  this.selector_div = $('<div>').appendTo(this.div);
 
-        d3.select(selector)
-            .datum(self.getData(agencyID))
-          .transition().duration(1200)
-            .attr('width', "100%")
-            .attr('height', "100%")
-            .attr('preserveAspectRatio', "none")
-            .attr('viewBox', '0 0 {0} {1}'.printf(w, h))
-            .call(chart);
+  this.chart = nv.models.pie()
+    .x(function(d){ return d.key; })
+    .y(function(d){ return d.value; })
+    .color(function(d){ return d.data.color; })
+    .width(this.w)
+    .height(this.h)
+    .showLabels(true)
+    .labelType("percent")
+    .donutRatio(0.35)
+    .labelThreshold(0.05)
+    .donut(true);
 
-        return chart;
+  this._drawLoading();
+};
+
+StopRatioDonut.prototype.update = function(dataHandler){
+  this.data = dataHandler;
+  this.loader_div.remove();
+  this._drawSelector();
+  this._drawChart();
+};
+
+StopRatioDonut.prototype._drawSelector = function(){
+  var self = this,
+      selector = $('<select>'),
+      opts = this.data.years.map(function(v){return '<option value="{0}">{0}</option>'.printf(v);}),
+      getData = function(){
+        var value = selector.val();
+        self.dataset =  self.data.by_year[value];
+        self._drawChart();
+      };
+
+  selector
+    .append('<option value="Total">Total</option>')
+    .append(opts)
+    .on('change', getData);
+
+  this.selector_div.html(selector);
+  getData();
+};
+
+StopRatioDonut.prototype._drawLoading = function(){
+  this.loader_div = $('<div>').prependTo(this.div);
+  this.loader_div.append('<p>Loading ... <i class="fa fa-cog fa-spin"></i></p>');
+};
+
+StopRatioDonut.prototype._drawChart = function(){
+  var self = this,
+      ds = [],
+      color_idx = 0;
+
+  for(var key in this.dataset){
+    ds.push({"key": key,
+             "value": this.dataset[key],
+             "color": Stops.colors[color_idx]
     });
+    color_idx += 1;
+  }
+
+  nv.addGraph(function() {
+
+      d3.select(self.svg[0])
+          .datum([ds])
+        .transition().duration(1200)
+          .attr('width', "100%")
+          .attr('height', "100%")
+          .attr("preserveAspectRatio", "xMinYMin")
+          .attr('viewBox', '0 0 {0} {1}'.printf(self.w, self.h))
+          .call(self.chart);
+
+      return self.chart;
+  });
 };
 
-StopRatioDonut.prototype.getData = function(agencyID){
-    // should execute a GET call to fetch data
-    return [stop_data_donut];
+
+var StopRatioTimeSeries = function(selector, options){
+  options = options || {};
+  this.w = options.width || 750;
+  this.h = options.height || 375;
+
+  this.svg = $(selector);
+  this.div = $(this.svg).parent();
+
+  this.chart = nv.models.lineChart()
+                .useInteractiveGuideline (true)
+                .transitionDuration(350)
+                .showLegend(true)
+                .showYAxis(true)
+                .showXAxis(true)
+                .forceY([0, 1])
+                .width(this.w)
+                .height(this.h);
+
+  this.chart.xAxis
+      .axisLabel('Year');
+
+  this.chart.yAxis
+      .axisLabel('Fraction of stops by race')
+      .tickFormat(d3.format('%'));
+
+  this._drawLoading();
 };
 
+StopRatioTimeSeries.prototype.update = function(dataHandler){
+  this.data = dataHandler;
+  this.loader_div.remove();
+  this._drawChart();
+};
 
-var StopRatioTimeSeries = function(selector, agencyID){
-    var self = this,
-        w = 750,
-        h = 375;
+StopRatioTimeSeries.prototype._drawChart = function(){
+  var self = this,
+      ds = [],
+      color_idx = 0,
+      totals = this.data.by_race["Total"];
 
-    nv.addGraph(function() {
-      var chart = nv.models.lineChart()
-                    .useInteractiveGuideline (true)
-                    .transitionDuration(350)
-                    .showLegend(true)
-                    .showYAxis(true)
-                    .showXAxis(true)
-                    .width(w)
-                    .height(h);
+  for(var race in this.data.by_race){
 
-      chart.xAxis
-          .axisLabel('Year');
+    if (race === "Total") continue;
 
-      chart.yAxis
-          .axisLabel('Fraction of stops by race')
-          .tickFormat(d3.format('.02f'));
+    var obj = {
+      values: [],
+      key: race,
+      color: Stops.colors[color_idx]
+    };
+    color_idx += 1;
 
-      d3.select(selector)
-        .datum(self.getData())
+    this.data.by_race[race].forEach(function(v, i){
+      var val = (totals[i]>0) ? v / totals[i] : NaN;
+      obj.values.push({x: Stops.start_year+i, y: val});
+    });
+
+    ds.push(obj);
+  }
+
+  nv.addGraph(function() {
+      d3.select(self.svg[0])
+        .datum(ds)
         .attr('width', "100%")
         .attr('height', "100%")
-        .attr('preserveAspectRatio', "none")
-        .attr('viewBox', "0 0 {0} {1}".printf(w, h))
-        .call(chart);
+        .attr('preserveAspectRatio', "xMinYMin")
+        .attr('viewBox', "0 0 {0} {1}".printf(self.w, self.h))
+        .call(self.chart);
     });
 };
 
-StopRatioTimeSeries.prototype.getData = function(agencyID){
-    // should execute a GET call to fetch data
-    return sinAndCos();
+StopRatioTimeSeries.prototype._drawLoading = function(){
+  this.loader_div = $('<div>').prependTo(this.div);
+  this.loader_div.append('<p>Loading ... <i class="fa fa-cog fa-spin"></i></p>');
 };
-
 
 var UseOfForceTimeSeries = function(selector, agencyID){
   var self = this,
