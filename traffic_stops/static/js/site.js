@@ -22,14 +22,32 @@ var Stops = {};
 Stops.start_year = 2001;
 Stops.max_year = new Date().getFullYear();
 Stops.years = Stops.max_year - Stops.start_year + 1;
-Stops.races = {
+Stops.races = d3.map({
   'A': 'Asian',
   'B': 'Black',
   'I': 'Native American',
   'U': 'Other/Unknown',
   'W': 'White'
-};
+});
 Stops.colors = ["#d7191c", "#fdae61", "#ffffbf", "#a6d96a", "#1a9641"];
+Stops.violations = d3.map({
+  1: 'Speed Limit Violation',
+  2: 'Stop Light/Sign Violation',
+  3: 'Driving While Impaired',
+  4: 'Safe Movement Violation',
+  5: 'Vehicle Equipment Violation',
+  6: 'Vehicle Regulatory Violation',
+  7: 'Seat Belt Violation',
+  8: 'Investigation',
+  9: 'Other Motor Vehicle Violation',
+  10: 'Checkpoint'
+});
+
+
+
+
+
+
 
 var StopsHandler = function(url){
   var self = this;
@@ -64,10 +82,10 @@ StopsHandler.prototype.clean_data = function(){
       by_race = {};
 
   // make a blank-template for totals
-  for(var key in Stops.races){
-    totals[Stops.races[key]] = 0;
-    by_race[Stops.races[key]] = Array.apply(null, new Array(Stops.years)).map(Number.prototype.valueOf,0);
-  }
+  Stops.races.keys().forEach(function(key){
+    totals[Stops.races.get(key)] = 0;
+    by_race[Stops.races.get(key)] = Array.apply(null, new Array(Stops.years)).map(Number.prototype.valueOf,0);
+  });
   by_race["Total"] = Array.apply(null, new Array(Stops.years)).map(Number.prototype.valueOf,0);
 
   // copy blank-template to all years
@@ -81,7 +99,7 @@ StopsHandler.prototype.clean_data = function(){
 
     var obj = by_year[v.year];
     for(var key in v){
-      var match = Stops.races[key];
+      var match = Stops.races.get(key);
       if (match){
         obj[match] = v[key];
         by_race[match][v.year-Stops.start_year] = v[key];
@@ -209,7 +227,7 @@ var StopRatioTimeSeries = function(selector, options){
       .axisLabel('Year');
 
   this.chart.yAxis
-      .axisLabel('Fraction of stops by race')
+      .axisLabel('Percentage of stops by race')
       .tickFormat(d3.format('%'));
 
   this._drawLoading();
@@ -261,6 +279,7 @@ StopRatioTimeSeries.prototype._drawLoading = function(){
   this.loader_div = $('<div>').prependTo(this.div);
   this.loader_div.append('<p>Loading ... <i class="fa fa-cog fa-spin"></i></p>');
 };
+
 
 var UseOfForceTimeSeries = function(selector, agencyID){
   var self = this,
@@ -347,40 +366,149 @@ ContrabandHitRateBar.prototype.getData = function(agencyID){
 };
 
 
-var LikelihoodOfStop = function(selector, whichChart){
-    var self = this;
+var LikelihoodStopsHandler = function(url){
+  var self = this;
 
-    nv.addGraph(function() {
-      var chart = nv.models.multiBarHorizontalChart()
-          .x(function(d) { return d.label; })
-          .y(function(d) { return d.value; })
-          .margin({top: 20, right: 50, bottom: 20, left: 150})
-          .showValues(true)
-          .tooltips(true)
-          .transitionDuration(350)
-          .showControls(false);
+  this.data = {};
+  this.observers = [];
 
-      chart.yAxis
-          .tickFormat(d3.format(',.2f'));
-
-      d3.select(selector)
-          .datum(self.getData(whichChart))
-          .call(chart);
-
-      nv.utils.windowResize(chart.update);
-
-      return chart;
+  d3.json(url, function(error, data) {
+    if(error) return console.warn(error);
+    self.data = data;
+    self.clean_data();
+    self.notify_observers();
   });
 };
 
-LikelihoodOfStop.prototype.getData = function(whichChart){
-    // should execute a GET call to fetch data
-    if (whichChart){
-      return barData;
-    } else {
-      return barData2;
-    }
+LikelihoodStopsHandler.prototype.clean_data = function(){
+  // create 2-D array of the data, each row is a stop-reason and column is
+  // race. Also create d3.map for columns
+  var rows = d3.map(),
+      cols = d3.map(),
+      data = [];
+
+  var len = Stops.races.keys().length;
+  // make zeroed array-template, set rows
+  Stops.violations.keys().forEach(function(key, i){
+    rows.set(key, i);
+    data.push(Array.apply(null, new Array(len)).map(Number.prototype.valueOf,0));
+  });
+
+  // set columns
+  Stops.races.keys().forEach(function(key, i){
+    cols.set(Stops.races.get(key), i);
+  });
+
+  // apply data to template
+  this.data.forEach(function(v){
+    v = d3.map(v);
+    var row = rows.get(v.get('purpose'));
+    v.keys().forEach(function(key){
+      var col = cols.get(Stops.races.get(key));
+      if(col) data[row][col] = v.get(key);
+    });
+  });
+
+  this.data = {
+    rows: rows,
+    cols: cols,
+    data: data
+  };
 };
+
+LikelihoodStopsHandler.prototype.add_observer = function(observer){
+  this.observers.push(observer);
+};
+
+LikelihoodStopsHandler.prototype.notify_observers = function(){
+  var self = this;
+  this.observers.forEach(function(v){
+    v.update(self);
+  });
+};
+
+
+var LikelihoodOfStop = function(selector, options){
+  options = options || {};
+  this.w = options.width || 750;
+  this.h = options.height || 375;
+
+  this.svg = $(selector);
+  this.div = $(this.svg).parent();
+
+  this.chart = nv.models.multiBarHorizontalChart()
+    .x(function(d){ return d.label; })
+    .y(function(d){ return d.value; })
+    .width(this.w)
+    .height(this.h)
+    .margin({top: 20, right: 50, bottom: 20, left: 180})
+    .showValues(true)
+    .tooltips(true)
+    .transitionDuration(350)
+    .showControls(false);
+
+  this.chart.yAxis
+      .axisLabel('Additional percentage or search by search-cause')
+      .tickFormat(d3.format('%'));
+
+  this._drawLoading();
+};
+
+LikelihoodOfStop.prototype.update = function(dataHandler){
+  this.data = dataHandler.data;
+  this.loader_div.remove();
+  this._drawChart();
+};
+
+LikelihoodOfStop.prototype._drawChart = function(){
+  d3.select(this.svg[0])
+          .datum(this._formatData())
+          .attr('width', "100%")
+          .attr('height', "100%")
+          .attr('preserveAspectRatio', "xMinYMin")
+          .attr('viewBox', "0 0 {0} {1}".printf(this.w, this.h))
+          .call(this.chart);
+
+  nv.utils.windowResize(this.chart.update);
+};
+
+LikelihoodOfStop.prototype._formatData = function(){
+  var self = this,
+      data = [],
+      wcol = this.data.cols.get("White"),
+      d = this.data;
+
+  this.data.cols.keys().forEach(function(v, i){
+    if(v !== "White"){
+      var formatted = {
+        color: Stops.colors[i],
+        key: v + " vs. White",
+        values: []
+      }, col = self.data.cols.get(v);
+
+      self.data.rows.forEach(function(v){
+        var row = d.rows.get(v),
+            rate = d.data[row][col]/d.data[row][wcol] || 0;
+
+        rate = (rate) ? rate -1 : undefined;
+
+        formatted.values.push({
+          label: Stops.violations.get(v),
+          value: rate
+        });
+      });
+      data.push(formatted);
+    }
+  });
+
+  return data;
+};
+
+LikelihoodOfStop.prototype._drawLoading = function(){
+  this.loader_div = $('<div>').prependTo(this.div);
+  this.loader_div.append('<p>Loading ... <i class="fa fa-cog fa-spin"></i></p>');
+};
+
 
 /*
  * Placeholders for made-up data used for mockups
