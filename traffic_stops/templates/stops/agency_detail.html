@@ -2,138 +2,131 @@
 {% load humanize %}
 
 {% block content %}
-<h2>{{ object }}</h2>
 
+  <h2>{{ object }}</h2>
+
+  <!-- stop data -->
   <div class="row">
-      <h2>Stops data</h2>
-      <div class="col-md-4">
-          <h3>Fraction of stops by race</h3>
+    <h2>Stops data</h2>
 
-          <div>
-            <svg id="stop_race_pie"></svg>
-          </div>
+    <div class="col-md-4">
+      <h3>Fraction of stops by race</h3>
 
-          <p class="help-block">
-            Pie chart showing the annual average stop-ratio by
-            race, in pie-chart format.
-          </p>
-
+      <div>
+        <svg id="stop_race_pie"></svg>
       </div>
-      <div class="col-md-8">
-          <h3>Annual percent of stops by race</h3>
 
-          <div>
-            <svg id="stop_race_line"></svg>
-          </div>
+      <p class="help-block">
+        Pie chart showing the annual average stop-ratio by
+        race, in pie-chart format.
+      </p>
+    </div>
 
-          <p class="help-block">
-            Three lines and they will all add up to 100. The mockup here isn't
-            reflective of the final chart; we want to show the percentage of
-            stops by race/ethnicity. The lines may not add-up to 100% given this
-            because of the race vs. ethnicity issues, but they should be close.
-            If needed we may need to create two charts to show one by races and
-            one by ethnicities.
-          </p>
+    <div class="col-md-8">
+      <h3>Annual percent of stops by race</h3>
+
+      <div>
+        <svg id="stop_race_line"></svg>
       </div>
+
+      <p class="help-block">
+        Three lines and they will all add up to 100. The mockup here isn't
+        reflective of the final chart; we want to show the percentage of
+        stops by race/ethnicity. The lines may not add-up to 100% given this
+        because of the race vs. ethnicity issues, but they should be close.
+        If needed we may need to create two charts to show one by races and
+        one by ethnicities.
+      </p>
+    </div>
   </div>
   <hr>
 
- <!--
+  <!-- search data -->
   <div class="row">
-      <h2>Search data</h2>
-      <div class="col-md-4">
-          <h3>Fraction of search by race</h3>
-          <svg id="search_race_pie"></svg>
-          <p class="help-block">
-            Pie chart showing the annual average search-ratio by
-            race, in pie-chart format.
-          </p>
-          <select>
-            <option>2002</option>
-            <option>2003</option>
-            <option>2004</option>
-            <option>2005</option>
-            <option>2006</option>
-            <option>2007</option>
-            <option>2008</option>
-            <option>2009</option>
-            <option>2010</option>
-            <option>2011</option>
-            <option>2012</option>
-            <option>All years</option>
-          </select>
-      </div>
-      <div class="col-md-8">
-          <h3>Search ratio by year</h3>
-          <svg id="search_race_line"></svg>
-          <p class="help-block">
-            Line-chart showing annual search-ratio for blacks, whites, and for the
-            full time-series where data are available. One value per race per year.
-          </p>
+    <h2>Search data</h2>
+
+    <div class="col-md-4">
+      <h3>Fraction of search by race</h3>
+
+      <div>
+        <svg id="search_race_pie"></svg>
       </div>
 
-    -->
-
-    <div class="row">
-      <div class="col-md-offset-2 col-md-8">
-        <h3>Likelihood of search by stop-cause</h3>
-        <div>
-          <svg id="lsb"></svg>
-        </div>
-        <p class="help-block">
-          Likelihood of stop by various stop-causes.
-        </p>
-      </div>
+      <p class="help-block">
+        Pie chart showing the annual average search-ratio by
+        race, in pie-chart format.
+      </p>
     </div>
 
-    <!--
-    <div class="row">
-      <div class="col-md-offset-2 col-md-8">
-        <h3>Likelihood of search by stop-cause</h3>
-        <svg id="lsb2"></svg>
-        <p class="help-block">
-          Likelihood of stop by various stop-causes.
-        </p>
-      </div>
-    </div>
+    <div class="col-md-8">
+      <h3>Annual percent of search by race</h3>
 
+      <div>
+        <svg id="search_race_line"></svg>
+      </div>
+
+      <p class="help-block">
+        Three lines and they will all add up to 100. The mockup here isn't
+        reflective of the final chart; we want to show the percentage of
+        search by race/ethnicity. The lines may not add-up to 100% given this
+        because of the race vs. ethnicity issues, but they should be close.
+        If needed we may need to create two charts to show one by races and
+        one by ethnicities.
+      </p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-offset-2 col-md-8">
+      <h3>Likelihood of search by stop-cause</h3>
+
+      <div>
+        <svg id="lsb"></svg>
+      </div>
+
+      <p class="help-block">
+        Likelihood of search by various stop-causes.
+      </p>
+    </div>
   </div>
   <hr>
 
+  <!-- use-of-force data -->
   <div class="row">
-      <h2>Use-of-force data</h2>
-      <div class="col-md-4">
-          <h3>Fraction of use-of-force by race</h3>
-          <svg id="use_force_race_pie"></svg>
-          <p class="help-block">
-            Pie chart showing the annual average use-of-force by
-            race, in pie-chart format.
-          </p>
-          <select>
-            <option>2002</option>
-            <option>2003</option>
-            <option>2004</option>
-            <option>2005</option>
-            <option>2006</option>
-            <option>2007</option>
-            <option>2008</option>
-            <option>2009</option>
-            <option>2010</option>
-            <option>2011</option>
-            <option>2012</option>
-            <option>All years</option>
-          </select>
+    <h2>Use-of-force data</h2>
+
+    <div class="col-md-4">
+      <h3>Fraction of use-of-force by race</h3>
+
+      <div>
+        <svg id="use_force_race_pie"></svg>
       </div>
-      <div class="col-md-8">
-          <h3>Use-of-force ratio by year</h3>
-          <svg id="use_force_race_line"></svg>
-          <p class="help-block">
-            Line-chart showing annual use-of-force for blacks, whites, and for the
-            full time-series where data are available. One value per race per year.
-          </p>
+
+      <p class="help-block">
+        Pie chart showing the annual average use-of-force-ratio by
+        race, in pie-chart format.
+      </p>
+    </div>
+
+    <div class="col-md-8">
+      <h3>Annual percent of use-of-force by race</h3>
+
+      <div>
+        <svg id="use_force_race_line"></svg>
       </div>
+
+      <p class="help-block">
+        Three lines and they will all add up to 100. The mockup here isn't
+        reflective of the final chart; we want to show the percentage of
+        use-of-force by race/ethnicity. The lines may not add-up to 100% given this
+        because of the race vs. ethnicity issues, but they should be close.
+        If needed we may need to create two charts to show one by races and
+        one by ethnicities.
+      </p>
+    </div>
   </div>
 
+  <!-- officer pages -->
   <div class="row">
     <h3>Officers ({{ officers.count|intcomma }} total)</h3>
     <ul>
@@ -141,27 +134,22 @@
       <li><a href="{% url 'stops-search' %}?agency={{ object.name }}&officer={{ officer.officer_id }}">{{ officer.officer_id }} ({{ officer.total_stops|intcomma }})</a></li>
       {% endfor %}
     </ul>
-  </div> -->
-
+  </div>
 {% endblock %}
 
 
 {% block extra-js %}
   <script type="text/javascript">
-      $(document).ready(function(){
-
-        var stop_handler = new StopsHandler({url: "{% url 'agency-api-stops' object.pk %}"}),
-            donut = new StopRatioDonut({handler: stop_handler, selector: "#stop_race_pie"}),
-            ts =  new StopRatioTimeSeries({handler: stop_handler, selector: "#stop_race_line"}),
-            lhandler = new LikelihoodStopsHandler({url: "{% url 'agency-api-stops-by-reason' object.pk %}"}),
-            lstops = new LikelihoodOfStop({handler: lhandler, selector: "#lsb"});
-
-        // // new StopRatioDonut("#search_race_pie");
-        // // new StopRatioTimeSeries("#search_race_line");
-        // // new StopRatioDonut("#use_force_race_pie");
-        // // new StopRatioTimeSeries("#use_force_race_line");
-
-        // new LikelihoodOfStop("#lsb2", false);
-      });
+    $(document).ready(function(){
+      var stop_handler = new StopsHandler({url: "{% url 'agency-api-stops' object.pk %}"}),
+          donut = new StopRatioDonut({handler: stop_handler, selector: "#stop_race_pie"}),
+          ts =  new StopRatioTimeSeries({handler: stop_handler, selector: "#stop_race_line"}),
+          lhandler = new LikelihoodStopsHandler({url: "{% url 'agency-api-stops-by-reason' object.pk %}"}),
+          lstops = new LikelihoodOfStop({handler: lhandler, selector: "#lsb"}),
+          search_donut = new SearchRatioDonut({handler: stop_handler, selector: "#search_race_pie"}),
+          search_ts =  new SearchRatioTimeSeries({handler: stop_handler, selector: "#search_race_line"}),
+          use_force_donut = new SearchRatioDonut({handler: stop_handler, selector: "#use_force_race_pie"}),
+          use_force_ts =  new SearchRatioTimeSeries({handler: stop_handler, selector: "#use_force_race_line"});
+    });
   </script>
 {% endblock extra-js %}
