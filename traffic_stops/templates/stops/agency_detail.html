@@ -150,23 +150,16 @@
   <script type="text/javascript">
       $(document).ready(function(){
 
-        var handler = new StopsHandler("{% url 'agency-api-stops' object.pk %}"),
-            donut = new StopRatioDonut("#stop_race_pie"),
-            ts = new StopRatioTimeSeries("#stop_race_line");
+        var stop_handler = new StopsHandler({url: "{% url 'agency-api-stops' object.pk %}"}),
+            donut = new StopRatioDonut({handler: stop_handler, selector: "#stop_race_pie"}),
+            ts =  new StopRatioTimeSeries({handler: stop_handler, selector: "#stop_race_line"}),
+            lhandler = new LikelihoodStopsHandler({url: "{% url 'agency-api-stops-by-reason' object.pk %}"}),
+            lstops = new LikelihoodOfStop({handler: lhandler, selector: "#lsb"});
 
-        handler.add_observer(donut);
-        handler.add_observer(ts);
-
-        // new StopRatioDonut("#search_race_pie");
-        // new StopRatioTimeSeries("#search_race_line");
-
-        // new StopRatioDonut("#use_force_race_pie");
-        // new StopRatioTimeSeries("#use_force_race_line");
-
-        var lhandler = new LikelihoodStopsHandler("{% url 'agency-api-stops-by-reason' object.pk %}"),
-            lstops = new LikelihoodOfStop("#lsb", true);
-
-        lhandler.add_observer(lstops);
+        // // new StopRatioDonut("#search_race_pie");
+        // // new StopRatioTimeSeries("#search_race_line");
+        // // new StopRatioDonut("#use_force_race_pie");
+        // // new StopRatioTimeSeries("#use_force_race_line");
 
         // new LikelihoodOfStop("#lsb2", false);
       });
