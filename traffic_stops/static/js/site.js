@@ -18,7 +18,7 @@ String.prototype.printf = function(){
 
 // global website defaults
 var Stops = {
-  start_year: 2001,
+  start_year: 2001,  // official start-year for reporting requirement
   max_year: new Date().getFullYear(),
   races: d3.map({
     'A': 'Asian',
@@ -35,18 +35,19 @@ var Stops = {
     "#1a9641"
   ],
   violations: d3.map({
-    1: 'Speed Limit Violation',
-    2: 'Stop Light/Sign Violation',
-    3: 'Driving While Impaired',
-    4: 'Safe Movement Violation',
-    5: 'Vehicle Equipment Violation',
-    6: 'Vehicle Regulatory Violation',
-    7: 'Seat Belt Violation',
-    8: 'Investigation',
-    9: 'Other Motor Vehicle Violation',
-    10: 'Checkpoint'
+    1:  {order: 6, label: 'Speed Limit Violation'},
+    2:  {order: 5, label: 'Stop Light/Sign Violation'},
+    3:  {order: 0, label: 'Driving While Impaired'},
+    4:  {order: 1, label: 'Safe Movement Violation'},
+    5:  {order: 2, label: 'Vehicle Equipment Violation'},
+    6:  {order: 7, label: 'Vehicle Regulatory Violation'},
+    7:  {order: 8, label: 'Seat Belt Violation'},
+    8:  {order: 4, label: 'Investigation'},
+    9:  {order: 3, label: 'Other Motor Vehicle Violation'},
+    10: {order: 9, label: 'Checkpoint'}
   })
-};
+  };
+
 Stops.years = Stops.max_year - Stops.start_year + 1;
 
 
@@ -351,6 +352,9 @@ LikelihoodOfStop = VisualBase.extend({
     this.chart.yAxis
         .axisLabel('Additional percentage or search by search-cause')
         .tickFormat(d3.format('%'));
+
+    this.chart.valueFormat(d3.format('%'));
+
   },
   drawStartup: function(){
   },
@@ -368,8 +372,8 @@ LikelihoodOfStop = VisualBase.extend({
   _formatData: function(){
     var self = this,
         data = [],
-        wcol = this.data.cols.get("White"),
-        d = this.data;
+        base_col = this.data.cols.get("White"),
+        d = this.data;  // sorting order (based on SME feedback)
 
     this.data.cols.keys().forEach(function(v, i){
       if(v !== "White"){
@@ -381,15 +385,22 @@ LikelihoodOfStop = VisualBase.extend({
 
         self.data.rows.forEach(function(v){
           var row = d.rows.get(v),
-              rate = d.data[row][col]/d.data[row][wcol] || 0;
+              rate = d.data[row][col]/d.data[row][base_col] || 0;
 
           rate = (rate) ? rate -1 : undefined;
 
           formatted.values.push({
-            label: Stops.violations.get(v),
-            value: rate
+            label: Stops.violations.get(v).label,
+            value: rate,
+            order: Stops.violations.get(v).order
           });
         });
+
+        formatted.values.sort(function(a,b){return a.order-b.order;});
+
+        // remove final "Checkpoint", optional reporting in regulation, based on SME feedback
+        formatted.values.pop();
+
         data.push(formatted);
       }
     });
