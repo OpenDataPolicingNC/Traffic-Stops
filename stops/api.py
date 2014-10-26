@@ -1,7 +1,7 @@
 from collections import defaultdict, OrderedDict
 
 from django.db import connections
-from django.db.models import Count
+from django.db.models import Count, Q
 
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
@@ -35,12 +35,14 @@ class AgencyViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Agency.objects.all()
     serializer_class = serializers.AgencySerializer
 
-    def query(self, results, group_by):
+    def query(self, results, group_by, filter_=None):
         # date trunc on year
         year = connections[Stop.objects.db].ops.date_trunc_sql('year', 'date')
         qs = Stop.objects.extra(select={'year': year})
         # filter down stops by agency only those who were drivers
         qs = qs.filter(agency=self.get_object(), person__type='D')
+        if filter_:
+            qs = qs.filter(filter_)
         # group by specified fields and order by year
         qs = qs.values(*group_by).order_by('year')
         for stop in qs.annotate(count=Count('date')):
@@ -70,18 +72,25 @@ class AgencyViewSet(viewsets.ReadOnlyModelViewSet):
 
     @detail_route(methods=['get'])
     def stops_by_reason(self, request, pk=None):
-        query = self.years().filter(agency=self.get_object(), person__type='D')
-        query = query.values('purpose', 'year', 'person__race').order_by('year')
-        stops = GroupedData(by=('purpose', 'year'), defaults=GROUP_DEFAULTS)
-        for stop in query.annotate(count=Count('person')):
-            race = GROUPS.get(stop['person__race'], stop['person__race'])
-            data = {race: stop['count']}
-            stops.add(stop['purpose'], stop['year'].year, **data)
-        query = self.years().filter(agency=self.get_object(), person__type='D')
-        query = query.values('purpose', 'year', 'person__ethnicity').order_by('year')
-        for stop in query.annotate(count=Count('date')):
-            race = GROUPS.get(stop['person__ethnicity'],
-                              stop['person__ethnicity'])
-            data = {race: stop['count']}
-            stops.add(stop['year'].year, **data)
-        return Response(stops.flatten())
+        response = {}
+        # stops
+        results = GroupedData(by=('purpose', 'year'), defaults=GROUP_DEFAULTS)
+        self.query(results, group_by=('purpose', 'year', 'person__race'))
+        self.query(results, group_by=('purpose', 'year', 'person__ethnicity'))
+        response['stops'] = results.flatten()
+        # searches
+        results = GroupedData(by=('purpose', 'year'), defaults=GROUP_DEFAULTS)
+        self.query(results, group_by=('purpose', 'year', 'person__race'),
+                   filter_=Q(search__isnull=False))
+        self.query(results, group_by=('purpose', 'year', 'person__ethnicity'),
+                   filter_=Q(search__isnull=False))
+        response['searches'] = results.flatten()
+        return Response(response)
+
+    @detail_route(methods=['get'])
+    def use_of_force(self, request, pk=None):
+        results = GroupedData(by='year', defaults=GROUP_DEFAULTS)
+        q = Q(search__isnull=False) & Q(engage_force='t')
+        self.query(results, group_by=('year', 'person__race'), filter_=q)
+        self.query(results, group_by=('year', 'person__ethnicity'), filter_=q)
+        return Response(results.flatten())
