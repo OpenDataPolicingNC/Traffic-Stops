@@ -38,20 +38,20 @@ class Stop(models.Model):
     stop_city = models.CharField(max_length=20)
 
 
-PERSON_TYPE_CHOICES = (("Dr", "Driver"),
-                       ("Pa", "Passenger"))
+PERSON_TYPE_CHOICES = (("D", "Driver"),
+                       ("P", "Passenger"))
 
 GENDER_CHOICES = (("M", "Male"),
                   ("F", "Female"))
 
 ETHNICITY_CHOICES = (('H', 'Hispanic'),
-                     ('NH', 'Non-Hispanic'))
+                     ('N', 'Non-Hispanic'))
 
 
 RACE_CHOICES = (('A', 'Asian'),
                 ('B', 'Black'),
                 ('I', 'Native American'),
-                ('U', 'Other/Unknown'),
+                ('U', 'Other'),
                 ('W', 'White'))
 
 
@@ -65,7 +65,11 @@ class Person(models.Model):
     race = models.CharField(max_length=2, choices=RACE_CHOICES)
 
 
-SEARCH_TYPE_CHOICES = ()
+SEARCH_TYPE_CHOICES = ((1, 'Consent'),
+                       (2, 'Search Warrant'),
+                       (3, 'Probable Cause'),
+                       (4, 'Search Incident to Arrest'),
+                       (5, 'Protective Frisk'))
 
 
 class Search(models.Model):
