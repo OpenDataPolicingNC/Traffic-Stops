@@ -14,3 +14,4 @@ PyYAML==3.10
 django-bootstrap3==4.8.2
 django-endless-pagination==2.0
 djangorestframework==2.4.3
+drf-extensions==0.2.6

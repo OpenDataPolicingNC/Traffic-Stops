@@ -4,6 +4,7 @@ from django.db.models import Count, Q
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
+from rest_framework_extensions.cache.decorators import cache_response
 
 from stops.models import Agency, Stop, Person
 from stops import serializers
@@ -71,6 +72,7 @@ class AgencyViewSet(viewsets.ReadOnlyModelViewSet):
             results.add(**data)
 
     @detail_route(methods=['get'])
+    @cache_response()
     def stops(self, request, pk=None):
         results = GroupedData(by='year', defaults=GROUP_DEFAULTS)
         self.query(results, group_by=('year', 'person__race'))
@@ -78,6 +80,7 @@ class AgencyViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(results.flatten())
 
     @detail_route(methods=['get'])
+    @cache_response()
     def stops_by_reason(self, request, pk=None):
         response = {}
         # stops
@@ -95,6 +98,7 @@ class AgencyViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(response)
 
     @detail_route(methods=['get'])
+    @cache_response()
     def use_of_force(self, request, pk=None):
         results = GroupedData(by='year', defaults=GROUP_DEFAULTS)
         q = Q(search__isnull=False) & Q(engage_force='t')
