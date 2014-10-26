@@ -15,6 +15,7 @@
         <li><a href='{% url "agency-list" %}'>Agencies</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
+        <li><a href="http://nc-traffic-stops.readthedocs.org/">Documentation</a></li>
         {% if not user.is_authenticated %}
             <li><a href="{% url "admin:index" %}">Log In</a></li>
         {% else %}
