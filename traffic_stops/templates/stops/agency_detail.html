@@ -91,6 +91,21 @@
   </div>
   <hr>
 
+  <div class="row">
+    <div class="col-md-offset-2 col-md-8">
+      <h3>Contraband hit-rate</h3>
+
+      <div>
+        <svg id="chr"></svg>
+      </div>
+
+      <p class="help-block">
+        Bar chart of percent of total searches where ANY contraband was found is reported, stratified by race/ethnicity.
+      </p>
+    </div>
+  </div>
+  <hr>
+
   <!-- use-of-force data -->
   <div class="row">
     <h2>Use-of-force data</h2>
@@ -146,6 +161,7 @@
           ts =  new StopRatioTimeSeries({handler: stop_handler, selector: "#stop_race_line"}),
           lhandler = new LikelihoodStopsHandler({url: "{% url 'agency-api-stops-by-reason' object.pk %}"}),
           lstops = new LikelihoodOfStop({handler: lhandler, selector: "#lsb"}),
+          chr = new ContrabandHitRateBar({handler: lhandler, selector: "#chr"}),
           search_donut = new SearchRatioDonut({handler: stop_handler, selector: "#search_race_pie"}),
           search_ts =  new SearchRatioTimeSeries({handler: stop_handler, selector: "#search_race_line"}),
           use_force_donut = new SearchRatioDonut({handler: stop_handler, selector: "#use_force_race_pie"}),

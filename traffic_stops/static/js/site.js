@@ -413,3 +413,4 @@ SearchRatioDonut = StopRatioDonut.extend({});
 SearchRatioTimeSeries = StopRatioTimeSeries.extend({});
 UseOfForceRatioDonut = StopRatioDonut.extend({});
 UseOfForceRatioTimeSeries = StopRatioTimeSeries.extend({});
+ContrabandHitRateBar = LikelihoodOfStop.extend({});
