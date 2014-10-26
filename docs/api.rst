@@ -4,6 +4,8 @@ API Endpoints
 Stops by all races and ethnicities by year
 ------------------------------------------
 
+**URI:** `/api/agency/<id>/stops/ <https://54.208.65.43/api/agency/78/stops/>`_
+
 Counts of stops by all races and by all ethnicities by year.
 
 
@@ -92,6 +94,9 @@ Sample JSON response (Durham Police Department):
 
 Likelihood-of-search by stop-reason
 -----------------------------------
+
+**URI:** `/api/agency/<id>/stops_by_reason/ <https://54.208.65.43/api/agency/78/stops_by_reason/>`_
+
 
 A count of likelihood-of-search by stop-reason.
 
@@ -270,6 +275,8 @@ JSON Response
 
 Use-of-force
 ------------
+
+**URI:** `/api/agency/<id>/use_of_force/ <https://54.208.65.43/api/agency/78/use_of_force/>`_
 
 A count of all use-of-force by all races and by all ethnicities by year.
 
