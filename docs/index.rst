@@ -30,6 +30,7 @@ Contents:
    data-import
    server-setup
    provisioning
+   api
    vagrant
 
 

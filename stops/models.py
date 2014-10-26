@@ -45,13 +45,13 @@ GENDER_CHOICES = (("M", "Male"),
                   ("F", "Female"))
 
 ETHNICITY_CHOICES = (('H', 'Hispanic'),
-                     ('NH', 'Non-Hispanic'))
+                     ('N', 'Non-Hispanic'))
 
 
 RACE_CHOICES = (('A', 'Asian'),
                 ('B', 'Black'),
                 ('I', 'Native American'),
-                ('U', 'Other/Unknown'),
+                ('U', 'Other'),
                 ('W', 'White'))
 
 
