@@ -219,7 +219,7 @@ JSON Response
     {
         "searches": [
             {
-                "purpose": 1,
+                "purpose": "Speed Limit Violation",
                 "year": 2006,
                 "hispanic": 35,
                 "native_american": 0,
@@ -230,7 +230,7 @@ JSON Response
                 "other": 1
             },
             {
-                "purpose": 2,
+                "purpose": "Stop Light/Sign Violation",
                 "year": 2006,
                 "hispanic": 14,
                 "native_american": 0,
@@ -243,7 +243,7 @@ JSON Response
         ],
         "stops": [
             {
-                "purpose": 1,
+                "purpose": "Speed Limit Violation",
                 "year": 2006,
                 "hispanic": 475,
                 "native_american": 31,
@@ -254,7 +254,7 @@ JSON Response
                 "other": 134
             },
             {
-                "purpose": 2,
+                "purpose": "Stop Light/Sign Violation",
                 "year": 2006,
                 "hispanic": 90,
                 "native_american": 0,

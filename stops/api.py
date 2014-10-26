@@ -1,5 +1,3 @@
-from collections import defaultdict, OrderedDict
-
 from django.db import connections
 from django.db.models import Count, Q
 
@@ -11,8 +9,6 @@ from stops.models import Agency, Stop, Person
 from stops import serializers
 from stops.utils import GroupedData
 
-from pprint import pprint
-
 
 GROUPS = {'A': 'asian',
           'B': 'black',
@@ -21,6 +17,17 @@ GROUPS = {'A': 'asian',
           'W': 'white',
           'H': 'hispanic',
           'N': 'non-hispanic'}
+
+PURPOSE_CHOICES = {1: 'Speed Limit Violation',
+                   2: 'Stop Light/Sign Violation',
+                   3: 'Driving While Impaired',
+                   4: 'Safe Movement Violation',
+                   5: 'Vehicle Equipment Violation',
+                   6: 'Vehicle Regulatory Violation',
+                   7: 'Seat Belt Violation',
+                   8: 'Investigation',
+                   9: 'Other Motor Vehicle Violation',
+                   10: 'Checkpoint'}
 
 GROUP_DEFAULTS = {'asian': 0,
                   'black': 0,
@@ -47,21 +54,21 @@ class AgencyViewSet(viewsets.ReadOnlyModelViewSet):
         qs = qs.values(*group_by).order_by('year')
         for stop in qs.annotate(count=Count('date')):
             data = {}
+            if 'year' in group_by:
+                data['year'] = stop['year'].year
+            if 'purpose' in group_by:
+                purpose = PURPOSE_CHOICES.get(stop['purpose'],
+                                              stop['purpose'])
+                data['purpose'] = purpose
             if 'person__race' in group_by:
                 race = GROUPS.get(stop['person__race'],
                                   stop['person__race'])
-                data = {race: stop['count']}
+                data[race] = stop['count']
             if 'person__ethnicity' in group_by:
                 ethnicity = GROUPS.get(stop['person__ethnicity'],
                                        stop['person__ethnicity'])
-                data = {ethnicity: stop['count']}
-            group = []
-            for name in results.group_by:
-                value = stop[name]
-                if name == 'year':
-                    value = value.year
-                group.append(value)
-            results.add(*group, **data)
+                data[ethnicity] = stop['count']
+            results.add(**data)
 
     @detail_route(methods=['get'])
     def stops(self, request, pk=None):

@@ -11,12 +11,14 @@ class GroupedData(object):
         self.data = OrderedDict()
         self.defaults = defaults or {}
 
-    def add(self, *args, **kwargs):
+    def add(self, **kwargs):
         """Save (group, value) mapping to internal dict"""
-        group = args
+        group = []
+        for name in self.group_by:
+            group.append(kwargs.pop(name))
+        group = tuple(group)
         if group not in self.data:
             self.data[group] = OrderedDict(self.defaults.copy())
-        print(group)
         self.data[group].update(kwargs)
 
     def flatten(self):
