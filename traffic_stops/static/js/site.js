@@ -15,24 +15,34 @@ String.prototype.printf = function(){
     });
 };
 
-
-// global website defaults
+// Traffic Stops global defaults
 var Stops = {
-  start_year: 2001,  // official start-year for reporting requirement
-  max_year: new Date().getFullYear(),
-  races: d3.map({
-    'A': 'Asian',
-    'B': 'Black',
-    'I': 'Native American',
-    'U': 'Other/Unknown',
-    'W': 'White'
-  }),
+  start_year: 2002,                    // start-year for reporting requirement
+  max_year: new Date().getFullYear(),  // current year
+  races: [
+    'white',
+    'black',
+    'native_american',
+    'asian',
+    'other'
+  ],
+  race_pprint: {
+    'white': 'White',
+    'black': 'Black',
+    'native_american': 'Native American',
+    'asian': 'Asian',
+    'other': 'Other'
+  },
+  ethnicities: [
+    'hispanic',
+    'non-hispanic'
+  ],
   colors: [
-    "#d7191c",
     "#fdae61",
-    "#ffffbf",
     "#a6d96a",
-    "#1a9641"
+    "#1a9641",
+    "#d7191c",
+    "#2BC2F0"
   ],
   violations: d3.map({
     1:  {order: 6, label: 'Speed Limit Violation'},
@@ -74,48 +84,61 @@ DataHandlerBase = Backbone.Model.extend({
 
 StopsHandler = DataHandlerBase.extend({
   clean_data: function(){
-    // make sure all years represented, and counts for each race exist
-    var years = [],
-        by_year = {},
-        totals = {},
-        by_race = {},
-        data = this.get('raw_data');
 
-    // make a blank-template for totals
-    Stops.races.keys().forEach(function(key){
-      totals[Stops.races.get(key)] = 0;
-      by_race[Stops.races.get(key)] = Array.apply(null, new Array(Stops.years)).map(Number.prototype.valueOf,0);
-    });
-    by_race["Total"] = Array.apply(null, new Array(Stops.years)).map(Number.prototype.valueOf,0);
+    var data = this.get("raw_data"),
+        total = {};
 
-    // copy blank-template to all years
-    for(var i = Stops.start_year; i<=Stops.max_year; i++){
-      years.push(i);
-      by_year[i] = $.extend({}, totals);
+    // build a "Totals" year which sums by race/ethnicity for all years
+    if (data.length>0){
+      // create new totals object, and reset values
+      total = _.clone(data[0]);
+      _.keys(total).forEach(function(key){
+        total[key] = 0;
+      });
+
+      // sum data from all years
+      data.forEach(function(year){
+        _.keys(year).forEach(function(key){
+          total[key] += year[key];
+        });
+      });
+      total["year"] = "Total";
     }
 
-    // apply data to template
+    // build-data for pie-chart
+    var pie = d3.map();
     data.forEach(function(v){
-
-      var obj = by_year[v.year];
-      for(var key in v){
-        var match = Stops.races.get(key);
-        if (match){
-          obj[match] = v[key];
-          by_race[match][v.year-Stops.start_year] = v[key];
-          by_race["Total"][v.year-Stops.start_year] += v[key];
-          totals[match] += v[key];
-        }
-      }
-
+      if (v.year>=Stops.start_year) pie.set(v.year, d3.map(v));
     });
-    by_year["Total"] = totals;
+    pie.set("Total", d3.map(total));
 
+    // build data for line-chart
+
+    var line = d3.map(),
+        get_total_by_race = function(yr){
+          var total = 0;
+          Stops.races.forEach(function(race){
+            total += yr[race];
+          });
+          return total;
+        };
+    Stops.races.forEach(function(v){
+      line.set(v, []);
+    });
+    data.forEach(function(yr){
+      if (yr.year>=Stops.start_year){
+        var total = get_total_by_race(yr);
+        Stops.races.forEach(function(race){
+          line.get(race).push({x: yr.year, y:yr[race]/total});
+        });
+      }
+    });
+
+    // set object data
     this.set("data",
       {
-        years:   years,
-        by_year: by_year,
-        by_race: by_race
+        pie: pie,
+        line: line
       });
   }
 });
@@ -216,18 +239,21 @@ StopRatioDonut = VisualBase.extend({
       .donut(true);
   },
   drawStartup: function(){
+
+    // get year options for pulldown menu
     var self = this,
         selector = $('<select>'),
-        opts = this.data.years.map(function(v){return '<option value="{0}">{0}</option>'.printf(v);}),
+        year_options = this.data.pie.keys(),
+        opts = year_options.map(function(v){return '<option value="{0}">{0}</option>'.printf(v);}),
         getData = function(){
           var value = selector.val();
-          self.dataset =  self.data.by_year[value];
+          self.dataset =  self.data.pie.get(value);
           self.drawChart();
         };
 
     selector
-      .append('<option value="Total">Total</option>')
       .append(opts)
+      .val("Total")
       .on('change', getData);
 
     $('<div>')
@@ -253,15 +279,17 @@ StopRatioDonut = VisualBase.extend({
   },
   _formatData: function(){
     var data = [],
-        color_idx = 0;
+        selected = this.dataset;
 
-    for(var key in this.dataset){
-      data.push({"key": key,
-               "value": this.dataset[key],
-               "color": Stops.colors[color_idx]
-      });
-      color_idx += 1;
-    }
+    // build data specifically for this pie chart
+    Stops.races.forEach(function(race, i){
+        data.push({
+          "key": Stops.race_pprint[race],
+          "value": selected.get(race),
+          "color": Stops.colors[i]
+        });
+    });
+
     return [data];
   }
 });
@@ -289,8 +317,7 @@ StopRatioTimeSeries = VisualBase.extend({
         .axisLabel('Percentage of stops by race')
         .tickFormat(d3.format('%'));
   },
-  drawStartup: function(){
-  },
+  drawStartup: function(){},
   drawChart: function(){
     var self = this,
         data = this._formatData();
@@ -306,28 +333,16 @@ StopRatioTimeSeries = VisualBase.extend({
       });
   },
   _formatData: function(){
-    var data = [],
-        color_idx = 0,
-        totals = this.data.by_race["Total"];
 
-    for(var race in this.data.by_race){
+    var data = [];
 
-      if (race === "Total") continue;
-
-      var obj = {
-        values: [],
-        key: race,
-        color: Stops.colors[color_idx]
-      };
-      color_idx += 1;
-
-      this.data.by_race[race].forEach(function(v, i){
-        var val = (totals[i]>0) ? v / totals[i] : NaN;
-        obj.values.push({x: Stops.start_year+i, y: val});
+    this.data.line.entries().forEach(function(v, i){
+      data.push({
+        key: Stops.race_pprint[v.key],
+        values: v.value,
+        color: Stops.colors[i]
       });
-
-      data.push(obj);
-    }
+    });
     return data;
   }
 });
@@ -354,7 +369,6 @@ LikelihoodOfStop = VisualBase.extend({
         .tickFormat(d3.format('%'));
 
     this.chart.valueFormat(d3.format('%'));
-
   },
   drawStartup: function(){
   },
