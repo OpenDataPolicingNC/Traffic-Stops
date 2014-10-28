@@ -39,7 +39,6 @@
   </div>
   <hr>
 
-  {% comment %}
   <!-- search data -->
   <div class="row">
     <h2>Search data</h2>
@@ -65,16 +64,15 @@
       </div>
 
       <p class="help-block">
-        Three lines and they will all add up to 100. The mockup here isn't
-        reflective of the final chart; we want to show the percentage of
-        search by race/ethnicity. The lines may not add-up to 100% given this
-        because of the race vs. ethnicity issues, but they should be close.
-        If needed we may need to create two charts to show one by races and
-        one by ethnicities.
+        These lines will add up to 100%. Note that this shows by race and not
+        by ethnicity; a feature will be added to show by ethnicity globally for
+        all plots. Another feature we plan to add will allow a data-table to
+        be created, to present the underlying data behind the plots.
       </p>
     </div>
   </div>
 
+  {% comment %}
   <div class="row">
     <div class="col-md-offset-2 col-md-8">
       <h3>Likelihood of search by stop-cause</h3>
@@ -155,24 +153,25 @@
   <script type="text/javascript">
     $(document).ready(function(){
 
-      // Stops data handler and plots
+      // Retrieve data from API using data-handlers
       var stop_handler = new StopsHandler({url: "{% url 'agency-api-stops' object.pk %}"}),
-          donut = new StopRatioDonut({handler: stop_handler, selector: "#stop_race_pie"}),
-          ts =  new StopRatioTimeSeries({handler: stop_handler, selector: "#stop_race_line"});
+          search_handler = new SearchHandler({url: "{% url 'agency-api-searches' object.pk %}"}),
+          uf_handler = new UseOfForceHandler({url: "{% url 'agency-api-use-of-force' object.pk %}"});
 
-      // Use-of-force data-handler and plots
-      var uf_handler = new UseOfForceHandler({url: "{% url 'agency-api-use-of-force' object.pk %}"});
-          uf_donut = new UseOfForceDonut({handler: uf_handler, selector: "#use_force_race_pie"}),
-          uf_ts =  new UseOfForceTimeSeries({handler: uf_handler, selector: "#use_force_race_line"});
+      // Create plots for each data-type
+      new StopRatioDonut({handler: stop_handler, selector: "#stop_race_pie"}),
+      new StopRatioTimeSeries({handler: stop_handler, selector: "#stop_race_line"});
 
+      new SearchRatioDonut({handler: search_handler, selector: "#search_race_pie"}),
+      new SearchRatioTimeSeries({handler: search_handler, selector: "#search_race_line"});
 
-        // search_donut = new SearchRatioDonut({handler: stop_handler, selector: "#search_race_pie"}),
-        // search_ts =  new SearchRatioTimeSeries({handler: stop_handler, selector: "#search_race_line"}),
+      new UseOfForceDonut({handler: uf_handler, selector: "#use_force_race_pie"}),
+      new UseOfForceTimeSeries({handler: uf_handler, selector: "#use_force_race_line"});
 
-        // lhandler = new LikelihoodStopsHandler({url: "{% url 'agency-api-stops-by-reason' object.pk %}"}),
-        // lstops = new LikelihoodOfStop({handler: lhandler, selector: "#lsb"}),
+      // var lhandler = new LikelihoodStopsHandler({url: "{% url 'agency-api-stops-by-reason' object.pk %}"});
+      // lstops = new LikelihoodOfStop({handler: lhandler, selector: "#lsb"}),
 
-        // chr = new ContrabandHitRateBar({handler: lhandler, selector: "#chr"}),
+      // chr = new ContrabandHitRateBar({handler: lhandler, selector: "#chr"}),
 
     });
   </script>

@@ -140,6 +140,7 @@ StopsHandler = DataHandlerBase.extend({
   }
 });
 
+SearchHandler = StopsHandler.extend({});
 UseOfForceHandler = StopsHandler.extend({});
 
 LikelihoodStopsHandler  = DataHandlerBase.extend({
@@ -369,8 +370,7 @@ LikelihoodOfStop = VisualBase.extend({
 
     this.chart.valueFormat(d3.format('%'));
   },
-  drawStartup: function(){
-  },
+  drawStartup: function(){},
   drawChart: function(){
     d3.select(this.svg[0])
             .datum(this._formatData())
@@ -424,6 +424,8 @@ LikelihoodOfStop = VisualBase.extend({
 
 SearchRatioDonut = StopRatioDonut.extend({});
 SearchRatioTimeSeries = StopRatioTimeSeries.extend({});
+
 UseOfForceDonut = StopRatioDonut.extend({});
 UseOfForceTimeSeries = StopRatioTimeSeries.extend({});
+
 ContrabandHitRateBar = LikelihoodOfStop.extend({});
