@@ -18,7 +18,6 @@ String.prototype.printf = function(){
 // Traffic Stops global defaults
 var Stops = {
   start_year: 2002,                    // start-year for reporting requirement
-  max_year: new Date().getFullYear(),  // current year
   races: [
     'white',
     'black',
@@ -57,8 +56,6 @@ var Stops = {
     10: {order: 9, label: 'Checkpoint'}
   })
   };
-
-Stops.years = Stops.max_year - Stops.start_year + 1;
 
 
 // data handlers to get raw-data
