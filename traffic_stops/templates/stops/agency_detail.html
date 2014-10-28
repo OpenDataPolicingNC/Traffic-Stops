@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load humanize %}
 
+{% block title %}
+  {{block.super}} | {{object}}
+{% endblock title %}
+
 {% block content %}
 
   <h2>{{ object }}</h2>
