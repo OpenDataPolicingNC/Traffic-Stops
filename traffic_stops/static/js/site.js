@@ -43,17 +43,17 @@ var Stops = {
     "#d7191c",
     "#2BC2F0"
   ],
-  violations: d3.map({
-    1:  {order: 6, label: 'Speed Limit Violation'},
-    2:  {order: 5, label: 'Stop Light/Sign Violation'},
-    3:  {order: 0, label: 'Driving While Impaired'},
-    4:  {order: 1, label: 'Safe Movement Violation'},
-    5:  {order: 2, label: 'Vehicle Equipment Violation'},
-    6:  {order: 7, label: 'Vehicle Regulatory Violation'},
-    7:  {order: 8, label: 'Seat Belt Violation'},
-    8:  {order: 4, label: 'Investigation'},
-    9:  {order: 3, label: 'Other Motor Vehicle Violation'},
-    10: {order: 9, label: 'Checkpoint'}
+  purpose_order: d3.map({
+    'Driving While Impaired': 0,
+    'Safe Movement Violation': 1,
+    'Vehicle Equipment Violation': 2,
+    'Other Motor Vehicle Violation': 3,
+    'Investigation': 4,
+    'Stop Light/Sign Violation': 5,
+    'Speed Limit Violation': 6,
+    'Vehicle Regulatory Violation': 7,
+    'Seat Belt Violation': 8,
+    'Checkpoint': 9
   })
   };
 
@@ -143,40 +143,56 @@ StopsHandler = DataHandlerBase.extend({
 SearchHandler = StopsHandler.extend({});
 UseOfForceHandler = StopsHandler.extend({});
 
-LikelihoodStopsHandler  = DataHandlerBase.extend({
+LikelihoodSearchHandler  = DataHandlerBase.extend({
   clean_data: function(){
-    // create 2-D array of the data, each row is a stop-reason and column is
-    // race. Also create d3.map for columns
-    var rows = d3.map(),
-        cols = d3.map(),
-        data = [];
 
-    var len = Stops.races.keys().length;
-    // make zeroed array-template, set rows
-    Stops.violations.keys().forEach(function(key, i){
-      rows.set(key, i);
-      data.push(Array.apply(null, new Array(len)).map(Number.prototype.valueOf,0));
-    });
+    var years,
+        raw = this.get("raw_data");
 
-    // set columns
-    Stops.races.keys().forEach(function(key, i){
-      cols.set(Stops.races.get(key), i);
-    });
+    // get available years
+    years = d3.set(raw.stops.map(function(v){return v.year;})).values();
+    years.filter(function(v){return (v >= Stops.start_year);});
+    years.push("Total");
 
-    // apply data to template
-    this.get("raw_data").forEach(function(v){
-      v = d3.map(v);
-      var row = rows.get(v.get('purpose'));
-      v.keys().forEach(function(key){
-        var col = cols.get(Stops.races.get(key));
-        if(col) data[row][col] = v.get(key);
+    // get total searches/stops for all years by purpose
+    var getTotals = function(arr){
+      // calculate total for all years by purpose; push to array
+      var purposes = d3.nest()
+                       .key(function(d) { return d.purpose; })
+                       .entries(arr);
+
+      purposes.forEach(function(v){
+        // create new totals object, and reset race/ethnicity-values
+        var total = _.clone(v.values[0]);
+
+        _.keys(total).forEach(function(key){
+          if ((Stops.races.indexOf(key)>=0) ||
+              (Stops.ethnicities.indexOf(key)>=0)) {
+            total[key] = 0;
+          }
+        });
+
+        // sum data from all years
+        v.values.forEach(function(year){
+          _.keys(year).forEach(function(key){
+            if ((Stops.races.indexOf(key)>=0) ||
+                (Stops.ethnicities.indexOf(key)>=0)) {
+              total[key] += year[key];
+            }
+          });
+        });
+        total["year"] = "Total";
+        arr.push(total);
       });
-    });
+    };
 
+    getTotals(raw.stops);
+    getTotals(raw.searches);
+
+    // set cleaned-data to handler
     this.set("data", {
-      rows: rows,
-      cols: cols,
-      data: data
+      years: years,
+      raw: raw
     });
   }
 });
@@ -347,7 +363,7 @@ StopRatioTimeSeries = VisualBase.extend({
   }
 });
 
-LikelihoodOfStop = VisualBase.extend({
+LikelihoodOfSearch = VisualBase.extend({
   defaults: {
     width: 750,
     height: 375
@@ -370,10 +386,34 @@ LikelihoodOfStop = VisualBase.extend({
 
     this.chart.valueFormat(d3.format('%'));
   },
-  drawStartup: function(){},
+  drawStartup: function(){
+    // get year options for pulldown menu
+    var self = this,
+        selector = $('<select>'),
+        year_options = this.data.years,
+        opts = year_options.map(function(v){return '<option value="{0}">{0}</option>'.printf(v);}),
+        getData = function(){
+          var year = selector.val();
+          year = parseInt(year, 10) || year;
+          self.dataset =  self._getDataset(year);
+          self.drawChart();
+        };
+
+    selector
+      .append(opts)
+      .val("Total")
+      .on('change', getData);
+
+    $('<div>')
+      .html(selector)
+      .appendTo(this.div);
+
+    getData();
+  },
   drawChart: function(){
+
     d3.select(this.svg[0])
-            .datum(this._formatData())
+            .datum(this.dataset)
             .attr('width', "100%")
             .attr('height', "100%")
             .attr('preserveAspectRatio', "xMinYMin")
@@ -382,43 +422,61 @@ LikelihoodOfStop = VisualBase.extend({
 
     nv.utils.windowResize(this.chart.update);
   },
-  _formatData: function(){
-    var self = this,
-        data = [],
-        base_col = this.data.cols.get("White"),
-        d = this.data;  // sorting order (based on SME feedback)
+  _getDataset: function(year){
+    var dataset = [],
+        raw = this.data.raw,
+        stops_arr = raw.stops.filter(function(v){return v.year===year;}),
+        searches_arr = raw.searches.filter(function(v){return v.year===year;}),
+        stops = d3.map(),
+        searches = d3.map();
 
-    this.data.cols.keys().forEach(function(v, i){
-      if(v !== "White"){
-        var formatted = {
-          color: Stops.colors[i],
-          key: v + " vs. White",
-          values: []
-        }, col = self.data.cols.get(v);
-
-        self.data.rows.forEach(function(v){
-          var row = d.rows.get(v),
-              rate = d.data[row][col]/d.data[row][base_col] || 0;
-
-          rate = (rate) ? rate -1 : undefined;
-
-          formatted.values.push({
-            label: Stops.violations.get(v).label,
-            value: rate,
-            order: Stops.violations.get(v).order
-          });
-        });
-
-        formatted.values.sort(function(a,b){return a.order-b.order;});
-
-        // remove final "Checkpoint", optional reporting in regulation, based on SME feedback
-        formatted.values.pop();
-
-        data.push(formatted);
-      }
+    // turn arrays into maps with purpose as the key
+    stops_arr.forEach(function(v){
+      stops.set(v.purpose, v);
+    });
+    searches_arr.forEach(function(v){
+      searches.set(v.purpose, v);
     });
 
-    return data;
+    // build a set of bars for each race, except for white
+    Stops.races.forEach(function(race, i){
+      if(race === "white") return;
+
+      var bar = {
+          color: Stops.colors[i],
+          key: "{0} vs. White".printf(Stops.race_pprint[race]),
+          values: []
+      };
+
+      // build a bar for each violation
+      Stops.purpose_order.forEach(function(purpose){
+        // optional reporting requirement; remove as it's generally unreported
+        if (purpose === "Checkpoint") return;
+
+        // calculate percent-difference of stops which led to searches by race,
+        // in comparison to white-baseline
+        var w_se = searches.get(purpose).white,
+            w_st = stops.get(purpose).white,
+            w_ra = w_se/w_st,
+            r_se = searches.get(purpose)[race],
+            r_st = stops.get(purpose)[race],
+            r_ra = r_se/r_st,
+            rate = (r_ra-w_ra)/w_ra;
+
+        // add purpose to list of values
+        bar.values.push({
+          label: purpose,
+          value: rate,
+          order: Stops.purpose_order.get(purpose)
+        });
+      });
+
+      // sort bars and then push race to list
+      bar.values.sort(function(a,b){return a.order-b.order;});
+      dataset.push(bar);
+    });
+
+    return dataset;
   }
 });
 
@@ -428,4 +486,4 @@ SearchRatioTimeSeries = StopRatioTimeSeries.extend({});
 UseOfForceDonut = StopRatioDonut.extend({});
 UseOfForceTimeSeries = StopRatioTimeSeries.extend({});
 
-ContrabandHitRateBar = LikelihoodOfStop.extend({});
+ContrabandHitRateBar = LikelihoodOfSearch.extend({});
