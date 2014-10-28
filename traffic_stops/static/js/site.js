@@ -140,6 +140,8 @@ StopsHandler = DataHandlerBase.extend({
   }
 });
 
+UseOfForceHandler = StopsHandler.extend({});
+
 LikelihoodStopsHandler  = DataHandlerBase.extend({
   clean_data: function(){
     // create 2-D array of the data, each row is a stop-reason and column is
@@ -422,6 +424,6 @@ LikelihoodOfStop = VisualBase.extend({
 
 SearchRatioDonut = StopRatioDonut.extend({});
 SearchRatioTimeSeries = StopRatioTimeSeries.extend({});
-UseOfForceRatioDonut = StopRatioDonut.extend({});
-UseOfForceRatioTimeSeries = StopRatioTimeSeries.extend({});
+UseOfForceDonut = StopRatioDonut.extend({});
+UseOfForceTimeSeries = StopRatioTimeSeries.extend({});
 ContrabandHitRateBar = LikelihoodOfStop.extend({});
