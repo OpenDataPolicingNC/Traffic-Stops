@@ -67,7 +67,7 @@ DataHandlerBase = Backbone.Model.extend({
   get_data: function(){
     var self = this;
     d3.json(this.get("url"), function(error, data) {
-      if(error) return self.trigger("dataRequestFailed", self.get("data"));
+      if(error) return self.trigger("dataRequestFailed");
       self.set("raw_data", data);
       self.set("data", undefined);
       self.clean_data();
