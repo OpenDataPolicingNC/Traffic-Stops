@@ -67,7 +67,7 @@ DataHandlerBase = Backbone.Model.extend({
   get_data: function(){
     var self = this;
     d3.json(this.get("url"), function(error, data) {
-      if(error) return console.warn(error);
+      if(error) return self.trigger("dataRequestFailed", self.get("data"));
       self.set("raw_data", data);
       self.set("data", undefined);
       self.clean_data();
@@ -203,6 +203,7 @@ VisualBase = Backbone.Model.extend({
   constructor: function(){
     Backbone.Model.apply(this, arguments);
     this.listenTo(this.get("handler"), "dataLoaded", this.update);
+    this.listenTo(this.get("handler"), "dataRequestFailed", this.showError);
     this.setDOM();
     this.loader_show();
     this.setDefaultChart();
@@ -214,6 +215,12 @@ VisualBase = Backbone.Model.extend({
   loader_show: function(){
     this.loader_div = $('<div>')
           .append('<p>Loading ... <i class="fa fa-cog fa-spin"></i></p>')
+          .prependTo(this.div);
+  },
+  showError: function(){
+    this.loader_hide();
+    this.error_div = $('<div class="bg-warning">')
+          .append('<p>An error occurred in fetching the data.</p>')
           .prependTo(this.div);
   },
   loader_hide: function(){
