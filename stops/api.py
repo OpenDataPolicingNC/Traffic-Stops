@@ -115,3 +115,21 @@ class AgencyViewSet(viewsets.ReadOnlyModelViewSet):
         self.query(results, group_by=('year', 'person__race'), filter_=q)
         self.query(results, group_by=('year', 'person__ethnicity'), filter_=q)
         return Response(results.flatten())
+
+    @detail_route(methods=['get'])
+    @cache_response(key_func=default_object_cache_key_func)
+    def contraband_hit_rate(self, request, pk=None):
+        response = {}
+        # searches
+        results = GroupedData(by='year', defaults=GROUP_DEFAULTS)
+        q = Q(search__isnull=False)
+        self.query(results, group_by=('year', 'person__race'), filter_=q)
+        self.query(results, group_by=('year', 'person__ethnicity'), filter_=q)
+        response['searches'] = results.flatten()
+        # searches
+        results = GroupedData(by='year', defaults=GROUP_DEFAULTS)
+        q = Q(search__contraband__isnull=False)
+        self.query(results, group_by=('year', 'person__race'), filter_=q)
+        self.query(results, group_by=('year', 'person__ethnicity'), filter_=q)
+        response['contraband'] = results.flatten()
+        return Response(response)
