@@ -17,6 +17,7 @@ gunicorn_conf:
     - mode: 600
     - template: jinja
     - context:
+        newrelic_config_file: "{{ vars.services_dir }}/newrelic-app.ini"
         log_dir: "{{ vars.log_dir }}"
         settings: "{{ pillar['project_name'] }}.settings.{{ pillar['environment'] }}"
         virtualenv_root: "{{ vars.venv_dir }}"

@@ -7,6 +7,7 @@ base:
     - locale.utf8
     - project.devs
     - salt.minion
+    - newrelic_sysmon
   'environment:local':
     - match: grain
     - vagrant.user
@@ -16,6 +17,7 @@ base:
   'roles:web':
     - match: grain
     - project.web.app
+    - project.newrelic_webmon
   'roles:worker':
     - match: grain
     - project.worker.default
