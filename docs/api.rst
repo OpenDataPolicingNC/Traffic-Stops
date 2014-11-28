@@ -4,7 +4,9 @@ API Endpoints
 Stops by all races and ethnicities by year
 ------------------------------------------
 
-**URI:** `/api/agency/<id>/stops/ <https://54.208.65.43/api/agency/78/stops/>`_
+**URI:** `/api/agency/<id>/stops/ <https://traffic-stops.codefordurham.com/api/agency/78/stops/>`_
+
+**Officer URI:** `/api/agency/<id>/stops/?officer=<id> <https://traffic-stops.codefordurham.com/api/agency/78/stops/?officer=368>`_
 
 Counts of stops by all races and by all ethnicities by year.
 
@@ -95,8 +97,9 @@ Sample JSON response (Durham Police Department):
 Likelihood-of-search by stop-reason
 -----------------------------------
 
-**URI:** `/api/agency/<id>/stops_by_reason/ <https://54.208.65.43/api/agency/78/stops_by_reason/>`_
+**URI:** `/api/agency/<id>/stops_by_reason/ <https://traffic-stops.codefordurham.com/api/agency/78/stops_by_reason/>`_
 
+**Officer URI:** `/api/agency/<id>/stops_by_reason/?officer=<id> <https://traffic-stops.codefordurham.com/api/agency/78/stops_by_reason/?officer=368>`_
 
 A count of likelihood-of-search by stop-reason.
 
@@ -276,7 +279,9 @@ JSON Response
 Use-of-force
 ------------
 
-**URI:** `/api/agency/<id>/use_of_force/ <https://54.208.65.43/api/agency/78/use_of_force/>`_
+**URI:** `/api/agency/<id>/use_of_force/ <https://traffic-stops.codefordurham.com/api/agency/78/use_of_force/>`_
+
+**Officer URI:** `/api/agency/<id>/use_of_force/?officer=<id> <https://traffic-stops.codefordurham.com/api/agency/78/use_of_force/?officer=368>`_
 
 A count of all use-of-force by all races and by all ethnicities by year.
 
@@ -375,7 +380,11 @@ Sample JSON response (Durham Police Department):
 
 
 Contraband Hit Rate
----------------------------------
+-------------------
+
+**URI:** `/api/agency/<id>/contraband_hit_rate/ <https://traffic-stops.codefordurham.com/api/agency/78/contraband_hit_rate/>`_
+
+**Officer URI:** `/api/agency/<id>/contraband_hit_rate/?officer=<id> <https://traffic-stops.codefordurham.com/api/agency/78/contraband_hit_rate/?officer=368>`_
 
 A count of contraband hit-rate by year and race.
 
@@ -441,3 +450,58 @@ Sample SQL Results:
          1 | I    | 2007
        259 | B    | 2007
          4 | A    | 2007
+
+
+JSON
+~~~~
+
+Sample JSON response (Durham Police Department):
+
+.. code-block:: json
+
+    {
+        "contraband": [
+            {
+                "year": 2006,
+                "hispanic": 17,
+                "native_american": 0,
+                "other": 1,
+                "black": 149,
+                "asian": 2,
+                "non-hispanic": 182,
+                "white": 47
+            },
+            {
+                "year": 2007,
+                "hispanic": 31,
+                "native_american": 1,
+                "other": 0,
+                "black": 260,
+                "asian": 4,
+                "non-hispanic": 319,
+                "white": 85
+            },
+        ],
+        "searches": [
+            {
+                "year": 2006,
+                "hispanic": 174,
+                "native_american": 1,
+                "other": 6,
+                "black": 716,
+                "asian": 7,
+                "non-hispanic": 872,
+                "white": 316
+            },
+            {
+                "year": 2007,
+                "hispanic": 225,
+                "native_american": 3,
+                "other": 5,
+                "black": 935,
+                "asian": 17,
+                "non-hispanic": 1200,
+                "white": 465
+            },
+        ]
+    }
