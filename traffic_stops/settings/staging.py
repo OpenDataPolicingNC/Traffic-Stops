@@ -31,7 +31,7 @@ ADMINS = (
 )
 MANAGERS = ADMINS
 
-DEFAULT_FROM_EMAIL = 'noreply@foobar.com'
+DEFAULT_FROM_EMAIL = 'no-reply@codeforamerica.org'
 
 COMPRESS_ENABLED = True
 
