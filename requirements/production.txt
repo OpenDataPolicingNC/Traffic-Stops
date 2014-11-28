@@ -1,3 +1,4 @@
 -r base.txt
 gunicorn==19.1.1
 python3-memcached==1.51
+newrelic==2.38.2.32
