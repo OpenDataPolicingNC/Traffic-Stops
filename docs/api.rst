@@ -4,7 +4,9 @@ API Endpoints
 Stops by all races and ethnicities by year
 ------------------------------------------
 
-**URI:** `/api/agency/<id>/stops/ <https://54.208.65.43/api/agency/78/stops/>`_
+**URI:** `/api/agency/<id>/stops/ <https://traffic-stops.codefordurham.com/api/agency/78/stops/>`_
+
+**Officer URI:** `/api/agency/<id>/stops/?officer=<id> <https://traffic-stops.codefordurham.com/api/agency/78/stops/?officer=368>`_
 
 Counts of stops by all races and by all ethnicities by year.
 
@@ -95,8 +97,9 @@ Sample JSON response (Durham Police Department):
 Likelihood-of-search by stop-reason
 -----------------------------------
 
-**URI:** `/api/agency/<id>/stops_by_reason/ <https://54.208.65.43/api/agency/78/stops_by_reason/>`_
+**URI:** `/api/agency/<id>/stops_by_reason/ <https://traffic-stops.codefordurham.com/api/agency/78/stops_by_reason/>`_
 
+**Officer URI:** `/api/agency/<id>/stops_by_reason/?officer=<id> <https://traffic-stops.codefordurham.com/api/agency/78/stops_by_reason/?officer=368>`_
 
 A count of likelihood-of-search by stop-reason.
 
@@ -276,7 +279,9 @@ JSON Response
 Use-of-force
 ------------
 
-**URI:** `/api/agency/<id>/use_of_force/ <https://54.208.65.43/api/agency/78/use_of_force/>`_
+**URI:** `/api/agency/<id>/use_of_force/ <https://traffic-stops.codefordurham.com/api/agency/78/use_of_force/>`_
+
+**Officer URI:** `/api/agency/<id>/use_of_force/?officer=<id> <https://traffic-stops.codefordurham.com/api/agency/78/use_of_force/?officer=368>`_
 
 A count of all use-of-force by all races and by all ethnicities by year.
 
@@ -374,10 +379,14 @@ Sample JSON response (Durham Police Department):
     ]
 
 
-Contraband Hit Rate (Not working)
----------------------------------
+Contraband Hit Rate
+-------------------
 
-A count of contraband hit-rate by race, year, and search-type. I'm not sure
+**URI:** `/api/agency/<id>/contraband_hit_rate/ <https://traffic-stops.codefordurham.com/api/agency/78/contraband_hit_rate/>`_
+
+**Officer URI:** `/api/agency/<id>/contraband_hit_rate/?officer=<id> <https://traffic-stops.codefordurham.com/api/agency/78/contraband_hit_rate/?officer=368>`_
+
+A count of contraband hit-rate by year and race.
 
 
 SQL Query
@@ -389,7 +398,6 @@ One query for all stops with searches and another for stops with searches with c
 
     SELECT count(se.person_id),
            p.race,
-           se.type,
            extract(YEAR FROM s.date) AS year
     FROM stops_person p
     JOIN stops_stop s ON p.stop_id = s.stop_id
@@ -397,10 +405,8 @@ One query for all stops with searches and another for stops with searches with c
     WHERE p.type='D'
       AND s.agency_id = 78
     GROUP BY p.race,
-             se.type,
              year
     ORDER BY year ASC,
-             se.type ASC,
              p.race DESC;
 
     SELECT count(c.person_id),
@@ -410,12 +416,9 @@ One query for all stops with searches and another for stops with searches with c
     JOIN stops_stop s ON p.stop_id = s.stop_id
     JOIN stops_search se ON s.stop_id = se.stop_id
     JOIN stops_contraband c ON se.search_id = c.search_id
-     AND p.person_id = c.person_id
-     AND se.stop_id = c.stop_id
     WHERE p.type='D'
       AND s.agency_id = 78
     GROUP BY p.race,
-             s.purpose,
              year
     ORDER BY year ASC,
              p.race DESC;
@@ -424,32 +427,81 @@ Sample SQL Results:
 
 .. code-block:: sql
 
-     count | race | purpose | year 
-    -------+------+---------+------
-        73 | W    |       1 | 2006
-         1 | U    |       1 | 2006
-       126 | B    |       1 | 2006
-         5 | A    |       1 | 2006
-        21 | W    |       2 | 2006
-         1 | U    |       2 | 2006
-        25 | B    |       2 | 2006
-        19 | W    |       3 | 2006
-        18 | B    |       3 | 2006
-        44 | W    |       4 | 2006
-        56 | B    |       4 | 2006
-        62 | W    |       5 | 2006
-       156 | B    |       5 | 2006
-         1 | A    |       5 | 2006
-        47 | W    |       6 | 2006
-         1 | U    |       6 | 2006
-       169 | B    |       6 | 2006
-         5 | W    |       7 | 2006
-         1 | U    |       7 | 2006
-        26 | B    |       7 | 2006
-        29 | W    |       8 | 2006
-        91 | B    |       8 | 2006
-         1 | A    |       8 | 2006
-        16 | W    |       9 | 2006
-         2 | U    |       9 | 2006
-         1 | I    |       9 | 2006
-        50 | B    |       9 | 2006
+     count | race | year
+    -------+------+------
+       316 | W    | 2006
+         6 | U    | 2006
+         1 | I    | 2006
+       717 | B    | 2006
+         7 | A    | 2006
+       465 | W    | 2007
+         5 | U    | 2007
+         3 | I    | 2007
+       934 | B    | 2007
+        17 | A    | 2007
+
+     count | race | year
+    -------+------+------
+        47 | W    | 2006
+         1 | U    | 2006
+       150 | B    | 2006
+         2 | A    | 2006
+        85 | W    | 2007
+         1 | I    | 2007
+       259 | B    | 2007
+         4 | A    | 2007
+
+
+JSON
+~~~~
+
+Sample JSON response (Durham Police Department):
+
+.. code-block:: json
+
+    {
+        "contraband": [
+            {
+                "year": 2006,
+                "hispanic": 17,
+                "native_american": 0,
+                "other": 1,
+                "black": 149,
+                "asian": 2,
+                "non-hispanic": 182,
+                "white": 47
+            },
+            {
+                "year": 2007,
+                "hispanic": 31,
+                "native_american": 1,
+                "other": 0,
+                "black": 260,
+                "asian": 4,
+                "non-hispanic": 319,
+                "white": 85
+            },
+        ],
+        "searches": [
+            {
+                "year": 2006,
+                "hispanic": 174,
+                "native_american": 1,
+                "other": 6,
+                "black": 716,
+                "asian": 7,
+                "non-hispanic": 872,
+                "white": 316
+            },
+            {
+                "year": 2007,
+                "hispanic": 225,
+                "native_american": 3,
+                "other": 5,
+                "black": 935,
+                "asian": 17,
+                "non-hispanic": 1200,
+                "white": 465
+            },
+        ]
+    }
