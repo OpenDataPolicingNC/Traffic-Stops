@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
 from django.db.models import Count
-from stops.models import Stop, Agency
+from stops.models import Stop, Agency, Person
 from stops import forms
 
 
@@ -19,7 +19,7 @@ def home(request):
 
 def search(request):
     query = None
-    if request.method == 'GET':
+    if request.method == 'GET' and request.GET:
         form = forms.SearchForm(request.GET)
         if form.is_valid():
             query = form.get_query()
@@ -27,13 +27,13 @@ def search(request):
         form = forms.SearchForm()
 
     if query:
-        stops = Stop.objects.filter(query)
+        people = Person.objects.filter(query)
     else:
-        stops = Stop.objects.none()
-    stops = stops.order_by('-date')
+        people = Person.objects.none()
+    people = people.select_related('stop').order_by('-stop__date')
     context = {
         'form': form,
-        'stops': stops,
+        'people': people,
     }
     return render(request, 'stops/search.html', context)
 

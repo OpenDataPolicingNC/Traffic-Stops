@@ -1,3 +1,5 @@
+import datetime
+
 from django import forms
 from django.db.models import Q
 from selectable.forms import AutoCompleteWidget, AutoCompleteSelectField
@@ -10,16 +12,10 @@ class SearchForm(forms.Form):
     agency = forms.CharField(
         label='Agency Name',
         widget=AutoCompleteWidget(AgencyLookup),
-        required=False,
+        help_text="ex: Durham Police Department"
     )
-    officer = forms.CharField(required=False)
-    driver_arrest = forms.BooleanField(required=False)
-    passenger_arrest = forms.BooleanField(required=False)
-    encounter_force = forms.BooleanField(required=False)
-    engage_force = forms.BooleanField(required=False)
-    officer_injury = forms.BooleanField(required=False)
-    driver_injury = forms.BooleanField(required=False)
-    passenger_injury = forms.BooleanField(required=False)
+    officer = forms.CharField(required=False, help_text="ex: 227")
+    date = forms.DateField(required=False, help_text="ex: 8/13/2012")
     purpose = forms.MultipleChoiceField(required=False,
                                         choices=stops.PURPOSE_CHOICES,
                                         widget=forms.CheckboxSelectMultiple)
@@ -40,19 +36,20 @@ class SearchForm(forms.Form):
         query = Q()
         agency = self.cleaned_data['agency']
         if agency:
-            query &= Q(agency=agency)
+            query &= Q(stop__agency=agency)
+        officer = self.cleaned_data['officer']
+        if officer:
+            query &= Q(stop__officer_id=officer)
+        date = self.cleaned_data['date']
+        if date:
+            query &= Q(stop__date__gte=date,
+                       stop__date__lt=date + datetime.timedelta(days=1))
         purpose = self.cleaned_data['purpose']
         if purpose:
             query &= Q(purpose__in=purpose)
-        driver_arrest = self.cleaned_data['driver_arrest']
-        if driver_arrest:
-            query &= Q(driver_arrest=True)
         action = self.cleaned_data['action']
         if action:
             query &= Q(action__in=action)
-        officer = self.cleaned_data['officer']
-        if officer:
-            query &= Q(officer_id=officer)
         return query
 
 
