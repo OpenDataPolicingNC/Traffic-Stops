@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, Http404
 from django.views.generic import ListView, DetailView
 from django.db.models import Count
 from stops.models import Stop, Agency, Person
@@ -48,7 +48,15 @@ class AgencyDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super(AgencyDetail, self).get_context_data(**kwargs)
         agency = context['object']
-        officers = Stop.objects.filter(agency=agency).values('officer_id')
-        officers = officers.annotate(total_stops=Count('officer_id'))
-        context['officers'] = officers.order_by('-total_stops')
+        officer_id = self.request.GET.get('officer_id')
+
+        if officer_id:
+            if not Stop.objects.filter(agency=agency, officer_id=officer_id).exists():
+                raise Http404()
+            context['officer_id'] = officer_id
+        else:
+            officers = Stop.objects.filter(agency=agency).values('officer_id')
+            officers = officers.annotate(total_stops=Count('officer_id'))
+            context['officers'] = officers.order_by('-total_stops')
+
         return context

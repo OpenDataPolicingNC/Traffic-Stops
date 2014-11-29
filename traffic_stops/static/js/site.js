@@ -187,8 +187,8 @@ LikelihoodSearchHandler = DataHandlerBase.extend({
       });
     };
 
-    getTotals(raw.stops);
-    getTotals(raw.searches);
+    if (raw.stops.length>0) getTotals(raw.stops);
+    if (raw.searches.length>0) getTotals(raw.searches);
 
     // set cleaned-data to handler
     this.set("data", {
@@ -211,8 +211,6 @@ ContrabandHitRateHandler = DataHandlerBase.extend({
 
     // build totals for all years
     var getTotals = function(arr){
-
-      // reset totals
       var total = _.clone(arr[0]);
       _.keys(total).forEach(function(key){
         total[key] = 0;
@@ -230,8 +228,8 @@ ContrabandHitRateHandler = DataHandlerBase.extend({
       arr.push(total);
     };
 
-    getTotals(raw.searches);
-    getTotals(raw.contraband);
+    if (raw.searches.length>0) getTotals(raw.searches);
+    if (raw.contraband.length>0) getTotals(raw.contraband);
 
     // set cleaned-data to handler
     this.set("data", {
@@ -506,20 +504,29 @@ LikelihoodOfSearch = VisualBase.extend({
 
         // calculate percent-difference of stops which led to searches by race,
         // in comparison to white-baseline
-        var w_se = searches.get(purpose).white,
-            w_st = stops.get(purpose).white,
-            w_ra = w_se/w_st,
-            r_se = searches.get(purpose)[race],
-            r_st = stops.get(purpose)[race],
-            r_ra = r_se/r_st,
-            rate = (r_ra-w_ra)/w_ra;
+        var search = searches.get(purpose),
+            stop  = stops.get(purpose);
 
-        // add purpose to list of values
-        bar.values.push({
-          label: purpose,
-          value: rate,
-          order: Stops.purpose_order.get(purpose)
-        });
+        if (search && stop){
+
+          var rate, w_rate, r_rate,
+              w_se = search.white || 0,
+              w_st = stop.white || 0,
+              r_se = search[race] || 0,
+              r_st = stop[race] || 0;
+
+          w_rate = w_se/w_st;
+          r_rate = r_se/r_st;
+          rate = (r_rate-w_rate)/w_rate;
+
+          // add purpose to list of values
+          bar.values.push({
+            label: purpose,
+            value: rate,
+            order: Stops.purpose_order.get(purpose)
+          });
+
+        }
       });
 
       // sort bars and then push race to list
@@ -606,17 +613,21 @@ ContrabandHitRateBar = VisualBase.extend({
             values: []
         };
 
-    if (searches_arr.length>0)   searches_arr=searches_arr[0];
-    if (contraband_arr.length>0) contraband_arr=contraband_arr[0];
+    if (searches_arr.length===1 && contraband_arr.length===1){
 
-    // build a bar for each race
-    Stops.races.forEach(function(race, i){
-      var ratio = contraband_arr[race] / searches_arr[race];
-      dataset.values.push({
-        "label": Stops.race_pprint[race],
-        "value": ratio
+      searches_arr = searches_arr[0];
+      contraband_arr = contraband_arr[0];
+
+      // build a bar for each race
+      Stops.races.forEach(function(race, i){
+        var ratio = contraband_arr[race] / searches_arr[race];
+        dataset.values.push({
+          "label": Stops.race_pprint[race],
+          "value": ratio
+        });
       });
-    });
+
+    }
 
     return [dataset];
   }
