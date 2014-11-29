@@ -43,6 +43,7 @@ var Stops = {
     "#d7191c",
     "#2BC2F0"
   ],
+  single_color: "#5C0808",
   purpose_order: d3.map({
     'Driving While Impaired': 0,
     'Safe Movement Violation': 1,
@@ -143,7 +144,7 @@ StopsHandler = DataHandlerBase.extend({
 SearchHandler = StopsHandler.extend({});
 UseOfForceHandler = StopsHandler.extend({});
 
-LikelihoodSearchHandler  = DataHandlerBase.extend({
+LikelihoodSearchHandler = DataHandlerBase.extend({
   clean_data: function(){
 
     var years,
@@ -188,6 +189,49 @@ LikelihoodSearchHandler  = DataHandlerBase.extend({
 
     getTotals(raw.stops);
     getTotals(raw.searches);
+
+    // set cleaned-data to handler
+    this.set("data", {
+      years: years,
+      raw: raw
+    });
+  }
+});
+
+ContrabandHitRateHandler = DataHandlerBase.extend({
+  clean_data: function(){
+
+    var years,
+        raw = this.get("raw_data");
+
+    // get available years
+    years = d3.set(raw.searches.map(function(v){return v.year;})).values();
+    years.filter(function(v){return (v >= Stops.start_year);});
+    years.push("Total");
+
+    // build totals for all years
+    var getTotals = function(arr){
+
+      // reset totals
+      var total = _.clone(arr[0]);
+      _.keys(total).forEach(function(key){
+        total[key] = 0;
+      });
+
+      // sum data from all years
+      arr.forEach(function(year){
+        _.keys(year).forEach(function(key){
+          total[key] += year[key];
+        });
+      });
+
+      // push to end of array
+      total["year"] = "Total";
+      arr.push(total);
+    };
+
+    getTotals(raw.searches);
+    getTotals(raw.contraband);
 
     // set cleaned-data to handler
     this.set("data", {
@@ -493,4 +537,87 @@ SearchRatioTimeSeries = StopRatioTimeSeries.extend({});
 UseOfForceDonut = StopRatioDonut.extend({});
 UseOfForceTimeSeries = StopRatioTimeSeries.extend({});
 
-ContrabandHitRateBar = LikelihoodOfSearch.extend({});
+ContrabandHitRateBar = VisualBase.extend({
+  defaults: {
+    width: 750,
+    height: 375
+  },
+  setDefaultChart: function(){
+    this.chart = nv.models.multiBarHorizontalChart()
+      .x(function(d){ return d.label; })
+      .y(function(d){ return d.value; })
+      .width(this.get("width"))
+      .height(this.get("height"))
+      .margin({top: 20, right: 50, bottom: 20, left: 180})
+      .showValues(true)
+      .tooltips(true)
+      .transitionDuration(350)
+      .showControls(false);
+
+    this.chart.yAxis
+        .axisLabel('Searches resulting in contraband-found')
+        .tickFormat(d3.format('%'));
+
+    this.chart.valueFormat(d3.format('%'));
+  },
+  drawStartup: function(){
+    // get year options for pulldown menu
+    var self = this,
+        selector = $('<select>'),
+        year_options = this.data.years,
+        opts = year_options.map(function(v){return '<option value="{0}">{0}</option>'.printf(v);}),
+        getData = function(){
+          var year = selector.val();
+          year = parseInt(year, 10) || year;
+          self.dataset =  self._getDataset(year);
+          self.drawChart();
+        };
+
+    selector
+      .append(opts)
+      .val("Total")
+      .on('change', getData);
+
+    $('<div>')
+      .html(selector)
+      .appendTo(this.div);
+
+    getData();
+  },
+  drawChart: function(){
+
+    d3.select(this.svg[0])
+            .datum(this.dataset)
+            .attr('width', "100%")
+            .attr('height', "100%")
+            .attr('preserveAspectRatio', "xMinYMin")
+            .attr('viewBox', "0 0 {0} {1}".printf(this.get("width"), this.get("height")))
+            .call(this.chart);
+
+    nv.utils.windowResize(this.chart.update);
+  },
+  _getDataset: function(year){
+    var raw = this.data.raw,
+        searches_arr = raw.searches.filter(function(v){return v.year===year;}),
+        contraband_arr = raw.contraband.filter(function(v){return v.year===year;}),
+        dataset = {
+            color: Stops.single_color,
+            key: "Contraband hit-rates",
+            values: []
+        };
+
+    if (searches_arr.length>0)   searches_arr=searches_arr[0];
+    if (contraband_arr.length>0) contraband_arr=contraband_arr[0];
+
+    // build a bar for each race
+    Stops.races.forEach(function(race, i){
+      var ratio = contraband_arr[race] / searches_arr[race];
+      dataset.values.push({
+        "label": Stops.race_pprint[race],
+        "value": ratio
+      });
+    });
+
+    return [dataset];
+  }
+});

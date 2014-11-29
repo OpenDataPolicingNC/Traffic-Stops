@@ -91,7 +91,6 @@
   </div>
   <hr>
 
-  {% comment %}
   <div class="row">
     <div class="col-md-offset-2 col-md-8">
       <h3>Contraband hit-rate</h3>
@@ -106,7 +105,6 @@
     </div>
   </div>
   <hr>
-  {% endcomment %}
 
   <!-- use-of-force data -->
   <div class="row">
@@ -161,7 +159,8 @@
       var stop_handler = new StopsHandler({url: "{% url 'agency-api-stops' object.pk %}"}),
           search_handler = new SearchHandler({url: "{% url 'agency-api-searches' object.pk %}"}),
           uf_handler = new UseOfForceHandler({url: "{% url 'agency-api-use-of-force' object.pk %}"}),
-          lhs_handler = new LikelihoodSearchHandler({url: "{% url 'agency-api-stops-by-reason' object.pk %}"});
+          lhs_handler = new LikelihoodSearchHandler({url: "{% url 'agency-api-stops-by-reason' object.pk %}"}),
+          chr_handler = new ContrabandHitRateHandler({url: "{% url 'agency-api-contraband-hit-rate' object.pk %}"});
 
       // Create plots for each data-type
       new StopRatioDonut({handler: stop_handler, selector: "#stop_race_pie"}),
@@ -174,8 +173,7 @@
       new UseOfForceTimeSeries({handler: uf_handler, selector: "#use_force_race_line"});
 
       new LikelihoodOfSearch({handler: lhs_handler, selector: "#lsb"});
-
-      // chr = new ContrabandHitRateBar({handler: lhandler, selector: "#chr"}),
+      new ContrabandHitRateBar({handler: chr_handler, selector: "#chr"});
 
     });
   </script>
