@@ -46,10 +46,10 @@ class SearchForm(forms.Form):
                        stop__date__lt=date + datetime.timedelta(days=1))
         purpose = self.cleaned_data['purpose']
         if purpose:
-            query &= Q(purpose__in=purpose)
+            query &= Q(stop__purpose__in=purpose)
         action = self.cleaned_data['action']
         if action:
-            query &= Q(action__in=action)
+            query &= Q(stop__action__in=action)
         return query
 
 

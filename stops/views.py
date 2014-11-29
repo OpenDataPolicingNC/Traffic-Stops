@@ -30,7 +30,7 @@ def search(request):
         people = Person.objects.filter(query)
     else:
         people = Person.objects.none()
-    people = people.select_related('stop').order_by('-stop__date')
+    people = people.select_related('stop').order_by('stop__date')
     context = {
         'form': form,
         'people': people,
