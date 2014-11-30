@@ -7,11 +7,13 @@
 
 {% block content %}
 
-  <h2>{{ object }}{% if officer_id %}: officer {{officer_id}} {% endif %}</h2>
+  <h1>{{ object }}{% if officer_id %}: officer {{officer_id}} {% endif %}</h1>
 
   <!-- stop data -->
   <div class="row">
-    <h2>Stops data</h2>
+    <div class="col-md-12">
+      <h2>Stops data</h2>
+    </div>
 
     <div class="col-md-4">
       <h3>Fraction of stops by race</h3>
@@ -45,7 +47,9 @@
 
   <!-- search data -->
   <div class="row">
-    <h2>Search data</h2>
+    <div class="col-md-12">
+      <h2>Search data</h2>
+    </div>
 
     <div class="col-md-4">
       <h3>Fraction of search by race</h3>
@@ -108,7 +112,9 @@
 
   <!-- use-of-force data -->
   <div class="row">
-    <h2>Use-of-force data</h2>
+    <div class="col-md-12">
+      <h2>Use-of-force data</h2>
+    </div>
 
     <div class="col-md-4">
       <h3>Fraction of use-of-force by race</h3>
