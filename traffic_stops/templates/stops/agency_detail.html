@@ -26,7 +26,7 @@
       </p>
     </div>
 
-    <div class="col-md-8">
+    <div id="stop_div" class="col-md-8">
       <h3>Annual percent of stops by race</h3>
 
       <div>
@@ -60,7 +60,7 @@
       </p>
     </div>
 
-    <div class="col-md-8">
+    <div id="search_div" class="col-md-8">
       <h3>Annual percent of search by race</h3>
 
       <div>
@@ -77,7 +77,7 @@
   </div>
 
   <div class="row">
-    <div class="col-md-offset-2 col-md-8">
+    <div id="lhs_div" class="col-md-offset-2 col-md-8">
       <h3>Likelihood of search by stop-cause</h3>
 
       <div>
@@ -92,7 +92,7 @@
   <hr>
 
   <div class="row">
-    <div class="col-md-offset-2 col-md-8">
+    <div id="contraband_div" class="col-md-offset-2 col-md-8">
       <h3>Contraband hit-rate</h3>
 
       <div>
@@ -123,7 +123,7 @@
       </p>
     </div>
 
-    <div class="col-md-8">
+    <div id="use_force_div" class="col-md-8">
       <h3>Annual percent of use-of-force by race</h3>
 
       <div>
@@ -171,6 +171,7 @@
             lhs_handler = new LikelihoodSearchHandler({url: "{% url 'agency-api-stops-by-reason' object.pk %}"}),
             chr_handler = new ContrabandHitRateHandler({url: "{% url 'agency-api-contraband-hit-rate' object.pk %}"});
       {% endif %}
+
       // Create plots for each data-type
       new StopRatioDonut({handler: stop_handler, selector: "#stop_race_pie"}),
       new StopRatioTimeSeries({handler: stop_handler, selector: "#stop_race_line"});
@@ -184,6 +185,12 @@
       new LikelihoodOfSearch({handler: lhs_handler, selector: "#lsb"});
       new ContrabandHitRateBar({handler: chr_handler, selector: "#chr"});
 
+      // create tables
+      new StopsTable({handler: stop_handler, selector: "#stop_div"});
+      new SearchTable({handler: search_handler, selector: "#search_div"});
+      new UseOfForceTable({handler: uf_handler, selector: "#use_force_div"});
+      new LikelihoodSearchTable({handler: lhs_handler, selector: "#lhs_div"});
+      new ContrabandTable({handler: chr_handler, selector: "#contraband_div"});
     });
   </script>
 {% endblock extra-js %}

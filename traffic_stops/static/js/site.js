@@ -25,17 +25,21 @@ var Stops = {
     'asian',
     'other'
   ],
-  race_pprint: {
+  race_pprint: d3.map({
     'white': 'White',
     'black': 'Black',
     'native_american': 'Native American',
     'asian': 'Asian',
     'other': 'Other'
-  },
+  }),
   ethnicities: [
     'hispanic',
     'non-hispanic'
   ],
+  ethnicity_pprint: d3.map({
+    'hispanic': 'Hispanic',
+    'non-hispanic': 'Non-hispanic'
+  }),
   colors: [
     "#fdae61",
     "#a6d96a",
@@ -54,7 +58,7 @@ var Stops = {
     'Speed Limit Violation': 6,
     'Vehicle Regulatory Violation': 7,
     'Seat Belt Violation': 8,
-    'Checkpoint': 9
+    'Checkpoint': 9  // todo: use a list and indexOf instead of map
   })
   };
 
@@ -349,7 +353,7 @@ StopRatioDonut = VisualBase.extend({
     // build data specifically for this pie chart
     Stops.races.forEach(function(race, i){
         data.push({
-          "key": Stops.race_pprint[race],
+          "key": Stops.race_pprint.get(race),
           "value": selected.get(race),
           "color": Stops.colors[i]
         });
@@ -403,7 +407,7 @@ StopRatioTimeSeries = VisualBase.extend({
 
     this.data.line.entries().forEach(function(v, i){
       data.push({
-        key: Stops.race_pprint[v.key],
+        key: Stops.race_pprint.get(v.key),
         values: v.value,
         color: Stops.colors[i]
       });
@@ -493,7 +497,7 @@ LikelihoodOfSearch = VisualBase.extend({
 
       var bar = {
           color: Stops.colors[i],
-          key: "{0} vs. White".printf(Stops.race_pprint[race]),
+          key: "{0} vs. White".printf(Stops.race_pprint.get(race)),
           values: []
       };
 
@@ -622,7 +626,7 @@ ContrabandHitRateBar = VisualBase.extend({
       Stops.races.forEach(function(race, i){
         var ratio = contraband_arr[race] / searches_arr[race];
         dataset.values.push({
-          "label": Stops.race_pprint[race],
+          "label": Stops.race_pprint.get(race),
           "value": ratio
         });
       });
@@ -630,5 +634,143 @@ ContrabandHitRateBar = VisualBase.extend({
     }
 
     return [dataset];
+  }
+});
+
+// dashboard tables
+TableBase = Backbone.Model.extend({
+  constructor: function(){
+    Backbone.Model.apply(this, arguments);
+    this.listenTo(this.get("handler"), "dataLoaded", this.update);
+    this.listenTo(this.get("handler"), "dataRequestFailed", this.showError);
+  },
+  update: function(data){
+    this.data = data;
+    this.draw_table();
+  },
+  get_tabular_data: function(){
+    // should return list of lists, one list per row
+    throw "abstract method: requires override";
+  },
+  showError: function(){
+    var div = $(this.get("selector")),
+        error_div = $('<div class="bg-warning">')
+          .append('<p>An error occurred in fetching the data.</p>')
+          .prependTo(div);
+  },
+  draw_table: function(){
+    var div = $(this.get("selector")),
+        matrix = this.get_tabular_data(),
+        tbl = $('<table>').attr("class", "table table-striped table-condensed dash-tables");
+
+    matrix.forEach(function(row, i){
+
+      if(i===0){
+        var cols = $('<colgroup>');
+
+      }
+
+      var tr = $('<tr>');
+      row.forEach(function(d){
+        var cell = (i === 0) ? $('<th>') : $('<td>');
+        tr.append(cell.append(d));
+      });
+      tbl.append(tr);
+    });
+    div.append(tbl);
+  }
+});
+
+StopsTable = TableBase.extend({
+  get_tabular_data: function(){
+    var header, row, rows = [];
+
+    // create header
+    header = ["Year"];
+    header.push.apply(header, Stops.race_pprint.values());
+    header.push.apply(header, Stops.ethnicity_pprint.values());
+    rows.push(header);
+
+    // create data rows
+    this.data.pie.forEach(function(k, v){
+      row = [k];
+      Stops.races.forEach(function(r){ row.push((v.get(r)||0).toLocaleString()); });
+      Stops.ethnicities.forEach(function(e){ row.push((v.get(e)||0).toLocaleString()); });
+      rows.push(row);
+    });
+
+    return rows;
+  }
+});
+
+SearchTable = StopsTable.extend({});
+UseOfForceTable = StopsTable.extend({});
+
+ContrabandTable = TableBase.extend({
+  get_tabular_data: function(){
+    var header, row, rows = [];
+
+    // create header
+    header = ["Year"];
+    header.push.apply(header, Stops.race_pprint.values());
+    header.push.apply(header, Stops.ethnicity_pprint.values());
+    rows.push(header);
+
+    // create data rows
+    this.data.raw.contraband.forEach(function(v){
+      row = [v.year];
+      Stops.races.forEach(function(r){ row.push(v[r]||0).toLocaleString(); });
+      Stops.ethnicities.forEach(function(e){ row.push(v[e]||0).toLocaleString(); });
+      rows.push(row);
+    });
+
+    return rows;
+  }
+});
+
+LikelihoodSearchTable = TableBase.extend({
+  get_tabular_data: function(){
+    var header, row, rows = [];
+
+    // create header
+    header = ["Year", "Stop-reason"];
+    header.push.apply(header, Stops.race_pprint.values());
+    header.push.apply(header, Stops.ethnicity_pprint.values());
+    rows.push(header);
+
+    var stop, search, stop_purp, search_purp, v1, v2,
+        purposes = Stops.purpose_order.keys(),
+        stops = this.data.raw.stops,
+        searches = this.data.raw.searches,
+        get_row = function(stops, searches, term){
+          var stop = (stops !== undefined) ? stops[term] : 0,
+              search = (searches !== undefined) ? searches[term] : 0;
+          return "{0}/{1}".printf(search, stop);
+        };
+
+    // create data rows
+    this.data.years.forEach(function(yr){
+        stop = stops.filter(function(d){return d.year == yr;});
+        search = searches.filter(function(d){return d.year == yr;});
+        purposes.forEach(function(purp){
+          row = [yr, purp];
+          stop_purp = (stop.length>0) ? stop.filter(function(d){return d.purpose == purp;}): undefined;
+          search_purp = (search.length>0) ? search.filter(function(d){return d.purpose == purp;}) : undefined;
+          stop_purp = (stop_purp && stop_purp.length === 1) ? stop_purp[0] : undefined;
+          search_purp = (search_purp && search_purp.length === 1) ? search_purp[0] : undefined;
+
+          Stops.races.forEach(function(r){
+            row.push(get_row(stop_purp, search_purp, r));
+          });
+
+          Stops.ethnicities.forEach(function(e){
+            row.push(get_row(stop_purp, search_purp, e));
+          });
+
+          rows.push(row);
+        });
+    });
+
+    return rows;
   }
 });
