@@ -41,11 +41,11 @@ var Stops = {
     'non-hispanic': 'Non-hispanic'
   }),
   colors: [
-    "#fdae61",
-    "#a6d96a",
     "#1a9641",
-    "#d7191c",
-    "#2BC2F0"
+    "#0571b0",
+    "#a6d96a",
+    "#66ADDD",
+    "#F2AC29",
   ],
   single_color: "#5C0808",
   purpose_order: d3.map({
@@ -623,6 +623,7 @@ ContrabandHitRateBar = VisualBase.extend({
     this.chart = nv.models.multiBarHorizontalChart()
       .x(function(d){ return d.label; })
       .y(function(d){ return d.value; })
+      .barColor(function(d,i){return Stops.colors[1];})
       .width(this.get("width"))
       .height(this.get("height"))
       .margin({top: 20, right: 50, bottom: 20, left: 180})
