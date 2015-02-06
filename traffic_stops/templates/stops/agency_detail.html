@@ -9,6 +9,25 @@
 
   <h2>{{ object }}{% if officer_id %}: officer {{officer_id}} {% endif %}</h2>
 
+  <!-- census data -->
+  <div id="census_row" class="row">
+    <h2>2010 census data</h2>
+
+    <div class="col-md-4">
+      <h3>Percentage by race</h3>
+      <svg id="census_pie"></svg>
+    </div>
+
+    <div class="col-md-8">
+      <h3>Data table</h3>
+      <br><br>
+      <div id="census_data"></div>
+    </div>
+
+  </div>
+  <hr>
+
+
   <!-- stop data -->
   <div class="row">
     <h2>Stops data</h2>
@@ -245,18 +264,22 @@
             chr_handler = new ContrabandHitRateHandler({url: "{% url 'agency-api-contraband-hit-rate' object.pk %}?officer={{officer_id|urlencode}}"});
       {% else %}
         // Retrieve data from API using data-handlers
-        var stop_handler = new StopsHandler({url: "{% url 'agency-api-stops' object.pk %}"}),
+        var census_handler = new CensusHandler({url: "{{ STATIC_URL }}js/census.temporary.json", agency:{{object.pk}}}),
+            stop_handler = new StopsHandler({url: "{% url 'agency-api-stops' object.pk %}"}),
             search_handler = new SearchHandler({url: "{% url 'agency-api-searches' object.pk %}"}),
             uf_handler = new UseOfForceHandler({url: "{% url 'agency-api-use-of-force' object.pk %}"}),
             lhs_handler = new LikelihoodSearchHandler({url: "{% url 'agency-api-stops-by-reason' object.pk %}"}),
             chr_handler = new ContrabandHitRateHandler({url: "{% url 'agency-api-contraband-hit-rate' object.pk %}"});
       {% endif %}
 
-      new StopRatioDonut({handler: stop_handler, selector: "#stop_race_pie"}),
+      new CensusRatioDonut({handler: census_handler, selector: "#census_pie"});
+      new CensusTable({handler: census_handler, selector: "#census_data"});
+
+      new StopRatioDonut({handler: stop_handler, selector: "#stop_race_pie"});
       new StopRatioTimeSeries({handler: stop_handler, selector: "#stop_race_line"});
       new StopsTable({handler: stop_handler, selector: "#stop_race_data"});
 
-      new SearchRatioDonut({handler: search_handler, selector: "#search_race_pie"}),
+      new SearchRatioDonut({handler: search_handler, selector: "#search_race_pie"});
       new SearchRatioTimeSeries({handler: search_handler, selector: "#search_race_line"});
       new SearchTable({handler: search_handler, selector: "#search_race_data"});
 
@@ -266,7 +289,7 @@
       new ContrabandHitRateBar({handler: chr_handler, selector: "#chr"});
       new ContrabandTable({handler: chr_handler, selector: "#chr_data"});
 
-      new UseOfForceDonut({handler: uf_handler, selector: "#use_force_race_pie"}),
+      new UseOfForceDonut({handler: uf_handler, selector: "#use_force_race_pie"});
       new UseOfForceTimeSeries({handler: uf_handler, selector: "#use_force_race_line"});
       new UseOfForceTable({handler: uf_handler, selector: "#use_force_race__data"});
 

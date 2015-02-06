@@ -1,0 +1,14 @@
+[
+    {
+        "year": 2010,
+        "agency": 78,
+        "native_american": 1171,
+        "black": 1798,
+        "other": 35,
+        "asian": 15,
+        "white": 1970,
+        "non-hispanic": 4619,
+        "hispanic": 370,
+        "derivation_notes": "ADD NOTES ON HOW DATA WERE DERIVED."
+    }
+]
