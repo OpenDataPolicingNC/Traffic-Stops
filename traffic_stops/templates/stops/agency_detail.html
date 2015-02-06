@@ -230,17 +230,6 @@
     </div>
   </div>
 
-  {% if not officer_id %}
-    <!-- officer pages -->
-    <div class="row">
-      <h3>Officers ({{ officers.count|intcomma }} total)</h3>
-      <ul>
-        {% for officer in officers %}
-        <li><a href="{% url 'agency-detail' object.pk %}?officer_id={{ officer.officer_id|urlencode }}">{{ officer.officer_id }} ({{ officer.total_stops|intcomma }})</a></li>
-        {% endfor %}
-      </ul>
-    </div>
-  {% endif %}
 {% endblock %}
 
 
