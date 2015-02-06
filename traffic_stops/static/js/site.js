@@ -677,7 +677,7 @@ TableBase = Backbone.Model.extend({
       });
       tbl.append(tr);
     });
-    div.append(tbl);
+    div.prepend(tbl);
   }
 });
 
