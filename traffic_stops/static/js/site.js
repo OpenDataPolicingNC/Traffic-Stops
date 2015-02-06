@@ -472,10 +472,13 @@ StopRatioTimeSeries = VisualBase.extend({
     var data = [];
 
     this.data.line.entries().forEach(function(v, i){
+      // disable by default if maximum value < 5%
+      var disabled = d3.max(v.value, function(d){return d.y;})<0.05;
       data.push({
         key: Stops.race_pprint.get(v.key),
         values: v.value,
-        color: Stops.colors[i]
+        color: Stops.colors[i],
+        disabled: disabled
       });
     });
     return data;
@@ -564,7 +567,8 @@ LikelihoodOfSearch = VisualBase.extend({
       var bar = {
           color: Stops.colors[i],
           key: "{0} vs. White".printf(Stops.race_pprint.get(race)),
-          values: []
+          values: [],
+          disabled: (race !== "black")
       };
 
       // build a bar for each violation
@@ -588,6 +592,7 @@ LikelihoodOfSearch = VisualBase.extend({
           w_rate = w_se/w_st;
           r_rate = r_se/r_st;
           rate = (r_rate-w_rate)/w_rate;
+          if(r_rate===0 || !isFinite(rate)) rate = undefined;
 
           // add purpose to list of values
           bar.values.push({
@@ -627,6 +632,7 @@ ContrabandHitRateBar = VisualBase.extend({
       .width(this.get("width"))
       .height(this.get("height"))
       .margin({top: 20, right: 50, bottom: 20, left: 180})
+      .showLegend(false)
       .showValues(true)
       .tooltips(true)
       .transitionDuration(350)
@@ -692,6 +698,7 @@ ContrabandHitRateBar = VisualBase.extend({
       // build a bar for each race
       Stops.races.forEach(function(race, i){
         var ratio = contraband_arr[race] / searches_arr[race];
+        if (!isFinite(ratio)) ratio = undefined;
         dataset.values.push({
           "label": Stops.race_pprint.get(race),
           "value": ratio
