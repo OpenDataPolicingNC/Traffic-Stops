@@ -18,6 +18,8 @@ The development team consists of:
 * Andy Shapiro
 * Colin Copeland
 
+A special thanks to Tom Meehan for assisting with analyzing US census data.
+
 .. _Southern Coalition for Social Justice: http://www.scsj.org/
 
 

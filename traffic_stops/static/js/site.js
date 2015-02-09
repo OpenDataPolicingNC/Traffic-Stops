@@ -25,23 +25,27 @@ var Stops = {
     'asian',
     'other'
   ],
-  race_pprint: {
+  race_pprint: d3.map({
     'white': 'White',
     'black': 'Black',
     'native_american': 'Native American',
     'asian': 'Asian',
     'other': 'Other'
-  },
+  }),
   ethnicities: [
     'hispanic',
     'non-hispanic'
   ],
+  ethnicity_pprint: d3.map({
+    'hispanic': 'Hispanic',
+    'non-hispanic': 'Non-hispanic'
+  }),
   colors: [
-    "#fdae61",
-    "#a6d96a",
     "#1a9641",
-    "#d7191c",
-    "#2BC2F0"
+    "#0571b0",
+    "#a6d96a",
+    "#66ADDD",
+    "#F2AC29",
   ],
   single_color: "#5C0808",
   purpose_order: d3.map({
@@ -54,7 +58,7 @@ var Stops = {
     'Speed Limit Violation': 6,
     'Vehicle Regulatory Violation': 7,
     'Seat Belt Violation': 8,
-    'Checkpoint': 9
+    'Checkpoint': 9  // todo: use a list and indexOf instead of map
   })
   };
 
@@ -77,6 +81,20 @@ DataHandlerBase = Backbone.Model.extend({
   },
   clean_data: function(){
     throw "abstract method: requires override";
+  }
+});
+
+CensusHandler  = DataHandlerBase.extend({
+  clean_data: function(){
+    // temporary for dummy census data
+    var agency = this.get('agency'),
+        data = this.get("raw_data").filter(function(d){return d.agency===agency;});
+    if(data.length>0){
+      data = d3.map(data[0]);
+      this.set("data", data);
+    } else {
+      $('#census_row').remove();
+    }
   }
 });
 
@@ -269,6 +287,7 @@ VisualBase = Backbone.Model.extend({
     this.loader_div.remove();
   },
   update: function(data){
+    if(data===undefined) return;  // temporary for dummy census data
     this.data = data;
     this.loader_hide();
     this.drawStartup();
@@ -282,6 +301,57 @@ VisualBase = Backbone.Model.extend({
   },
   setDefaultChart: function(){
     throw "abstract method: requires override";
+  }
+});
+
+CensusRatioDonut = VisualBase.extend({
+  defaults: {
+    width: 300,
+    height: 300
+  },
+  setDefaultChart: function(){
+    this.chart = nv.models.pie()  // change to pie-chart
+      .x(function(d){ return d.key; })
+      .y(function(d){ return d.value; })
+      .color(function(d){ return d.data.color; })
+      .width(this.get("width"))
+      .height(this.get("height"))
+      .showLabels(true)
+      .labelType("percent")
+      .donutRatio(0.35)
+      .labelThreshold(0.05)
+      .donut(true);
+  },
+  drawStartup: function(){},
+  drawChart: function(){
+    var self = this,
+        data = this._formatData();
+
+    nv.addGraph(function() {
+      d3.select(self.svg[0])
+          .datum(data)
+        .transition().duration(1200)
+          .attr('width', "100%")
+          .attr('height', "100%")
+          .attr("preserveAspectRatio", "xMinYMin")
+          .attr('viewBox', '0 0 {0} {1}'.printf(self.get("width"), self.get("height")))
+          .call(self.chart);
+    });
+  },
+  _formatData: function(){
+    var data = [],
+        raw = this.data;
+
+    // build data specifically for this pie chart
+    Stops.races.forEach(function(race, i){
+        data.push({
+          "key": Stops.race_pprint.get(race),
+          "value": raw.get(race),
+          "color": Stops.colors[i]
+        });
+    });
+
+    return [data];
   }
 });
 
@@ -349,7 +419,7 @@ StopRatioDonut = VisualBase.extend({
     // build data specifically for this pie chart
     Stops.races.forEach(function(race, i){
         data.push({
-          "key": Stops.race_pprint[race],
+          "key": Stops.race_pprint.get(race),
           "value": selected.get(race),
           "color": Stops.colors[i]
         });
@@ -402,10 +472,13 @@ StopRatioTimeSeries = VisualBase.extend({
     var data = [];
 
     this.data.line.entries().forEach(function(v, i){
+      // disable by default if maximum value < 5%
+      var disabled = d3.max(v.value, function(d){return d.y;})<0.05;
       data.push({
-        key: Stops.race_pprint[v.key],
+        key: Stops.race_pprint.get(v.key),
         values: v.value,
-        color: Stops.colors[i]
+        color: Stops.colors[i],
+        disabled: disabled
       });
     });
     return data;
@@ -493,8 +566,9 @@ LikelihoodOfSearch = VisualBase.extend({
 
       var bar = {
           color: Stops.colors[i],
-          key: "{0} vs. White".printf(Stops.race_pprint[race]),
-          values: []
+          key: "{0} vs. White".printf(Stops.race_pprint.get(race)),
+          values: [],
+          disabled: (race !== "black")
       };
 
       // build a bar for each violation
@@ -518,6 +592,7 @@ LikelihoodOfSearch = VisualBase.extend({
           w_rate = w_se/w_st;
           r_rate = r_se/r_st;
           rate = (r_rate-w_rate)/w_rate;
+          if(r_rate===0 || !isFinite(rate)) rate = undefined;
 
           // add purpose to list of values
           bar.values.push({
@@ -553,9 +628,11 @@ ContrabandHitRateBar = VisualBase.extend({
     this.chart = nv.models.multiBarHorizontalChart()
       .x(function(d){ return d.label; })
       .y(function(d){ return d.value; })
+      .barColor(function(d,i){return Stops.colors[1];})
       .width(this.get("width"))
       .height(this.get("height"))
       .margin({top: 20, right: 50, bottom: 20, left: 180})
+      .showLegend(false)
       .showValues(true)
       .tooltips(true)
       .transitionDuration(350)
@@ -621,8 +698,9 @@ ContrabandHitRateBar = VisualBase.extend({
       // build a bar for each race
       Stops.races.forEach(function(race, i){
         var ratio = contraband_arr[race] / searches_arr[race];
+        if (!isFinite(ratio)) ratio = undefined;
         dataset.values.push({
-          "label": Stops.race_pprint[race],
+          "label": Stops.race_pprint.get(race),
           "value": ratio
         });
       });
@@ -630,5 +708,197 @@ ContrabandHitRateBar = VisualBase.extend({
     }
 
     return [dataset];
+  }
+});
+
+// dashboard tables
+TableBase = Backbone.Model.extend({
+  constructor: function(){
+    Backbone.Model.apply(this, arguments);
+    this.listenTo(this.get("handler"), "dataLoaded", this.update);
+    this.listenTo(this.get("handler"), "dataRequestFailed", this.showError);
+  },
+  update: function(data){
+    if(data===undefined) return;  // temporary for dummy census data
+    this.data = data;
+    this.draw_table();
+  },
+  get_tabular_data: function(){
+    // should return list of lists, one list per row
+    throw "abstract method: requires override";
+  },
+  showError: function(){
+    var div = $(this.get("selector")),
+        error_div = $('<div class="bg-warning">')
+          .append('<p>An error occurred in fetching the data.</p>')
+          .prependTo(div);
+  },
+  draw_table: function(){
+    var div = $(this.get("selector")),
+        matrix = this.get_tabular_data(),
+        tbl = $('<table>').attr("class", "table table-striped table-condensed dash-tables");
+
+    matrix.forEach(function(row, i){
+
+      if(i===0){
+        var cols = $('<colgroup>');
+
+      }
+
+      var tr = $('<tr>');
+      row.forEach(function(d){
+        var cell = (i === 0) ? $('<th>') : $('<td>');
+        tr.append(cell.append(d));
+      });
+      tbl.append(tr);
+    });
+    div.prepend(tbl);
+  }
+});
+
+CensusTable = TableBase.extend({
+  get_tabular_data: function(){
+    var row, rows = [], data = this.data, fmt = d3.format('.1%'),
+        nRaces, nEthnicities, totalRace, totalEthnicity, pRaces, pEthnicities;
+
+    // create header
+    row = [""];
+    row.push.apply(row, Stops.race_pprint.values());
+    row.push.apply(row, Stops.ethnicity_pprint.values());
+    rows.push(row);
+
+
+    nRaces = Stops.races.map(function(r){ return (data.get(r)||0); });
+    nEthnicities = Stops.ethnicities.map(function(e){ return (data.get(e)||0); });
+
+    totalRace = d3.sum(nRaces);
+    totalEthnicity = d3.sum(nEthnicities);
+
+    pRaces = nRaces.map(function(d){return fmt(d/totalRace);});
+    pEthnicities = nEthnicities.map(function(d){return fmt(d/totalEthnicity);});
+
+    // create data rows
+    row = ["Population"];
+    row.push.apply(row, nRaces);
+    row.push.apply(row, nEthnicities);
+    rows.push(row.map(function(d){return d.toLocaleString();}));
+
+    row = ["Percent"];
+    row.push.apply(row, pRaces);
+    row.push.apply(row, pEthnicities);
+    rows.push(row);
+
+    return rows;
+  },
+  update: function(){
+    TableBase.prototype.update.apply(this, arguments);
+    if(this.data===undefined) return;  // temporary for dummy census data
+
+    // add extra-styling to separate data-types
+    $(this.get("selector"))
+          .find('tr th:nth-child(1),td:nth-child(1)')
+          .css("border-right", "1px solid #dddddd");
+    $(this.get("selector"))
+          .find('tr th:nth-child(6),td:nth-child(6)')
+          .css("border-right", "1px solid #dddddd");
+
+    // add help-text
+    $('<p class="help-block">')
+      .text(this.data.get('derivation_notes'))
+      .appendTo($(this.get("selector")));
+  }
+});
+
+StopsTable = TableBase.extend({
+  get_tabular_data: function(){
+    var header, row, rows = [];
+
+    // create header
+    header = ["Year"];
+    header.push.apply(header, Stops.race_pprint.values());
+    header.push.apply(header, Stops.ethnicity_pprint.values());
+    rows.push(header);
+
+    // create data rows
+    this.data.pie.forEach(function(k, v){
+      row = [k];
+      Stops.races.forEach(function(r){ row.push((v.get(r)||0).toLocaleString()); });
+      Stops.ethnicities.forEach(function(e){ row.push((v.get(e)||0).toLocaleString()); });
+      rows.push(row);
+    });
+
+    return rows;
+  }
+});
+
+SearchTable = StopsTable.extend({});
+UseOfForceTable = StopsTable.extend({});
+
+ContrabandTable = TableBase.extend({
+  get_tabular_data: function(){
+    var header, row, rows = [];
+
+    // create header
+    header = ["Year"];
+    header.push.apply(header, Stops.race_pprint.values());
+    header.push.apply(header, Stops.ethnicity_pprint.values());
+    rows.push(header);
+
+    // create data rows
+    this.data.raw.contraband.forEach(function(v){
+      row = [v.year];
+      Stops.races.forEach(function(r){ row.push(v[r]||0).toLocaleString(); });
+      Stops.ethnicities.forEach(function(e){ row.push(v[e]||0).toLocaleString(); });
+      rows.push(row);
+    });
+
+    return rows;
+  }
+});
+
+LikelihoodSearchTable = TableBase.extend({
+  get_tabular_data: function(){
+    var header, row, rows = [];
+
+    // create header
+    header = ["Year", "Stop-reason"];
+    header.push.apply(header, Stops.race_pprint.values());
+    header.push.apply(header, Stops.ethnicity_pprint.values());
+    rows.push(header);
+
+    var stop, search, stop_purp, search_purp, v1, v2,
+        purposes = Stops.purpose_order.keys(),
+        stops = this.data.raw.stops,
+        searches = this.data.raw.searches,
+        get_row = function(stops, searches, term){
+          var stop = (stops !== undefined) ? stops[term] : 0,
+              search = (searches !== undefined) ? searches[term] : 0;
+          return "{0}/{1}".printf(search, stop);
+        };
+
+    // create data rows
+    this.data.years.forEach(function(yr){
+        stop = stops.filter(function(d){return d.year == yr;});
+        search = searches.filter(function(d){return d.year == yr;});
+        purposes.forEach(function(purp){
+          row = [yr, purp];
+          stop_purp = (stop.length>0) ? stop.filter(function(d){return d.purpose == purp;}): undefined;
+          search_purp = (search.length>0) ? search.filter(function(d){return d.purpose == purp;}) : undefined;
+          stop_purp = (stop_purp && stop_purp.length === 1) ? stop_purp[0] : undefined;
+          search_purp = (search_purp && search_purp.length === 1) ? search_purp[0] : undefined;
+
+          Stops.races.forEach(function(r){
+            row.push(get_row(stop_purp, search_purp, r));
+          });
+
+          Stops.ethnicities.forEach(function(e){
+            row.push(get_row(stop_purp, search_purp, e));
+          });
+
+          rows.push(row);
+        });
+    });
+
+    return rows;
   }
 });

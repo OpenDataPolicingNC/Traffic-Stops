@@ -9,6 +9,25 @@
 
   <h1>{{ object }}{% if officer_id %}: officer {{officer_id}} {% endif %}</h1>
 
+  <!-- census data -->
+  <div id="census_row" class="row">
+    <h2>2010 census data</h2>
+
+    <div class="col-md-4">
+      <h3>Percentage by race</h3>
+      <svg id="census_pie"></svg>
+    </div>
+
+    <div class="col-md-8">
+      <h3>Data table</h3>
+      <br><br>
+      <div id="census_data"></div>
+    </div>
+
+  </div>
+  <hr>
+
+
   <!-- stop data -->
   <div class="row">
     <div class="col-md-12">
@@ -28,19 +47,36 @@
       </p>
     </div>
 
-    <div class="col-md-8">
+    <div id="stop_div" class="col-md-8">
       <h3>Annual percent of stops by race</h3>
 
-      <div>
-        <svg id="stop_race_line"></svg>
+      <div role="tabpanel">
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active">
+            <a href="#stop_race_line_div" aria-controls="stop_race_line_div" role="tab" data-toggle="tab">Chart</a></li>
+          <li role="presentation">
+            <a href="#stop_race_data" aria-controls="stop_race_data" role="tab" data-toggle="tab">Data</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="stop_race_line_div">
+            <svg id="stop_race_line"></svg>
+              <p class="help-block">
+                  LINE CHART TEXT
+              </p>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="stop_race_data">
+            <p class="help-block">
+              DATA TABLE TEXT
+            </p>
+          </div>
+        </div>
+
       </div>
 
-      <p class="help-block">
-        These lines will add up to 100%. Note that this shows by race and not
-        by ethnicity; a feature will be added to show by ethnicity globally for
-        all plots. Another feature we plan to add will allow a data-table to
-        be created, to present the underlying data behind the plots.
-      </p>
     </div>
   </div>
   <hr>
@@ -64,48 +100,105 @@
       </p>
     </div>
 
-    <div class="col-md-8">
+    <div id="search_div" class="col-md-8">
       <h3>Annual percent of search by race</h3>
 
-      <div>
-        <svg id="search_race_line"></svg>
+      <div role="tabpanel">
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active">
+            <a href="#search_race_line_div" aria-controls="search_race_line_div" role="tab" data-toggle="tab">Chart</a></li>
+          <li role="presentation">
+            <a href="#search_race_data" aria-controls="stop_race_data" role="tab" data-toggle="tab">Data</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="search_race_line_div">
+            <svg id="search_race_line"></svg>
+              <p class="help-block">
+                  LINE CHART TEXT
+              </p>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="search_race_data">
+            <p class="help-block">
+              DATA TABLE TEXT
+            </p>
+          </div>
+        </div>
+
       </div>
 
-      <p class="help-block">
-        These lines will add up to 100%. Note that this shows by race and not
-        by ethnicity; a feature will be added to show by ethnicity globally for
-        all plots. Another feature we plan to add will allow a data-table to
-        be created, to present the underlying data behind the plots.
-      </p>
     </div>
   </div>
 
   <div class="row">
-    <div class="col-md-offset-2 col-md-8">
+    <div id="lhs_div" class="col-md-offset-2 col-md-8">
       <h3>Likelihood of search by stop-cause</h3>
 
-      <div>
-        <svg id="lsb"></svg>
+      <div role="tabpanel">
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active">
+            <a href="#lsb_div" aria-controls="lsb_div" role="tab" data-toggle="tab">Chart</a></li>
+          <li role="presentation">
+            <a href="#lsb_data" aria-controls="lsb_data" role="tab" data-toggle="tab">Data</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="lsb_div">
+            <svg id="lsb"></svg>
+              <p class="help-block">
+                  LINE CHART TEXT
+              </p>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="lsb_data">
+            <p class="help-block">
+              DATA TABLE TEXT
+            </p>
+          </div>
+        </div>
+
       </div>
 
-      <p class="help-block">
-        Likelihood of search by various stop-causes.
-      </p>
     </div>
   </div>
   <hr>
 
   <div class="row">
-    <div class="col-md-offset-2 col-md-8">
+    <div id="contraband_div" class="col-md-offset-2 col-md-8">
       <h3>Contraband hit-rate</h3>
 
-      <div>
-        <svg id="chr"></svg>
+      <div role="tabpanel">
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active">
+            <a href="#chr_div" aria-controls="chr_div" role="tab" data-toggle="tab">Chart</a></li>
+          <li role="presentation">
+            <a href="#chr_data" aria-controls="chr_data" role="tab" data-toggle="tab">Data</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="chr_div">
+            <svg id="chr"></svg>
+              <p class="help-block">
+                  LINE CHART TEXT
+              </p>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="chr_data">
+            <p class="help-block">
+              DATA TABLE TEXT
+            </p>
+          </div>
+        </div>
+
       </div>
 
-      <p class="help-block">
-        Bar chart of percent of total searches where ANY contraband was found is reported, stratified by race/ethnicity.
-      </p>
     </div>
   </div>
   <hr>
@@ -129,33 +222,39 @@
       </p>
     </div>
 
-    <div class="col-md-8">
+    <div id="use_force_div" class="col-md-8">
       <h3>Annual percent of use-of-force by race</h3>
 
-      <div>
-        <svg id="use_force_race_line"></svg>
+      <div role="tabpanel">
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active">
+            <a href="#use_force_race_line_div" aria-controls="use_force_race_line_div" role="tab" data-toggle="tab">Chart</a></li>
+          <li role="presentation">
+            <a href="#use_force_race__data" aria-controls="use_force_race__data" role="tab" data-toggle="tab">Data</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="use_force_race_line_div">
+            <svg id="use_force_race_line"></svg>
+              <p class="help-block">
+                  LINE CHART TEXT
+              </p>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="use_force_race__data">
+            <p class="help-block">
+              DATA TABLE TEXT
+            </p>
+          </div>
+        </div>
+
       </div>
 
-      <p class="help-block">
-        These lines will add up to 100%. Note that this shows by race and not
-        by ethnicity; a feature will be added to show by ethnicity globally for
-        all plots. Another feature we plan to add will allow a data-table to
-        be created, to present the underlying data behind the plots.
-      </p>
     </div>
   </div>
 
-  {% if not officer_id %}
-    <!-- officer pages -->
-    <div class="row">
-      <h3>Officers ({{ officers.count|intcomma }} total)</h3>
-      <ul>
-        {% for officer in officers %}
-        <li><a href="{% url 'agency-detail' object.pk %}?officer_id={{ officer.officer_id|urlencode }}">{{ officer.officer_id }} ({{ officer.total_stops|intcomma }})</a></li>
-        {% endfor %}
-      </ul>
-    </div>
-  {% endif %}
 {% endblock %}
 
 
@@ -171,24 +270,34 @@
             chr_handler = new ContrabandHitRateHandler({url: "{% url 'agency-api-contraband-hit-rate' object.pk %}?officer={{officer_id|urlencode}}"});
       {% else %}
         // Retrieve data from API using data-handlers
-        var stop_handler = new StopsHandler({url: "{% url 'agency-api-stops' object.pk %}"}),
+        var census_handler = new CensusHandler({url: "{{ STATIC_URL }}js/census.temporary.json", agency:{{object.pk}}}),
+            stop_handler = new StopsHandler({url: "{% url 'agency-api-stops' object.pk %}"}),
             search_handler = new SearchHandler({url: "{% url 'agency-api-searches' object.pk %}"}),
             uf_handler = new UseOfForceHandler({url: "{% url 'agency-api-use-of-force' object.pk %}"}),
             lhs_handler = new LikelihoodSearchHandler({url: "{% url 'agency-api-stops-by-reason' object.pk %}"}),
             chr_handler = new ContrabandHitRateHandler({url: "{% url 'agency-api-contraband-hit-rate' object.pk %}"});
       {% endif %}
-      // Create plots for each data-type
-      new StopRatioDonut({handler: stop_handler, selector: "#stop_race_pie"}),
+
+      new CensusRatioDonut({handler: census_handler, selector: "#census_pie"});
+      new CensusTable({handler: census_handler, selector: "#census_data"});
+
+      new StopRatioDonut({handler: stop_handler, selector: "#stop_race_pie"});
       new StopRatioTimeSeries({handler: stop_handler, selector: "#stop_race_line"});
+      new StopsTable({handler: stop_handler, selector: "#stop_race_data"});
 
-      new SearchRatioDonut({handler: search_handler, selector: "#search_race_pie"}),
+      new SearchRatioDonut({handler: search_handler, selector: "#search_race_pie"});
       new SearchRatioTimeSeries({handler: search_handler, selector: "#search_race_line"});
-
-      new UseOfForceDonut({handler: uf_handler, selector: "#use_force_race_pie"}),
-      new UseOfForceTimeSeries({handler: uf_handler, selector: "#use_force_race_line"});
+      new SearchTable({handler: search_handler, selector: "#search_race_data"});
 
       new LikelihoodOfSearch({handler: lhs_handler, selector: "#lsb"});
+      new LikelihoodSearchTable({handler: lhs_handler, selector: "#lsb_data"});
+
       new ContrabandHitRateBar({handler: chr_handler, selector: "#chr"});
+      new ContrabandTable({handler: chr_handler, selector: "#chr_data"});
+
+      new UseOfForceDonut({handler: uf_handler, selector: "#use_force_race_pie"});
+      new UseOfForceTimeSeries({handler: uf_handler, selector: "#use_force_race_line"});
+      new UseOfForceTable({handler: uf_handler, selector: "#use_force_race__data"});
 
     });
   </script>

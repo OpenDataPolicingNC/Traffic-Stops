@@ -54,9 +54,5 @@ class AgencyDetail(DetailView):
             if not Stop.objects.filter(agency=agency, officer_id=officer_id).exists():
                 raise Http404()
             context['officer_id'] = officer_id
-        else:
-            officers = Stop.objects.filter(agency=agency).values('officer_id')
-            officers = officers.annotate(total_stops=Count('officer_id'))
-            context['officers'] = officers.order_by('-total_stops')
 
         return context

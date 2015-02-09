@@ -28,6 +28,7 @@ body {
 
 /* Wrapper for page content to push down footer */
 #wrap {
+  background-color: #efefef;
   min-height: 100%;
   height: auto;
   /* Negative indent footer by its height */
@@ -69,9 +70,8 @@ body#home {
     position: fixed;
     width: 100%;
     min-height: 100%;
-    margin-top: 50px;
-    margin-bottom: 60px;
-    z-index: -1;
+    margin-top: -60px;
+    z-index: 0;
     opacity: 0.3;
   }
   .ui-autocomplete {
@@ -82,6 +82,7 @@ body#home {
     margin-top: 80px;
     margin-left: 30px;
     width: 100%;
+    z-index: 1;
     #agency_search {
       #id_agency_0 {
         font-size: 20px;
@@ -94,4 +95,29 @@ body#home {
       }
     }
   }
+}
+
+
+/* Dashboard data tables
+========================================= */
+
+.dash-tables {
+  table-layout: fixed;
+}
+
+
+/* NVD3 style-overrides
+========================================= */
+
+.nvd3.nv-pie .nv-label text{
+  fill: white !important;
+  font-weight: bold;
+}
+
+.nvd3 .nv-axis line {
+  stroke: #d1d1d1;
+}
+
+.nvd3 .nv-groups path.nv-line {
+  stroke-width: 5px;
 }
