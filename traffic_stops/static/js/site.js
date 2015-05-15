@@ -310,7 +310,7 @@ CensusRatioDonut = VisualBase.extend({
     height: 300
   },
   setDefaultChart: function(){
-    this.chart = nv.models.pie()  // change to pie-chart
+    this.chart = nv.models.pieChart()
       .x(function(d){ return d.key; })
       .y(function(d){ return d.value; })
       .color(function(d){ return d.data.color; })
@@ -351,7 +351,7 @@ CensusRatioDonut = VisualBase.extend({
         });
     });
 
-    return [data];
+    return data;
   }
 });
 
@@ -361,7 +361,7 @@ StopRatioDonut = VisualBase.extend({
     height: 300
   },
   setDefaultChart: function(){
-    this.chart = nv.models.pie()
+    this.chart = nv.models.pieChart()
       .x(function(d){ return d.key; })
       .y(function(d){ return d.value; })
       .color(function(d){ return d.data.color; })
@@ -425,7 +425,7 @@ StopRatioDonut = VisualBase.extend({
         });
     });
 
-    return [data];
+    return data;
   }
 });
 
