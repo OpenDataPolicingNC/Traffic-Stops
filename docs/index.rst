@@ -16,7 +16,7 @@ The development team consists of:
 * Ian Mance
 * Dylan Young
 * Andy Shapiro
-* Colin Copeland
+* Colin Copeland (`Caktus Group <http://www.caktusgroup.com/>`_)
 
 A special thanks to Tom Meehan for assisting with analyzing US census data.
 
