@@ -15,14 +15,14 @@ def main():
     parser.add_argument('uri', help='Agency REST URI')
     args = parser.parse_args()
     # get agencies
-    r = requests.get(args.uri, auth=('admin', 'traff1cst0ps'), verify=False)
+    r = requests.get(args.uri)
     agencies = r.json()
     for agency in agencies:
         logger.info(agency['name'])
         for endpoint in ENDPOINTS:
             uri = "{}/{}/{}/".format(args.uri.rstrip('/'), agency['id'],
-                                    endpoint)
-            requests.get(uri, auth=('admin', 'traff1cst0ps'), verify=False)
+                                     endpoint)
+            requests.get(uri)
 
 
 if __name__ == "__main__":
