@@ -1,6 +1,6 @@
 environment: production
 
-domain: traffic-stops.codefordurham.com
+domain: opendatapolicingnc.com
 
 repo:
   url: git@github.com:copelco/NC-Traffic-Stops.git
