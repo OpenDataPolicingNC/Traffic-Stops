@@ -5,3 +5,6 @@ users:
   shapiromatron:
     public_key:
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsqyw0pc19OdDTsWtlYDrZ9gBFKI2GcYHfdTliYKd/q/2hjXVr/xk4SbN+98REgNxsLLOI54vlMjO33gEUO8w0dhfbqAybD6db9IsVJSVZYNneEkaY4+ZtqPpI7JGs6UsLQesY+DuY5sofOa5VHWqwviSyjq828yNmnVMKeCyq+aQP4Cpx7xeZpvukHtwmd6QxkFCGlXuHZEhtKGHjpoIddqJczLVNK/3SbQZoNufjnJ51cNoobcCNKM3Vzuk0FmOxoGwlwDZilAludH3lLeAZF+VyF982q5i9nYZkwZwonvmay0WOTHy/l594S1aAAkYu1iF9pfD90dfA/mXP6tLp shapiromatron@gmail.com
+  djyoung:
+    public_key:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDd+HZPZFY4cs7xeuJQXd5XLoeMLpQSLvX7pVOAlXrxiCrk1HxyWfuE6lDy8gjmJffde31SfhIvngwyoA2bQ5ufYT7ronyWHpJGtpDqFL8bFQbtg35Y6VJB7NnIyCFvoQW0GXcXVgipZBJk5bZLfS3BPIoHD1m+1WTFTqDWBKMmn/3l+Yi/cK1iUawlZMOPbPskNzNXuupdOhTf5pzI0ExQGCvISJj7pvMWfq2GMqXKzH5BP7RBn2N2QUB1U1CJfvAcpN/NoF1V+Q1jEGeV03ShayK0eBfc/8HP/7+O/QC/xnUnTHoXlAj7+ECx6YXdTeC8OKI0NCbnG9ArExEdmXxd dyoung@RENCI-W530
