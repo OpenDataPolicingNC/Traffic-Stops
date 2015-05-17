@@ -22,18 +22,17 @@ VALID_ROLES = (
     'cache',
 )
 
-# This assumes a single master for both staging and production
-env.master = '54.208.65.43'
-
 
 @task
 def staging():
     env.environment = 'staging'
+    env.master = '52.6.26.10'
 
 
 @task
 def production():
     env.environment = 'production'
+    env.master = '54.208.65.43'
 
 
 @task
