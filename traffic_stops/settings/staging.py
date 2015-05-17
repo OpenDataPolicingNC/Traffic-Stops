@@ -29,7 +29,7 @@ EMAIL_SUBJECT_PREFIX = '[Traffic Stops Staging] '
 ADMINS = (
     ('Colin Copeland', 'ccopeland@codeforamerica.org'),
     ('Andy Shapiro', 'shapiromatron@gmail.com'),
-    ('Dylan Young', 'shapiromatron@gmail.com'),
+    ('Dylan Young', 'dylanjamesyoung@gmail.com'),
 )
 MANAGERS = ADMINS
 
