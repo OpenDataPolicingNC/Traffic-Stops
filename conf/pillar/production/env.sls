@@ -12,6 +12,7 @@ postgresql_config: # from pgtune
   shared_buffers: 896MB
   effective_cache_size: 2560MB
   checkpoint_segments: 16
+  log_min_duration_statement: 1000
 
 # Addtional public environment variables to set for the project
 env:
