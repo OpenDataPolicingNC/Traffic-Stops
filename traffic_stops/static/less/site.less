@@ -83,15 +83,16 @@ body#home {
     margin-left: 30px;
     width: 100%;
     z-index: 1;
+    @media (min-width: @screen-desktop) {
+      width: 40%;
+    }
+    width: 85%;
     #agency_search {
       #id_agency_0 {
         font-size: 20px;
-        @media (min-width: @screen-desktop) {
-          width: 40%;
-        }
-        width: 85%;
         height: 60px;
         font-family: 'Droid Sans', sans-serif;
+        margin-bottom: 5px;
       }
     }
   }
