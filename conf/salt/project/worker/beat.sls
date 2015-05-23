@@ -16,7 +16,7 @@ beat_conf:
     - context:
         newrelic_config_file: "{{ vars.services_dir }}/newrelic-worker.ini"
         log_dir: "{{ vars.log_dir }}"
-        settings: "{{ pillar['project_name'] }}.settings.{{ pillar['environment'] }}"
+        settings: "{{ pillar['project_name'] }}.settings.deploy"
         virtualenv_root: "{{ vars.venv_dir }}"
         directory: "{{ vars.source_dir }}"
         name: "celery-beat"

@@ -8,6 +8,14 @@ include:
   - postfix
   - ufw
 
+gunicorn_requirements:
+  pip.installed:
+    - name: "gunicorn>=19.1,<19.2"
+    - bin_env: {{ vars.venv_dir }}
+    - upgrade: true
+    - require:
+      - virtualenv: venv
+
 gunicorn_conf:
   file.managed:
     - name: /etc/supervisor/conf.d/{{ pillar['project_name'] }}-gunicorn.conf
@@ -19,13 +27,14 @@ gunicorn_conf:
     - context:
         newrelic_config_file: "{{ vars.services_dir }}/newrelic-app.ini"
         log_dir: "{{ vars.log_dir }}"
-        settings: "{{ pillar['project_name'] }}.settings.{{ pillar['environment'] }}"
+        settings: "{{ pillar['project_name'] }}.settings.deploy"
         virtualenv_root: "{{ vars.venv_dir }}"
         directory: "{{ vars.source_dir }}"
     - require:
       - pip: supervisor
       - file: log_dir
       - pip: pip_requirements
+      - pip: gunicorn_requirements
     - watch_in:
       - cmd: supervisor_update
 
@@ -36,7 +45,7 @@ gunicorn_process:
     - require:
       - file: gunicorn_conf
 
-{% for host, ifaces in salt['mine.get']('roles:balancer', 'network.interfaces', expr_form='grain_pcre').items() %}
+{% for host, ifaces in vars.balancer_minions.items() %}
 {% set host_addr = vars.get_primary_ip(ifaces) %}
 app_allow-{{ host_addr }}:
   ufw.allow:
@@ -59,9 +68,9 @@ nodejs:
 
 less:
   cmd.run:
-    - name: npm install less@1.5.1 -g
+    - name: npm install less@{{ pillar['less_version'] }} -g
     - user: root
-    - unless: "which lessc && lessc --version | grep 1.5.1"
+    - unless: "which lessc && lessc --version | grep {{ pillar['less_version'] }}"
     - require:
       - pkg: nodejs
 
@@ -73,21 +82,12 @@ collectstatic:
     - require:
       - file: manage
 
-syncdb:
-  cmd.run:
-    - name: "{{ vars.path_from_root('manage.sh') }} syncdb --noinput"
-    - user: {{ pillar['project_name'] }}
-    - group: {{ pillar['project_name'] }}
-    - require:
-      - file: manage
-    - order: last
-
 migrate:
   cmd.run:
     - name: "{{ vars.path_from_root('manage.sh') }} migrate --noinput"
     - user: {{ pillar['project_name'] }}
     - group: {{ pillar['project_name'] }}
-    - onlyif: "{{ vars.path_from_root('manage.sh') }} migrate --list | grep '( )'"
+    - onlyif: "{{ vars.path_from_root('manage.sh') }} migrate --list | grep '\\[ \\]'"
     - require:
-      - cmd: syncdb
+      - file: manage
     - order: last
