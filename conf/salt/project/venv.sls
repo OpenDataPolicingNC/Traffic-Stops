@@ -22,7 +22,7 @@ venv:
     - require:
       - pip: virtualenv
       - file: root_dir
-      - file: project_repo
+      - git: project_repo
       - pkg: python-pkgs
       - pkg: python-headers
 
