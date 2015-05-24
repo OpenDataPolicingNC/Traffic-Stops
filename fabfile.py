@@ -1,5 +1,6 @@
 import os
 import tempfile
+import time
 
 import yaml
 
@@ -9,6 +10,7 @@ from fabric.contrib import files, project
 from fabric.contrib.console import confirm
 from fabric.utils import abort
 
+DEFAULT_SALT_LOGLEVEL = 'info'
 PROJECT_ROOT = os.path.dirname(__file__)
 CONF_ROOT = os.path.join(PROJECT_ROOT, 'conf')
 
@@ -27,96 +29,66 @@ VALID_ROLES = (
 def staging():
     env.environment = 'staging'
     env.master = '52.6.26.10'
+    initialize_env()
 
 
 @task
 def production():
     env.environment = 'production'
     env.master = '54.208.65.43'
+    initialize_env()
 
 
 @task
 def vagrant():
     env.environment = 'local'
-    env.master = '33.33.33.10'
     env.user = 'vagrant'
-    vagrant_version = local('vagrant -v', capture=True).split()[-1]
-    env.key_filename = '/opt/vagrant/embedded/gems/gems/vagrant-%s/keys/vagrant' % vagrant_version
+    # convert vagrant's ssh-config output to a dictionary
+    ssh_config_output = local('vagrant ssh-config', capture=True)
+    ssh_config = dict(line.split() for line in ssh_config_output.splitlines())
+    env.master = '{HostName}:{Port}'.format(**ssh_config)
+    env.key_filename = ssh_config['IdentityFile']
+    initialize_env()
+
+
+def initialize_env():
+    """Build some common variables into the env dictionary."""
+    env.gpg_key = os.path.join(CONF_ROOT, '{}.pub.gpg'.format(env.environment))
 
 
 @task
 def setup_master():
     """Provision master with salt-master."""
-    with settings(warn_only=True):
-        with hide('running', 'stdout', 'stderr'):
-            installed = run('which salt')
-    if not installed:
-        sudo('apt-get update -qq -y')
-        sudo('apt-get install python-software-properties -qq -y')
-        sudo('add-apt-repository ppa:saltstack/salt -y')
-        sudo('apt-get update -qq')
-        sudo('apt-get install salt-master -qq -y')
-    # make sure git is installed for gitfs
-    with settings(warn_only=True):
-        with hide('running', 'stdout', 'stderr'):
-            installed = run('which git')
-    if not installed:
-        sudo('apt-get install python-pip git-core -qq -y')
-        sudo('pip install -q -U GitPython')
-    put(local_path='conf/master.conf', remote_path="/etc/salt/master", use_sudo=True)
-    sudo('service salt-master restart')
+    require('environment')
+    with settings(host_string=env.master):
+        with settings(warn_only=True):
+            with hide('running', 'stdout', 'stderr'):
+                installed = run('which salt-master')
+        if not installed:
+            sudo('apt-get update -qq -y')
+            sudo('apt-get install python-software-properties -qq -y')
+            sudo('add-apt-repository ppa:saltstack/salt -y')
+            sudo('apt-get update -qq')
+            sudo('apt-get install salt-master -qq -y')
+            sudo('apt-get install python-pip git-core python-git python-gnupg haveged -qq -y')
+        put(local_path='conf/master.conf',
+            remote_path="/etc/salt/master", use_sudo=True)
+        sudo('service salt-master restart')
+    generate_gpg_key()
+    fetch_gpg_key()
 
 
 @task
 def sync():
     """Rysnc local states and pillar data to the master."""
-    # Check for missing local secrets so that they don't get deleted
     # project.rsync_project fails if host is not set
     with settings(host=env.master, host_string=env.master):
-        if not have_secrets():
-            get_secrets()
-        else:
-            # Check for differences in the secrets files
-            for environment in ['staging', 'production']:
-                remote_file = os.path.join('/srv/pillar/', environment, 'secrets.sls')
-                with lcd(os.path.join(CONF_ROOT, 'pillar', environment)):
-                    if files.exists(remote_file):
-                        get(remote_file, 'secrets.sls.remote')
-                    else:
-                        local('touch secrets.sls.remote')
-                    with settings(warn_only=True):
-                        result = local('diff -u secrets.sls.remote secrets.sls')
-                        if result.failed and not confirm(red("Above changes will be made to secrets.sls. Continue?")):
-                            abort("Aborted. File have been copied to secrets.sls.remote. " +
-                              "Resolve conflicts, then retry.")
-                        else:
-                            local("rm secrets.sls.remote")
         salt_root = CONF_ROOT if CONF_ROOT.endswith('/') else CONF_ROOT + '/'
-        project.rsync_project(local_dir=salt_root, remote_dir='/tmp/salt', delete=True)
+        project.rsync_project(
+            local_dir=salt_root, remote_dir='/tmp/salt', delete=True)
         sudo('rm -rf /srv/salt /srv/pillar')
         sudo('mv /tmp/salt/* /srv/')
         sudo('rm -rf /tmp/salt/')
-
-
-def have_secrets():
-    """Check if the local secret files exist for all environments."""
-    found = True
-    for environment in ['staging', 'production']:
-        local_file = os.path.join(CONF_ROOT, 'pillar', environment, 'secrets.sls')
-        found = found and os.path.exists(local_file)
-    return found
-
-
-@task
-def get_secrets():
-    """Grab the latest secrets file from the master."""
-    with settings(host=env.master):
-        for environment in ['staging', 'production']:
-            local_file = os.path.join(CONF_ROOT, 'pillar', environment, 'secrets.sls')
-            if os.path.exists(local_file):
-                local('cp {0} {0}.bak'.format(local_file))
-            remote_file = os.path.join('/srv/pillar/', environment, 'secrets.sls')
-            get(remote_file, local_file)
 
 
 @task
@@ -129,7 +101,7 @@ def setup_minion(*roles):
     # install salt minion if it's not there already
     with settings(warn_only=True):
         with hide('running', 'stdout', 'stderr'):
-            installed = run('which salt-call')
+            installed = run('which salt-minion')
     if not installed:
         # install salt-minion from PPA
         sudo('apt-get update -qq -y')
@@ -155,6 +127,7 @@ def setup_minion(*roles):
     sudo('service salt-minion restart')
     # queries server for its fully qualified domain name to get minion id
     key_name = run('python -c "import socket; print socket.getfqdn()"')
+    time.sleep(5)
     execute(accept_key, key_name)
 
 
@@ -182,18 +155,19 @@ def add_role(name):
 
 
 @task
-def salt(cmd, target="'*'"):
+def salt(cmd, target="'*'", loglevel=DEFAULT_SALT_LOGLEVEL):
     """Run arbitrary salt commands."""
     with settings(warn_only=True, host_string=env.master):
-        sudo("salt {0} {1}".format(target, cmd))
+        result = sudo("salt {0} -l{1} {2} ".format(target, loglevel, cmd))
+    return result
 
 
 @task
-def highstate(target="'*'"):
+def highstate(target="'*'", loglevel=DEFAULT_SALT_LOGLEVEL):
     """Run highstate on master."""
     with settings(host_string=env.master):
         print("This can take a long time without output, be patient")
-        salt('state.highstate', target)
+        salt('state.highstate', target, loglevel)
 
 
 @task
@@ -214,11 +188,95 @@ def delete_key(name):
 
 
 @task
-def deploy():
+def deploy(loglevel=DEFAULT_SALT_LOGLEVEL):
     """Deploy to a given environment by pushing the latest states and executing the highstate."""
     require('environment')
     with settings(host_string=env.master):
-        sync()
+        if env.environment != "local":
+            sync()
         target = "-G 'environment:{0}'".format(env.environment)
-        salt('saltutil.sync_all', target)
+        salt('saltutil.sync_all', target, loglevel)
         highstate(target)
+
+
+@task
+def generate_gpg_key():
+    """Generate a GPG on the master if one does not exist."""
+    require('environment')
+    gpg_home = '/etc/salt/gpgkeys'
+    gpg_file = '/tmp/gpg-batch'
+    with settings(host_string=env.master):
+        if not files.exists(os.path.join(gpg_home, 'secring.gpg'), use_sudo=True):
+            sudo('mkdir -p {}'.format(gpg_home))
+            files.upload_template(
+                filename='conf/gpg.tmpl', destination=gpg_file,
+                context={'environment': env.environment},
+                use_jinja=False, use_sudo=False, backup=True)
+            sudo('gpg --gen-key --homedir {} --batch {}'.format(gpg_home, gpg_file))
+
+
+@task
+def fetch_gpg_key():
+    """Export GPG keys from the master."""
+    require('environment')
+    gpg_home = '/etc/salt/gpgkeys'
+    gpg_public = '/tmp/public.gpg'
+    with settings(host_string=env.master):
+        with hide('running', 'stdout', 'stderr'):
+            sudo('gpg --armor --homedir {} --armor --export > {}'.format(gpg_home, gpg_public))
+            get(gpg_public, env.gpg_key)
+
+
+@task
+def encrypt(*args, **kwargs):
+    """Encrypt a secret value for a given environment."""
+    require('environment')
+    # Convert ASCII key to binary
+    temp_key = '/tmp/tmp.key'
+    with hide('running', 'stdout', 'stderr'):
+        local('gpg --dearmor < {} > {}'.format(env.gpg_key, temp_key))
+        # Encrypt each file
+        for name in args:
+            local(
+                'gpg --no-default-keyring --keyring {} '
+                '--trust-model always -aer {}_salt_key {}'.format(
+                    temp_key, env.environment, name))
+        # Encrypt each value
+        updates = {}
+        for name, value in kwargs.items():
+            updates[name] = '{}'.format(
+                local(
+                    'echo -n "{}" | '
+                    'gpg --no-default-keyring --keyring {} '
+                    '--trust-model always -aer {}_salt_key'.format(
+                        value, temp_key, env.environment), capture=True))
+        os.remove(temp_key)
+    if updates:
+        print(yaml.dump(updates, default_flow_style=False, default_style='|', indent=2))
+
+
+def hostnames_for_role(role):
+    with hide('running', 'stdout'):
+        result = salt(
+            cmd='test.ping --output=yaml',
+            target='-G "roles:%s"' % role)
+    return yaml.safe_load(result.stdout).keys()
+
+
+def get_project_name():
+    with open(os.path.join(CONF_ROOT, 'pillar', 'project.sls'), 'r') as f:
+        return yaml.safe_load(f)['project_name']
+
+
+@task
+def manage_run(command):
+    require('environment')
+    project_name = get_project_name()
+    manage_sh = u'/var/www/%s/manage.sh ' % project_name
+    with settings(host_string=hostnames_for_role('web')[0]):
+        sudo(manage_sh + command, user=project_name)
+
+
+@task
+def manage_shell():
+    manage_run('shell')

@@ -11,7 +11,7 @@ user-{{ pillar['project_name'] }}:
     - createdb: False
     - createuser: False
     - superuser: False
-    - password: {{ pillar['secrets']['DB_PASSWORD'] }}
+    - password: {{ pillar.get('secrets', {}).get('DB_PASSWORD', '') }}
     - encrypted: True
     - require:
       - service: postgresql

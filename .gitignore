@@ -20,3 +20,4 @@ jmeter.log
 locale/en/
 data/nc/*
 _build
+*.priv
