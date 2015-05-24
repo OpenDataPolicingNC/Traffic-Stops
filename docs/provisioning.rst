@@ -397,8 +397,9 @@ Quickstart
   fab staging encrypt:BROKER_PASSWORD=`make generate-secret`
   fab staging encrypt:SECRET_KEY=`make generate-secret length=64`
   fab staging encrypt:newrelic_license_key='<fill-me-in>'
+  # copy each generated encrypted key to conf/pillar/<env>.sls
   fab staging setup_minion:web,balancer,db-master,cache,queue,worker -H 52.6.26.10 -u ubuntu -i ~/.ssh/traffic-stops.pem
   fab staging deploy -H 52.6.26.10 -u ubuntu -i ~/.ssh/traffic-stops.pem
-  # run temp. fix for postgres
+  # postgres create cluster doesn't work, ran manually
   # kick nginx?
   fab staging deploy
