@@ -8,7 +8,7 @@
     "hispanic": 5455,
     "non-hispanic": 77938,
     "year": 2012,
-    "agency": 3434,
+    "agency": "Asheville Police Department",
     "derivation_notes": ""
   },
   {
@@ -20,7 +20,7 @@
     "hispanic": 94,
     "non-hispanic": 5612,
     "year": 2013,
-    "agency": 3462,
+    "agency": "Carolina Beach Police Department",
     "derivation_notes": ""
   },
   {
@@ -32,7 +32,7 @@
     "hispanic": 2706,
     "non-hispanic": 16876,
     "year": 2014,
-    "agency": 3463,
+    "agency": "Carrboro Police Department",
     "derivation_notes": ""
   },
   {
@@ -44,7 +44,7 @@
     "hispanic": 10364,
     "non-hispanic": 124870,
     "year": 2015,
-    "agency": 3465,
+    "agency": "Cary Police Department",
     "derivation_notes": ""
   },
   {
@@ -56,7 +56,7 @@
     "hispanic": 3638,
     "non-hispanic": 53595,
     "year": 2011,
-    "agency": 3470,
+    "agency": "Chapel Hill Police Department",
     "derivation_notes": ""
   },
   {
@@ -68,7 +68,7 @@
     "hispanic": 95688,
     "non-hispanic": 635736,
     "year": 2016,
-    "agency": 3471,
+    "agency": "Charlotte-Mecklenburg Police Department",
     "derivation_notes": ""
   },
   {
@@ -80,7 +80,7 @@
     "hispanic": 32459,
     "non-hispanic": 195871,
     "year": 2010,
-    "agency": 3499,
+    "agency": "Durham Police Department",
     "derivation_notes": ""
   },
   {
@@ -92,7 +92,7 @@
     "hispanic": 1738,
     "non-hispanic": 16199,
     "year": 2017,
-    "agency": 3514,
+    "agency": "Fuquay-Varina Police Department",
     "derivation_notes": ""
   },
   {
@@ -104,7 +104,7 @@
     "hispanic": 2561,
     "non-hispanic": 23184,
     "year": 2018,
-    "agency": 3515,
+    "agency": "Garner Police Department",
     "derivation_notes": ""
   },
   {
@@ -116,7 +116,7 @@
     "hispanic": 20336,
     "non-hispanic": 249330,
     "year": 2019,
-    "agency": 3524,
+    "agency": "Greensboro Police Department",
     "derivation_notes": ""
   },
   {
@@ -128,7 +128,7 @@
     "hispanic": 1544,
     "non-hispanic": 23117,
     "year": 2020,
-    "agency": 3543,
+    "agency": "Holly Springs Police Department",
     "derivation_notes": ""
   },
   {
@@ -140,7 +140,7 @@
     "hispanic": 45868,
     "non-hispanic": 358024,
     "year": 2021,
-    "agency": 3643,
+    "agency": "Raleigh Police Department",
     "derivation_notes": ""
   },
   {
@@ -152,7 +152,7 @@
     "hispanic": 538,
     "non-hispanic": 9206,
     "year": 2022,
-    "agency": 3713,
+    "agency": "Washington Police Department",
     "derivation_notes": ""
   }
 ]

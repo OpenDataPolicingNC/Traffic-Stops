@@ -308,7 +308,7 @@
   <script type="text/javascript">
     $(document).ready(function(){
       var showEthnicity = {{request.session.showEthnicity|lower|default:"false"}},
-          census_handler = new CensusHandler({url: "{{ STATIC_URL }}js/census.temporary.json", agency:{{object.pk}}});
+          census_handler = new CensusHandler({url: "{{ STATIC_URL }}js/census.temporary.json", agency: "{{object}}"});
       {% if officer_id %}
         // Retrieve data from API using data-handlers
         var stop_handler = new StopsHandler({url: "{% url 'agency-api-stops' object.pk %}?officer={{officer_id|urlencode}}"}),
