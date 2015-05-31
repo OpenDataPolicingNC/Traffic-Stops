@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, Http404
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, View
 from django.db.models import Count
+from django.http import HttpResponse, HttpResponseNotAllowed
 from stops.models import Stop, Agency, Person
 from stops import forms
 
@@ -15,6 +16,17 @@ def home(request):
         form = forms.AgencySearchForm()
     context = {'agency_form': form}
     return render(request, 'home.html', context)
+
+
+class UpdateSession(View):
+
+    http_method_names = (u'post', )
+
+    def post(self, request, *args, **kwargs):
+        if not request.is_ajax():
+            return HttpResponseNotAllowed(['POST'])
+        request.session['showEthnicity'] = request.POST.get("showEthnicity", "true") == "true"
+        return HttpResponse(True)
 
 
 def search(request):

@@ -15,6 +15,39 @@ String.prototype.printf = function(){
     });
 };
 
+
+// Django AJAX with CSRF protection.
+var getCookie = function(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+              var cookie = jQuery.trim(cookies[i]);
+              // Does this cookie string begin with the name we want?
+              if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      return cookieValue;
+    },
+    csrftoken = getCookie('csrftoken'),
+    sessionid = getCookie('sessionid'),
+    csrfSafeMethod = function(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));  // safe methods
+    };
+
+$.ajaxSetup({
+    crossDomain: false,
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type)) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            xhr.setRequestHeader("sessionid", sessionid);
+        }
+    }
+});
+
 // Traffic Stops global defaults
 var Stops = {
   start_year: 2002,                    // start-year for reporting requirement
@@ -936,19 +969,29 @@ LikelihoodSearchTable = TableBase.extend({
   }
 });
 
-RaceToggle = function(){
+RaceToggle = function(updateUrl, showEthnicity){
+  this.updateUrl = updateUrl;
+  this.showEthnicity = showEthnicity;
 }
 _.extend(RaceToggle.prototype, {
   render: function($div){
-    var inpDiv = $('<div class="radio">')
-          .append('<label><input type="radio" name="raceType" value="race" checked>Race &nbsp;</label>')
-          .append('<label><input type="radio" name="raceType" value="ethnicity">Ethnicity</label>'),
+    var self = this,
+        id,
+        inpDiv = $('<div class="radio">')
+          .append('<label><input type="radio" name="raceType" id="raceTypeRace" value="race">Race &nbsp;</label>')
+          .append('<label><input type="radio" name="raceType" id="raceTypeEthnicity" value="ethnicity">Ethnicity</label>'),
         container = $('<div class="raceSelector pull-right">')
           .append('<strong>View results by:</strong>')
           .append(inpDiv)
           .insertBefore($div);
+
+    id = (this.showEthnicity) ? "#raceTypeEthnicity" : "#raceTypeRace";
+    inpDiv.find(id).prop("checked", true);
+
     inpDiv.find('input').on('change', function(){
-      $(document).trigger('raceToggle.change', $(this).val()==="race");
+      self.showEthnicity = $(this).val()==="ethnicity";
+      $.post(self.updateUrl, {"showEthnicity": self.showEthnicity});
+      $(document).trigger('raceToggle.change', self.showEthnicity);
     });
   }
 });

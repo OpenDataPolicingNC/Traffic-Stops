@@ -307,7 +307,8 @@
 {% block extra-js %}
   <script type="text/javascript">
     $(document).ready(function(){
-      var census_handler = new CensusHandler({url: "{{ STATIC_URL }}js/census.temporary.json", agency:{{object.pk}}});
+      var showEthnicity = {{request.session.showEthnicity|lower|default:"false"}},
+          census_handler = new CensusHandler({url: "{{ STATIC_URL }}js/census.temporary.json", agency:{{object.pk}}});
       {% if officer_id %}
         // Retrieve data from API using data-handlers
         var stop_handler = new StopsHandler({url: "{% url 'agency-api-stops' object.pk %}?officer={{officer_id|urlencode}}"}),
@@ -345,7 +346,7 @@
       new UseOfForceTimeSeries({handler: uf_handler, selector: "#use_force_race_line"});
       new UseOfForceTable({handler: uf_handler, selector: "#use_force_race__data"});
 
-      new RaceToggle().render($('h1'));
+      new RaceToggle("{% url 'update_session' %}", showEthnicity).render($('h1'));
 
     });
   </script>
