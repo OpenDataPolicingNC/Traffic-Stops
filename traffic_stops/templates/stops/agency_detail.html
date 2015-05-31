@@ -325,26 +325,26 @@
             chr_handler = new ContrabandHitRateHandler({url: "{% url 'agency-api-contraband-hit-rate' object.pk %}"});
       {% endif %}
 
-      new CensusRatioDonut({handler: census_handler, selector: "#census_pie"});
-      new CensusTable({handler: census_handler, selector: "#census_data"});
+      new CensusRatioDonut({handler: census_handler, selector: "#census_pie", showEthnicity: showEthnicity});
+      new CensusTable({handler: census_handler, selector: "#census_data", showEthnicity: showEthnicity});
 
-      new StopRatioDonut({handler: stop_handler, selector: "#stop_race_pie"});
-      new StopRatioTimeSeries({handler: stop_handler, selector: "#stop_race_line"});
-      new StopsTable({handler: stop_handler, selector: "#stop_race_data"});
+      new StopRatioDonut({handler: stop_handler, selector: "#stop_race_pie", showEthnicity: showEthnicity});
+      new StopRatioTimeSeries({handler: stop_handler, selector: "#stop_race_line", showEthnicity: showEthnicity});
+      new StopsTable({handler: stop_handler, selector: "#stop_race_data", showEthnicity: showEthnicity});
 
-      new SearchRatioDonut({handler: search_handler, selector: "#search_race_pie"});
-      new SearchRatioTimeSeries({handler: search_handler, selector: "#search_race_line"});
-      new SearchTable({handler: search_handler, selector: "#search_race_data"});
+      new SearchRatioDonut({handler: search_handler, selector: "#search_race_pie", showEthnicity: showEthnicity});
+      new SearchRatioTimeSeries({handler: search_handler, selector: "#search_race_line", showEthnicity: showEthnicity});
+      new SearchTable({handler: search_handler, selector: "#search_race_data", showEthnicity: showEthnicity});
 
-      new LikelihoodOfSearch({handler: lhs_handler, selector: "#lsb"});
-      new LikelihoodSearchTable({handler: lhs_handler, selector: "#lsb_data"});
+      new LikelihoodOfSearch({handler: lhs_handler, selector: "#lsb", showEthnicity: showEthnicity});
+      new LikelihoodSearchTable({handler: lhs_handler, selector: "#lsb_data", showEthnicity: showEthnicity});
 
-      new ContrabandHitRateBar({handler: chr_handler, selector: "#chr"});
-      new ContrabandTable({handler: chr_handler, selector: "#chr_data"});
+      new ContrabandHitRateBar({handler: chr_handler, selector: "#chr", showEthnicity: showEthnicity});
+      new ContrabandTable({handler: chr_handler, selector: "#chr_data", showEthnicity: showEthnicity});
 
-      new UseOfForceDonut({handler: uf_handler, selector: "#use_force_race_pie"});
-      new UseOfForceTimeSeries({handler: uf_handler, selector: "#use_force_race_line"});
-      new UseOfForceTable({handler: uf_handler, selector: "#use_force_race__data"});
+      new UseOfForceDonut({handler: uf_handler, selector: "#use_force_race_pie", showEthnicity: showEthnicity});
+      new UseOfForceTimeSeries({handler: uf_handler, selector: "#use_force_race_line", showEthnicity: showEthnicity});
+      new UseOfForceTable({handler: uf_handler, selector: "#use_force_race__data", showEthnicity: showEthnicity});
 
       new RaceToggle("{% url 'update_session' %}", showEthnicity).render($('h1'));
 

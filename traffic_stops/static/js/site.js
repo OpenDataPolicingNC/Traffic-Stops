@@ -393,7 +393,7 @@ CensusRatioDonut = VisualBase.extend({
 
 StopRatioDonut = VisualBase.extend({
   defaults: {
-    showRace: true,
+    showEthnicity: false,
     width: 300,
     height: 300
   },
@@ -452,7 +452,7 @@ StopRatioDonut = VisualBase.extend({
   _formatData: function(){
     var data = [],
         selected = this.dataset,
-        items = (this.get('showRace')) ? Stops.races : Stops.ethnicities;
+        items = (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races;
 
     // build data specifically for this pie chart
     items.forEach(function(d, i){
@@ -466,14 +466,14 @@ StopRatioDonut = VisualBase.extend({
     return data;
   },
   triggerRaceToggle: function(e, v){
-    this.set('showRace', v);
+    this.set('showEthnicity', v);
     this.drawChart();
   }
 });
 
 StopRatioTimeSeries = VisualBase.extend({
   defaults: {
-    showRace: true,
+    showEthnicity: false,
     width: 750,
     height: 375
   },
@@ -512,7 +512,7 @@ StopRatioTimeSeries = VisualBase.extend({
   },
   _formatData: function(){
     var data = [],
-        items = (this.get('showRace')) ? Stops.races : Stops.ethnicities,
+        items = (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races,
         subset = [],
         i = 0,
         disabled;
@@ -532,14 +532,14 @@ StopRatioTimeSeries = VisualBase.extend({
     return data;
   },
   triggerRaceToggle: function(e, v){
-    this.set('showRace', v);
+    this.set('showEthnicity', v);
     this.drawChart();
   }
 });
 
 LikelihoodOfSearch = VisualBase.extend({
   defaults: {
-    showRace: true,
+    showEthnicity: true,
     width: 750,
     height: 375
   },
@@ -605,9 +605,9 @@ LikelihoodOfSearch = VisualBase.extend({
         searches_arr = raw.searches.filter(function(v){return v.year===year;}),
         stops = d3.map(),
         searches = d3.map(),
-        items = (this.get('showRace')) ? Stops.races : Stops.ethnicities,
-        base = (this.get('showRace')) ? "white" : "non-hispanic",
-        defRace = (this.get('showRace')) ? "black" : "hispanic",
+        items = (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races,
+        base = (this.get('showEthnicity')) ? "non-hispanic" : "white",
+        defRace = (this.get('showEthnicity')) ? "hispanic" : "black",
         baseUpper = function(d){return d.charAt(0).toUpperCase() + d.slice(1);}(base);
 
     // turn arrays into maps with purpose as the key
@@ -670,7 +670,7 @@ LikelihoodOfSearch = VisualBase.extend({
     return dataset;
   },
   triggerRaceToggle: function(e, v){
-    this.set('showRace', v);
+    this.set('showEthnicity', v);
     this.selector.trigger('change');
   }
 });
@@ -683,7 +683,7 @@ UseOfForceTimeSeries = StopRatioTimeSeries.extend({});
 
 ContrabandHitRateBar = VisualBase.extend({
   defaults: {
-    showRace: true,
+    showEthnicity: true,
     width: 750,
     height: 375
   },
@@ -753,7 +753,7 @@ ContrabandHitRateBar = VisualBase.extend({
             key: "Contraband hit-rates",
             values: []
         },
-        items = (this.get('showRace')) ? Stops.races : Stops.ethnicities,
+        items = (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races,
         ratio;
 
     if (searches_arr.length===1 && contraband_arr.length===1){
@@ -775,7 +775,7 @@ ContrabandHitRateBar = VisualBase.extend({
     return [dataset];
   },
   triggerRaceToggle: function(e, v){
-    this.set('showRace', v);
+    this.set('showEthnicity', v);
     this.selector.trigger('change');
   }
 });
