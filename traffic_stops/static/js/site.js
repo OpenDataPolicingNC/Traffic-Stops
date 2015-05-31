@@ -342,6 +342,7 @@ VisualBase = Backbone.Model.extend({
 
 CensusRatioDonut = VisualBase.extend({
   defaults: {
+    showEthnicity: false,
     width: 300,
     height: 300
   },
@@ -376,10 +377,11 @@ CensusRatioDonut = VisualBase.extend({
   },
   _formatData: function(){
     var data = [],
-        raw = this.data;
+        raw = this.data,
+        items = (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races;
 
     // build data specifically for this pie chart
-    Stops.races.forEach(function(race, i){
+    items.forEach(function(race, i){
         data.push({
           "key": Stops.pprint.get(race),
           "value": raw.get(race),
@@ -388,6 +390,10 @@ CensusRatioDonut = VisualBase.extend({
     });
 
     return data;
+  },
+  triggerRaceToggle: function(e, v){
+    this.set('showEthnicity', v);
+    this.drawChart();
   }
 });
 
@@ -833,9 +839,7 @@ CensusTable = TableBase.extend({
     // create header
     row = [""];
     row.push.apply(row, Stops.pprint.values());
-    row.push.apply(row, Stops.ethnicity_pprint.values());
     rows.push(row);
-
 
     nRaces = Stops.races.map(function(r){ return (data.get(r)||0); });
     nEthnicities = Stops.ethnicities.map(function(e){ return (data.get(e)||0); });
