@@ -38,6 +38,15 @@ CACHES = {
     }
 }
 
+ADMINS = (
+    ('Colin Copeland', 'ccopeland@codeforamerica.org'),
+    ('Andy Shapiro', 'shapiromatron@gmail.com'),
+    ('Dylan Young', 'dylanjamesyoung@gmail.com'),
+)
+MANAGERS = ADMINS
+
+DEFAULT_FROM_EMAIL = 'no-reply@codeforamerica.org'
+
 EMAIL_SUBJECT_PREFIX = '[Traffic_Stops %s] ' % ENVIRONMENT.title()
 
 COMPRESS_ENABLED = True
@@ -51,6 +60,12 @@ ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split(';')
 # Uncomment if using celery worker configuration
 CELERY_SEND_TASK_ERROR_EMAILS = True
 BROKER_URL = 'amqp://traffic_stops_staging:%(BROKER_PASSWORD)s@%(BROKER_HOST)s/traffic_stops_staging' % os.environ  # noqa
+
+LOGGING['handlers']['file']['filename'] = '/var/www/traffic_stops/log/traffic_stops.log'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': []
+}
 
 # Environment overrides
 # These should be kept to an absolute minimum
