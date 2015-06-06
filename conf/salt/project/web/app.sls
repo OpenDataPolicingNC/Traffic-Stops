@@ -91,3 +91,17 @@ migrate:
     - require:
       - file: manage
     - order: last
+
+### State DBs ###
+{% for instance in salt['pillar.get']('instances') %}
+{% set db_name = pillar['project_name'] + '_' + instance + '_' + pillar['environment'] %}
+migrate-{{ instance }}:
+  cmd.run:
+    - name: "{{ vars.path_from_root('manage.sh') }} migrate --database={{ db_name }} --noinput"
+    - user: {{ pillar['project_name'] }}
+    - group: {{ pillar['project_name'] }}
+    - onlyif: "{{ vars.path_from_root('manage.sh') }} migrate --list | grep '\\[ \\]'"
+    - require:
+      - file: manage
+    - order: last
+{% endfor %}

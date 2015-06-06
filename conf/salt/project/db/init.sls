@@ -30,6 +30,25 @@ database-{{ pillar['project_name'] }}:
       - file: hba_conf
       - file: postgresql_conf
 
+### State DBs ###
+{% for instance in salt['pillar.get']('instances') %}
+database-{{ pillar['project_name'] }}-{{ instance }}:
+  postgres_database.present:
+    - name: {{ pillar['project_name'] }}_{{ instance }}_{{ pillar['environment'] }}
+    - owner: {{ pillar['project_name'] }}_{{ pillar['environment'] }}
+    - template: template0
+    - encoding: UTF8
+    - locale: en_US.UTF-8
+    - lc_collate: en_US.UTF-8
+    - lc_ctype: en_US.UTF-8
+    - require:
+      - postgres_user: user-{{ pillar['project_name'] }}
+      - file: hba_conf
+      - file: postgresql_conf
+    - require_in:
+      - postgres_database: database-{{ pillar['project_name'] }}
+{% endfor %}
+
 hba_conf:
   file.managed:
     - name: /etc/postgresql/{{ version }}/main/pg_hba.conf
@@ -88,4 +107,18 @@ create-{{ extension }}-extension:
       - postgres_database: database-{{ pillar['project_name'] }}
     - require_in:
       - virtualenv: venv
+
+{% for instance in salt['pillar.get']('instances') %}
+create-{{ extension }}-{{ instance }}-extension:
+  cmd.run:
+    - name: psql -U postgres {{ pillar['project_name'] }}_{{ instance }}_{{ pillar['environment'] }} -c "CREATE EXTENSION postgis;"
+    - unless: psql -U postgres {{ pillar['project_name'] }}_{{ pillar['environment'] }} -c "\dx+" | grep postgis
+    - user: postgres
+    - require:
+      - pkg: postgis-packages
+      - postgres_database: database-{{ pillar['project_name'] }}
+    - require_in:
+      - virtualenv: venv
+{% endfor %}
+
 {% endfor %}

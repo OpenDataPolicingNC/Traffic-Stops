@@ -6,7 +6,7 @@ domain: 52.6.26.10
 
 repo:
   url: https://github.com/copelco/NC-Traffic-Stops.git
-  branch: update-template
+  branch: multidb
 
 postgresql_config: # from pgtune
   work_mem: 22MB
