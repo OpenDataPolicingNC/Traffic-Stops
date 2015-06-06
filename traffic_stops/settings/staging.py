@@ -11,6 +11,11 @@ DATABASES['default']['USER'] = 'traffic_stops_staging'
 DATABASES['default']['HOST'] = os.environ.get('DB_HOST', '')
 DATABASES['default']['PORT'] = os.environ.get('DB_PORT', '')
 DATABASES['default']['PASSWORD'] = os.environ['DB_PASSWORD']
+DATABASES['traffic_stops_nc']['NAME'] = 'traffic_stops_staging'
+DATABASES['traffic_stops_nc']['USER'] = 'traffic_stops_staging'
+DATABASES['traffic_stops_nc']['HOST'] = os.environ.get('DB_HOST', '')
+DATABASES['traffic_stops_nc']['PORT'] = os.environ.get('DB_PORT', '')
+DATABASES['traffic_stops_nc']['PASSWORD'] = os.environ['DB_PASSWORD']
 
 PUBLIC_ROOT = '/var/www/traffic_stops/public/'
 
