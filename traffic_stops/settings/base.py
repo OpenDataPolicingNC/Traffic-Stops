@@ -30,7 +30,7 @@ DATABASES = {
     }
 }
 
-DATABASE_ROUTERS = ['traffic_stops.routers.StateDatasetRouter']
+DATABASE_ROUTERS = ['nc.routers.StateDatasetRouter']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -195,6 +195,8 @@ LOGGING = {
         },
     }
 }
+
+SITE_ID = 1
 
 # Application settings
 COMPRESS_PRECOMPILERS = (

@@ -122,5 +122,8 @@ class SearchBasis(models.Model):
 class Agency(models.Model):
     name = models.CharField(max_length=255)
 
+    class Meta(object):
+      verbose_name_plural = 'Agencies'
+
     def __str__(self):
         return self.name
