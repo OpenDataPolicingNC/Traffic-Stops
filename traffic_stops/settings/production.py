@@ -5,6 +5,7 @@ from traffic_stops.settings.staging import *
 DATABASES['default']['NAME'] = 'traffic_stops_production'
 DATABASES['default']['USER'] = 'traffic_stops_production'
 DATABASES['traffic_stops_nc']['NAME'] = 'traffic_stops_nc_production'
+DATABASES['traffic_stops_nc']['USER'] = 'traffic_stops_production'
 
 EMAIL_SUBJECT_PREFIX = '[Traffic Stops Prod] '
 
