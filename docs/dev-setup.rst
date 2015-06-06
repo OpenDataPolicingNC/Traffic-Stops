@@ -53,6 +53,7 @@ Exit the virtualenv and reactivate it to activate the settings just changed::
 Create the Postgres database and run the initial syncdb/migrate::
 
     createdb -E UTF-8 traffic_stops
+    createdb -E UTF-8 traffic_stops_nc
     python manage.py syncdb
 
 You should now be able to run the development server::

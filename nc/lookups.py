@@ -1,7 +1,7 @@
 from selectable.base import ModelLookup
 from selectable.registry import registry
 
-from stops.models import Agency
+from nc.models import Agency
 
 
 class AgencyLookup(ModelLookup):

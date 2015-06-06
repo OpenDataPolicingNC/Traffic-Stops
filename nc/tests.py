@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from stops.utils import GroupedData
+from nc.utils import GroupedData
 
 
 class GrouperTestCase(TestCase):

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from stops import models as stops
+from nc import models as stops
 
 
 class AgencySerializer(serializers.ModelSerializer):

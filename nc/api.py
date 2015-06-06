@@ -8,9 +8,9 @@ from rest_framework_extensions.cache.decorators import cache_response
 from rest_framework_extensions.key_constructor import bits
 from rest_framework_extensions.key_constructor.constructors import DefaultObjectKeyConstructor
 
-from stops.models import Agency, Stop, Person
-from stops import serializers
-from stops.utils import GroupedData
+from nc.models import Agency, Stop, Person
+from nc import serializers
+from nc.utils import GroupedData
 
 
 GROUPS = {'A': 'asian',

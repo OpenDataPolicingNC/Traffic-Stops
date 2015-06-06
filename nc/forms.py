@@ -4,8 +4,8 @@ from django import forms
 from django.db.models import Q
 from selectable.forms import AutoCompleteWidget, AutoCompleteSelectField
 
-from stops import models as stops
-from stops.lookups import AgencyLookup
+from nc import models as stops
+from nc.lookups import AgencyLookup
 
 
 class SearchForm(forms.Form):

@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, url, include
 from rest_framework.routers import DefaultRouter
-from stops import views
-from stops import api
+from nc import views
+from nc import api
 
 
 router = DefaultRouter()

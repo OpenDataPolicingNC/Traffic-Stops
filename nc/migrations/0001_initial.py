@@ -65,7 +65,7 @@ class Migration(migrations.Migration):
                 ('vehicle_siezed', models.BooleanField(default=False)),
                 ('personal_property_siezed', models.BooleanField(default=False)),
                 ('other_property_sized', models.BooleanField(default=False)),
-                ('person', models.ForeignKey(to='stops.Person')),
+                ('person', models.ForeignKey(to='nc.Person')),
             ],
             options={
             },
@@ -76,8 +76,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('search_basis_id', models.IntegerField(serialize=False, primary_key=True)),
                 ('basis', models.CharField(choices=[('ER', 'Erratic/Suspicious Behavior'), ('OB', 'Observation of Suspected Contraband'), ('OI', 'Other Official Information'), ('SM', 'Suspicious Movement'), ('TIP', 'Informant Tip'), ('WTNS', 'Witness Observation')], max_length=4)),
-                ('person', models.ForeignKey(to='stops.Person')),
-                ('search', models.ForeignKey(to='stops.Search')),
+                ('person', models.ForeignKey(to='nc.Person')),
+                ('search', models.ForeignKey(to='nc.Search')),
             ],
             options={
             },
@@ -109,37 +109,37 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='searchbasis',
             name='stop',
-            field=models.ForeignKey(to='stops.Stop'),
+            field=models.ForeignKey(to='nc.Stop'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='search',
             name='stop',
-            field=models.ForeignKey(to='stops.Stop'),
+            field=models.ForeignKey(to='nc.Stop'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='person',
             name='stop',
-            field=models.ForeignKey(to='stops.Stop'),
+            field=models.ForeignKey(to='nc.Stop'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='contraband',
             name='person',
-            field=models.ForeignKey(to='stops.Person'),
+            field=models.ForeignKey(to='nc.Person'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='contraband',
             name='search',
-            field=models.ForeignKey(to='stops.Search'),
+            field=models.ForeignKey(to='nc.Search'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='contraband',
             name='stop',
-            field=models.ForeignKey(to='stops.Stop'),
+            field=models.ForeignKey(to='nc.Stop'),
             preserve_default=True,
         ),
     ]

@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, Http404
 from django.views.generic import ListView, DetailView
 from django.db.models import Count
-from stops.models import Stop, Agency, Person
-from stops import forms
+from nc.models import Stop, Agency, Person
+from nc import forms
 
 
 def home(request):
@@ -35,7 +35,7 @@ def search(request):
         'form': form,
         'people': people,
     }
-    return render(request, 'stops/search.html', context)
+    return render(request, 'nc/search.html', context)
 
 
 class AgencyList(ListView):

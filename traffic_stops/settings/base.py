@@ -19,8 +19,18 @@ DATABASES = {
         'PASSWORD': '',
         'HOST': '',
         'PORT': '',
+    },
+    'traffic_stops_nc': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'traffic_stops_nc',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
     }
 }
+
+DATABASE_ROUTERS = ['traffic_stops.routers.StateDatasetRouter']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -132,7 +142,7 @@ INSTALLED_APPS = (
     'endless_pagination',
     'rest_framework',
     # Custom apps
-    'stops'
+    'nc'
 )
 
 # A sample logging configuration. The only tangible logging
@@ -179,9 +189,9 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
-        'traffic_stops': {
+        '': {
             'handlers': ['file', 'mail_admins'],
-            'level': 'INFO',
+            'level': 'DEBUG',
         },
     }
 }
