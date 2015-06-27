@@ -468,7 +468,7 @@ if [ "${CALLER}x" = "${0}x" ]; then
 fi
 
 echoinfo "${CALLER} ${0} -- Version ${__ScriptVersion}"
-#echowarn "Running the unstable version of ${__ScriptName}"
+echowarn "Running the unstable version of ${__ScriptName}"
 
 #---  FUNCTION  -------------------------------------------------------------------------------------------------------
 #          NAME:  __exit_cleanup
@@ -1147,7 +1147,7 @@ fi
 if ([ "${DISTRO_NAME_L}" != "ubuntu" ] && [ "$ITYPE" = "daily" ]); then
     echoerror "${DISTRO_NAME} does not have daily packages support"
     exit 1
-elif ([ "${DISTRO_NAME_L}" != "ubuntu" ] && [ "$STABLE_REV" != "latest" ]); then
+elif ([ "${DISTRO_NAME_L}" != "ubuntu" ] && [ "$ITYPE" = "stable" ] && [ "$STABLE_REV" != "latest" ]); then
     echoerror "${DISTRO_NAME} does not have major version pegged packages support"
     exit 1
 fi
@@ -1915,7 +1915,7 @@ install_ubuntu_git_post() {
         [ $fname = "api" ] && ([ "$_INSTALL_MASTER" -eq $BS_FALSE ] || [ "$(which salt-${fname} 2>/dev/null)" = "" ]) && continue
         [ $fname = "syndic" ] && [ "$_INSTALL_SYNDIC" -eq $BS_FALSE ] && continue
 
-        if [ -f /bin/systemctl ]; then
+        if [ -f /bin/systemctl ] && [ "$DISTRO_MAJOR_VERSION" -ge 15 ]; then
             copyfile "${__SALT_GIT_CHECKOUT_DIR}/pkg/rpm/salt-${fname}.service" "/lib/systemd/system/salt-${fname}.service"
 
             # Skip salt-api since the service should be opt-in and not necessarily started on boot
@@ -1954,8 +1954,8 @@ install_ubuntu_git_post() {
 install_ubuntu_restart_daemons() {
     [ $_START_DAEMONS -eq $BS_FALSE ] && return
 
-    # Ensure upstart configs are loaded
-    if [ -f /bin/systemctl ]; then
+    # Ensure upstart configs / systemd units are loaded
+    if [ -f /bin/systemctl ] && [ "$DISTRO_MAJOR_VERSION" -ge 15 ]; then
         systemctl daemon-reload
     elif [ -f /sbin/initctl ]; then
         /sbin/initctl reload-configuration
@@ -1970,7 +1970,7 @@ install_ubuntu_restart_daemons() {
         #[ $fname = "api" ] && ([ "$_INSTALL_MASTER" -eq $BS_FALSE ] || [ "$(which salt-${fname} 2>/dev/null)" = "" ]) && continue
         [ $fname = "syndic" ] && [ "$_INSTALL_SYNDIC" -eq $BS_FALSE ] && continue
 
-        if [ -f /bin/systemctl ]; then
+        if [ -f /bin/systemctl ] && [ "$DISTRO_MAJOR_VERSION" -ge 15 ]; then
             echodebug "There's systemd support while checking salt-$fname"
             systemctl stop salt-$fname > /dev/null 2>&1
             systemctl start salt-$fname.service
@@ -2015,7 +2015,7 @@ install_ubuntu_check_services() {
         #[ $fname = "api" ] && ([ "$_INSTALL_MASTER" -eq $BS_FALSE ] || [ "$(which salt-${fname} 2>/dev/null)" = "" ]) && continue
         [ $fname = "syndic" ] && [ "$_INSTALL_SYNDIC" -eq $BS_FALSE ] && continue
 
-        if [ -f /bin/systemctl ]; then
+        if [ -f /bin/systemctl ] && [ "$DISTRO_MAJOR_VERSION" -ge 15 ]; then
             __check_services_systemd salt-$fname || return 1
         elif [ -f /sbin/initctl ] && [ -f /etc/init/salt-${fname}.conf ]; then
             __check_services_upstart salt-$fname || return 1
@@ -2137,7 +2137,7 @@ _eof
         # We NEED to install the unstable dpkg or mime-support WILL fail to install
         __apt_get_install_noinput -t unstable dpkg liblzma5 python mime-support || return 1
         __apt_get_install_noinput -t unstable libzmq3 libzmq3-dev || return 1
-        __apt_get_install_noinput build-essential python-dev python-pip || return 1
+        __apt_get_install_noinput build-essential python-dev python-pip python-setuptools || return 1
 
         # Saltstack's Unstable Debian repository
         if [ "$(grep -R 'debian.saltstack.com' /etc/apt)" = "" ]; then
@@ -2179,6 +2179,14 @@ _eof
 
     __apt_get_install_noinput python-zmq || return 1
 
+    if [ "$_PIP_ALLOWED" -eq $BS_TRUE ]; then
+        # Building pyzmq from source to build it against libzmq3.
+        # Should override current installation
+        # Using easy_install instead of pip because at least on Debian 6,
+        # there's no default virtualenv active.
+        easy_install -U pyzmq || return 1
+    fi
+
     if [ "${_EXTRA_PACKAGES}" != "" ]; then
         echoinfo "Installing the following extra packages as requested: ${_EXTRA_PACKAGES}"
         # shellcheck disable=SC2086
@@ -2210,7 +2218,7 @@ install_debian_7_deps() {
 
     # Debian Backports
     if [ "$(grep -R 'wheezy-backports' /etc/apt | grep -v "^#")" = "" ]; then
-        echo "deb http://http.debian.net/debian wheezy-backports main" >> \
+        echo "deb http://httpredir.debian.org/debian wheezy-backports main" >> \
             /etc/apt/sources.list.d/backports.list
     fi
 
@@ -2278,7 +2286,7 @@ install_debian_8_deps() {
 
     # Debian Backports
     if [ "$(grep -R 'jessie-backports' /etc/apt | grep -v "^#")" = "" ]; then
-        echo "deb http://http.debian.net/debian jessie-backports main" >> \
+        echo "deb http://httpredir.debian.org/debian jessie-backports main" >> \
             /etc/apt/sources.list.d/backports.list
     fi
 
@@ -2380,7 +2388,7 @@ install_debian_6_git_deps() {
     install_debian_6_deps || return 1
     if [ "$_PIP_ALLOWED" -eq $BS_TRUE ]; then
         __PACKAGES="build-essential lsb-release python python-dev python-pkg-resources python-crypto"
-        __PACKAGES="${__PACKAGES} python-m2crypto python-yaml msgpack-python python-pip"
+        __PACKAGES="${__PACKAGES} python-m2crypto python-yaml msgpack-python python-pip python-setuptools"
 
         if [ "$(which git)" = "" ]; then
             __PACKAGES="${__PACKAGES} git"
@@ -2434,14 +2442,6 @@ __install_debian_stable() {
     fi
     # shellcheck disable=SC2086
     __apt_get_install_noinput ${__PACKAGES} || return 1
-
-    if [ "$_PIP_ALLOWED" -eq $BS_TRUE ]; then
-        # Building pyzmq from source to build it against libzmq3.
-        # Should override current installation
-        # Using easy_install instead of pip because at least on Debian 6,
-        # there's no default virtualenv active.
-        easy_install -U pyzmq || return 1
-    fi
 
     return 0
 }
@@ -4156,6 +4156,10 @@ install_smartos_deps() {
         fi
     fi
 
+    if [ "$_INSTALL_CLOUD" -eq $BS_TRUE  ]; then
+        pkgin -y install py27-apache-libcloud || return 1
+    fi
+
     if [ "${_EXTRA_PACKAGES}" != "" ]; then
         echoinfo "Installing the following extra packages as requested: ${_EXTRA_PACKAGES}"
         # shellcheck disable=SC2086
@@ -4170,7 +4174,7 @@ install_smartos_git_deps() {
     install_smartos_deps || return 1
 
     if [ "$(which git)" = "" ]; then
-        pkgin -y install scmgit || return 1
+        pkgin -y install git || return 1
     fi
 
     if [ -f "${__SALT_GIT_CHECKOUT_DIR}/requirements/base.txt" ]; then

@@ -30,7 +30,7 @@ VALID_ROLES = (
 @task
 def staging():
     env.environment = 'staging'
-    env.master = 'dev.opendatapolicingnc.com'
+    env.master = '52.6.26.10'
     initialize_env()
 
 
@@ -103,6 +103,10 @@ def install_salt(version, master=False, minion=False, restart=True):
             # Already installed - if Ubuntu package, uninstall current version first
             # because we're going to do a git install later
             sudo("apt-get remove salt-minion -yq")
+        elif not install_minion and not files.exists("/etc/init/salt-minon.conf", use_sudo=True):
+            # setup_master() installs salt-minion, but not the salt-minion
+            # upstart service, so we check for the conf file
+            install_minion = True
         if restart and not install_minion:
             sudo("service salt-minion restart")
 
@@ -128,6 +132,8 @@ def setup_master():
     with settings(host_string=env.master):
         sudo('apt-get update -qq')
         sudo('apt-get install python-pip git-core python-git python-gnupg haveged -qq -y')
+        if not files.exists("/etc/salt/", use_sudo=True):
+            sudo('mkdir -p /etc/salt/')
         put(local_path='conf/master.conf',
             remote_path="/etc/salt/master", use_sudo=True)
         # install salt master if it's not there already, or restart to pick up config changes
@@ -222,7 +228,7 @@ def state(name, target="'*'", loglevel=DEFAULT_SALT_LOGLEVEL):
 def margarita():
     require('environment')
     execute(state, 'margarita')
-    sudo('service salt-master restart')
+    # sudo('service salt-master restart')
 
 
 @task
