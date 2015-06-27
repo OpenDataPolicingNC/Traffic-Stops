@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from nc import data
+from nc.data import importer
 
 
 class Command(BaseCommand):
@@ -11,4 +11,4 @@ class Command(BaseCommand):
         dest = None
         if len(args) == 1:
             dest = args[0]
-        data.load(self.url, dest)
+        importer.run(self.url, dest)
