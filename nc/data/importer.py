@@ -126,6 +126,10 @@ def copy_from(destination):
     call(cmd)
 
 
+# SQL commands to drop/create all nc_* table constraints
+# Adapted from: http://blog.hagander.net/archives/131-Automatically-dropping-and-creating-constraints.html
+
+
 SELECT_DROP_CONSTRAINTS_SQL = """
 SELECT 'ALTER TABLE "'||nspname||'"."'||relname||'" DROP CONSTRAINT IF EXISTS "'||conname||'";'
 FROM pg_constraint 
