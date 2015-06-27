@@ -93,8 +93,8 @@ def convert_to_csv(destination):
         logger.info("Converting {} > {}".format(data_path, csv_path))
         # Convert to CSV using ISO-8859-1 encoding
         # TODO: This may be incorrect https://en.wikipedia.org/wiki/Windows-1252
-        subprocess.call("in2csv -e iso-8859-1 -f fixed -s {} {} > {}".format(schema_path, data_path, csv_path), shell=True)
-        subprocess.call(r"sed -i 's/\x0//g' {}".format(csv_path), shell=True)
+        call(["in2csv -e iso-8859-1 -f fixed -s {} {} > {}".format(schema_path, data_path, csv_path)], shell=True)
+        call([r"sed -i 's/\x0//g' {}".format(csv_path)], shell=True)
         data_count = line_count(data_path)
         csv_count = line_count(csv_path)
         if data_count == (csv_count - 1):

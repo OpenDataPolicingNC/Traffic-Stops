@@ -9,10 +9,11 @@ import zipfile
 logger = logging.getLogger(__name__)
 
 
-def call(cmd):
+def call(cmd, shell=False):
     """Spawn a new process and capture its output"""
     logger.debug(' '.join(cmd))
-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                         shell=shell)
     stdout, stderr = p.communicate()
     if p.returncode != 0:
         raise IOError(stderr)
