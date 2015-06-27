@@ -189,7 +189,7 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
-        '': {
+        'nc': {
             'handlers': ['file', 'mail_admins'],
             'level': 'DEBUG',
         },

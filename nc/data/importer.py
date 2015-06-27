@@ -1,7 +1,11 @@
-import os
 import logging
+import os
 import tempfile
+
+from django.conf import settings
 from django.db import connections
+
+from .util import call, line_count, download_and_unzip_data
 
 
 logger = logging.getLogger(__name__)
@@ -30,12 +34,15 @@ def run(url, destination=None, download=True):
     convert_to_csv(destination)
     # inspect table constraints so we can toggle them off during import
     drop_constraints = get_constraints_sql(SELECT_DROP_CONSTRAINTS_SQL)
-    add_constraints = get_constraints_sql(SELECT_CREATE_CONSTRAINTS_SQL)
+    add_constraints = get_constraints_sql(SELECT_ADD_CONSTRAINTS_SQL)
     # drop constraints to speed up import
-    cursor.execute(drop_constraints)
+    if drop_constraints:
+        logger.info("Dropping table constraints")
+        cursor.execute(drop_constraints)
     # use COPY to load CSV files as quickly as possible
     copy_from(destination)
     # add constraints back
+    logger.info("Adding table constraints")
     cursor.execute(add_constraints)
     logger.info("NC Data Import Complete")
 
@@ -96,12 +103,12 @@ def convert_to_csv(destination):
             logger.error('CSV {}'.format(csv_count))
 
 
-def get_constraints_sql(selecqt_sql):
+def get_constraints_sql(select_sql):
     """
     Simple wrapper function used to execute a SQL query that returns a 
     list of SQL commands to be run later.
     """
-    cursor.execute(selecqt_sql)
+    cursor.execute(select_sql)
     sql = ''
     for row in cursor.fetchall():
         sql += row[0]
@@ -114,7 +121,7 @@ def copy_from(destination):
     cmd = ['psql',
            '-v', 'data_dir={}'.format(destination),
            '-f', sql_file,
-           'traffic_stops_nc']
+           settings.DATABASES['traffic_stops_nc']['NAME']]
     call(cmd)
 
 
@@ -127,7 +134,7 @@ WHERE relname LIKE 'nc_%'
 ORDER BY CASE WHEN contype='f' THEN 0 ELSE 1 END,contype,nspname,relname,conname;
 """
 
-SELECT_CREATE_CONSTRAINTS_SQL = """
+SELECT_ADD_CONSTRAINTS_SQL = """
 SELECT 'ALTER TABLE "'||nspname||'"."'||relname||'" ADD CONSTRAINT "'||conname||'" '||pg_get_constraintdef(pg_constraint.oid)||';'
 FROM pg_constraint
 INNER JOIN pg_class ON conrelid=pg_class.oid
