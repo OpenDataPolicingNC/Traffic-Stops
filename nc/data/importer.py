@@ -1,5 +1,6 @@
 import logging
 import os
+import subprocess
 import tempfile
 
 from django.conf import settings
