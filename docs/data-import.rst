@@ -20,17 +20,15 @@ To create the database dump, run:
     pg_dump -Ox -Ft traffic_stops > traffic_stops.tar
 
 
-Raw Data
---------
+Raw NC Data
+-----------
 
 Make sure our database is in the right state before importing:
 
 .. code-block:: bash
 
-    dropdb traffic_stops;
-    createdb -E UTF-8 traffic_stops
-    python manage.py syncdb --noinput
-    python manage.py migrate stops 0001
+    dropdb traffic_stops_nc && createdb -E UTF-8 traffic_stops_nc
+    python manage.py syncdb --database=traffic_stops_nc --noinput
 
 Download the extract the latest North Carolina data dump into
 ``<git-repo>/data/nc``.
