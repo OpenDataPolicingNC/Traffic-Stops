@@ -71,6 +71,7 @@ ssl_cert:
       - service: nginx
 {% endif %}
 
+
 {% if 'http_auth' in pillar %}
 apache2-utils:
   pkg:
@@ -103,6 +104,8 @@ auth_file:
     - require:
       - file: root_dir
       - file: clear_auth_file
+    - watch_in:
+      - service: nginx
 {% endif %}
 
 nginx_conf:
@@ -119,7 +122,7 @@ nginx_conf:
         log_dir: "{{ vars.log_dir }}"
         ssl_dir: "{{ vars.ssl_dir }}"
         servers:
-{% for host, ifaces in salt['mine.get']('roles:web', 'network.interfaces', expr_form='grain_pcre').items() %}
+{% for host, ifaces in vars.web_minions.items() %}
 {% set host_addr = vars.get_primary_ip(ifaces) %}
           - {% if host_addr == vars.current_ip %}'127.0.0.1'{% else %}{{ host_addr }}{% endif %}
 {% endfor %}

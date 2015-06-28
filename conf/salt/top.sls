@@ -6,14 +6,10 @@ base:
     - sshd.github
     - locale.utf8
     - project.devs
-    - salt.minion
     - newrelic_sysmon
   'environment:local':
     - match: grain
     - vagrant.user
-  'roles:salt-master':
-    - match: grain
-    - salt.master
   'roles:web':
     - match: grain
     - project.web.app

@@ -2,8 +2,12 @@ Data Import
 ===========
 
 
+Local/Development Environment
+-----------------------------
+
+
 Database Dump
--------------
+_____________
 
 To load the database dump, run:
 
@@ -20,113 +24,24 @@ To create the database dump, run:
     pg_dump -Ox -Ft traffic_stops > traffic_stops.tar
 
 
-Raw Data
---------
+Raw NC Data
+___________
 
-Make sure our database is in the right state before importing:
-
-.. code-block:: bash
-
-    dropdb traffic_stops;
-    createdb -E UTF-8 traffic_stops
-    python manage.py syncdb --noinput
-    python manage.py migrate stops 0001
-
-Download the extract the latest North Carolina data dump into
-``<git-repo>/data/nc``.
+Make sure our NC database is in the right state before importing:
 
 .. code-block:: bash
 
-    cd data/
-    unzip -d nc raw-data.zip
-    sudo chmod 666 nc/*
+    dropdb traffic_stops_nc && createdb -E UTF-8 traffic_stops_nc
+    python manage.py syncdb --database=traffic_stops_nc --noinput
 
-Convert space-delineated files to CSVs with the help of `csvkit`_ and
-``create-schema.py`` (this will create ``data/nc/csv``):
+Run the import command:
 
 .. code-block:: bash
 
-    time python create-schema.py
-    python create-schema.py count
+    python manage.py import_nc
 
-The output will show the line counts of each file. The CSV files should have an
-extra line for the header.
-
-.. code-block:: bash
-
-    (nc-traffic-stops)copelco@caktus005:~/projects/nc-traffic-stop/data$ python create-schema.py count
-    CONTRABAND
-    DAT 136346
-    CSV 136347
-    REFCOMMONCODE
-    DAT 218
-    CSV 219
-    SEARCH
-    DAT 542736
-    CSV 542737
-    SEARCHBASIS
-    DAT 618871
-    CSV 618872
-    REFSTOPSCODENUMBER
-    DAT 28
-    CSV 29
-    REFCODETYPE
-    DAT 17
-    CSV 18
-    STOP
-    DAT 16822954
-    CSV 16822955
-    PERSON
-    DAT 17108280
-    CSV 17108281
-
-Now use PostgreSQL's ``COPY`` command to load our data:
-
-.. code-block:: bash
-
-    time psql --set=data_dir="$PWD/nc/csv" -f import.sql traffic_stops
-
-This took ~25 minutes on my laptop. The output should match the line count from
-above:
-
-.. code-block:: bash
-
-    BEGIN
-    psql:import.sql:18: NOTICE:  truncate cascades to table "stops_contraband"
-    psql:import.sql:18: NOTICE:  truncate cascades to table "stops_person"
-    psql:import.sql:18: NOTICE:  truncate cascades to table "stops_search"
-    psql:import.sql:18: NOTICE:  truncate cascades to table "stops_searchbasis"
-    TRUNCATE TABLE
-    ANALYZE
-    COMMIT
-    BEGIN
-    COPY 16822954
-    COMMIT
-    BEGIN
-    COPY 17108280
-    COMMIT
-    BEGIN
-    COPY 542736
-    COMMIT
-    BEGIN
-    COPY 136346
-    COMMIT
-    BEGIN
-    COPY 618871
-    COMMIT
-    BEGIN
-    ANALYZE
-    COMMIT
-
-    real    25m42.752s
-    user    0m0.036s
-    sys 0m0.012s
-
-Apply the latest migrations:
-
-.. code-block:: bash
-
-    python manage.py syncdb --noinput
+This took ~25 minutes on my laptop. Run ``tail -f traffic_stops.log`` to follow
+along.
 
 Now you should be able to view data with ``runserver``:
 
@@ -135,4 +50,35 @@ Now you should be able to view data with ``runserver``:
     python manage.py runserver
 
 
-.. _csvkit: https://csvkit.readthedocs.org/
+Server
+------
+
+Raw NC Data
+___________
+
+To start with fresh NC data, first drop the server's database:
+
+.. code-block:: bash
+    
+    sudo -u postgres dropdb traffic_stops_nc_staging
+
+Then run a **deploy** to recreate the database.
+
+Temporarily grant our PostgreSQL user SUPERUSER privileges:
+
+.. code-block:: bash
+
+    sudo -u postgres psql -c 'ALTER USER traffic_stops_staging WITH SUPERUSER;'
+
+Run the import command:
+
+.. code-block:: bash
+
+    cd /var/www/traffic-stops
+    source ./env/bin/activate
+    ./manage.sh import_nc /var/www/traffic_stops/data
+
+When finished, revoke SUPERUSER privileges:
+
+.. code-block:: bash
+    sudo -u postgres psql -c 'ALTER USER traffic_stops_staging WITH NOSUPERUSER;'

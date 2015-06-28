@@ -14,7 +14,7 @@ newrelic_ini_app:
     - context:
       log_file: "{{ vars.log_dir }}/newrelic-python-agent.log"
       newrelic_license_key: "{{ pillar['secrets']['newrelic_license_key'] }}"
-      newrelic_app_name: "{{ pillar['project_name'] }} {{ pillar['environment'] }} (Gunicorn); {{ pillar['project_name'] }} {{ pillar['environment'] }}"
+      newrelic_app_name: "{{ pillar['project_name'] }} {{ pillar['environment'] }}"
     - require:
       - file: services_dir
 
@@ -29,6 +29,6 @@ newrelic_ini_worker:
     - context:
       log_file: "{{ vars.log_dir }}/newrelic-python-agent.log"
       newrelic_license_key: "{{ pillar['secrets']['newrelic_license_key'] }}"
-      newrelic_app_name: "{{ pillar['project_name'] }} {{ pillar['environment'] }} (Celery); {{ pillar['project_name'] }} {{ pillar['environment'] }}"
+      newrelic_app_name: "{{ pillar['project_name'] }} {{ pillar['environment'] }}"
     - require:
       - file: services_dir
