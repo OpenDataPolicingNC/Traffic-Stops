@@ -67,7 +67,7 @@ Then run a **deploy** to recreate the database.
 Temporarily grant our PostgreSQL user SUPERUSER privileges:
 
 .. code-block:: bash
-    
+
     sudo -u postgres psql -c 'ALTER USER traffic_stops_staging WITH SUPERUSER;'
 
 Run the import command:
@@ -75,10 +75,10 @@ Run the import command:
 .. code-block:: bash
 
     cd /var/www/traffic-stops
+    source ./env/bin/activate
     ./manage.sh import_nc /var/www/traffic_stops/data
 
 When finished, revoke SUPERUSER privileges:
 
 .. code-block:: bash
-    
     sudo -u postgres psql -c 'ALTER USER traffic_stops_staging WITH NOSUPERUSER;'
