@@ -15,6 +15,39 @@ String.prototype.printf = function(){
     });
 };
 
+
+// Django AJAX with CSRF protection.
+var getCookie = function(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+              var cookie = jQuery.trim(cookies[i]);
+              // Does this cookie string begin with the name we want?
+              if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      return cookieValue;
+    },
+    csrftoken = getCookie('csrftoken'),
+    sessionid = getCookie('sessionid'),
+    csrfSafeMethod = function(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));  // safe methods
+    };
+
+$.ajaxSetup({
+    crossDomain: false,
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type)) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            xhr.setRequestHeader("sessionid", sessionid);
+        }
+    }
+});
+
 // Traffic Stops global defaults
 var Stops = {
   start_year: 2002,                    // start-year for reporting requirement
@@ -25,18 +58,16 @@ var Stops = {
     'asian',
     'other'
   ],
-  race_pprint: d3.map({
-    'white': 'White',
-    'black': 'Black',
-    'native_american': 'Native American',
-    'asian': 'Asian',
-    'other': 'Other'
-  }),
   ethnicities: [
     'hispanic',
     'non-hispanic'
   ],
-  ethnicity_pprint: d3.map({
+  pprint: d3.map({
+    'white': 'White',
+    'black': 'Black',
+    'native_american': 'Native American',
+    'asian': 'Asian',
+    'other': 'Other',
     'hispanic': 'Hispanic',
     'non-hispanic': 'Non-hispanic'
   }),
@@ -131,23 +162,26 @@ StopsHandler = DataHandlerBase.extend({
     // build data for line-chart
 
     var line = d3.map(),
-        get_total_by_race = function(yr){
+        get_total_by_race = function(dataType, yr){
           var total = 0;
-          Stops.races.forEach(function(race){
+          dataType.forEach(function(race){
             total += yr[race];
           });
           return total;
         };
-    Stops.races.forEach(function(v){
-      line.set(v, []);
-    });
-    data.forEach(function(yr){
-      if (yr.year>=Stops.start_year){
-        var total = get_total_by_race(yr);
-        Stops.races.forEach(function(race){
-          line.get(race).push({x: yr.year, y:yr[race]/total});
-        });
-      }
+
+    [Stops.races, Stops.ethnicities].forEach(function(dataType){
+      dataType.forEach(function(v){
+        line.set(v, []);
+      });
+      data.forEach(function(yr){
+        if (yr.year>=Stops.start_year){
+          var total = get_total_by_race(dataType, yr);
+          dataType.forEach(function(race){
+            line.get(race).push({x: yr.year, y:yr[race]/total});
+          });
+        }
+      });
     });
 
     // set object data
@@ -292,6 +326,7 @@ VisualBase = Backbone.Model.extend({
     this.loader_hide();
     this.drawStartup();
     this.drawChart();
+    $(document).on('raceToggle.change', this.triggerRaceToggle.bind(this));
   },
   drawStartup: function(){
     throw "abstract method: requires override";
@@ -301,11 +336,13 @@ VisualBase = Backbone.Model.extend({
   },
   setDefaultChart: function(){
     throw "abstract method: requires override";
-  }
+  },
+  triggerRaceToggle: function(e, v){}
 });
 
 CensusRatioDonut = VisualBase.extend({
   defaults: {
+    showEthnicity: false,
     width: 300,
     height: 300
   },
@@ -340,23 +377,29 @@ CensusRatioDonut = VisualBase.extend({
   },
   _formatData: function(){
     var data = [],
-        raw = this.data;
+        raw = this.data,
+        items = (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races;
 
     // build data specifically for this pie chart
-    Stops.races.forEach(function(race, i){
+    items.forEach(function(race, i){
         data.push({
-          "key": Stops.race_pprint.get(race),
+          "key": Stops.pprint.get(race),
           "value": raw.get(race),
           "color": Stops.colors[i]
         });
     });
 
     return data;
+  },
+  triggerRaceToggle: function(e, v){
+    this.set('showEthnicity', v);
+    this.drawChart();
   }
 });
 
 StopRatioDonut = VisualBase.extend({
   defaults: {
+    showEthnicity: false,
     width: 300,
     height: 300
   },
@@ -414,23 +457,29 @@ StopRatioDonut = VisualBase.extend({
   },
   _formatData: function(){
     var data = [],
-        selected = this.dataset;
+        selected = this.dataset,
+        items = (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races;
 
     // build data specifically for this pie chart
-    Stops.races.forEach(function(race, i){
+    items.forEach(function(d, i){
         data.push({
-          "key": Stops.race_pprint.get(race),
-          "value": selected.get(race),
+          "key": Stops.pprint.get(d),
+          "value": selected.get(d),
           "color": Stops.colors[i]
         });
     });
 
     return data;
+  },
+  triggerRaceToggle: function(e, v){
+    this.set('showEthnicity', v);
+    this.drawChart();
   }
 });
 
 StopRatioTimeSeries = VisualBase.extend({
   defaults: {
+    showEthnicity: false,
     width: 750,
     height: 375
   },
@@ -468,25 +517,35 @@ StopRatioTimeSeries = VisualBase.extend({
       });
   },
   _formatData: function(){
+    var data = [],
+        items = (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races,
+        subset = [],
+        i = 0,
+        disabled;
 
-    var data = [];
-
-    this.data.line.entries().forEach(function(v, i){
+    this.data.line.forEach(function(key, vals){
+      if (items.indexOf(key) < 0) return;
       // disable by default if maximum value < 5%
-      var disabled = d3.max(v.value, function(d){return d.y;})<0.05;
+      disabled = d3.max(vals, function(d){return d.y;})<0.05;
       data.push({
-        key: Stops.race_pprint.get(v.key),
-        values: v.value,
+        key: Stops.pprint.get(key),
+        values: vals,
         color: Stops.colors[i],
         disabled: disabled
       });
+      i += 1;
     });
     return data;
+  },
+  triggerRaceToggle: function(e, v){
+    this.set('showEthnicity', v);
+    this.drawChart();
   }
 });
 
 LikelihoodOfSearch = VisualBase.extend({
   defaults: {
+    showEthnicity: true,
     width: 750,
     height: 375
   },
@@ -524,13 +583,14 @@ LikelihoodOfSearch = VisualBase.extend({
     selector
       .append(opts)
       .val("Total")
-      .on('change', getData);
+      .on('change', getData)
+      .trigger('change');
 
     $('<div>')
       .html(selector)
       .appendTo(this.div);
 
-    getData();
+    this.selector = selector;
   },
   drawChart: function(){
 
@@ -550,7 +610,11 @@ LikelihoodOfSearch = VisualBase.extend({
         stops_arr = raw.stops.filter(function(v){return v.year===year;}),
         searches_arr = raw.searches.filter(function(v){return v.year===year;}),
         stops = d3.map(),
-        searches = d3.map();
+        searches = d3.map(),
+        items = (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races,
+        base = (this.get('showEthnicity')) ? "non-hispanic" : "white",
+        defRace = (this.get('showEthnicity')) ? "hispanic" : "black",
+        baseUpper = function(d){return d.charAt(0).toUpperCase() + d.slice(1);}(base);
 
     // turn arrays into maps with purpose as the key
     stops_arr.forEach(function(v){
@@ -560,15 +624,15 @@ LikelihoodOfSearch = VisualBase.extend({
       searches.set(v.purpose, v);
     });
 
-    // build a set of bars for each race, except for white
-    Stops.races.forEach(function(race, i){
-      if(race === "white") return;
+    // build a set of bars for each race, except for base
+    items.forEach(function(race, i){
+      if(race === base) return;
 
       var bar = {
           color: Stops.colors[i],
-          key: "{0} vs. White".printf(Stops.race_pprint.get(race)),
+          key: "{0} vs. {1}".printf(Stops.pprint.get(race), baseUpper),
           values: [],
-          disabled: (race !== "black")
+          disabled: (race !== defRace)
       };
 
       // build a bar for each violation
@@ -577,21 +641,21 @@ LikelihoodOfSearch = VisualBase.extend({
         if (purpose === "Checkpoint") return;
 
         // calculate percent-difference of stops which led to searches by race,
-        // in comparison to white-baseline
+        // in comparison to base-baseline
         var search = searches.get(purpose),
             stop  = stops.get(purpose);
 
         if (search && stop){
 
-          var rate, w_rate, r_rate,
-              w_se = search.white || 0,
-              w_st = stop.white || 0,
+          var rate, base_rate, r_rate,
+              base_se = search[base] || 0,
+              base_st = stop[base] || 0,
               r_se = search[race] || 0,
               r_st = stop[race] || 0;
 
-          w_rate = w_se/w_st;
+          base_rate = base_se/base_st;
           r_rate = r_se/r_st;
-          rate = (r_rate-w_rate)/w_rate;
+          rate = (r_rate-base_rate)/base_rate;
           if(r_rate===0 || !isFinite(rate)) rate = undefined;
 
           // add purpose to list of values
@@ -610,6 +674,10 @@ LikelihoodOfSearch = VisualBase.extend({
     });
 
     return dataset;
+  },
+  triggerRaceToggle: function(e, v){
+    this.set('showEthnicity', v);
+    this.selector.trigger('change');
   }
 });
 
@@ -621,6 +689,7 @@ UseOfForceTimeSeries = StopRatioTimeSeries.extend({});
 
 ContrabandHitRateBar = VisualBase.extend({
   defaults: {
+    showEthnicity: true,
     width: 750,
     height: 375
   },
@@ -660,13 +729,14 @@ ContrabandHitRateBar = VisualBase.extend({
     selector
       .append(opts)
       .val("Total")
-      .on('change', getData);
+      .on('change', getData)
+      .trigger('change');
 
     $('<div>')
       .html(selector)
       .appendTo(this.div);
 
-    getData();
+    this.selector = selector;
   },
   drawChart: function(){
 
@@ -688,7 +758,9 @@ ContrabandHitRateBar = VisualBase.extend({
             color: Stops.single_color,
             key: "Contraband hit-rates",
             values: []
-        };
+        },
+        items = (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races,
+        ratio;
 
     if (searches_arr.length===1 && contraband_arr.length===1){
 
@@ -696,18 +768,21 @@ ContrabandHitRateBar = VisualBase.extend({
       contraband_arr = contraband_arr[0];
 
       // build a bar for each race
-      Stops.races.forEach(function(race, i){
-        var ratio = contraband_arr[race] / searches_arr[race];
+      items.forEach(function(race, i){
+        ratio = contraband_arr[race] / searches_arr[race];
         if (!isFinite(ratio)) ratio = undefined;
         dataset.values.push({
-          "label": Stops.race_pprint.get(race),
+          "label": Stops.pprint.get(race),
           "value": ratio
         });
       });
 
     }
-
     return [dataset];
+  },
+  triggerRaceToggle: function(e, v){
+    this.set('showEthnicity', v);
+    this.selector.trigger('change');
   }
 });
 
@@ -763,10 +838,8 @@ CensusTable = TableBase.extend({
 
     // create header
     row = [""];
-    row.push.apply(row, Stops.race_pprint.values());
-    row.push.apply(row, Stops.ethnicity_pprint.values());
+    row.push.apply(row, Stops.pprint.values());
     rows.push(row);
-
 
     nRaces = Stops.races.map(function(r){ return (data.get(r)||0); });
     nEthnicities = Stops.ethnicities.map(function(e){ return (data.get(e)||0); });
@@ -815,8 +888,7 @@ StopsTable = TableBase.extend({
 
     // create header
     header = ["Year"];
-    header.push.apply(header, Stops.race_pprint.values());
-    header.push.apply(header, Stops.ethnicity_pprint.values());
+    header.push.apply(header, Stops.pprint.values());
     rows.push(header);
 
     // create data rows
@@ -840,8 +912,7 @@ ContrabandTable = TableBase.extend({
 
     // create header
     header = ["Year"];
-    header.push.apply(header, Stops.race_pprint.values());
-    header.push.apply(header, Stops.ethnicity_pprint.values());
+    header.push.apply(header, Stops.pprint.values());
     rows.push(header);
 
     // create data rows
@@ -862,8 +933,7 @@ LikelihoodSearchTable = TableBase.extend({
 
     // create header
     header = ["Year", "Stop-reason"];
-    header.push.apply(header, Stops.race_pprint.values());
-    header.push.apply(header, Stops.ethnicity_pprint.values());
+    header.push.apply(header, Stops.pprint.values());
     rows.push(header);
 
     var stop, search, stop_purp, search_purp, v1, v2,
@@ -900,5 +970,32 @@ LikelihoodSearchTable = TableBase.extend({
     });
 
     return rows;
+  }
+});
+
+RaceToggle = function(updateUrl, showEthnicity){
+  this.updateUrl = updateUrl;
+  this.showEthnicity = showEthnicity;
+}
+_.extend(RaceToggle.prototype, {
+  render: function($div){
+    var self = this,
+        id,
+        inpDiv = $('<div class="radio">')
+          .append('<label><input type="radio" name="raceType" id="raceTypeRace" value="race">Race &nbsp;</label>')
+          .append('<label><input type="radio" name="raceType" id="raceTypeEthnicity" value="ethnicity">Ethnicity</label>'),
+        container = $('<div class="raceSelector pull-right">')
+          .append('<strong>View results by:</strong>')
+          .append(inpDiv)
+          .insertBefore($div);
+
+    id = (this.showEthnicity) ? "#raceTypeEthnicity" : "#raceTypeRace";
+    inpDiv.find(id).prop("checked", true);
+
+    inpDiv.find('input').on('change', function(){
+      self.showEthnicity = $(this).val()==="ethnicity";
+      $.post(self.updateUrl, {"showEthnicity": self.showEthnicity});
+      $(document).trigger('raceToggle.change', self.showEthnicity);
+    });
   }
 });
