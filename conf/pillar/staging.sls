@@ -9,11 +9,11 @@ repo:
   branch: multidb
 
 postgresql_config: # from pgtune
-  work_mem: 22MB
-  maintenance_work_mem: 224MB
-  shared_buffers: 896MB
-  effective_cache_size: 2560MB
-  checkpoint_segments: 16
+  work_mem: 44MB
+  maintenance_work_mem: 448MB
+  shared_buffers: 1792MB
+  effective_cache_size: 5GB
+  checkpoint_segments: 32
   log_min_duration_statement: 1000
 
 # Addtional public environment variables to set for the project

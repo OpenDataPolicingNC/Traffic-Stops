@@ -21,3 +21,6 @@ locale/en/
 data/nc/*
 _build
 *.priv
+*.cert
+*.key
+*.asc
