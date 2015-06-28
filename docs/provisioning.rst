@@ -418,6 +418,7 @@ __________
   fab production encrypt:BROKER_PASSWORD=`make generate-secret`
   fab production encrypt:production-ssl.cert && cat production-ssl.cert.asc
   fab production encrypt:production-ssl.key && cat production-ssl.key.asc
+  fab production encrypt:admin=<fill-me-in>
   fab production encrypt:newrelic_license_key='<fill-me-in>'
   # copy each generated encrypted key to conf/pillar/<env>.sls
   fab production setup_minion:web,balancer,db-master,cache,queue,worker -H 54.208.65.43 -u ubuntu -i ~/.ssh/traffic-stops.pem
