@@ -171,6 +171,7 @@ def setup_minion(*roles):
         'mine_functions': {
             'network.interfaces': []
         },
+        'log_level_logfile': DEFAULT_SALT_LOGLEVEL,
     }
     _, path = tempfile.mkstemp()
     with open(path, 'w') as f:
