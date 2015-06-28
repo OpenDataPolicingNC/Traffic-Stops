@@ -30,7 +30,7 @@ VALID_ROLES = (
 @task
 def staging():
     env.environment = 'staging'
-    env.master = '52.6.26.10'
+    env.master = 'ec2-52-6-26-10.compute-1.amazonaws.com'
     initialize_env()
 
 
@@ -103,10 +103,6 @@ def install_salt(version, master=False, minion=False, restart=True):
             # Already installed - if Ubuntu package, uninstall current version first
             # because we're going to do a git install later
             sudo("apt-get remove salt-minion -yq")
-        elif not install_minion and not files.exists("/etc/init/salt-minon.conf", use_sudo=True):
-            # setup_master() installs salt-minion, but not the salt-minion
-            # upstart service, so we check for the conf file
-            install_minion = True
         if restart and not install_minion:
             sudo("service salt-minion restart")
 
@@ -137,7 +133,7 @@ def setup_master():
         put(local_path='conf/master.conf',
             remote_path="/etc/salt/master", use_sudo=True)
         # install salt master if it's not there already, or restart to pick up config changes
-        install_salt(master=True, restart=True, version=SALT_VERSION)
+        install_salt(master=True, minion=True, restart=True, version=SALT_VERSION)
     generate_gpg_key()
     fetch_gpg_key()
 
