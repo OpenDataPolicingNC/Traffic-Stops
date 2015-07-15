@@ -701,6 +701,7 @@ ContrabandHitRateBar = VisualBase.extend({
       .width(this.get("width"))
       .height(this.get("height"))
       .margin({top: 20, right: 50, bottom: 20, left: 180})
+      .forceY([0, 1])
       .showLegend(false)
       .showValues(true)
       .tooltips(true)
