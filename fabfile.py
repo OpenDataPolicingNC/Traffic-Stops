@@ -346,3 +346,11 @@ def manage_run(command):
 @task
 def manage_shell():
     manage_run('shell')
+
+
+@task
+def update_project_template():
+    dest = tempfile.mkdtemp(prefix='django-project-template-')
+    cmd = 'django-admin.py startproject --template=https://github.com/caktus/django-project-template/zipball/master --extension=py,rst {} {}'
+    local(cmd.format(get_project_name(), dest))
+    local('rsync -av {}/ {}'.format(dest, PROJECT_ROOT))
