@@ -68,7 +68,7 @@ Temporarily grant our PostgreSQL user SUPERUSER privileges:
 
 .. code-block:: bash
 
-    sudo -u postgres psql -c 'ALTER USER traffic_stops_staging WITH SUPERUSER;'
+    sudo -u postgres psql -c 'ALTER USER traffic_stops_production WITH SUPERUSER;'
 
 Run the import command:
 

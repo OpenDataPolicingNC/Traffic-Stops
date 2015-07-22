@@ -6,7 +6,7 @@ domain: opendatapolicingnc.com
 
 repo:
   url: https://github.com/OpenDataPolicingNC/Traffic-Stops.git
-  branch: multidb
+  branch: master
 
 postgresql_config: # from pgtune
   work_mem: 44MB
