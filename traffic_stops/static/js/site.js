@@ -78,6 +78,7 @@ var Stops = {
     "#66ADDD",
     "#F2AC29",
   ],
+  baseline_color: "black",
   single_color: "#5C0808",
   purpose_order: d3.map({
     'Driving While Impaired': 0,
@@ -115,7 +116,7 @@ DataHandlerBase = Backbone.Model.extend({
   }
 });
 
-CensusHandler  = DataHandlerBase.extend({
+CensusHandler = DataHandlerBase.extend({
   clean_data: function(){
     // temporary for dummy census data
     var agency = this.get('agency'),
@@ -187,13 +188,23 @@ StopsHandler = DataHandlerBase.extend({
     // set object data
     this.set("data",
       {
+        type: "stop",
+        raw: this.get("raw_data"),
         pie: pie,
         line: line
       });
   }
 });
 
-SearchHandler = StopsHandler.extend({});
+SearchHandler = StopsHandler.extend({
+  clean_data: function(){
+    SearchHandler.__super__.clean_data.call(this);
+    var data = this.get("data");
+    data.type = "search";
+    this.set("data", data);
+  }
+});
+
 UseOfForceHandler = StopsHandler.extend({});
 
 LikelihoodSearchHandler = DataHandlerBase.extend({
@@ -291,6 +302,91 @@ ContrabandHitRateHandler = DataHandlerBase.extend({
   }
 });
 
+AggregateDataHandlerBase = DataHandlerBase.extend({
+  get_data: function(){
+    var self = this,
+        datas = [],
+        checkIfComplete = function(data){
+          self.numRemaining = self.numRemaining - 1;
+          datas.push(data);
+          if(self.numRemaining === 0){
+            self.set("raw_data", datas);
+            self.set("data", undefined);
+            self.clean_data();
+            self.trigger("dataLoaded", self.get("data"));
+          }
+        };
+
+    this.numRemaining = this.get("handlers").length;
+    _.each(this.get("handlers"), function(handler){
+      this.listenTo(handler, "dataLoaded", checkIfComplete);
+      this.listenTo(handler, "dataRequestFailed", this.showError);
+    }, this);
+  }
+});
+
+StopSearchHandler = AggregateDataHandlerBase.extend({
+  clean_data: function(){
+
+    var stops = _.findWhere(this.get("raw_data"), {"type": "stop"}).raw,
+        searches = _.findWhere(this.get("raw_data"), {"type": "search"}).raw,
+        years = _.chain(stops).pluck('year')
+                 .filter(function(yr){return yr>=Stops.start_year})
+                 .sort().value(),
+        lines = d3.map(),
+        tables = [],
+        stop, search, row, st, se, headers;
+
+    // get total by race
+    _.each([stops, searches], function(data){
+      _.each(data, function(yr){
+        yr.total = d3.sum(_.map(Stops.races, function(race){return yr[race] || 0;}));
+      });
+    });
+
+    // set defaults
+    _.each([Stops.races, Stops.ethnicities, ["total"]], function(dataType){
+      _.each(dataType, function(race){
+        lines.set(race, []);
+      });
+    });
+
+    // get values for table and for each line
+    headers = [Stops.races, Stops.ethnicities];
+    var headerArr = _.chain(headers).flatten().map(function(d){return Stops.pprint.get(d);}).value();
+    headerArr.unshift("Year");
+    headerArr.push("Total");
+    headers.push(["total"]);
+
+    _.each(years, function(yr){
+      stop = _.findWhere(stops, {"year": yr});
+      search = _.findWhere(searches, {"year": yr});
+      row = [yr];
+      _.each(headers, function(dataType){
+        _.each(dataType, function(race){
+          st = stop && stop[race] || 0;
+          se = search && search[race] || 0;
+          if (st===0){
+            row.push("-");
+            lines.get(race).push({x:yr , y:undefined});
+          } else {
+            row.push("{0}/{1}".printf(se, st));
+            lines.get(race).push({x:yr , y:se/st});
+          }
+        });
+      });
+      tables.push(row);
+    });
+
+    // set object data
+    this.set("data",
+      {
+        line: lines,
+        table: tables,
+        table_headers: headerArr,
+      });
+  }
+});
 
 // dashboard visuals
 VisualBase = Backbone.Model.extend({
@@ -681,6 +777,46 @@ LikelihoodOfSearch = VisualBase.extend({
   }
 });
 
+StopSearchTimeSeries = StopRatioTimeSeries.extend({
+  setDefaultChart: function(){
+    this.chart = nv.models.lineChart()
+                  .useInteractiveGuideline (true)
+                  .transitionDuration(350)
+                  .showLegend(true)
+                  .showYAxis(true)
+                  .showXAxis(true)
+                  .width(this.get("width"))
+                  .height(this.get("height"));
+
+    this.chart.xAxis
+        .axisLabel('Year');
+
+    this.chart.yAxis
+        .tickFormat(d3.format('%'));
+  },
+  _formatData: function(){
+
+    var data = StopSearchTimeSeries.__super__._formatData.call(this),
+        total = this.data.line.get('total'),
+        defaultEnabled = ["Total", "White", "Black", "Hispanic", "Non-hispanic"];
+
+    // add total-line
+    data.push({
+      key: "Total",
+      values: total,
+      color: Stops.baseline_color,
+      disabled: false
+    });
+
+    // predefine enabled/disabled lines on chart
+    _.each(data, function(d){
+      d.disabled = defaultEnabled.indexOf(d.key) === -1;
+    });
+
+    return data;
+  },
+});
+
 SearchRatioDonut = StopRatioDonut.extend({});
 SearchRatioTimeSeries = StopRatioTimeSeries.extend({});
 
@@ -701,6 +837,7 @@ ContrabandHitRateBar = VisualBase.extend({
       .width(this.get("width"))
       .height(this.get("height"))
       .margin({top: 20, right: 50, bottom: 20, left: 180})
+      .forceY([0, 1])
       .showLegend(false)
       .showValues(true)
       .tooltips(true)
@@ -814,12 +951,6 @@ TableBase = Backbone.Model.extend({
         tbl = $('<table>').attr("class", "table table-striped table-condensed dash-tables");
 
     matrix.forEach(function(row, i){
-
-      if(i===0){
-        var cols = $('<colgroup>');
-
-      }
-
       var tr = $('<tr>');
       row.forEach(function(d){
         var cell = (i === 0) ? $('<th>') : $('<td>');
@@ -897,6 +1028,22 @@ StopsTable = TableBase.extend({
       Stops.races.forEach(function(r){ row.push((v.get(r)||0).toLocaleString()); });
       Stops.ethnicities.forEach(function(e){ row.push((v.get(e)||0).toLocaleString()); });
       rows.push(row);
+    });
+
+    return rows;
+  }
+});
+
+StopSearchTable = TableBase.extend({
+  get_tabular_data: function(){
+    var header, row, rows = [];
+
+    // create header
+    rows.push(this.data.table_headers);
+
+    // create data rows
+    _.each(this.data.table, function(k, v){
+      rows.push(k)
     });
 
     return rows;

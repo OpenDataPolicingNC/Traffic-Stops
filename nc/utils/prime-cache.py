@@ -22,7 +22,10 @@ def main():
         for endpoint in ENDPOINTS:
             uri = "{}/{}/{}/".format(args.uri.rstrip('/'), agency['id'],
                                      endpoint)
-            requests.get(uri)
+            response = requests.get(uri)
+            if response.status_code != 200:
+                logging.warning("Status not OK: {} ({})".format(
+                                uri, response.status_code))
 
 
 if __name__ == "__main__":
