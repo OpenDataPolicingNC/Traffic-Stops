@@ -8,16 +8,17 @@ logger = logging.getLogger(__name__)
 ENDPOINTS = ('stops', 'stops_by_reason')
 
 
-def run(api):
+def run(api, host='opendatapolicingnc.com'):
+    headers = {'Host': host}
     # get agencies
-    r = requests.get(api)
+    r = requests.get(api, headers=headers)
     agencies = r.json()
     for agency in agencies:
         logger.info(agency['name'])
         for endpoint in ENDPOINTS:
             uri = "{}/{}/{}/".format(api.rstrip('/'), agency['id'],
                                      endpoint)
-            response = requests.get(uri)
+            response = requests.get(uri, headers=headers)
             if response.status_code != 200:
                 logging.warning("Status not OK: {} ({})".format(
                                 uri, response.status_code))
