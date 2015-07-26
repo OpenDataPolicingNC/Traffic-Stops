@@ -1,8 +1,8 @@
 NC Traffic Stops
 ================
 
-.. image:: https://badge.waffle.io/copelco/NC-Traffic-Stops.png?label=ready&title=Ready 
- :target: https://waffle.io/copelco/NC-Traffic-Stops
+.. image:: https://badge.waffle.io/OpenDataPolicingNC/Traffic-Stops.svg?label=ready&title=Ready 
+ :target: https://waffle.io/OpenDataPolicingNC/Traffic-Stops 
  :alt: 'Stories in Ready'
 
 .. image:: https://readthedocs.org/projects/nc-traffic-stops/badge/?version=latest
