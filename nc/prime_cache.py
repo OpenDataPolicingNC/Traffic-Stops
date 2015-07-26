@@ -18,10 +18,13 @@ def run(api, host='opendatapolicingnc.com'):
         for endpoint in ENDPOINTS:
             uri = "{}/{}/{}/".format(api.rstrip('/'), agency['id'],
                                      endpoint)
-            response = requests.get(uri, headers=headers)
+            try:
+                response = requests.get(uri, headers=headers)
+            except requests.ConnectionError as err:
+                logger.error(err)
             if response.status_code != 200:
-                logging.warning("Status not OK: {} ({})".format(
-                                uri, response.status_code))
+                logger.warning("Status not OK: {} ({})".format(
+                               uri, response.status_code))
 
 
 def main():
