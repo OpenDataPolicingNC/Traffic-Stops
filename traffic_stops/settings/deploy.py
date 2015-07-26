@@ -45,7 +45,8 @@ ADMINS = (
 )
 MANAGERS = ADMINS
 
-DEFAULT_FROM_EMAIL = 'no-reply@codeforamerica.org'
+SERVER_EMAIL = 'no-reply@opendatapolicingnc.com'
+DEFAULT_FROM_EMAIL = 'no-reply@opendatapolicingnc.com'
 
 EMAIL_SUBJECT_PREFIX = '[Traffic_Stops %s] ' % ENVIRONMENT.title()
 
