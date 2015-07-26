@@ -8,24 +8,28 @@ logger = logging.getLogger(__name__)
 ENDPOINTS = ('stops', 'stops_by_reason')
 
 
+def run(api):
+    # get agencies
+    r = requests.get(api)
+    agencies = r.json()
+    for agency in agencies:
+        logger.info(agency['name'])
+        for endpoint in ENDPOINTS:
+            uri = "{}/{}/{}/".format(api.rstrip('/'), agency['id'],
+                                     endpoint)
+            response = requests.get(uri)
+            if response.status_code != 200:
+                logging.warning("Status not OK: {} ({})".format(
+                                uri, response.status_code))
+
+
 def main():
     logging.basicConfig(format='%(asctime)s %(levelname)-8s %(message)s',
                         level=logging.DEBUG)
     parser = argparse.ArgumentParser()
     parser.add_argument('uri', help='Agency REST URI')
     args = parser.parse_args()
-    # get agencies
-    r = requests.get(args.uri)
-    agencies = r.json()
-    for agency in agencies:
-        logger.info(agency['name'])
-        for endpoint in ENDPOINTS:
-            uri = "{}/{}/{}/".format(args.uri.rstrip('/'), agency['id'],
-                                     endpoint)
-            response = requests.get(uri)
-            if response.status_code != 200:
-                logging.warning("Status not OK: {} ({})".format(
-                                uri, response.status_code))
+    run(args.uri)
 
 
 if __name__ == "__main__":
