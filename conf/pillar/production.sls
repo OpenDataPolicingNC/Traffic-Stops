@@ -88,16 +88,17 @@ secrets:
     -----BEGIN PGP MESSAGE-----
     Version: GnuPG v1.4.11 (GNU/Linux)
 
-    hQEMA+D0jX3LNz3XAQgAtx8XBs6uEg9lx4zFfgcqklXShgab03l5cLbVwUnY5o0a
-    MrxVcSU4VRBwy/brAIJ2eqqPJPFtC8uSb/ycdEa7FJcw1zwWvWoAH3NIjmv390Rd
-    +3RXtzvoy8EcwnLYXP/Iz7eRyRFZC2CnhqsbNe7/8EEd/58NC+4Aso3MZAhWJqpg
-    AZbV6uKOkONyocQTDmmO7JTDl+JucDWQLZDXS330q25zffDx/fxSIMe3tsdJERVb
-    H7XOElWTmyD4PSdieYrcZz4/AVJ4/+suAmhCUwajarUH/Tpzb+IcSrW+cF1Nwepo
-    9oZodfAUxTxDXK4uTX2ua2UmJ7c6TQt9DVHp34uDktJjASdelh6itA0HuVvadsE/
-    tw/seuIpEhFZ8xmUaKiYQXrR/xclGKBTvimHHRBZ8UgsJNsSINsWx1Ow9UYAEpyc
-    2fafUbtelPGnqaZGD2LfObvkF5URTOArBeXuiiqNWjG4kcUA
-    =pa7t
+    hQEMA+D0jX3LNz3XAQf+JWQ4WvvFneUFk0cUL36o72IKuNa/8bYMfO0dQRYRzgsh
+    g1jLz92SCiz0o8uGis8d9L8+gwjhfUGZvsqcOBK6D11xB1eGDE0L8NjiiSq7fPCG
+    BzXQZlLt+WIIn/iOpSIDt8DQ/jA81Fx3Ja95V0OiDWbh0+YU2svYjbv9cnjJYr1f
+    JE6OhpXUipxHiaf61H31OXIjgR3rxOs6xOcRDUCh+OprFHzoRMnBUlkGhTZzen/4
+    8XvrZ9BJhk2HWyi4X00rymBKjlHWLawE7Y9K7ko+qA4ntM7gP8l5rrE1b3qSA2oJ
+    eMasCtx54WhdMv1rWYn6mOa/blqevxLkvQAjsjwV9tJjAft/Ji7TS0PylbVWIL4J
+    0CA2T5xVznjR5zL1+gi71kf1YpQq4R1MmIHlTJ/zYSJhUHMcyyWdJf5czlHf57MP
+    gAv0wIhlGeVs/IRqT4Z6dALTtkYfhbGa34MlRTc5x9dP1cT6
+    =aGnD
     -----END PGP MESSAGE-----
+
 
 # Private deploy key. Must be GPG encrypted.
 # github_deploy_key: |-
