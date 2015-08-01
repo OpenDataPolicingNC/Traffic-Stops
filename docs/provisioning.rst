@@ -392,7 +392,8 @@ Quickstart
 Staging
 _______
 
-::
+.. code-block:: bash
+
   ssh-keygen -f "$HOME/.ssh/known_hosts" -R dev.opendatapolicingnc.com
   ssh-keygen -f "$HOME/.ssh/known_hosts" -R 52.6.26.10
   fab -u ubuntu -i ~/.ssh/traffic-stops.pem staging setup_master
@@ -408,7 +409,8 @@ _______
 Production
 __________
 
-::
+.. code-block:: bash
+
   ssh-keygen -f "$HOME/.ssh/known_hosts" -R dev.opendatapolicingnc.com
   ssh-keygen -f "$HOME/.ssh/known_hosts" -R 54.208.65.43
   fab -u ubuntu -i ~/.ssh/traffic-stops.pem production setup_master
