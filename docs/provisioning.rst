@@ -394,36 +394,36 @@ _______
 
 .. code-block:: bash
 
-  ssh-keygen -f "$HOME/.ssh/known_hosts" -R dev.opendatapolicingnc.com
-  ssh-keygen -f "$HOME/.ssh/known_hosts" -R 52.6.26.10
-  fab -u ubuntu -i ~/.ssh/traffic-stops.pem staging setup_master
-  fab staging encrypt:DB_PASSWORD=`make generate-secret`
-  fab staging encrypt:SECRET_KEY=`make generate-secret length=64`
-  fab staging encrypt:BROKER_PASSWORD=`make generate-secret`
-  fab staging encrypt:newrelic_license_key='<fill-me-in>'
-  # copy each generated encrypted key to conf/pillar/<env>.sls
-  fab staging setup_minion:web,balancer,db-master,cache,queue,worker -H dev.opendatapolicingnc.com -u ubuntu -i ~/.ssh/traffic-stops.pem
-  fab staging deploy -H dev.opendatapolicingnc.com -u ubuntu -i ~/.ssh/traffic-stops.pem
-  fab staging deploy
+    ssh-keygen -f "$HOME/.ssh/known_hosts" -R dev.opendatapolicingnc.com
+    ssh-keygen -f "$HOME/.ssh/known_hosts" -R 52.6.26.10
+    fab -u ubuntu -i ~/.ssh/traffic-stops.pem staging setup_master
+    fab staging encrypt:DB_PASSWORD=`make generate-secret`
+    fab staging encrypt:SECRET_KEY=`make generate-secret length=64`
+    fab staging encrypt:BROKER_PASSWORD=`make generate-secret`
+    fab staging encrypt:newrelic_license_key='<fill-me-in>'
+    # copy each generated encrypted key to conf/pillar/<env>.sls
+    fab staging setup_minion:web,balancer,db-master,cache,queue,worker -H dev.opendatapolicingnc.com -u ubuntu -i ~/.ssh/traffic-stops.pem
+    fab staging deploy -H dev.opendatapolicingnc.com -u ubuntu -i ~/.ssh/traffic-stops.pem
+    fab staging deploy
 
 Production
 __________
 
 .. code-block:: bash
 
-  ssh-keygen -f "$HOME/.ssh/known_hosts" -R dev.opendatapolicingnc.com
-  ssh-keygen -f "$HOME/.ssh/known_hosts" -R 54.208.65.43
-  fab -u ubuntu -i ~/.ssh/traffic-stops.pem production setup_master
-  rm production*.asc
-  fab production encrypt:DB_PASSWORD=`make generate-secret`
-  fab production encrypt:SECRET_KEY=`make generate-secret length=64`
-  fab production encrypt:BROKER_PASSWORD=`make generate-secret`
-  fab production encrypt:production-ssl.cert && cat production-ssl.cert.asc
-  fab production encrypt:production-ssl.key && cat production-ssl.key.asc
-  fab production encrypt:admin=<fill-me-in>
-  fab production encrypt:newrelic_license_key='<fill-me-in>'
-  # copy each generated encrypted key to conf/pillar/<env>.sls
-  fab production setup_minion:web,balancer,db-master,cache,queue,worker -H 54.208.65.43 -u ubuntu -i ~/.ssh/traffic-stops.pem
-  fab production sync
-  fab production deploy -H dev.opendatapolicingnc.com -u ubuntu -i ~/.ssh/traffic-stops.pem
-  fab production deploy
+    ssh-keygen -f "$HOME/.ssh/known_hosts" -R dev.opendatapolicingnc.com
+    ssh-keygen -f "$HOME/.ssh/known_hosts" -R 54.208.65.43
+    fab -u ubuntu -i ~/.ssh/traffic-stops.pem production setup_master
+    rm production*.asc
+    fab production encrypt:DB_PASSWORD=`make generate-secret`
+    fab production encrypt:SECRET_KEY=`make generate-secret length=64`
+    fab production encrypt:BROKER_PASSWORD=`make generate-secret`
+    fab production encrypt:production-ssl.cert && cat production-ssl.cert.asc
+    fab production encrypt:production-ssl.key && cat production-ssl.key.asc
+    fab production encrypt:admin=<fill-me-in>
+    fab production encrypt:newrelic_license_key='<fill-me-in>'
+    # copy each generated encrypted key to conf/pillar/<env>.sls
+    fab production setup_minion:web,balancer,db-master,cache,queue,worker -H 54.208.65.43 -u ubuntu -i ~/.ssh/traffic-stops.pem
+    fab production sync
+    fab production deploy -H dev.opendatapolicingnc.com -u ubuntu -i ~/.ssh/traffic-stops.pem
+    fab production deploy
