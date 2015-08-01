@@ -9,12 +9,13 @@ repo:
   branch: master
 
 postgresql_config: # from pgtune
-  work_mem: 44MB
+  work_mem: 88MB
   maintenance_work_mem: 448MB
   shared_buffers: 1792MB
   effective_cache_size: 5GB
   checkpoint_segments: 32
   log_min_duration_statement: 1000
+  random_page_cost: 1
 
 # Addtional public environment variables to set for the project
 env:
