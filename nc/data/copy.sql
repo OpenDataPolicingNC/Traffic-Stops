@@ -68,6 +68,13 @@ WHERE
    nc_stop.agency_description = nc_agency.name;
 COMMIT;
 
+BEGIN;
+CREATE INDEX ON nc_stop (purpose);
+CREATE INDEX ON nc_stop (date);
+CREATE INDEX ON nc_person (type);
+CREATE INDEX ON nc_person (race);
+CREATE INDEX ON nc_person (ethnicity);
+COMMIT;
 
 BEGIN;
 ANALYZE;
