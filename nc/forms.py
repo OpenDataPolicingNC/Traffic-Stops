@@ -15,7 +15,7 @@ class SearchForm(forms.Form):
         help_text="ex: Durham Police Department"
     )
     officer = forms.CharField(required=False, help_text="ex: 227")
-    date = forms.DateField(help_text="ex: 8/13/2012")
+    date = forms.DateField(required=False, help_text="ex: 8/13/2012")
     purpose = forms.MultipleChoiceField(required=False,
                                         choices=stops.PURPOSE_CHOICES,
                                         widget=forms.CheckboxSelectMultiple)
