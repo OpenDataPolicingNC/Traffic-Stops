@@ -6,7 +6,7 @@ NC Traffic Stops
  :alt: 'Stories in Ready'
 
 .. image:: https://readthedocs.org/projects/nc-traffic-stops/badge/?version=latest
-  :target: https://readthedocs.org/projects/nc-traffic-stops/?badge=latest
+  :target: http://nc-traffic-stops.readthedocs.org/en/latest/
   :alt: Documentation Status
 
 NC Traffic Stops is a website to monitor and identify racial profiling
