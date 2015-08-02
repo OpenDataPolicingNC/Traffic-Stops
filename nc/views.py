@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect, Http404
 from django.views.generic import ListView, DetailView, View
-from django.db.models import Count
 from django.http import HttpResponse, HttpResponseNotAllowed
 from nc.models import Stop, Agency, Person
 from nc import forms

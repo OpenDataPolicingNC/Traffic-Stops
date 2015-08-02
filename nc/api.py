@@ -8,7 +8,7 @@ from rest_framework_extensions.cache.decorators import cache_response
 from rest_framework_extensions.key_constructor import bits
 from rest_framework_extensions.key_constructor.constructors import DefaultObjectKeyConstructor
 
-from nc.models import Agency, Stop, Person
+from nc.models import Agency, Stop
 from nc import serializers
 from nc.utils import GroupedData
 

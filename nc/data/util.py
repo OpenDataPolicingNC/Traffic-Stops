@@ -37,7 +37,7 @@ def download_and_unzip_data(url, destination):
     downloaded = 0
     with open(zip_filename, 'wb') as f:
         for chunk in response.iter_content(chunk_size=1024):
-            if chunk: 
+            if chunk:
                 downloaded += len(chunk)
                 now = time.clock()
                 if (now - start) >= 5:
