@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 
 from nc.models import Stop
-from nc.routers import StateDatasetRouter
+from traffic_stops.routers import StateDatasetRouter
 
 
 class StateDatasetRouterTest(TestCase):
