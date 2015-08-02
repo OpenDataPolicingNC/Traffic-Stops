@@ -1,9 +1,9 @@
-#!/bin/sh -ex
+#!/bin/sh
+set -ex
 
 # Check PEP-8
-if ! flake8 traffic_stops ; then
-  echo "PEP-8 checking failed"
-  exit 1
-fi
+# flake8 .
 
-coverage run manage.py test  --settings=traffic_stops.settings.dev "$@" && coverage report
+rm -f .coverage
+coverage run manage.py test --noinput --settings=traffic_stops.settings.dev "$@"
+coverage report
