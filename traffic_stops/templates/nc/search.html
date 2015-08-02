@@ -5,6 +5,36 @@
     {% include_ui_theme %}
     {% include_jquery_libs %}
     {{ form.media }}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var $start = $("#id_start_date"),
+                $end = $("#id_end_date");
+
+            // add datepicker widgets
+            $("#id_start_date, #id_end_date").datepicker({
+                minDate: new Date(Stops.start_year, 0, 1),
+                maxDate: new Date(Stops.end_year, 11, 31),
+                changeMonth: true,
+                changeYear: true,
+                yearRange: Stops.start_year + ':' + Stops.end_year,
+                dateFormat: "mm/dd/yy",
+            });
+
+            // set new end-date whenever start-date changes
+            $start.change(function(v){
+                var start = $start.val(),
+                    end = $end.val(),
+                    newVal = (end === "") ? start : end,
+                    diff;
+                try {
+                    if ((Date.parse(end) - Date.parse(start)) < 0) newVal = start;
+                } catch (e) {
+                    newVal = end;
+                }
+                $end.val(newVal);
+            });
+        });
+    </script>
 {% endblock extra-js %}
 
 {% block title %}Find a Traffic Stop{% endblock %}

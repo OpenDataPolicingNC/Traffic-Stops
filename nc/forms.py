@@ -1,4 +1,5 @@
 import datetime
+import operator
 
 from django import forms
 from django.db.models import Q
@@ -15,13 +16,34 @@ class SearchForm(forms.Form):
         help_text="ex: Durham Police Department"
     )
     officer = forms.CharField(required=False, help_text="ex: 227")
-    date = forms.DateField(required=False, help_text="ex: 8/13/2012")
+    start_date = forms.DateField(required = False,
+                                 help_text="ex: 8/13/2012")
+    end_date = forms.DateField(required = False,
+                               help_text="ex: 8/13/2012")
     purpose = forms.MultipleChoiceField(required=False,
                                         choices=stops.PURPOSE_CHOICES,
                                         widget=forms.CheckboxSelectMultiple)
     action = forms.MultipleChoiceField(required=False,
                                        choices=stops.ACTION_CHOICES,
                                        widget=forms.CheckboxSelectMultiple)
+
+    def clean(self):
+        cleaned_data = super(SearchForm, self).clean()
+
+        start_date = cleaned_data.get('start_date')
+        end_date = cleaned_data.get('end_date')
+        if start_date is not None and end_date is not None:
+
+            if start_date > end_date:
+                err = "End date must be greater than or equal to start-date"
+                self.add_error('end_date', err)
+
+            dt = end_date - start_date
+            if dt.days  > 366:  # allow for leap-year
+                err = "Date-range must be less than or equal to one-year"
+                self.add_error('end_date', err)
+
+        return cleaned_data
 
     def clean_agency(self):
         agency = self.cleaned_data['agency']
@@ -40,10 +62,12 @@ class SearchForm(forms.Form):
         officer = self.cleaned_data['officer']
         if officer:
             query &= Q(stop__officer_id=officer)
-        date = self.cleaned_data['date']
-        if date:
-            query &= Q(stop__date__gte=date,
-                       stop__date__lt=date + datetime.timedelta(days=1))
+        start_date = self.cleaned_data['start_date']
+        if start_date:
+            query &= Q(stop__date__gte=start_date)
+        end_date = self.cleaned_data['end_date']
+        if end_date:
+            query &= Q(stop__date__lte=end_date + datetime.timedelta(days=1))
         purpose = self.cleaned_data['purpose']
         if purpose:
             query &= Q(stop__purpose__in=purpose)
