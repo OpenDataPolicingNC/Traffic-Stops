@@ -82,3 +82,14 @@ When finished, revoke SUPERUSER privileges:
 
 .. code-block:: bash
     sudo -u postgres psql -c 'ALTER USER traffic_stops_staging WITH NOSUPERUSER;'
+
+
+Create DB Dump
+______________
+
+.. code-block:: bash
+
+    sudo -u postgres pg_dump -Ox -Ft traffic_stops_nc_production > traffic_stops_nc_production.tar
+    zip traffic_stops_nc_production.tar.zip traffic_stops_nc_production.tar
+    # then on local laptop, run:
+    scp opendatapolicingnc.com:traffic_stops_nc_production.tar.zip .
