@@ -1,6 +1,5 @@
 import logging
 import os
-import subprocess
 import tempfile
 
 from django.conf import settings
@@ -52,7 +51,7 @@ def create_schema(format_path, schema_path):
     """
     Create in2csv-compatible schema file.
 
-    Use MSSQL format files [1] (included in the data dump) to build 
+    Use MSSQL format files [1] (included in the data dump) to build
     schema files [2] for use with the in2csv command.
 
     [1] Non-XML Format Files (SQL Server)
@@ -60,11 +59,11 @@ def create_schema(format_path, schema_path):
     [2] https://csvkit.readthedocs.org/en/0.9.1/scripts/in2csv.html#description
     """
     mapping = {'length': (36, 44),
-           'name': (59, 86)}
+               'name': (59, 86)}
     schema = ['column,start,length']
     with open(format_path, 'r') as f:
-        version = f.readline().strip()
-        num_columns = int(f.readline())
+        version = f.readline().strip()  # noqa
+        num_columns = int(f.readline())  # noqa
         start = 0
         for line in f:
             name = line[mapping['name'][0]:mapping['name'][1]].strip()
@@ -93,7 +92,10 @@ def convert_to_csv(destination):
         logger.info("Converting {} > {}".format(data_path, csv_path))
         # Convert to CSV using ISO-8859-1 encoding
         # TODO: This may be incorrect https://en.wikipedia.org/wiki/Windows-1252
-        call(["in2csv -e iso-8859-1 -f fixed -s {} {} > {}".format(schema_path, data_path, csv_path)], shell=True)
+        call(["in2csv -e iso-8859-1 -f fixed -s {} {} > {}".format(schema_path,
+                                                                   data_path,
+                                                                   csv_path)],
+             shell=True)
         call([r"sed -i 's/\x0//g' {}".format(csv_path)], shell=True)
         data_count = line_count(data_path)
         csv_count = line_count(csv_path)
@@ -106,7 +108,7 @@ def convert_to_csv(destination):
 
 def get_constraints_sql(select_sql):
     """
-    Simple wrapper function used to execute a SQL query that returns a 
+    Simple wrapper function used to execute a SQL query that returns a
     list of SQL commands to be run later.
     """
     cursor.execute(select_sql)
@@ -129,17 +131,17 @@ def copy_from(destination):
 
 
 # SQL commands to drop/create all nc_* table constraints
-# Adapted from: http://blog.hagander.net/archives/131-Automatically-dropping-and-creating-constraints.html
+# Adapted from: http://blog.hagander.net/archives/131-Automatically-dropping-and-creating-constraints.html    # noqa
 
 
 SELECT_DROP_CONSTRAINTS_SQL = """
 SELECT 'ALTER TABLE "'||nspname||'"."'||relname||'" DROP CONSTRAINT IF EXISTS "'||conname||'";'
-FROM pg_constraint 
-INNER JOIN pg_class ON conrelid=pg_class.oid 
-INNER JOIN pg_namespace ON pg_namespace.oid=pg_class.relnamespace 
+FROM pg_constraint
+INNER JOIN pg_class ON conrelid=pg_class.oid
+INNER JOIN pg_namespace ON pg_namespace.oid=pg_class.relnamespace
 WHERE relname LIKE 'nc_%'
 ORDER BY CASE WHEN contype='f' THEN 0 ELSE 1 END,contype,nspname,relname,conname;
-"""
+"""  # noqa
 
 SELECT_ADD_CONSTRAINTS_SQL = """
 SELECT 'ALTER TABLE "'||nspname||'"."'||relname||'" ADD CONSTRAINT "'||conname||'" '||pg_get_constraintdef(pg_constraint.oid)||';'
@@ -148,4 +150,4 @@ INNER JOIN pg_class ON conrelid=pg_class.oid
 INNER JOIN pg_namespace ON pg_namespace.oid=pg_class.relnamespace
 WHERE relname LIKE 'nc_%'
 ORDER BY CASE WHEN contype='f' THEN 0 ELSE 1 END DESC,contype DESC,nspname DESC,relname DESC,conname DESC;
-"""
+"""  # noqa

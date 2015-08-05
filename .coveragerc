@@ -1,6 +1,6 @@
 [run]
 branch = true
-source = users,events
+source = traffic_stops,nc
 omit = */tests/*, */migrations/*, */admin.py, */management/*
 
 [report]

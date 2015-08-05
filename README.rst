@@ -9,6 +9,9 @@ NC Traffic Stops
   :target: http://nc-traffic-stops.readthedocs.org/en/latest/
   :alt: Documentation Status
 
+.. image:: https://travis-ci.org/OpenDataPolicingNC/Traffic-Stops.svg?branch=master
+    :target: https://travis-ci.org/OpenDataPolicingNC/Traffic-Stops
+
 NC Traffic Stops is a website to monitor and identify racial profiling
 practices by North Carolina law enforcement agencies. This project is lead by
 the `Southern Coalition for Social Justice`_, a Durham-based civil rights
