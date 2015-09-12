@@ -33,7 +33,7 @@ LOGGING['handlers']['file']['filename'] = os.path.join(
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'BACKEND': 'caching.backends.memcached.MemcachedCache',
         'LOCATION': '%(CACHE_HOST)s' % os.environ,
     }
 }
