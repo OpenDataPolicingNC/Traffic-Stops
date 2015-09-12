@@ -16,3 +16,4 @@ djangorestframework==2.4.3
 drf-extensions==0.2.6
 requests==2.7.0
 csvkit==0.9.1
+django-cache-machine==0.9

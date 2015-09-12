@@ -1,5 +1,7 @@
 from django.db import models
 
+from caching.base import CachingManager, CachingMixin
+
 
 PURPOSE_CHOICES = ((1, 'Speed Limit Violation'),
                    (2, 'Stop Light/Sign Violation'),
@@ -19,7 +21,41 @@ ACTION_CHOICES = ((1, 'Verbal Warning'),
                   (5, 'No Action Taken'))
 
 
-class Stop(models.Model):
+PERSON_TYPE_CHOICES = (("D", "Driver"),
+                       ("P", "Passenger"))
+
+
+GENDER_CHOICES = (("M", "Male"),
+                  ("F", "Female"))
+
+
+ETHNICITY_CHOICES = (('H', 'Hispanic'),
+                     ('N', 'Non-Hispanic'))
+
+
+RACE_CHOICES = (('A', 'Asian'),
+                ('B', 'Black'),
+                ('I', 'Native American'),
+                ('U', 'Other'),
+                ('W', 'White'))
+
+
+SEARCH_TYPE_CHOICES = ((1, 'Consent'),
+                       (2, 'Search Warrant'),
+                       (3, 'Probable Cause'),
+                       (4, 'Search Incident to Arrest'),
+                       (5, 'Protective Frisk'))
+
+
+SEARCH_BASIS_CHOICES = (('ER',   'Erratic/Suspicious Behavior'),
+                        ('OB',   'Observation of Suspected Contraband'),
+                        ('OI',   'Other Official Information'),
+                        ('SM',   'Suspicious Movement'),
+                        ('TIP',  'Informant Tip'),
+                        ('WTNS', 'Witness Observation'))
+
+
+class Stop(CachingMixin, models.Model):
     stop_id = models.PositiveIntegerField(primary_key=True)
     agency_description = models.CharField(max_length=100)
     agency = models.ForeignKey('Agency', null=True, related_name='stops')
@@ -37,25 +73,10 @@ class Stop(models.Model):
     stop_location = models.CharField(max_length=15)  # todo: keys
     stop_city = models.CharField(max_length=20)
 
-
-PERSON_TYPE_CHOICES = (("D", "Driver"),
-                       ("P", "Passenger"))
-
-GENDER_CHOICES = (("M", "Male"),
-                  ("F", "Female"))
-
-ETHNICITY_CHOICES = (('H', 'Hispanic'),
-                     ('N', 'Non-Hispanic'))
+    objects = CachingManager()
 
 
-RACE_CHOICES = (('A', 'Asian'),
-                ('B', 'Black'),
-                ('I', 'Native American'),
-                ('U', 'Other'),
-                ('W', 'White'))
-
-
-class Person(models.Model):
+class Person(CachingMixin, models.Model):
     person_id = models.IntegerField(primary_key=True)
     stop = models.ForeignKey(Stop)
     type = models.CharField(max_length=2, choices=PERSON_TYPE_CHOICES)
@@ -64,15 +85,10 @@ class Person(models.Model):
     ethnicity = models.CharField(max_length=2, choices=ETHNICITY_CHOICES)
     race = models.CharField(max_length=2, choices=RACE_CHOICES)
 
-
-SEARCH_TYPE_CHOICES = ((1, 'Consent'),
-                       (2, 'Search Warrant'),
-                       (3, 'Probable Cause'),
-                       (4, 'Search Incident to Arrest'),
-                       (5, 'Protective Frisk'))
+    objects = CachingManager()
 
 
-class Search(models.Model):
+class Search(CachingMixin, models.Model):
     search_id = models.IntegerField(primary_key=True)
     stop = models.ForeignKey(Stop)
     person = models.ForeignKey(Person)
@@ -85,8 +101,10 @@ class Search(models.Model):
     personal_property_siezed = models.BooleanField(default=False)
     other_property_sized = models.BooleanField(default=False)
 
+    objects = CachingManager()
 
-class Contraband(models.Model):
+
+class Contraband(CachingMixin, models.Model):
     contraband_id = models.IntegerField(primary_key=True)
     search = models.ForeignKey(Search)
     person = models.ForeignKey(Person)
@@ -102,25 +120,23 @@ class Contraband(models.Model):
     weapons = models.FloatField(default=0, null=True)
     dollar_amount = models.FloatField(default=0, null=True)
 
-
-SEARCH_BASIS_CHOICES = (('ER',   'Erratic/Suspicious Behavior'),
-                        ('OB',   'Observation of Suspected Contraband'),
-                        ('OI',   'Other Official Information'),
-                        ('SM',   'Suspicious Movement'),
-                        ('TIP',  'Informant Tip'),
-                        ('WTNS', 'Witness Observation'))
+    objects = CachingManager()
 
 
-class SearchBasis(models.Model):
+class SearchBasis(CachingMixin, models.Model):
     search_basis_id = models.IntegerField(primary_key=True)
     search = models.ForeignKey(Search)
     person = models.ForeignKey(Person)
     stop = models.ForeignKey(Stop)
     basis = models.CharField(max_length=4, choices=SEARCH_BASIS_CHOICES)
 
+    objects = CachingManager()
 
-class Agency(models.Model):
+
+class Agency(CachingMixin, models.Model):
     name = models.CharField(max_length=255)
+
+    objects = CachingManager()
 
     class Meta(object):
         verbose_name_plural = 'Agencies'

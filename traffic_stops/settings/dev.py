@@ -20,6 +20,12 @@ CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
 
 COMPRESS_ENABLED = False
 
+CACHES = {
+    'default': {
+        'BACKEND': 'caching.backends.locmem.LocMemCache',
+    },
+}
+
 # Special test settings
 if 'test' in sys.argv:
     COMPRESS_PRECOMPILERS = ()
