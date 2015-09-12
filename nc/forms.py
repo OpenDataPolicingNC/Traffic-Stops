@@ -1,5 +1,4 @@
 import datetime
-import operator
 
 from django import forms
 from django.db.models import Q
@@ -16,9 +15,9 @@ class SearchForm(forms.Form):
         help_text="ex: Durham Police Department"
     )
     officer = forms.CharField(required=False, help_text="ex: 227")
-    start_date = forms.DateField(required = False,
+    start_date = forms.DateField(required=False,
                                  help_text="ex: 8/13/2012")
-    end_date = forms.DateField(required = False,
+    end_date = forms.DateField(required=False,
                                help_text="ex: 8/13/2012")
     purpose = forms.MultipleChoiceField(required=False,
                                         choices=stops.PURPOSE_CHOICES,
@@ -39,7 +38,7 @@ class SearchForm(forms.Form):
                 self.add_error('end_date', err)
 
             dt = end_date - start_date
-            if dt.days  > 366:  # allow for leap-year
+            if dt.days > 366:  # allow for leap-year
                 err = "Date-range must be less than or equal to one-year"
                 self.add_error('end_date', err)
 
