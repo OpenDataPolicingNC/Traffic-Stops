@@ -13,9 +13,10 @@ To load the database dump, run:
 
 .. code-block:: bash
 
-    sudo -u postgres dropdb traffic_stops
-    sudo -u postgres createdb -E UTF-8 traffic_stops
-    sudo -u postgres pg_restore -d traffic_stops /path/to/traffic_stops.tar
+    dropdb traffic_stops_nc
+    createdb -E UTF-8 traffic_stops_nc
+    unzip traffic_stops_nc_production.tar.zip
+    pg_restore -Ox -d traffic_stops_nc traffic_stops_nc_production.tar
 
 To create the database dump, run:
 
