@@ -5,7 +5,7 @@ import requests
 
 
 logger = logging.getLogger(__name__)
-ENDPOINTS = ('stops', 'stops_by_reason')
+ENDPOINTS = ('stops', 'stops_by_reason', 'use_of_force', 'searches', 'contraband_hit_rate')
 
 
 def run(api, host='opendatapolicingnc.com'):
