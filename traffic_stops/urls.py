@@ -15,4 +15,5 @@ urlpatterns = patterns('',  # noqa
     url(r'^selectable/', include('selectable.urls')),
     url(r'^', include('nc.urls')),
     url(r'^update-session/', UpdateSession.as_view(), name='update_session'),
+    (r'^robots\.txt$', include('robots.urls')),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

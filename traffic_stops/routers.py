@@ -31,11 +31,6 @@ class StateDatasetRouter(object):
         logger.debug('db_for_write({}): {}'.format(state_db, name))
         return name
 
-    def allow_relation(self, obj1, obj2, **hints):
-        name1 = self._db_name(obj1)
-        name2 = self._db_name(obj2)
-        return name1 == name2
-
     def allow_syncdb(self, db, model):
         # scenarios:
         #
