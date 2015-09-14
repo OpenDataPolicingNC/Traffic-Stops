@@ -141,6 +141,7 @@ INSTALLED_APPS = (
     'bootstrap3',
     'endless_pagination',
     'rest_framework',
+    'robots',
     # Custom apps
     'nc'
 )
