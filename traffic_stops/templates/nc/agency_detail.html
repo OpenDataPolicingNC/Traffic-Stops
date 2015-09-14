@@ -301,7 +301,7 @@
     </div>
 
     <div id="use_force_div" class="col-md-8">
-      <h3>Annual percent of use-of-force by race</h3>
+      <h3>Annual use-of-force by race/ethnicity</h3>
 
       <div role="tabpanel">
 
@@ -384,7 +384,7 @@
       new ContrabandTable({handler: chr_handler, selector: "#chr_data", showEthnicity: showEthnicity});
 
       new UseOfForceDonut({handler: uf_handler, selector: "#use_force_race_pie", showEthnicity: showEthnicity});
-      new UseOfForceTimeSeries({handler: uf_handler, selector: "#use_force_race_line", showEthnicity: showEthnicity});
+      new UseOfForceBarChart({handler: uf_handler, selector: "#use_force_race_line", showEthnicity: showEthnicity});
       new UseOfForceTable({handler: uf_handler, selector: "#use_force_race__data", showEthnicity: showEthnicity});
 
       new RaceToggle("{% url 'update_session' %}", showEthnicity).render($('h1'));
