@@ -15,7 +15,8 @@ To load the database dump, run:
 
     dropdb traffic_stops_nc
     createdb -E UTF-8 traffic_stops_nc
-    unzip traffic_stops_nc_production.tar.zip
+    wget https://s3-us-west-2.amazonaws.com/openpolicingdata/traffic_stops_nc_production_20150801.tar.zip
+    unzip traffic_stops_nc_production_20150801.tar.zip
     pg_restore -Ox -d traffic_stops_nc traffic_stops_nc_production.tar
 
 To create the database dump, run:
