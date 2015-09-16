@@ -11,9 +11,9 @@
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
+        <li><a href="{% url "about" %}">About</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="http://nc-traffic-stops.readthedocs.org/">Documentation</a></li>
         <li><a href='{% url "agency-list" %}'>Agencies</a></li>
         <li><a href='{% url "stops-search" %}'>Find a stop</a></li>
         {% if user.is_authenticated %}

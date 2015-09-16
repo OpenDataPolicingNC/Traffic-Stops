@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, Http404
-from django.views.generic import ListView, DetailView, View
+from django.views.generic import ListView, DetailView, View, TemplateView
 from django.http import HttpResponse, HttpResponseNotAllowed
 from nc.models import Stop, Agency, Person
 from nc import forms
@@ -15,6 +15,10 @@ def home(request):
         form = forms.AgencySearchForm()
     context = {'agency_form': form}
     return render(request, 'home.html', context)
+
+
+class About(TemplateView):
+    template_name="about.html"
 
 
 class UpdateSession(View):
