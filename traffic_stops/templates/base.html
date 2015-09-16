@@ -53,7 +53,9 @@
     {% block footer %}
     <div id="footer">
       <div class="container">
-        <p class="small text-muted credit">NC Traffic Stops - <a href='http://www.southerncoalition.org/'>Southern Coalition for Social Justice</a></p>
+        <p class="small text-muted credit">NC Traffic Stops - <a href='http://www.southerncoalition.org/'>Southern Coalition for Social Justice</a>
+        - <a href="{% url "admin:index" %}">Admin</a>
+        </p>
       </div>
     </div>
     {% endblock footer %}
@@ -84,7 +86,7 @@
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-    
+
       ga('create', 'UA-63028976-1', 'auto');
       ga('send', 'pageview');
     </script>

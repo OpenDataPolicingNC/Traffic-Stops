@@ -16,9 +16,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="http://nc-traffic-stops.readthedocs.org/">Documentation</a></li>
-        {% if not user.is_authenticated %}
-            <li><a href="{% url "admin:index" %}">Log In</a></li>
-        {% else %}
+        {% if user.is_authenticated %}
             {% if user.is_staff %}
               <li><a href="{% url "admin:index" %}">Admin</a></li>
             {% endif %}
