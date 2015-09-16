@@ -8,6 +8,12 @@ from nc import models as stops
 from nc.lookups import AgencyLookup
 
 
+def addNoneOpt(choices):
+    opts = list(choices)
+    opts.insert(0, (None, "---"))
+    return opts
+
+
 class SearchForm(forms.Form):
     agency = forms.CharField(
         label='Agency Name',
@@ -25,6 +31,18 @@ class SearchForm(forms.Form):
     action = forms.MultipleChoiceField(required=False,
                                        choices=stops.ACTION_CHOICES,
                                        widget=forms.CheckboxSelectMultiple)
+    age = forms.IntegerField(
+        required=False,
+        min_value=0,
+        max_value=130)
+    race = forms.ChoiceField(
+        required=False,
+        initial=None,
+        choices=addNoneOpt(stops.RACE_CHOICES))
+    ethnicity = forms.ChoiceField(
+        required=False,
+        initial=None,
+        choices=addNoneOpt(stops.ETHNICITY_CHOICES))
 
     def clean(self):
         cleaned_data = super(SearchForm, self).clean()
@@ -67,6 +85,15 @@ class SearchForm(forms.Form):
         end_date = self.cleaned_data['end_date']
         if end_date:
             query &= Q(stop__date__lte=end_date + datetime.timedelta(days=1))
+        age = self.cleaned_data['age']
+        if age:
+            query &= Q(stop__person__age=age) & Q(stop__person__type="D")
+        race = self.cleaned_data['race']
+        if race:
+            query &= Q(stop__person__race=race) & Q(stop__person__type="D")
+        ethnicity = self.cleaned_data['ethnicity']
+        if ethnicity:
+            query &= Q(stop__person__ethnicity=ethnicity) & Q(stop__person__type="D")
         purpose = self.cleaned_data['purpose']
         if purpose:
             query &= Q(stop__purpose__in=purpose)
