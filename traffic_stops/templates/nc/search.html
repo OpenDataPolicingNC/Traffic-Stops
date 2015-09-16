@@ -8,23 +8,28 @@
     <script type="text/javascript">
         $(document).ready(function(){
             var $start = $("#id_start_date"),
-                $end = $("#id_end_date");
+                $end = $("#id_end_date"),
+                now = new Date(),
+                opts = {
+                    minDate: new Date(Stops.start_year, 0, 1),
+                    maxDate: new Date(Stops.end_year, 11, 31),
+                    changeMonth: true,
+                    changeYear: true,
+                    yearRange: Stops.start_year + ':' + Stops.end_year,
+                    dateFormat: "mm/dd/yy",
+                };
 
             // add datepicker widgets
-            $("#id_start_date, #id_end_date").datepicker({
-                minDate: new Date(Stops.start_year, 0, 1),
-                maxDate: new Date(Stops.end_year, 11, 31),
-                changeMonth: true,
-                changeYear: true,
-                yearRange: Stops.start_year + ':' + Stops.end_year,
-                dateFormat: "mm/dd/yy",
-            });
+            $("#id_start_date").datepicker(_.extend(
+               {defaultDate: new Date(now.getFullYear()-2, 0, 1)}, opts));
+            $("#id_end_date").datepicker(_.extend(
+               {defaultDate: new Date(now.getFullYear()-2, 11, 31)}, opts));
 
             // set new end-date whenever start-date changes
             $start.change(function(v){
                 var start = $start.val(),
                     end = $end.val(),
-                    newVal = (end === "") ? start : end,
+                    newVal = end,
                     diff;
                 try {
                     if ((Date.parse(end) - Date.parse(start)) < 0) newVal = start;
@@ -32,6 +37,20 @@
                     newVal = end;
                 }
                 $end.val(newVal);
+            });
+
+            // set new start if end-date changes
+            $end.change(function(v){
+                var start = $start.val(),
+                    end = $end.val(),
+                    newVal = start,
+                    diff;
+                try {
+                    if ((Date.parse(end) - Date.parse(start)) < 0) newVal = end;
+                } catch (e) {
+                    newVal = start;
+                }
+                $start.val(newVal);
             });
         });
     </script>
