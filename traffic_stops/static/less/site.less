@@ -77,16 +77,14 @@ body#home {
   .ui-autocomplete {
     font-family: 'Droid Sans', sans-serif;
   }
+  .homeInset {
+    margin-left: 30px;
+  }
   #quick-search {
     position: fixed;
     margin-top: 80px;
-    margin-left: 30px;
     width: 100%;
     z-index: 1;
-    @media (min-width: @screen-desktop) {
-      width: 40%;
-    }
-    width: 85%;
     #agency_search {
       #id_agency_0 {
         font-size: 20px;
@@ -94,6 +92,13 @@ body#home {
         font-family: 'Droid Sans', sans-serif;
         margin-bottom: 5px;
       }
+    }
+  }
+  #elevator {
+    .textInset {
+      position: fixed;
+      margin-top: 220px;
+      font-size: 1.2em;
     }
   }
 }

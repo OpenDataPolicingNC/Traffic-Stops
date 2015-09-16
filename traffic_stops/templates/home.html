@@ -36,22 +36,33 @@
 {% block content-outer %}
 <div id="map"></div>
 <div id="quick-search">
-    <h1>NC Traffic Stops</h1>
-    <form role="form" id="agency_search" action='{% url "home" %}' method="post" accept-charset="utf-8">
-        <div class="form-group">
-        {% csrf_token %}
-        {{ agency_form.agency }}
-        {% if agency_form.agency.errors %}
-            <div class="alert alert-warning alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <ul>
-                {% for error in agency_form.agency.errors %}
-                    <li><strong>{{ error }}</strong></li>
-                {% endfor %}
-                </ul>
-            </div>
-        {% endif %}
+    <div class="row-fluid">
+        <div class="col-xs-12 col-sm-10 col-md-8 col-lg-6">
+            <h1 class="homeInset">NC Traffic Stops</h1>
+            <form role="form" id="agency_search" action='{% url "home" %}' method="post" accept-charset="utf-8">
+                <div class="form-group">
+                {% csrf_token %}
+                {{ agency_form.agency }}
+                {% if agency_form.agency.errors %}
+                    <div class="alert alert-warning alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <ul>
+                        {% for error in agency_form.agency.errors %}
+                            <li><strong>{{ error }}</strong></li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
+</div>
+<div id="elevator" class="row-fluid">
+    <div class="homeInset textInset col-xs-11 col-sm-10 col-md-8 col-lg-6">
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tincidunt urna non tortor suscipit, a cursus elit tincidunt. Interdum et malesuada fames ac ante ipsum primis in faucibus. Praesent eros tellus, sollicitudin ac felis a, pellentesque efficitur nisi. Pellentesque consequat ipsum eu est tincidunt, quis vulputate odio feugiat.
+    </p>
+    </div>
 </div>
 {% endblock %}
