@@ -883,7 +883,6 @@ UseOfForceBarChart = VisualBase.extend({
       .transitionDuration(350)
       .reduceXTicks(false)
       .rotateLabels(0)
-      .stacked(true)
       .showControls(true)
       .groupSpacing(0.1)
       .width(this.get("width"))
