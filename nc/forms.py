@@ -18,19 +18,16 @@ class SearchForm(forms.Form):
     agency = forms.CharField(
         label='Agency Name',
         widget=AutoCompleteWidget(AgencyLookup),
-        help_text="ex: Durham Police Department"
-    )
-    officer = forms.CharField(required=False, help_text="ex: 227")
-    start_date = forms.DateField(required=False,
-                                 help_text="ex: 8/13/2012")
-    end_date = forms.DateField(required=False,
-                               help_text="ex: 8/13/2012")
-    purpose = forms.MultipleChoiceField(required=False,
-                                        choices=stops.PURPOSE_CHOICES,
-                                        widget=forms.CheckboxSelectMultiple)
-    action = forms.MultipleChoiceField(required=False,
-                                       choices=stops.ACTION_CHOICES,
-                                       widget=forms.CheckboxSelectMultiple)
+        help_text="ex: Durham Police Department")
+    officer = forms.CharField(
+        required=False,
+        help_text="ex: 227")
+    start_date = forms.DateField(
+        required=False,
+        help_text="ex: 8/13/2013")
+    end_date = forms.DateField(
+        required=False,
+        help_text="ex: 8/13/2014")
     age = forms.IntegerField(
         required=False,
         min_value=0,
@@ -43,6 +40,14 @@ class SearchForm(forms.Form):
         required=False,
         initial=None,
         choices=addNoneOpt(stops.ETHNICITY_CHOICES))
+    purpose = forms.MultipleChoiceField(
+        required=False,
+        choices=stops.PURPOSE_CHOICES,
+        widget=forms.CheckboxSelectMultiple)
+    action = forms.MultipleChoiceField(
+        required=False,
+        choices=stops.ACTION_CHOICES,
+        widget=forms.CheckboxSelectMultiple)
 
     def clean(self):
         cleaned_data = super(SearchForm, self).clean()
