@@ -8,44 +8,44 @@ window.log = function f(){ log.history = log.history || []; log.history.push(arg
 
 // printf helper function for strings
 String.prototype.printf = function(){
-    //http://stackoverflow.com/questions/610406/
-    var args = arguments;
-    return this.replace(/{(\d+)}/g, function(match, number){
-        return typeof args[number] !== 'undefined' ? args[number] : match;
-    });
+  //http://stackoverflow.com/questions/610406/
+  var args = arguments;
+  return this.replace(/{(\d+)}/g, function(match, number){
+    return typeof args[number] !== 'undefined' ? args[number] : match;
+  });
 };
 
 
 // Django AJAX with CSRF protection.
 var getCookie = function(name) {
-      var cookieValue = null;
-      if (document.cookie && document.cookie !== '') {
-          var cookies = document.cookie.split(';');
-          for (var i = 0; i < cookies.length; i++) {
-              var cookie = jQuery.trim(cookies[i]);
-              // Does this cookie string begin with the name we want?
-              if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                  break;
-              }
-          }
+  var cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = jQuery.trim(cookies[i]);
+      // Does this cookie string begin with the name we want?
+      if (cookie.substring(0, name.length + 1) == (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
       }
-      return cookieValue;
-    },
-    csrftoken = getCookie('csrftoken'),
-    sessionid = getCookie('sessionid'),
-    csrfSafeMethod = function(method) {
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));  // safe methods
-    };
+    }
+  }
+  return cookieValue;
+},
+csrftoken = getCookie('csrftoken'),
+sessionid = getCookie('sessionid'),
+csrfSafeMethod = function(method) {
+  return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));  // safe methods
+};
 
 $.ajaxSetup({
-    crossDomain: false,
-    beforeSend: function(xhr, settings) {
-        if (!csrfSafeMethod(settings.type)) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            xhr.setRequestHeader("sessionid", sessionid);
-        }
+  crossDomain: false,
+  beforeSend: function(xhr, settings) {
+    if (!csrfSafeMethod(settings.type)) {
+      xhr.setRequestHeader("X-CSRFToken", csrftoken);
+      xhr.setRequestHeader("sessionid", sessionid);
     }
+  }
 });
 
 // Traffic Stops global defaults
@@ -92,8 +92,8 @@ var Stops = {
     'Vehicle Regulatory Violation': 7,
     'Seat Belt Violation': 8,
     'Checkpoint': 9  // todo: use a list and indexOf instead of map
-  })
-  };
+  }),
+};
 
 
 // data handlers to get raw-data
@@ -187,13 +187,12 @@ StopsHandler = DataHandlerBase.extend({
     });
 
     // set object data
-    this.set("data",
-      {
-        type: "stop",
-        raw: this.get("raw_data"),
-        pie: pie,
-        line: line
-      });
+    this.set("data", {
+      type: "stop",
+      raw: this.get("raw_data"),
+      pie: pie,
+      line: line
+    });
   }
 });
 
@@ -252,13 +251,12 @@ UseOfForceHandler = DataHandlerBase.extend({
     });
 
     // set object data
-    this.set("data",
-      {
-        type: "stop",
-        raw: this.get("raw_data"),
-        pie: pie,
-        line: line
-      });
+    this.set("data", {
+      type: "stop",
+      raw: this.get("raw_data"),
+      pie: pie,
+      line: line
+    });
   }
 });
 
@@ -434,12 +432,11 @@ StopSearchHandler = AggregateDataHandlerBase.extend({
     });
 
     // set object data
-    this.set("data",
-      {
-        line: lines,
-        table: tables,
-        table_headers: headerArr,
-      });
+    this.set("data", {
+      line: lines,
+      table: tables,
+      table_headers: headerArr,
+    });
   }
 });
 
@@ -459,14 +456,14 @@ VisualBase = Backbone.Model.extend({
   },
   loader_show: function(){
     this.loader_div = $('<div>')
-          .append('<p>Loading ... <i class="fa fa-cog fa-spin"></i></p>')
-          .prependTo(this.div);
+        .append('<p>Loading ... <i class="fa fa-cog fa-spin"></i></p>')
+        .prependTo(this.div);
   },
   showError: function(){
     this.loader_hide();
     this.error_div = $('<div class="bg-warning">')
-          .append('<p>An error occurred in fetching the data.</p>')
-          .prependTo(this.div);
+        .append('<p>An error occurred in fetching the data.</p>')
+        .prependTo(this.div);
   },
   loader_hide: function(){
     this.loader_div.remove();
@@ -533,11 +530,11 @@ CensusRatioDonut = VisualBase.extend({
 
     // build data specifically for this pie chart
     items.forEach(function(race, i){
-        data.push({
-          "key": Stops.pprint.get(race),
-          "value": raw.get(race),
-          "color": Stops.colors[i]
-        });
+      data.push({
+        "key": Stops.pprint.get(race),
+        "value": raw.get(race),
+        "color": Stops.colors[i]
+      });
     });
 
     return data;
@@ -613,11 +610,11 @@ StopRatioDonut = VisualBase.extend({
 
     // build data specifically for this pie chart
     items.forEach(function(d, i){
-        data.push({
-          "key": Stops.pprint.get(d),
-          "value": selected.get(d),
-          "color": Stops.colors[i]
-        });
+      data.push({
+        "key": Stops.pprint.get(d),
+        "value": selected.get(d),
+        "color": Stops.colors[i]
+      });
     });
 
     return data;
@@ -746,12 +743,12 @@ LikelihoodOfSearch = VisualBase.extend({
   drawChart: function(){
 
     d3.select(this.svg[0])
-            .datum(this.dataset)
-            .attr('width', "100%")
-            .attr('height', "100%")
-            .attr('preserveAspectRatio', "xMinYMin")
-            .attr('viewBox', "0 0 {0} {1}".printf(this.get("width"), this.get("height")))
-            .call(this.chart);
+      .datum(this.dataset)
+      .attr('width', "100%")
+      .attr('height', "100%")
+      .attr('preserveAspectRatio', "xMinYMin")
+      .attr('viewBox', "0 0 {0} {1}".printf(this.get("width"), this.get("height")))
+      .call(this.chart);
 
     nv.utils.windowResize(this.chart.update);
   },
@@ -815,7 +812,6 @@ LikelihoodOfSearch = VisualBase.extend({
             value: rate,
             order: Stops.purpose_order.get(purpose)
           });
-
         }
       });
 
