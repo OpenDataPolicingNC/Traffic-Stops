@@ -1,0 +1,2 @@
+django-extensions==1.5.7
+jupyter==1.0.0
