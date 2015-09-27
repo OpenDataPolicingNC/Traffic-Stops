@@ -1,2 +1,6 @@
+# add django_extensions to INSTALLED_APPS
+# add2virtualenv Traffic-Stops/
+# python manage.py shell_plus --notebook
+
 django-extensions==1.5.7
 jupyter==1.0.0
