@@ -96,16 +96,16 @@ class SearchForm(forms.Form):
             query &= Q(stop__date__lte=end_date + datetime.timedelta(days=1))
         age = self.cleaned_data['age']
         if age:
-            query &= Q(stop__person__age=age) & Q(stop__person__type="D")
+            query &= Q(age=age) & Q(type="D")
         gender = self.cleaned_data['gender']
         if gender:
             query &= Q(gender=gender) & Q(type="D")
         race = self.cleaned_data['race']
         if race:
-            query &= Q(stop__person__race=race) & Q(stop__person__type="D")
+            query &= Q(race=race) & Q(type="D")
         ethnicity = self.cleaned_data['ethnicity']
         if ethnicity:
-            query &= Q(stop__person__ethnicity=ethnicity) & Q(stop__person__type="D")
+            query &= Q(ethnicity=ethnicity) & Q(type="D")
         purpose = self.cleaned_data['purpose']
         if purpose:
             query &= Q(stop__purpose__in=purpose)
