@@ -18,7 +18,7 @@ def home(request):
 
 
 class About(TemplateView):
-    template_name="about.html"
+    template_name = "about.html"
 
 
 class UpdateSession(View):
