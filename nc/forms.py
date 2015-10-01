@@ -32,6 +32,10 @@ class SearchForm(forms.Form):
         required=False,
         min_value=0,
         max_value=130)
+    gender = forms.ChoiceField(
+        required=False,
+        initial=None,
+        choices=addNoneOpt(stops.GENDER_CHOICES))
     race = forms.ChoiceField(
         required=False,
         initial=None,
@@ -93,6 +97,9 @@ class SearchForm(forms.Form):
         age = self.cleaned_data['age']
         if age:
             query &= Q(stop__person__age=age) & Q(stop__person__type="D")
+        gender = self.cleaned_data['gender']
+        if gender:
+            query &= Q(gender=gender) & Q(type="D")
         race = self.cleaned_data['race']
         if race:
             query &= Q(stop__person__race=race) & Q(stop__person__type="D")
