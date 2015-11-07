@@ -27,7 +27,15 @@ DATABASES = {
         'PASSWORD': '',
         'HOST': '',
         'PORT': '',
-    }
+    },
+    'traffic_stops_md': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'traffic_stops_md',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
+    },
 }
 
 DATABASE_ROUTERS = ['traffic_stops.routers.StateDatasetRouter']
@@ -143,7 +151,8 @@ INSTALLED_APPS = (
     'rest_framework',
     'robots',
     # Custom apps
-    'nc'
+    'nc',
+    'md',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -190,7 +199,15 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
+        'tsdata': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+        },
         'nc': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+        },
+        'md': {
             'handlers': ['file'],
             'level': 'DEBUG',
         },

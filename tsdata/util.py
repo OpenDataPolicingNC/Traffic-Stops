@@ -2,6 +2,7 @@ import logging
 import os
 import requests
 import subprocess
+import tempfile
 import time
 import zipfile
 
@@ -27,8 +28,23 @@ def line_count(fname):
     return int(call(['wc', '-l', fname]).strip().split()[0])
 
 
-def download_and_unzip_data(url, destination):
+def download_and_unzip_data(url, destination, prefix='state-'):
     """Download an unzip data into destionation directory"""
+    download = True
+    # make sure destination exists or create a temporary directory
+    if not destination:
+        destination = tempfile.mkdtemp(prefix=prefix)
+        logger.debug("Created temp directory {}".format(destination))
+    else:
+        if not os.path.exists(destination):
+            os.makedirs(destination)
+            logger.info("Created {}".format(destination))
+        else:
+            download = False
+    # don't redownload data if directory already exists with data files
+    if not download:
+        logger.debug("{} exists, skipping download".format(destination))
+        return
     zip_filename = os.path.join(destination, url.split('/')[-1])
     logger.debug("Downloading data to {}".format(zip_filename))
     response = requests.get(url, stream=True)
