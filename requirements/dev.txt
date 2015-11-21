@@ -19,3 +19,8 @@ coveralls==0.4.2
 # paramiko==1.13.0
 # pycrypto==2.6.1
 # ecdsa==0.11
+
+django-extensions==1.5.7
+jupyter==1.0.0
+pandas==0.17.1
+matplotlib==1.5.0
