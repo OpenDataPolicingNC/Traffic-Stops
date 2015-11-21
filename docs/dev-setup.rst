@@ -36,7 +36,7 @@ To setup your local environment you should create a virtualenv and install the
 necessary requirements::
 
     which python3.4  # make sure you have Python 3.4 installed
-    mkvirtualenv --python=`which python3.4` nc-traffic-stops
+    mkvirtualenv --python=`which python3.4` opendatapolicing
     $VIRTUAL_ENV/bin/pip install -r $PWD/requirements/dev.txt
 
 Then create a local settings file and set your ``DJANGO_SETTINGS_MODULE`` to
@@ -49,12 +49,13 @@ use it::
 Exit the virtualenv and reactivate it to activate the settings just changed::
 
     deactivate
-    workon nc-traffic-stops
+    workon opendatapolicing
 
 Create the Postgres database and run the initial syncdb/migrate::
 
     createdb -E UTF-8 traffic_stops
     createdb -E UTF-8 traffic_stops_nc
+    createdb -E UTF-8 traffic_stops_md
     python manage.py syncdb
 
 You should now be able to run the development server::
