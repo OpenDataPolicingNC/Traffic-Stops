@@ -5,7 +5,7 @@ from md.data import importer
 
 class Command(BaseCommand):
     """Helper command to kickoff MD data import"""
-    url = "https://s3-us-west-2.amazonaws.com/openpolicingdata/TODO.zip"
+    url = "https://s3-us-west-2.amazonaws.com/openpolicingdata/Maryland-Traffic-Stop-Data-2013.zip"
 
     def handle(self, *args, **options):
         dest = None
