@@ -17,26 +17,29 @@ def run(url, destination=None, download=True):
     logger.info('*** MD Data Import Started ***')
     download_and_unzip_data(url, destination)
     # Convert to CSV
-    xls_path = os.path.join(destination, '2013-montgomery.xlsx')
-    df = pd.read_excel(xls_path, parse_dates={'datetime': ['Date of Stop']})
-    headers = ["Location",
-               "Agency",
-               "datetime",
-               "Gender",
-               "DOB",
-               "Race",
-               "County of Residence",
-               "State of Residence",
-               "State of Registration",
-               "Stop Reason",
-               "Search",
-               "Search Reason",
-               "Disposition",
-               "Outcome"]
-    csv_path = os.path.join(destination, '2013-montgomery.csv')
+    xls_path = os.path.join(destination, '2013.xlsx')
+    csv_path = os.path.join(destination, '2013.csv')
     if not os.path.exists(csv_path):
+        logger.info('Loading {} into pandas'.format(xls_path))
+        df = pd.read_excel(xls_path, parse_dates={'datetime': ['Date of Stop']})
+        headers = ["Location",
+                   "Agency",
+                   "datetime",
+                   "Gender",
+                   "DOB",
+                   "Race",
+                   "County of Residence",
+                   "State of Residence",
+                   "State of Registration",
+                   "Stop Reason",
+                   "Search",
+                   "Search Reason",
+                   "Disposition",
+                   "Outcome"]
         logger.info("Converting {} > {}".format(xls_path, csv_path))
         df.to_csv(csv_path, columns=headers)
+    else:
+        logger.info("{} exists, skipping XLS->CSV conversion".format(csv_path))
     csv_count = line_count(csv_path)
     logger.debug('Rows: {}'.format(csv_count))
     # use COPY to load CSV files as quickly as possible

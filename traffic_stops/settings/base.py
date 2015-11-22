@@ -211,6 +211,10 @@ LOGGING = {
             'handlers': ['file'],
             'level': 'DEBUG',
         },
+        'traffic_stops': {
+            'handlers': ['file'],
+            'level': 'INFO',
+        },
     }
 }
 

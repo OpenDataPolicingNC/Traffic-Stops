@@ -7,13 +7,13 @@ ANALYZE;
 COMMIT;
 
 -- import stops
-\set import_file :data_dir '/2013-montgomery.csv'
+\set import_file :data_dir '/2013.csv'
 BEGIN;
 COPY md_stop (id, location_text, agency_description, stop_date, gender, dob, race, residence_county, residence_state, registration_state, stop_reason, search_type, search_reason, disposition, outcome) FROM :'import_file' WITH
     DELIMITER ','
     NULL AS ''
     CSV HEADER
-    FORCE NOT NULL search_type, search_reason, disposition, residence_county, registration_state, residence_state, stop_reason, gender;
+    FORCE NOT NULL search_type, search_reason, disposition, residence_county, registration_state, residence_state, stop_reason, gender, race, outcome, location_text;
 COMMIT;
 
 -- -- populate nc_agency lookup table
