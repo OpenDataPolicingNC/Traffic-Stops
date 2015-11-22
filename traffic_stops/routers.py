@@ -46,7 +46,7 @@ class StateDatasetRouter(object):
             else:
                 ret = True
         else:
-            if name in settings.DATABASES:
+            if name in settings.DATABASES and db == name:
                 ret = True
             else:
                 ret = False

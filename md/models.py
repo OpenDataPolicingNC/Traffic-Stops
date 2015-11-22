@@ -71,7 +71,7 @@ class Stop(models.Model):
     agency_description = models.CharField(max_length=100)
     stop_date = models.DateTimeField()
     gender = models.CharField(max_length=2, choices=GENDER_CHOICES, blank=True)
-    dob = models.DateField()
+    dob = models.DateField(null=True)
     race = models.CharField(max_length=1, choices=RACE_CHOICES, blank=True)
     residence_county = models.CharField(max_length=100)
     residence_state = models.CharField(max_length=1, blank=True,
