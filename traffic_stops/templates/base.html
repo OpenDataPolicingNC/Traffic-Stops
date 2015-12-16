@@ -92,5 +92,16 @@
     </script>
     {% endblock js %}
     {% block extra-js %}{% endblock extra-js %}
+    <script type="text/javascript">
+      (function() {
+      var s = document.createElement("script");
+      s.type = "text/javascript";
+      s.async = true;
+      s.src = '//api.usersnap.com/load/'+
+              '1dd37c04-c522-4916-9a84-fa75c52ac45e.js';
+      var x = document.getElementsByTagName('script')[0];
+      x.parentNode.insertBefore(s, x);
+      })();
+    </script>
 </body>
 </html>
