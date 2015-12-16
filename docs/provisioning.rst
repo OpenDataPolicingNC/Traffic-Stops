@@ -22,9 +22,9 @@ Salt Master
 ------------------------
 
 Each project needs a Salt Master per environment (staging, production, etc).
-The master is configured with Fabric. ``env.master`` should be set to the IP 
+The master is configured with Fabric. ``env.master`` should be set to the IP
 of this server in the environment where it will be used::
-    
+
     @task
     def staging():
         ...
@@ -98,7 +98,7 @@ Secret information such as passwords and API keys must be encrypted before being
 to the pillar files. As previously noted, provisioning the master for the environment
 generates a public GPG key which is added to repo under ``conf/<environment>.pub.gpg``
 To encrypt a new secret using this key, you can use the ``encrypt`` fab command::
-  
+
     # Example command
     fab <environment> encrypt:<key>=<secret-value>
     # Encrypt the SECRET_KEY for the staging environment
@@ -202,7 +202,7 @@ Environment Variables
 ------------------------
 
 Other environment variables which need to be configured but aren't secret can be added
-to the ``env`` dictionary in ``conf/pillar/<environment>.sls`` without encryption.
+to the ``env`` dictionary in ``conf/pillar/<environment>.sls`` without encryption::
 
   # Additional public environment variables to set for the project
   env:
@@ -290,7 +290,7 @@ As with other passwords this should be encrypted before it is added::
     # Encrypt admin/abc123 for the staging environment
     fab staging encrypt:admin=abc123
 
-This would be added in ``conf/pillar/<environment>.sls`` under ``http_auth``:
+This would be added in ``conf/pillar/<environment>.sls`` under ``http_auth``::
 
     http_auth:
       "admin": |-
@@ -381,7 +381,7 @@ match the domain for which the certificate is going to be deployed (i.e example.
 
 This signing request (.csr) will be handed off to a trusted Certificate Authority (CA) such as
 StartSSL, NameCheap, GoDaddy, etc. to purchase the signed certificate. The contents of
-the *.key file will be added to the ``ssl_key`` pillar and the signed certificate
+the \*.key file will be added to the ``ssl_key`` pillar and the signed certificate
 from the CA will be added to the ``ssl_cert`` pillar. These should be encrypted using
 the same proceedure as with the private SSH deploy key.
 

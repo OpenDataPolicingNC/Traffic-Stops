@@ -61,7 +61,7 @@ ___________
 To start with fresh NC data, first drop the server's database:
 
 .. code-block:: bash
-    
+
     sudo -u postgres dropdb traffic_stops_nc_staging
 
 Then run a **deploy** to recreate the database.
@@ -83,8 +83,8 @@ Run the import command:
 When finished, revoke SUPERUSER privileges:
 
 .. code-block:: bash
-    sudo -u postgres psql -c 'ALTER USER traffic_stops_staging WITH NOSUPERUSER;'
 
+    sudo -u postgres psql -c 'ALTER USER traffic_stops_staging WITH NOSUPERUSER;'
 
 Create DB Dump
 ______________
