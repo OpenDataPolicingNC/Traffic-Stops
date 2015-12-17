@@ -51,7 +51,7 @@ $.ajaxSetup({
 // Traffic Stops global defaults
 var Stops = {
   start_year: 2002,     // start-year for reporting requirement
-  end_year: 2014,       // end-date for latest dataset
+  end_year: 2015,       // end-date for latest dataset
   races: [
     'white',
     'black',
