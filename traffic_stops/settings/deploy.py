@@ -56,7 +56,7 @@ SESSION_COOKIE_SECURE = True
 
 SESSION_COOKIE_HTTPONLY = True
 
-ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split(';')
+ALLOWED_HOSTS = [os.environ['DOMAIN']]
 
 # Uncomment if using celery worker configuration
 CELERY_SEND_TASK_ERROR_EMAILS = True
