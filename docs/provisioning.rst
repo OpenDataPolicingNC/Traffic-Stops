@@ -22,9 +22,9 @@ Salt Master
 ------------------------
 
 Each project needs a Salt Master per environment (staging, production, etc).
-The master is configured with Fabric. ``env.master`` should be set to the IP 
+The master is configured with Fabric. ``env.master`` should be set to the IP
 of this server in the environment where it will be used::
-    
+
     @task
     def staging():
         ...
@@ -98,7 +98,7 @@ Secret information such as passwords and API keys must be encrypted before being
 to the pillar files. As previously noted, provisioning the master for the environment
 generates a public GPG key which is added to repo under ``conf/<environment>.pub.gpg``
 To encrypt a new secret using this key, you can use the ``encrypt`` fab command::
-  
+
     # Example command
     fab <environment> encrypt:<key>=<secret-value>
     # Encrypt the SECRET_KEY for the staging environment
@@ -400,9 +400,10 @@ _______
     fab staging encrypt:DB_PASSWORD=`make generate-secret`
     fab staging encrypt:SECRET_KEY=`make generate-secret length=64`
     fab staging encrypt:BROKER_PASSWORD=`make generate-secret`
+    fab staging encrypt:admin='<fill-me-in>'
     fab staging encrypt:newrelic_license_key='<fill-me-in>'
     # copy each generated encrypted key to conf/pillar/<env>.sls
-    fab staging setup_minion:web,balancer,db-master,cache,queue,worker -H dev.opendatapolicingnc.com -u ubuntu -i ~/.ssh/traffic-stops.pem
+    fab staging setup_minion:web,balancer,db-master,cache,queue,worker,salt-master -H dev.opendatapolicingnc.com -u ubuntu -i ~/.ssh/traffic-stops.pem
     fab staging deploy -H dev.opendatapolicingnc.com -u ubuntu -i ~/.ssh/traffic-stops.pem
     fab staging deploy
 

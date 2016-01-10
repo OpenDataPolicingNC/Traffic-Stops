@@ -7,6 +7,7 @@ include:
   - project.django
   - postfix
   - ufw
+  - nodejs
 
 gunicorn_requirements:
   pip.installed:
@@ -25,11 +26,11 @@ gunicorn_conf:
     - mode: 600
     - template: jinja
     - context:
-        newrelic_config_file: "{{ vars.services_dir }}/newrelic-app.ini"
         log_dir: "{{ vars.log_dir }}"
         settings: "{{ pillar['project_name'] }}.settings.deploy"
         virtualenv_root: "{{ vars.venv_dir }}"
         directory: "{{ vars.source_dir }}"
+        use_newrelic: {{ vars.use_newrelic }}
     - require:
       - pip: supervisor
       - file: log_dir
@@ -56,23 +57,19 @@ app_allow-{{ host_addr }}:
       - pkg: ufw
 {% endfor %}
 
-node_ppa:
-  pkgrepo.managed:
-    - ppa: chris-lea/node.js
-
-nodejs:
-  pkg.installed:
-    - require:
-      - pkgrepo: node_ppa
-    - refresh: True
-
 less:
   cmd.run:
     - name: npm install less@{{ pillar['less_version'] }} -g
     - user: root
     - unless: "which lessc && lessc --version | grep {{ pillar['less_version'] }}"
     - require:
-      - pkg: nodejs
+      - pkg: node-pkgs
+  file.symlink:
+    - name: /usr/bin/lessc
+    - target: /usr/local/bin/lessc
+    - user: root
+    - require:
+      - cmd: less
 
 collectstatic:
   cmd.run:
@@ -87,6 +84,7 @@ migrate:
     - name: "{{ vars.path_from_root('manage.sh') }} migrate --noinput"
     - user: {{ pillar['project_name'] }}
     - group: {{ pillar['project_name'] }}
+    - onlyif: "{{ vars.path_from_root('manage.sh') }} migrate --list | grep '\\[ \\]'"
     - require:
       - file: manage
     - order: last

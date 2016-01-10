@@ -6,7 +6,7 @@ domain: dev.opendatapolicingnc.com
 
 repo:
   url: https://github.com/OpenDataPolicingNC/Traffic-Stops.git
-  branch: dev
+  branch: update-margarita
 
 postgresql_config: # from pgtune
   work_mem: 44MB
@@ -23,69 +23,80 @@ env:
 
 # Uncomment and update username/password to enable HTTP basic auth
 # Password must be GPG encrypted.
-# http_auth:
-#   username: |-
-#    -----BEGIN PGP MESSAGE-----
-#    -----END PGP MESSAGE-----
+http_auth:
+  "admin": |-
+    -----BEGIN PGP MESSAGE-----
+    Version: GnuPG v1
+
+    hQEMAxjKmUQTU68EAQf/THe354R07IfCkQrY2ksCMmuKWEX5h063hvY6nDPwGuaY
+    QRzPbDjiLX5UK9esG7zIHCHgLAmG739rmP0dUDhk70aFp/rF11epLwsikkow3TRt
+    RbO7xze3Mn17It8+sjix51PVAFfW0H2+whrjmESR7H5a6Db2jY9TJTkdLpunrxoz
+    n71vfJttv+oUjIqrn2ZgUhEqGbUn3XD+nb9x3Uegx3x6TP1J42bIp/FX6bVqxpe0
+    i8mqdrHNt0Hi1eLyAtdlcW4Z72gzsrzzcAfFWOoC+d2FIlgI8MD4HfmLL+LMOCfu
+    ap9Rp+Xm5SRGXWRFuUyM5lE27eNBfWWW0wtE9cJ5U9JHAfjXmnk3GluZDPrBsisT
+    vPnE29iEbNncFsml5x0J9Sk3BznadVNj7BVp5Kg0vTfqW2jdQWNj3nCtFVjnQ18g
+    JOMEfH6eZAA=
+    =pFcJ
+    -----END PGP MESSAGE-----
 
 # Private environment variables. Must be GPG encrypted.
 secrets:
   "DB_PASSWORD": |-
     -----BEGIN PGP MESSAGE-----
-    Version: GnuPG v1.4.11 (GNU/Linux)
+    Version: GnuPG v1
 
-    hQEMAyQKCZoo5mkcAQf/VkAPxauQQ71Zj90iuESa8GyLLq5w8AKuoqT206tm1RKC
-    +bjz+lmRCXyI+g40x8YU5FXTtwkeXYeJ3YJvG6Xas+Vvs4N07GNUPBSXYu13NT4W
-    ogI8+JHuOQvrRiavx2ygjKMSqmVQDPuJ6Rxn3P59l5durLoUPYP66AMy/VHrTZlL
-    gtSZgOBaVK0RXTAREE3aBeNu30wk/tdPDzjKfidrX/14ofkCvR/vqhM68v/l9Bs4
-    9YqbBqS8jEeR5GhSE6lJkRzpzNgGZXqjJUhlE6a/v4+lmPmQ6soHHUwfzDd6PryP
-    CtBw5gpknS+VKFeQ4HfZ/o0pCIou5SvevCuef7fbRtJbAZc90wW2iqqk0fVgJCLi
-    2ouV6rMfmgtMOg/HFG1GHdydgghHJrDA3MzRVF4LyFj4VYKmiZySskQ62fR57y5s
-    FC3O2xFyo1Agzr1TLOxbSXE/SFhTaYhT9favnA==
-    =3pmf
+    hQEMAxjKmUQTU68EAQf8D9zfHdZHNJ5TReuIpHm+FDx90wh3ZpXL5PdYh+mQjB1O
+    IjpNUBwlwhfRbZJAt21Z/xllMP2FNbQyGZjXz4M/HzEjNdTi1UffgS37ho/KBZHW
+    U42ADUZZ2bVD5AaI/J7w74XLfDGgdpV6LOb6qG8JU1mpxGaLfQ0wxtXs4e8O5eA1
+    Qv1uelcUNpi9bVC/yLUN0nOnLqPpuVd6EOeceol9h2gvjcnSo7lQn0pIw6kIsfgp
+    cB64nreSk7juamNRwitTZbb+Fck45GZKY6QsFPIUJ9a1iNaacnRRx8etpl8owSUk
+    5N+zgbc7iFQw1mJpMVQjH6ioQWN/Lh6G6zJidbKLbNJbAQXffnNgM1XBSBDnG15E
+    fxabuQTQ3hHg5LVR86mcY7bGqOqCc5jbFDX9aiEPyyS7fv/eS7972iM9ZRATI603
+    ZrHWSeX9O9MqYIBfa4Ugmvd9s/FaTCjss41jng==
+    =AZDR
     -----END PGP MESSAGE-----
   "SECRET_KEY": |-
     -----BEGIN PGP MESSAGE-----
-    Version: GnuPG v1.4.11 (GNU/Linux)
+    Version: GnuPG v1
 
-    hQEMAyQKCZoo5mkcAQf/XvZAz5/Nul57ysGtGkihXtm51scvvKuclBTft2m6lQ9y
-    ME4Jeev4djZmjWJgkrlgt3nPW8xtmfcLHxUwKQNwzc/8aiXjWUEqqdxerigRTHDQ
-    +P2jzE2OnYcqXEL8UQrEsL8CpiSK0l6VxKK2ENFZX/5ZnTB5DGZ8yUR1W3ylOeX4
-    ifTzqRDZwyNqaL9Us4uEzr8RsqFWXUxpZVm2dIMJhBO5Vc4CheUH+Th4uoO4sgIT
-    lMNj1ZlYSwoQTcbk9QGk5UIBnOKOZagS+qpoS4EIAaiZ/tj+WKORCW9bQYuPYoMf
-    EvpF+8AxbJSOMHRMxBsWO+EstfjG+LUNXW2t0mA09dJ7AUfM1Y0iwzrcaUhOm/FQ
-    eCbKl6z8X3LCgVIpr2ru6kfP6ShPDwiHF190f6eDIltEKFPE9kdvyHSG44YsWhQ2
-    bZSSQpaQdHEurrPlYWIok+BlEWjyLWyyodnn9vXvT8Ngvsm4uOdZ4Wc3vY+Y5e14
-    7d4ZGRdWCDx4ZSaj
-    =X+bG
+    hQEMAxjKmUQTU68EAQf/btxT5qXtalRNRsioIXYN+xAvrjAKOESfEEkR06g+5SdH
+    5ZVVe5DQzAUR6Tl7/NlQ+0QHHE8cR+96/yzuJVIl80l8EOETCk1yp0+TCdv5f+F9
+    nEm2Bz1bruKxNxg+rqW6VGtUl1GSwqrt2KB3r07Q34KLesNLG8+W4cAEdw01EXWT
+    AghFRKOxPdS4GrBif9sgaIEZAwspT1C1vhNNwlhGgznkth3qynUQbRcdefCUjrO/
+    m3t1tsxbO6kL7EtstZEDIJZGv90O/n/YYCROtc/AktpwB3i/arYJr+jtu3R+u3/1
+    DPFoIZ9EsdsTmycWZP42d1fGWen7FLqSxVuv3BtMvtJ7Acskt7bow481Nk6/i1yQ
+    dz5i0nzzP/yj/djPCWPyT0Gy/YHgLfemK4RPmwyNVZXgTTPrwQqNM294+qYF4HXE
+    BaOqbjUO6PNtN0wni6z4CE2r20SY1AwDumKtbgRtEkgjEU155eEeo3uiLl5W47Ht
+    WkoWkKysIy/PWsP0
+    =O299
     -----END PGP MESSAGE-----
   "BROKER_PASSWORD": |-
     -----BEGIN PGP MESSAGE-----
-    Version: GnuPG v1.4.11 (GNU/Linux)
+    Version: GnuPG v1
 
-    hQEMAyQKCZoo5mkcAQf/SDk/+arGT0XzVVIwLSbW4f1/Z24xEsFAEhD54Wp5KSDz
-    XxfDCfvUOz6TA4Vryvu2WqnhCvA+pI2FBsqkwhCYSkuDn1EJDMR7PFg9mijNpPM1
-    xmMEJ89cB+46gfB/sNU6+xWFtZUp5igT4fu1j5PG9stdTgNM1TCmyAbE9rv5Id52
-    zCMlDjqqc1ns0crM65mHNy8zQUs3WhR59IYCcZjhhD1a0M68B2GdqoSGC2GgENgZ
-    FudKjlTEyer+c9iJEnBTrZA4rdTkdOcJzJ6hPrJc9m8uKZ5pa7xiLsDpwvN4evah
-    qkeBxuSajFEboqsOZaexuVPwNZqKeSatnc9gr4plttJbAVl5IV8OgCAyYgmjVmHN
-    5uqL29UKU3iTehG73Qi+zOtXgIrJl5nwuiamC2Btk6zqaSbGTxvJGomtw4b4uDAo
-    7Z1IrjmWenrlJfL3D476W4nfj0KgIo5SV1+zQw==
-    =TIUh
+    hQEMAxjKmUQTU68EAQf/eD4Z+ixMyBi/p6ewRCuIPklXvYqxDP1oCSSEgesIG+Rd
+    4ZIhkU29mBJBvlUsvfsVo6eBlXWoVCvGCRTPw2gf2PEbWkAXuRYdkBJoRaja+6F+
+    9wGdPJ8psy5Tvr75ToYejyesRpzNNlocPos6wMV4j+bW0RvFgGo/UnsmZYIlKma+
+    z188O/KgI8/uAvp18ctoQvCL88sqBlkYWtAEWRuXjyyq91cVzYkFgaIH38+wMLFX
+    hr6cQnyEAi6Dao64DXfzQih0tEBebE5OWmXCzkKtueZBI3n/2qIkHVSXEGO/f8nj
+    nueMW99OwfxIWJRUONjEqvDR6esO08Dt+UW6TdFQe9JbAW5JQf5i7KNsJoetAgDA
+    g9lWQOUKj7X0Nqm7oLEosm2hDEL7eDaOztM3aMrMc962PQz56NRD/Z3Il2daxAoN
+    4cpm0Ws5YeIEMZKcfVra0WBZauywuzfoSEYruw==
+    =IcB/
     -----END PGP MESSAGE-----
   "newrelic_license_key": |-
     -----BEGIN PGP MESSAGE-----
-    Version: GnuPG v1.4.11 (GNU/Linux)
+    Version: GnuPG v1
 
-    hQEMAyQKCZoo5mkcAQf6A8lXWkk7cp8mbLFI+Fdn6cIanB0EGwDurkLW75O9R7JB
-    y2G8RYKAV45/vdDGGSqZPThKSCA7bp6aAiGY6qhdRJuPmAMqdjNN9TsVgLETi1Si
-    Pkmhy9RuNAp/07QFTe+Me4q/mwOk3nwDYcyaCEUtHXafWL5J+A6TvATx5RcBUHBl
-    sz4ovcPS7P+q+NO1SoL8E2BQipwa+mcVzkazT7gSgi6Rtzf5H+aLf4SzgnVUHjFF
-    bPOYus9sOv55guAK6OQcPDm5BeDBc6/6/P9Z7bse77uEb1x1HKxmTuEVNwESAbo/
-    WZ5CRQxy9ihOlTaW7DiQkxtv9tUsaH17YrkHbWVBUtJjAaeJliU/srkiMX+0Ngpr
-    2U8p7Atf4Hj+6B3qsDJ/FpKKJIrAb4otIkkRjhjLPPke4sREMFjO5Pi+1wBtlij6
-    qzkPQs9tmiPhg5L+emKjQmCCTRCNDMORnf+Rbvfq5oODOQQo
-    =e/BW
+    hQEMAxjKmUQTU68EAQf+Nri9PLzalzLTlsIG4UqKN4yHYCLkU1i/5w3zQXx0AMtl
+    QDjroO4vU0sG1UloJHdhwA1vxMmhBenFjb/G2ov0xMBtrse6oR6wADKftV0+NJTu
+    Vennq7z/7t6J2pHPROwu28CJ63O2M/NSIdb2Cof5Tl/fMdscd5tI+PbinRouFcWv
+    Emlm2AMaJlqB+optWcJaaLN6hDRISbWLpsI3vkV4ObuLZc9Z+enwg/AHOibkAb5N
+    pFE7BGq0RfHoP48ZiAVGBUwwdBEdYz7p5A12q5QKe7LGRUKvBb6LgxjX1uN50w2m
+    dRtTmYYOcu6uAsbvNnZHi1zl3jbtviMgPR+X9DSYyNJjAQJuUEU/0r9pHuUGfi0i
+    RLq8rVB3fiQuJaHOwNgl2e3LGAFP3XRLMM5m4TY13JHYoLtLNgZjlzYN3mBI2m75
+    ecnfOyjh8K60sxsLpwTc/O6sxAmnOqWSvDJQq4eT0Uw1b6ev
+    =XK6m
     -----END PGP MESSAGE-----
 
 

@@ -39,12 +39,13 @@ necessary requirements::
     mkvirtualenv --python=`which python3.4` opendatapolicing
     $VIRTUAL_ENV/bin/pip install -r $PWD/requirements/dev.txt
 
-Then create a local settings file and set your ``DJANGO_SETTINGS_MODULE`` to
-use it::
+Next, we'll set up our local environment variables. We use `django-dotenv
+<https://github.com/jpadilla/django-dotenv>`_ to help with this. It reads environment variables
+located in a file name ``.env`` in the top level directory of the project. The only variable we need
+to start is ``DJANGO_SETTINGS_MODULE``::
 
     cp traffic_stops/settings/local.example.py traffic_stops/settings/local.py
-    echo "export DJANGO_SETTINGS_MODULE=traffic_stops.settings.local" >> $VIRTUAL_ENV/bin/postactivate
-    echo "unset DJANGO_SETTINGS_MODULE" >> $VIRTUAL_ENV/bin/postdeactivate
+    echo "DJANGO_SETTINGS_MODULE=traffic_stops.settings.local" > .env
 
 Exit the virtualenv and reactivate it to activate the settings just changed::
 

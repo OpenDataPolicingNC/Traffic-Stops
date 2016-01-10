@@ -1,5 +1,6 @@
 {% import 'project/_vars.sls' as vars with context %}
-{% set version=pillar.get("postgresql_version", "9.3") %}
+
+{% set pg_version = salt['pillar.get']('postgres_version', '9.3') %}
 
 include:
   - postgresql
@@ -51,13 +52,14 @@ database-{{ pillar['project_name'] }}-{{ instance }}:
 
 hba_conf:
   file.managed:
-    - name: /etc/postgresql/{{ version }}/main/pg_hba.conf
+    - name: /etc/postgresql/{{ pg_version }}/main/pg_hba.conf
     - source: salt://project/db/pg_hba.conf
     - user: postgres
     - group: postgres
     - mode: 0640
     - template: jinja
     - context:
+        version: "{{ pg_version }}"
         servers:
 {%- for host, ifaces in vars.app_minions.items() %}
 {% set host_addr = vars.get_primary_ip(ifaces) %}
@@ -70,20 +72,20 @@ hba_conf:
 
 postgresql_conf:
   file.managed:
-    - name: /etc/postgresql/{{ version }}/main/postgresql.conf
+    - name: /etc/postgresql/{{ pg_version }}/main/postgresql.conf
     - source: salt://project/db/postgresql.conf
     - user: postgres
     - group: postgres
     - mode: 0644
     - template: jinja
     - context:
-      version: {{ version }}
+        version: "{{ pg_version }}"
     - require:
       - pkg: postgresql
     - watch_in:
       - service: postgresql
 
-{%- for host, ifaces in vars.app_minions.items() %}
+{% for host, ifaces in vars.app_minions.items() %}
 {% set host_addr = vars.get_primary_ip(ifaces) %}
 db_allow-{{ host_addr }}:
   ufw.allow:
@@ -94,7 +96,7 @@ db_allow-{{ host_addr }}:
       - pkg: ufw
 {% endfor %}
 
-{% for extension in pillar.get('postgresql_extensions', []) %}
+{% for extension in pillar.get('postgres_extensions', []) %}
 create-{{ extension }}-extension:
   cmd.run:
     - name: psql -U postgres {{ pillar['project_name'] }}_{{ pillar['environment'] }} -c "CREATE EXTENSION postgis;"
