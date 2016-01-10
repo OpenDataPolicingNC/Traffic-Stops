@@ -4,10 +4,13 @@ import os
 
 from celery import Celery
 
-from django.conf import settings
+from . import load_env
+load_env.load_env()
 
 # set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'traffic_stops.settings')
+
+from django.conf import settings
 
 app = Celery('traffic_stops')
 
