@@ -1,4 +1,4 @@
-{% load compress %}
+{% load static from staticfiles %}
 <!DOCTYPE html>
 <html lang="en" class="no-js">
 <head>
@@ -9,17 +9,20 @@
     <meta name="author" content="{% block meta-author %}{% endblock %}">
     <meta name="keywords" content="{% block meta-keywords %}{% endblock %}">
     {% block extra-meta %}{% endblock %}
-    <link href="//cdnjs.cloudflare.com/ajax/libs/nvd3/1.1.15-beta/nv.d3.min.css" rel="stylesheet" type="text/css">
+    <!-- <link href="//cdnjs.cloudflare.com/ajax/libs/nvd3/1.1.15-beta/nv.d3.min.css" rel="stylesheet" type="text/css">
     <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href='//fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
-    {% if debug %}
+    <link href='//fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'> -->
+
+    <link rel="stylesheet" type="text/css" media="all" href="{% static 'css/bundle.css' %}">
+
+    <!-- {# if debug #}
     <link rel="stylesheet/less" type="text/css" media="all" href="{{ STATIC_URL }}less/site.less">
     <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.3/less.min.js"></script>
-    {% else %}
-    {% compress css %}
+    {# else #}
+    {# compress css #}
     <link rel="stylesheet" type="text/less" media="all" href="{{ STATIC_URL }}less/site.less">
-    {% endcompress %}
-    {% endif %}
+    {# endcompress #}
+    {# endif #} -->
     {% block extra-css %}{% endblock %}
     <script src="{{ STATIC_URL }}js/libs/modernizr-2.5.3.js"></script>
 </head>
@@ -59,14 +62,12 @@
       </div>
     </div>
     {% endblock footer %}
-
-    {% block js %}
-    <script charset="utf-8" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+    <!-- <script charset="utf-8" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
     <script charset="utf-8" src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
     <script charset="utf-8" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js"></script>
     <script charset="utf-8" src="//cdnjs.cloudflare.com/ajax/libs/nvd3/1.1.15-beta/nv.d3.min.js"></script>
     <script charset="utf-8" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    {% compress js %}
+
     <script charset="utf-8" src="{{ STATIC_URL }}bootstrap/js/affix.js"></script>
     <script charset="utf-8" src="{{ STATIC_URL }}bootstrap/js/alert.js"></script>
     <script charset="utf-8" src="{{ STATIC_URL }}bootstrap/js/button.js"></script>
@@ -79,8 +80,8 @@
     <script charset="utf-8" src="{{ STATIC_URL }}bootstrap/js/scrollspy.js"></script>
     <script charset="utf-8" src="{{ STATIC_URL }}bootstrap/js/tab.js"></script>
     <script charset="utf-8" src="{{ STATIC_URL }}bootstrap/js/transition.js"></script>
-    <script charset="utf-8" src="{{ STATIC_URL }}js/site.js"></script>
-    {% endcompress %}
+    <script charset="utf-8" src="{{ STATIC_URL }}js/site.js"></script> -->
+
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -90,7 +91,8 @@
       ga('create', 'UA-63028976-1', 'auto');
       ga('send', 'pageview');
     </script>
-    {% endblock js %}
+
+    <script src="{% static 'js/bundle.js' %}"></script>
     {% block extra-js %}{% endblock extra-js %}
 </body>
 </html>

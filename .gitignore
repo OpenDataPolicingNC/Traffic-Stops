@@ -26,3 +26,6 @@ _build
 *.asc
 .ipynb_checkpoints
 .env
+node_modules
+*/static/js/bundle.js
+*/static/css

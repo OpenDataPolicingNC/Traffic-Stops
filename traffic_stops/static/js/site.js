@@ -1,3 +1,10 @@
+var _ = require('underscore');
+var Backbone = require('backbone');
+var $ = require('jquery');
+Backbone.$ = $;
+import 'd3';
+import 'nvd3';
+
 // usage: log('inside coolFunc', this, arguments);
 // paulirish.com/2009/log-a-lightweight-wrapper-for-consolelog/
 window.log = function f(){ log.history = log.history || []; log.history.push(arguments); if(this.console) { var args = arguments, newarr; try { args.callee = f.caller } catch(e) {}; newarr = [].slice.call(args); if (typeof console.log === 'object') log.apply.call(console.log, console, newarr); else console.log.apply(console, newarr);}};
@@ -14,39 +21,6 @@ String.prototype.printf = function(){
     return typeof args[number] !== 'undefined' ? args[number] : match;
   });
 };
-
-
-// Django AJAX with CSRF protection.
-var getCookie = function(name) {
-  var cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-    var cookies = document.cookie.split(';');
-    for (var i = 0; i < cookies.length; i++) {
-      var cookie = jQuery.trim(cookies[i]);
-      // Does this cookie string begin with the name we want?
-      if (cookie.substring(0, name.length + 1) == (name + '=')) {
-        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-        break;
-      }
-    }
-  }
-  return cookieValue;
-},
-csrftoken = getCookie('csrftoken'),
-sessionid = getCookie('sessionid'),
-csrfSafeMethod = function(method) {
-  return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));  // safe methods
-};
-
-$.ajaxSetup({
-  crossDomain: false,
-  beforeSend: function(xhr, settings) {
-    if (!csrfSafeMethod(settings.type)) {
-      xhr.setRequestHeader("X-CSRFToken", csrftoken);
-      xhr.setRequestHeader("sessionid", sessionid);
-    }
-  }
-});
 
 // Traffic Stops global defaults
 var Stops = {
@@ -97,7 +71,7 @@ var Stops = {
 
 
 // data handlers to get raw-data
-DataHandlerBase = Backbone.Model.extend({
+var DataHandlerBase = Backbone.Model.extend({
   constructor: function(){
     Backbone.Model.apply(this, arguments);
     this.get_data();
@@ -117,7 +91,7 @@ DataHandlerBase = Backbone.Model.extend({
   }
 });
 
-CensusHandler = DataHandlerBase.extend({
+var CensusHandler = DataHandlerBase.extend({
   clean_data: function(){
     // temporary for dummy census data
     var agency = this.get('agency'),
@@ -131,7 +105,7 @@ CensusHandler = DataHandlerBase.extend({
   }
 });
 
-StopsHandler = DataHandlerBase.extend({
+var StopsHandler = DataHandlerBase.extend({
   clean_data: function(){
 
     var data = this.get("raw_data"),
@@ -196,7 +170,7 @@ StopsHandler = DataHandlerBase.extend({
   }
 });
 
-SearchHandler = StopsHandler.extend({
+var SearchHandler = StopsHandler.extend({
   clean_data: function(){
     SearchHandler.__super__.clean_data.call(this);
     var data = this.get("data");
@@ -205,7 +179,7 @@ SearchHandler = StopsHandler.extend({
   }
 });
 
-UseOfForceHandler = DataHandlerBase.extend({
+var UseOfForceHandler = DataHandlerBase.extend({
   clean_data: function(){
 
     var data = this.get("raw_data"),
@@ -260,7 +234,7 @@ UseOfForceHandler = DataHandlerBase.extend({
   }
 });
 
-LikelihoodSearchHandler = DataHandlerBase.extend({
+var LikelihoodSearchHandler = DataHandlerBase.extend({
   clean_data: function(){
 
     var years,
@@ -314,7 +288,7 @@ LikelihoodSearchHandler = DataHandlerBase.extend({
   }
 });
 
-ContrabandHitRateHandler = DataHandlerBase.extend({
+var ContrabandHitRateHandler = DataHandlerBase.extend({
   clean_data: function(){
 
     var years,
@@ -355,7 +329,7 @@ ContrabandHitRateHandler = DataHandlerBase.extend({
   }
 });
 
-AggregateDataHandlerBase = DataHandlerBase.extend({
+var AggregateDataHandlerBase = DataHandlerBase.extend({
   get_data: function(){
     var self = this,
         datas = [],
@@ -378,7 +352,7 @@ AggregateDataHandlerBase = DataHandlerBase.extend({
   }
 });
 
-StopSearchHandler = AggregateDataHandlerBase.extend({
+var StopSearchHandler = AggregateDataHandlerBase.extend({
   clean_data: function(){
 
     var stops = _.findWhere(this.get("raw_data"), {"type": "stop"}).raw,
@@ -441,7 +415,7 @@ StopSearchHandler = AggregateDataHandlerBase.extend({
 });
 
 // dashboard visuals
-VisualBase = Backbone.Model.extend({
+var VisualBase = Backbone.Model.extend({
   constructor: function(){
     Backbone.Model.apply(this, arguments);
     this.listenTo(this.get("handler"), "dataLoaded", this.update);
@@ -488,7 +462,7 @@ VisualBase = Backbone.Model.extend({
   triggerRaceToggle: function(e, v){}
 });
 
-CensusRatioDonut = VisualBase.extend({
+var CensusRatioDonut = VisualBase.extend({
   defaults: {
     showEthnicity: false,
     width: 300,
@@ -545,7 +519,7 @@ CensusRatioDonut = VisualBase.extend({
   }
 });
 
-StopRatioDonut = VisualBase.extend({
+var StopRatioDonut = VisualBase.extend({
   defaults: {
     showEthnicity: false,
     width: 300,
@@ -625,7 +599,7 @@ StopRatioDonut = VisualBase.extend({
   }
 });
 
-StopRatioTimeSeries = VisualBase.extend({
+var StopRatioTimeSeries = VisualBase.extend({
   defaults: {
     showEthnicity: false,
     width: 750,
@@ -691,7 +665,7 @@ StopRatioTimeSeries = VisualBase.extend({
   }
 });
 
-LikelihoodOfSearch = VisualBase.extend({
+var LikelihoodOfSearch = VisualBase.extend({
   defaults: {
     showEthnicity: true,
     width: 750,
@@ -828,7 +802,7 @@ LikelihoodOfSearch = VisualBase.extend({
   }
 });
 
-StopSearchTimeSeries = StopRatioTimeSeries.extend({
+var StopSearchTimeSeries = StopRatioTimeSeries.extend({
   setDefaultChart: function(){
     this.chart = nv.models.lineChart()
                   .useInteractiveGuideline (true)
@@ -868,11 +842,11 @@ StopSearchTimeSeries = StopRatioTimeSeries.extend({
   },
 });
 
-SearchRatioDonut = StopRatioDonut.extend({});
-SearchRatioTimeSeries = StopRatioTimeSeries.extend({});
+var SearchRatioDonut = StopRatioDonut.extend({});
+var SearchRatioTimeSeries = StopRatioTimeSeries.extend({});
 
-UseOfForceDonut = StopRatioDonut.extend({});
-UseOfForceBarChart = VisualBase.extend({
+var UseOfForceDonut = StopRatioDonut.extend({});
+var UseOfForceBarChart = VisualBase.extend({
   defaults: {
     showEthnicity: false,
     width: 750,
@@ -940,7 +914,7 @@ UseOfForceBarChart = VisualBase.extend({
   }
 });
 
-ContrabandHitRateBar = VisualBase.extend({
+var ContrabandHitRateBar = VisualBase.extend({
   defaults: {
     showEthnicity: true,
     width: 750,
@@ -1041,7 +1015,7 @@ ContrabandHitRateBar = VisualBase.extend({
 });
 
 // dashboard tables
-TableBase = Backbone.Model.extend({
+var TableBase = Backbone.Model.extend({
   constructor: function(){
     Backbone.Model.apply(this, arguments);
     this.listenTo(this.get("handler"), "dataLoaded", this.update);
@@ -1079,7 +1053,7 @@ TableBase = Backbone.Model.extend({
   }
 });
 
-CensusTable = TableBase.extend({
+var CensusTable = TableBase.extend({
   get_tabular_data: function(){
     var row, rows = [], data = this.data, fmt = d3.format('.1%'),
         nRaces, nEthnicities, totalRace, totalEthnicity, pRaces, pEthnicities;
@@ -1130,7 +1104,7 @@ CensusTable = TableBase.extend({
   }
 });
 
-StopsTable = TableBase.extend({
+var StopsTable = TableBase.extend({
   get_tabular_data: function(){
     var header, row, rows = [];
 
@@ -1151,7 +1125,7 @@ StopsTable = TableBase.extend({
   }
 });
 
-StopSearchTable = TableBase.extend({
+var StopSearchTable = TableBase.extend({
   get_tabular_data: function(){
     var header, row, rows = [];
 
@@ -1167,10 +1141,10 @@ StopSearchTable = TableBase.extend({
   }
 });
 
-SearchTable = StopsTable.extend({});
-UseOfForceTable = StopsTable.extend({});
+var SearchTable = StopsTable.extend({});
+var UseOfForceTable = StopsTable.extend({});
 
-ContrabandTable = TableBase.extend({
+var ContrabandTable = TableBase.extend({
   get_tabular_data: function(){
     var header, row, rows = [], se, cb;
 
@@ -1200,7 +1174,7 @@ ContrabandTable = TableBase.extend({
   }
 });
 
-LikelihoodSearchTable = TableBase.extend({
+var LikelihoodSearchTable = TableBase.extend({
   get_tabular_data: function(){
     var header, row, rows = [];
 
@@ -1246,7 +1220,7 @@ LikelihoodSearchTable = TableBase.extend({
   }
 });
 
-RaceToggle = function(updateUrl, showEthnicity){
+var RaceToggle = function(updateUrl, showEthnicity){
   this.updateUrl = updateUrl;
   this.showEthnicity = showEthnicity;
 }
@@ -1272,3 +1246,5 @@ _.extend(RaceToggle.prototype, {
     });
   }
 });
+
+console.log(window.agency_id);
