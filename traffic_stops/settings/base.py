@@ -93,7 +93,6 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'compressor.finders.CompressorFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -144,7 +143,6 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'django.contrib.sitemaps',
     # External apps
-    'compressor',
     'selectable',
     'bootstrap3',
     'endless_pagination',
@@ -221,10 +219,6 @@ LOGGING = {
 SITE_ID = 1
 
 # Application settings
-COMPRESS_PRECOMPILERS = (
-    ('text/less', 'lessc {infile} {outfile}'),
-)
-
 LOGIN_URL = 'account_login'
 LOGIN_REDIRECT_URL = 'home'
 ENDLESS_PAGINATION_PER_PAGE = 30

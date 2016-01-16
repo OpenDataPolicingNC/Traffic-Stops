@@ -52,8 +52,6 @@ DEFAULT_FROM_EMAIL = 'no-reply@opendatapolicingnc.com'
 
 EMAIL_SUBJECT_PREFIX = '[Traffic_Stops %s] ' % ENVIRONMENT.title()
 
-COMPRESS_ENABLED = True
-
 SESSION_COOKIE_SECURE = True
 
 SESSION_COOKIE_HTTPONLY = True

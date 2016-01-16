@@ -19,8 +19,6 @@ SOUTH_TESTS_MIGRATE = True
 CELERY_ALWAYS_EAGER = True
 CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
 
-COMPRESS_ENABLED = False
-
 CACHES = {
     'default': {
         'BACKEND': 'caching.backends.locmem.LocMemCache',
@@ -29,8 +27,6 @@ CACHES = {
 
 # Special test settings
 if 'test' in sys.argv:
-    COMPRESS_PRECOMPILERS = ()
-
     PASSWORD_HASHERS = (
         'django.contrib.auth.hashers.SHA1PasswordHasher',
         'django.contrib.auth.hashers.MD5PasswordHasher',
