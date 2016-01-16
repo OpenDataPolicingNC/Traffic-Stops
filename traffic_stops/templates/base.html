@@ -14,7 +14,7 @@
     <link href='//fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" media="all" href="{% static 'css/bundle.css' %}">
     {% block extra-css %}{% endblock %}
-    <script src="{{ STATIC_URL }}js/libs/modernizr-2.5.3.js"></script>
+    <script src="{% static 'libs/modernizr.js' %}"></script>
 </head>
 <body id="{% block body_id %}{% endblock body_id %}" class="{% block body_class %}{% endblock body_class %}">
     <div id='wrap'>
