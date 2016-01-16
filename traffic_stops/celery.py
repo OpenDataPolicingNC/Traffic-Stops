@@ -10,7 +10,7 @@ load_env.load_env()
 # set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'traffic_stops.settings')
 
-from django.conf import settings
+from django.conf import settings  # noqa
 
 app = Celery('traffic_stops')
 
