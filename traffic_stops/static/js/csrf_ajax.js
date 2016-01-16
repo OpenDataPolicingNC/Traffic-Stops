@@ -29,7 +29,7 @@ import jQuery from 'jquery';
     // Setup jQuery ajax calls to handle CSRF
     $.ajaxPrefilter(function (settings, originalOptions, xhr) {
         var csrftoken;
-        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+        if (!csrfSafeMethod(settings.type) && !settings.crossDomain) {
             // Send the token to same-origin, relative URLs only.
             // Send the token only if the method warrants CSRF protection
             // Using the CSRFToken value acquired earlier
