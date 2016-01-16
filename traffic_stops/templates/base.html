@@ -9,9 +9,9 @@
     <meta name="author" content="{% block meta-author %}{% endblock %}">
     <meta name="keywords" content="{% block meta-keywords %}{% endblock %}">
     {% block extra-meta %}{% endblock %}
-    <!-- <link href="//cdnjs.cloudflare.com/ajax/libs/nvd3/1.1.15-beta/nv.d3.min.css" rel="stylesheet" type="text/css">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/nvd3/1.1.15-beta/nv.d3.min.css" rel="stylesheet" type="text/css">
     <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href='//fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'> -->
+    <link href='//fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
 
     <link rel="stylesheet" type="text/css" media="all" href="{% static 'css/bundle.css' %}">
 
@@ -93,6 +93,7 @@
     </script>
 
     <script src="{% static 'js/bundle.js' %}"></script>
+    <script charset="utf-8" src="{% static 'js/site.js' %}"></script>
     {% block extra-js %}{% endblock extra-js %}
 </body>
 </html>
