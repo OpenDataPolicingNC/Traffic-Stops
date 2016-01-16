@@ -1032,7 +1032,8 @@ var TableBase = Backbone.Model.extend({
   draw_table: function(){
     var div = $(this.get("selector")),
         matrix = this.get_tabular_data(),
-        tbl = $('<table>').attr("class", "table table-striped table-condensed dash-tables");
+        tbl = $('<table>').attr("class", "table table-striped table-condensed dash-tables"),
+        tbody = $('<tbody>');
 
     matrix.forEach(function(row, i){
       var tr = $('<tr>');
@@ -1040,8 +1041,9 @@ var TableBase = Backbone.Model.extend({
         var cell = (i === 0) ? $('<th>') : $('<td>');
         tr.append(cell.append(d));
       });
-      tbl.append(tr);
+      tbody.append(tr);
     });
+    tbl.append(tbody);
     div.prepend(tbl);
   }
 });
