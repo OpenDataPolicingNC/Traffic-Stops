@@ -8,6 +8,7 @@ include:
   - postfix
   - ufw
   - nodejs
+  - project.npm
 
 gunicorn_requirements:
   pip.installed:
@@ -63,7 +64,7 @@ less:
     - user: root
     - unless: "which lessc && lessc --version | grep {{ pillar['less_version'] }}"
     - require:
-      - pkg: node-pkgs
+      - pkg: nodejs
   file.symlink:
     - name: /usr/bin/lessc
     - target: /usr/local/bin/lessc
@@ -78,6 +79,7 @@ collectstatic:
     - group: {{ pillar['project_name'] }}
     - require:
       - file: manage
+      - cmd: npm_run_build
 
 migrate:
   cmd.run:
