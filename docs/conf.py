@@ -44,8 +44,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'NC Traffic Stops'
-copyright = '2014, Dylan, Andy, and Colin'
+project = 'Open Data Policing'
+copyright = '2014-2016, Southern Coalition for Social Justice'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

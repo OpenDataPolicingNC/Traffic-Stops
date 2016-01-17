@@ -83,8 +83,8 @@ Run the import command:
 When finished, revoke SUPERUSER privileges:
 
 .. code-block:: bash
-    sudo -u postgres psql -c 'ALTER USER traffic_stops_staging WITH NOSUPERUSER;'
 
+    sudo -u postgres psql -c 'ALTER USER traffic_stops_staging WITH NOSUPERUSER;'
 
 Create DB Dump
 ______________

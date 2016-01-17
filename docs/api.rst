@@ -4,9 +4,9 @@ API Endpoints
 Stops by all races and ethnicities by year
 ------------------------------------------
 
-**URI:** `/api/agency/<id>/stops/ <https://traffic-stops.codefordurham.com/api/agency/78/stops/>`_
+**URI:** `/api/agency/<id>/stops/ <https://opendatapolicingnc.com/api/agency/78/stops/>`_
 
-**Officer URI:** `/api/agency/<id>/stops/?officer=<id> <https://traffic-stops.codefordurham.com/api/agency/78/stops/?officer=368>`_
+**Officer URI:** `/api/agency/<id>/stops/?officer=<id> <https://opendatapolicingnc.com/api/agency/78/stops/?officer=368>`_
 
 Counts of stops by all races and by all ethnicities by year.
 
@@ -33,7 +33,7 @@ Sample SQL Results:
 
 .. code-block:: sql
 
-     count | race | year 
+     count | race | year
     -------+------+------
       4481 | W    | 2005
        357 | U    | 2005
@@ -97,9 +97,9 @@ Sample JSON response (Durham Police Department):
 Likelihood-of-search by stop-reason
 -----------------------------------
 
-**URI:** `/api/agency/<id>/stops_by_reason/ <https://traffic-stops.codefordurham.com/api/agency/78/stops_by_reason/>`_
+**URI:** `/api/agency/<id>/stops_by_reason/ <https://opendatapolicingnc.com/api/agency/78/stops_by_reason/>`_
 
-**Officer URI:** `/api/agency/<id>/stops_by_reason/?officer=<id> <https://traffic-stops.codefordurham.com/api/agency/78/stops_by_reason/?officer=368>`_
+**Officer URI:** `/api/agency/<id>/stops_by_reason/?officer=<id> <https://opendatapolicingnc.com/api/agency/78/stops_by_reason/?officer=368>`_
 
 A count of likelihood-of-search by stop-reason.
 
@@ -146,7 +146,7 @@ Sample SQL Results:
 
 .. code-block:: sql
 
-     count | race | purpose | year 
+     count | race | purpose | year
     -------+------+---------+------
       2568 | W    |       1 | 2006
        134 | U    |       1 | 2006
@@ -188,7 +188,7 @@ Sample SQL Results:
        482 | B    |       9 | 2006
         13 | A    |       9 | 2006
 
-     count | race | purpose | year 
+     count | race | purpose | year
     -------+------+---------+------
         73 | W    |       1 | 2006
          1 | U    |       1 | 2006
@@ -279,9 +279,9 @@ JSON Response
 Use-of-force
 ------------
 
-**URI:** `/api/agency/<id>/use_of_force/ <https://traffic-stops.codefordurham.com/api/agency/78/use_of_force/>`_
+**URI:** `/api/agency/<id>/use_of_force/ <https://opendatapolicingnc.com/api/agency/78/use_of_force/>`_
 
-**Officer URI:** `/api/agency/<id>/use_of_force/?officer=<id> <https://traffic-stops.codefordurham.com/api/agency/78/use_of_force/?officer=368>`_
+**Officer URI:** `/api/agency/<id>/use_of_force/?officer=<id> <https://opendatapolicingnc.com/api/agency/78/use_of_force/?officer=368>`_
 
 A count of all use-of-force by all races and by all ethnicities by year.
 
@@ -311,7 +311,7 @@ Sample SQL results:
 
 .. code-block:: sql
 
-     count | race | year 
+     count | race | year
     -------+------+------
          3 | W    | 2002
          1 | W    | 2003
@@ -382,9 +382,9 @@ Sample JSON response (Durham Police Department):
 Contraband Hit Rate
 -------------------
 
-**URI:** `/api/agency/<id>/contraband_hit_rate/ <https://traffic-stops.codefordurham.com/api/agency/78/contraband_hit_rate/>`_
+**URI:** `/api/agency/<id>/contraband_hit_rate/ <https://opendatapolicingnc.com/api/agency/78/contraband_hit_rate/>`_
 
-**Officer URI:** `/api/agency/<id>/contraband_hit_rate/?officer=<id> <https://traffic-stops.codefordurham.com/api/agency/78/contraband_hit_rate/?officer=368>`_
+**Officer URI:** `/api/agency/<id>/contraband_hit_rate/?officer=<id> <https://opendatapolicingnc.com/api/agency/78/contraband_hit_rate/?officer=368>`_
 
 A count of contraband hit-rate by year and race.
 
