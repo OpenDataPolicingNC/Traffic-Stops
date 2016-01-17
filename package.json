@@ -19,7 +19,7 @@
     "url": "git@github.com:[ORGANIZATION]/PROJECT_NAME.git"
   },
   "author": "",
-  "license": "BSD",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/[ORGANIZATION]/PROJECT_NAME/issues"
   },

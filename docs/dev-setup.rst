@@ -6,19 +6,12 @@ Stops project. To begin you should have the following applications installed on
 your local development system:
 
 - Python 3.4
-- `pip >= 1.4 <http://www.pip-installer.org/>`_
+- NodeJS >= 4.2
+- `pip >= 1.5 <http://www.pip-installer.org/>`_
 - `virtualenv >= 1.10 <http://www.virtualenv.org/>`_
 - `virtualenvwrapper >= 3.0 <http://pypi.python.org/pypi/virtualenvwrapper>`_
 - Postgres >= 9.3
 - git >= 1.7
-
-The deployment uses SSH with agent forwarding so you'll need to enable agent
-forwarding if it is not already by adding ``ForwardAgent yes`` to your SSH
-config.
-
-
-Getting Started
----------------
 
 If you need Python 3.4 installed, you can use this PPA::
 
@@ -32,33 +25,53 @@ we need to install that globally in our Python2 environment::
 
     sudo pip install fabric==1.10.0
 
+The deployment uses SSH with agent forwarding so you'll need to enable agent
+forwarding if it is not already by adding ``ForwardAgent yes`` to your SSH
+config.
+
+
+Getting Started
+---------------
+
 To setup your local environment you should create a virtualenv and install the
 necessary requirements::
 
-    which python3.4  # make sure you have Python 3.4 installed
-    mkvirtualenv --python=`which python3.4` opendatapolicing
-    $VIRTUAL_ENV/bin/pip install -r $PWD/requirements/dev.txt
+    $ which python3.4  # make sure you have Python 3.4 installed
+    $ mkvirtualenv --python=`which python3.4` opendatapolicing
+    (opendatapolicing)$ pip install -r requirements/dev.txt
+    (opendatapolicing)$ npm install
 
 Next, we'll set up our local environment variables. We use `django-dotenv
 <https://github.com/jpadilla/django-dotenv>`_ to help with this. It reads environment variables
 located in a file name ``.env`` in the top level directory of the project. The only variable we need
 to start is ``DJANGO_SETTINGS_MODULE``::
 
-    cp traffic_stops/settings/local.example.py traffic_stops/settings/local.py
-    echo "DJANGO_SETTINGS_MODULE=traffic_stops.settings.local" > .env
+    (opendatapolicing)$ cp traffic_stops/settings/local.example.py traffic_stops/settings/local.py
+    (opendatapolicing)$ echo "DJANGO_SETTINGS_MODULE=traffic_stops.settings.local" > .env
 
 Exit the virtualenv and reactivate it to activate the settings just changed::
 
-    deactivate
-    workon opendatapolicing
+    (opendatapolicing)$ deactivate
+    (opendatapolicing)$ workon opendatapolicing
 
 Create the Postgres database and run the initial syncdb/migrate::
 
-    createdb -E UTF-8 traffic_stops
-    createdb -E UTF-8 traffic_stops_nc
-    createdb -E UTF-8 traffic_stops_md
-    python manage.py syncdb
+    (opendatapolicing)$ createdb -E UTF-8 traffic_stops
+    (opendatapolicing)$ createdb -E UTF-8 traffic_stops_nc
+    (opendatapolicing)$ createdb -E UTF-8 traffic_stops_md
+    (opendatapolicing)$ python manage.py migrate
 
-You should now be able to run the development server::
 
-    python manage.py runserver
+Development
+-----------
+
+You should be able to run the development server via the configured `dev` script::
+
+    (opendatapolicing)$ npm run dev
+
+Or, on a custom port and address::
+
+    (opendatapolicing)$ npm run dev -- --address=0.0.0.0 --port=8020
+
+Any changes made to Python, Javascript or Less files will be detected and rebuilt transparently as
+long as the development server is running.
