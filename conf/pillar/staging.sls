@@ -6,7 +6,7 @@ domain: dev.opendatapolicingnc.com
 
 repo:
   url: https://github.com/OpenDataPolicingNC/Traffic-Stops.git
-  branch: update-frontend-arch
+  branch: dev
 
 postgresql_config: # from pgtune
   work_mem: 44MB
