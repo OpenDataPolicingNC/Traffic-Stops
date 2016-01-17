@@ -1,6 +1,5 @@
 import logging
 import os
-import tempfile
 
 from django.conf import settings
 from django.db import connections

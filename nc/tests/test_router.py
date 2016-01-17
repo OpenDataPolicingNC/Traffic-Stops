@@ -29,19 +29,19 @@ class StateDatasetRouterTest(TestCase):
     def test_syncdb_state_model_defaultdb(self):
         """State models should not sync to the default DB"""
         router = StateDatasetRouter()
-        self.assertFalse(router.allow_syncdb('default', Stop))
+        self.assertFalse(router.allow_migrate('default', Stop))
 
     def test_syncdb_other_model_defaultdb(self):
         """Other models should sync to the default DB"""
         router = StateDatasetRouter()
-        self.assertTrue(router.allow_syncdb('default', User))
+        self.assertTrue(router.allow_migrate('default', User))
 
     def test_syncdb_state_model_statedb(self):
         """State models should sync to State DBs"""
         router = StateDatasetRouter()
-        self.assertTrue(router.allow_syncdb('traffic_stops_nc', Stop))
+        self.assertTrue(router.allow_migrate('traffic_stops_nc', Stop))
 
     def test_syncdb_other_model_statedb(self):
         """Other models should not sync to State DBs"""
         router = StateDatasetRouter()
-        self.assertFalse(router.allow_syncdb('traffic_stops_nc', User))
+        self.assertFalse(router.allow_migrate('traffic_stops_nc', User))
