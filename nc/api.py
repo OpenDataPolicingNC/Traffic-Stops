@@ -58,7 +58,7 @@ class AgencyViewSet(viewsets.ReadOnlyModelViewSet):
         # filter down stops by agency only those who were drivers
         qs = qs.filter(agency=self.get_object(), person__type='D')
         # filter down by officer if supplied
-        officer = self.request.QUERY_PARAMS.get('officer', None)
+        officer = self.request.query_params.get('officer', None)
         if officer:
             qs = qs.filter(officer_id=officer)
         if filter_:
