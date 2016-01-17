@@ -181,6 +181,10 @@ LOGGING = {
         'basic': {
             'format': '%(asctime)s %(name)-20s %(levelname)-8s %(message)s',
         },
+        'simple': {
+            'format': '%(asctime)s %(name)-20s %(levelname)-8s APP: %(message)s',
+            'datefmt': '%Y-%m-%dT%H:%M:%S',
+        },
     },
     'handlers': {
         'mail_admins': {
@@ -207,6 +211,7 @@ LOGGING = {
             'address': SYSLOG_PATH,
             'facility': 'local6',
             'filters': ['require_debug_false'],
+            'formatter': 'simple',
         },
     },
     'root': {
