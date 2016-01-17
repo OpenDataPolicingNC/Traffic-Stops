@@ -36,7 +36,7 @@
     <div class="row-fluid">
         <div class="col-xs-11 col-sm-10 col-md-8 col-lg-5 col-md-offset-1">
             <h1>Open Data Policing NC</h1>
-            <form role="form" id="agency_search" action='{% url "home" %}' method="post" accept-charset="utf-8">
+            <form role="form" id="agency_search" action='{% url "home" %}' method="get" accept-charset="utf-8">
                 <div class="form-group">
                 {% csrf_token %}
                 {{ agency_form.agency }}

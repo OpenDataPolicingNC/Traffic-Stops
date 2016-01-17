@@ -31,7 +31,7 @@ class StateDatasetRouter(object):
         logger.debug('db_for_write({}): {}'.format(state_db, name))
         return name
 
-    def allow_syncdb(self, db, model):
+    def allow_migrate(self, db, model):
         # scenarios:
         #
         # default           traffic_stops_nc    False

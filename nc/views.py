@@ -6,8 +6,8 @@ from nc import forms
 
 
 def home(request):
-    if request.method == 'POST':
-        form = forms.AgencySearchForm(request.POST)
+    if request.method == 'GET' and request.GET:
+        form = forms.AgencySearchForm(request.GET)
         if form.is_valid():
             agency = form.cleaned_data['agency']
             return redirect('agency-detail', agency.pk)

@@ -9,7 +9,6 @@ ENVIRONMENT = os.environ['ENVIRONMENT']
 SECRET_KEY = os.environ['SECRET_KEY']
 
 DEBUG = False
-TEMPLATE_DEBUG = DEBUG
 
 DATABASES['default']['NAME'] = 'traffic_stops_%s' % ENVIRONMENT.lower()
 DATABASES['default']['USER'] = 'traffic_stops_%s' % ENVIRONMENT.lower()
