@@ -400,6 +400,7 @@ _______
     fab staging encrypt:DB_PASSWORD=`make generate-secret`
     fab staging encrypt:SECRET_KEY=`make generate-secret length=64`
     fab staging encrypt:BROKER_PASSWORD=`make generate-secret`
+    fab staging encrypt:LOG_DESTINATION='<fill-me-in>'
     fab staging encrypt:admin='<fill-me-in>'
     fab staging encrypt:newrelic_license_key='<fill-me-in>'
     # copy each generated encrypted key to conf/pillar/<env>.sls

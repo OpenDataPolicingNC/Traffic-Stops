@@ -98,7 +98,20 @@ secrets:
     ecnfOyjh8K60sxsLpwTc/O6sxAmnOqWSvDJQq4eT0Uw1b6ev
     =XK6m
     -----END PGP MESSAGE-----
+  "LOG_DESTINATION": |-
+    -----BEGIN PGP MESSAGE-----
+    Version: GnuPG v1
 
+    hQEMAxjKmUQTU68EAQgAmQ7i8RXH58fSA7IEs4iQlP8U4d4nLxNAeQSQ7hJ4tdnI
+    +moNVan83kJnc/dsMuumHVnQjjWaU6AsJ3jHWa3yObBj5lbXtZ84fHEflenbrZBC
+    /tJY+zRAIcUpQzBEjRAd6K4Jhv0p3PCW/sJokYMTpu1ei3YyY3zm3avGUQplN+ZU
+    zO9yInr1nOJ+cZTS4AC2iKIFrToXsCPso/sWEO7/YuagX40IdA5sAxdJU6LX/pfw
+    vRSxldsCJzp7S+6/60JhYJxvo/eZJcS5L+UhMhQy5QUWG+azqOaR9inUPcC7LpiW
+    00C3PrcP7nS6CSyZ0VdKIXnixWwG9WkKnA1H1w8Xg9JYASRj52OIE1zGfdspQq2k
+    xWkRbk0cgtzofnp59Op71tHFf6IrZdSv/4TFcuaAI86U+k7cJKBAk1OaH/NiqCY0
+    wI9Sk454Hb0PpiA28uugFa3irY8+pK1DbQ==
+    =re1R
+    -----END PGP MESSAGE-----
 
 # Private deploy key. Must be GPG encrypted.
 # github_deploy_key: |-
