@@ -5,7 +5,7 @@ import tempfile
 from django.conf import settings
 from django.db import connections
 
-from .util import call, line_count, download_and_unzip_data
+from tsdata.util import call, line_count, download_and_unzip_data
 
 
 logger = logging.getLogger(__name__)
@@ -15,21 +15,7 @@ cursor = connections['traffic_stops_nc'].cursor()
 def run(url, destination=None, download=True):
     """Download NC data, extract, convert to CSV, and load into PostgreSQL"""
     logger.info('*** NC Data Import Started ***')
-    # make sure destination exists or create a temporary directory
-    if not destination:
-        destination = tempfile.mkdtemp(prefix='nc-')
-        logger.debug("Created temp directory {}".format(destination))
-    else:
-        if not os.path.exists(destination):
-            os.makedirs(destination)
-            logger.info("Created {}".format(destination))
-        else:
-            download = False
-    # don't redownload data if directory already exists with data files
-    if download:
-        download_and_unzip_data(url, destination)
-    else:
-        logger.debug("{} exists, skipping download".format(destination))
+    download_and_unzip_data(url, destination)
     # convert data files to CSV for database importing
     convert_to_csv(destination)
     # inspect table constraints so we can toggle them off during import

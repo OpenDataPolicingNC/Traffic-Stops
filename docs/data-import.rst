@@ -6,8 +6,8 @@ Local/Development Environment
 -----------------------------
 
 
-Database Dump
-_____________
+Database Dump (quicker)
+_____________________
 
 To load the database dump, run:
 
@@ -26,21 +26,21 @@ To create the database dump, run:
     pg_dump -Ox -Ft traffic_stops > traffic_stops.tar
 
 
-Raw NC Data
-___________
+Raw NC Data (slower)
+____________________
 
 Make sure our NC database is in the right state before importing:
 
 .. code-block:: bash
 
     dropdb traffic_stops_nc && createdb -E UTF-8 traffic_stops_nc
-    python manage.py syncdb --database=traffic_stops_nc --noinput
+    python manage.py migrate --database=traffic_stops_nc --noinput
 
 Run the import command:
 
 .. code-block:: bash
 
-    python manage.py import_nc
+    python manage.py import_nc --dest $PWD/ncdata
 
 This took ~25 minutes on my laptop. Run ``tail -f traffic_stops.log`` to follow
 along.
@@ -61,7 +61,7 @@ ___________
 To start with fresh NC data, first drop the server's database:
 
 .. code-block:: bash
-    
+
     sudo -u postgres dropdb traffic_stops_nc_staging
 
 Then run a **deploy** to recreate the database.

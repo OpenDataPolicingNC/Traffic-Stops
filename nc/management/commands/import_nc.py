@@ -7,8 +7,8 @@ class Command(BaseCommand):
     """Helper command to kickoff NC data import"""
     url = "https://s3-us-west-2.amazonaws.com/openpolicingdata/TS_2015_02_12T14.24.03.810.zip"
 
+    def add_arguments(self, parser):
+        parser.add_argument('--dest', default=None)
+
     def handle(self, *args, **options):
-        dest = None
-        if len(args) == 1:
-            dest = args[0]
-        importer.run(self.url, dest)
+        importer.run(self.url, options['dest'])
