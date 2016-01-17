@@ -9,12 +9,12 @@ from nc import views
 admin.autodiscover()
 
 
-urlpatterns = patterns('',  # noqa
+urlpatterns = [  # noqa
     url(r'^$', views.home, name='home'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^selectable/', include('selectable.urls')),
     url(r'^', include('nc.urls')),
     url(r'^about$', views.About.as_view(), name='about'),
     url(r'^update-session/', views.UpdateSession.as_view(), name='update_session'),
-    (r'^robots\.txt$', include('robots.urls')),
-) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    url(r'^robots\.txt$', include('robots.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

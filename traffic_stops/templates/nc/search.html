@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load selectable_tags bootstrap3 endless humanize %}
+{% load selectable_tags bootstrap3 el_pagination_tags humanize %}
 
 {% block extra-js %}
     {% include_ui_theme %}
@@ -59,7 +59,7 @@
 {% block title %}Find a Traffic Stop{% endblock %}
 
 {% block content %}
-{% paginate people %}
+{% paginate 30 people %}
 {% get_pages %}
 {% bootstrap_messages %}
 <div class="row">

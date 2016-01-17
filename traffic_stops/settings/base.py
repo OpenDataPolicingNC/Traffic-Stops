@@ -100,12 +100,12 @@ SECRET_KEY = os.environ.get('SECRET_KEY', '0qakm1)=inee683)p)0#lt2o#=@*dy5uw4_nm
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.core.context_processors.static',
-    'django.core.context_processors.tz',
-    'django.core.context_processors.request',
+    'django.template.context_processors.debug',
+    'django.template.context_processors.i18n',
+    'django.template.context_processors.media',
+    'django.template.context_processors.static',
+    'django.template.context_processors.tz',
+    'django.template.context_processors.request',
     'django.contrib.messages.context_processors.messages',
 )
 
@@ -145,7 +145,7 @@ INSTALLED_APPS = (
     # External apps
     'selectable',
     'bootstrap3',
-    'endless_pagination',
+    'el_pagination',
     'rest_framework',
     'robots',
     # Custom apps
@@ -221,7 +221,6 @@ SITE_ID = 1
 # Application settings
 LOGIN_URL = 'account_login'
 LOGIN_REDIRECT_URL = 'home'
-ENDLESS_PAGINATION_PER_PAGE = 30
 SELECTABLE_MAX_LIMIT = 30
 
 REST_FRAMEWORK_EXTENSIONS = {
