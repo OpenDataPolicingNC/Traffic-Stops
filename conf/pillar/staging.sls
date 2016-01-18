@@ -18,8 +18,8 @@ postgresql_config: # from pgtune
 
 # Addtional public environment variables to set for the project
 env:
-  FOO: BAR
-
+    NEW_RELIC_APP_NAME: opendatapolicing staging
+    NEW_RELIC_MONITOR_MODE: "true"
 
 # Uncomment and update username/password to enable HTTP basic auth
 # Password must be GPG encrypted.
@@ -84,7 +84,7 @@ secrets:
     4cpm0Ws5YeIEMZKcfVra0WBZauywuzfoSEYruw==
     =IcB/
     -----END PGP MESSAGE-----
-  "newrelic_license_key": |-
+  "NEW_RELIC_LICENSE_KEY": |-
     -----BEGIN PGP MESSAGE-----
     Version: GnuPG v1
 
