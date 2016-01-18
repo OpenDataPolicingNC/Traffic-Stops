@@ -182,8 +182,7 @@ LOGGING = {
             'format': '%(asctime)s %(name)-20s %(levelname)-8s %(message)s',
         },
         'papertrail': {
-            'format': '%(asctime)s django %(name)s %(levelname)s: %(message)s',
-            'datefmt': '%Y-%m-%dT%H:%M:%S',
+            'format': 'django %(asctime)s %(name)s %(levelname)s: %(message)s',
         },
     },
     'handlers': {
