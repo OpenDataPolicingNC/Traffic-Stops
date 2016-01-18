@@ -18,7 +18,7 @@ postgresql_config: # from pgtune
 
 # Addtional public environment variables to set for the project
 env:
-    NEW_RELIC_APP_NAME: opendatapolicing staging
+    NEW_RELIC_APP_NAME: "opendatapolicing staging"
     NEW_RELIC_MONITOR_MODE: "true"
 
 # Uncomment and update username/password to enable HTTP basic auth
