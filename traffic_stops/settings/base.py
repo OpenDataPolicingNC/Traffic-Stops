@@ -231,18 +231,22 @@ LOGGING = {
         'traffic_stops': {
             'handlers': ['file', 'syslog'],
             'level': 'INFO',
+            'propagate': False,
         },
         'tsdata': {
             'handlers': ['file', 'syslog'],
             'level': 'DEBUG',
+            'propagate': False,
         },
         'nc': {
             'handlers': ['file', 'syslog'],
             'level': 'DEBUG',
+            'propagate': False,
         },
         'md': {
             'handlers': ['file', 'syslog'],
             'level': 'DEBUG',
+            'propagate': False,
         },
     }
 }
