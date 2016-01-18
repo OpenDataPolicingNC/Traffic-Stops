@@ -78,7 +78,7 @@ Run the import command:
 
     cd /var/www/traffic-stops
     source ./env/bin/activate
-    ./manage.sh import_nc /var/www/traffic_stops/data
+    ./manage.sh import_nc --dest=/var/www/traffic_stops/data
 
 When finished, revoke SUPERUSER privileges:
 

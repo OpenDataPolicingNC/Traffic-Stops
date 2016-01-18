@@ -402,7 +402,7 @@ _______
     fab staging encrypt:BROKER_PASSWORD=`make generate-secret`
     fab staging encrypt:LOG_DESTINATION='<fill-me-in>'
     fab staging encrypt:admin='<fill-me-in>'
-    fab staging encrypt:newrelic_license_key='<fill-me-in>'
+    fab staging encrypt:NEW_RELIC_LICENSE_KEY='<fill-me-in>'
     # copy each generated encrypted key to conf/pillar/<env>.sls
     fab staging setup_minion:web,balancer,db-master,cache,queue,worker,salt-master -H dev.opendatapolicingnc.com -u ubuntu -i ~/.ssh/traffic-stops.pem
     fab staging deploy -H dev.opendatapolicingnc.com -u ubuntu -i ~/.ssh/traffic-stops.pem
@@ -423,7 +423,7 @@ __________
     fab production encrypt:production-ssl.cert && cat production-ssl.cert.asc
     fab production encrypt:production-ssl.key && cat production-ssl.key.asc
     fab production encrypt:admin=<fill-me-in>
-    fab production encrypt:newrelic_license_key='<fill-me-in>'
+    fab production encrypt:NEW_RELIC_LICENSE_KEY='<fill-me-in>'
     # copy each generated encrypted key to conf/pillar/<env>.sls
     fab production setup_minion:web,balancer,db-master,cache,queue,worker -H 54.208.65.43 -u ubuntu -i ~/.ssh/traffic-stops.pem
     fab production sync
