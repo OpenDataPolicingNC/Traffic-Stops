@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load selectable_tags %}
+{% load selectable_tags staticfiles %}
 
 {% block body_id %}home{% endblock %}
 
@@ -31,7 +31,112 @@
 {% endblock %}
 
 {% block content-outer %}
-<div id="map"></div>
+
+<div class="state-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-sm-6">
+        <h1>North Carolina</h1>
+        <p>
+          Browse all known traffic stops to have occurred in North Carolina since
+          January 1, 2002
+        </p>
+      </div>
+      <div class="col-md-4 col-sm-6 hidden-xs">
+        <img src="{% static "svg/noun_19625_cc-white.svg" %}" class="state">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-7">
+      <h2>About</h2>
+      <p>
+          Open Data Policing NC aggregates, visualizes, and publishes public
+          records related to all known traffic stops to have occurred in North
+          Carolina since January 1, 2002.  Enter an agency name into the search
+          field to the right to review data on the racial and ethnic demographics of
+          people stopped, searched, and subjected to force in the course of
+          traffic stops in a given jurisdiction.  Data is available for most
+          North Carolina departments and officers serving populations greater
+          than 10,000.
+      </p>
+      <p>
+          North Carolina law requires all such agencies to report their data
+          on a monthly basis to the NC Department of Justice; however, some
+          datasets are incomplete or remain unreported.  Where data sets are
+          incomplete or missing from the website it is because they have not
+          been reported to the state agency from which the site derives its
+          records. Open Data Policing does not have access to, nor does it
+          publish, the names of officers, drivers, or passengers involved in
+          traffic stops.
+      </p>
+    </div>
+    <div class="col-sm-5">
+      <h2>Find Agency</h2>
+      <p>
+        Enter an agency name into the search field or browse a list of all <a href="{% url "agency-list" %}">NC agencies</a>:
+      </p>
+      <form role="form" id="agency_search" action='{% url "home" %}' method="get" accept-charset="utf-8">
+          <div class="form-group">
+          {% csrf_token %}
+          {{ agency_form.agency }}
+          {% if agency_form.agency.errors %}
+              <div class="alert alert-warning alert-dismissible">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <ul>
+                  {% for error in agency_form.agency.errors %}
+                      <li><strong>{{ error }}</strong></li>
+                  {% endfor %}
+                  </ul>
+              </div>
+          {% endif %}
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="state-featurette">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-10 col-md-offset-1">
+        <blockquote>
+          <p>"This platform presents the information in a manner that increases the transparency of the Fayetteville Police Department and improves the community and police relationship."</p>
+          <footer>Harold Medlock, Fayetteville Police Chief</footer>
+        </blockquote>
+      </div>
+    </div>
+    <hr class="half-rule">
+    <div class="row">
+      <div class="col-sm-4">
+        <h3>Feature A</h3>
+        <p>
+          Etiam at mollis nisi, a fringilla lorem. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec placerat tempor felis, ac ullamcorper orci tincidunt viverra.
+        </p>
+      </div>
+      <div class="col-sm-4">
+        <h3>Feature B</h3>
+        <p>
+          Etiam malesuada, mauris vitae laoreet pulvinar, tortor eros egestas tellus, vehicula gravida tellus tellus euismod nisl. Cras consequat orci mi, efficitur finibus turpis ultricies nec.
+        </p>
+      </div>
+      <div class="col-sm-4">
+        <h3>Feature C</h3>
+        <p>
+          Sed egestas, nulla id sollicitudin lobortis, mi libero semper tellus, vel faucibus ligula libero at lectus. Morbi iaculis neque justo, at varius velit molestie quis.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+
+</div>
+
+<!-- <div id="map"></div>
 <div id="quick-search">
     <div class="row-fluid">
         <div class="col-xs-11 col-sm-10 col-md-8 col-lg-5 col-md-offset-1">
@@ -76,5 +181,5 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 {% endblock %}

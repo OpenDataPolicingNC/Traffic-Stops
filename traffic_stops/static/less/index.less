@@ -13,6 +13,17 @@
 /* Variables
 ==================== */
 
+// http://paletton.com/palette.php?uid=13z0u0kllllaFw0g0qFqFg0w0aF
+@brand-primary:    #133453;
+@brand-secondary:  #728DA5;
+@brand-tertiary:   #4A6B8A;
+@brand-quaternary: #041F37;
+@link-color:       @brand-tertiary;
+@link-hover-color: darken(@link-color, 30%);
+
+@navbar-default-link-color: @brand-primary;
+@navbar-default-link-hover-color: @brand-quaternary;
+
 /* Sitewide
 ==================== */
 
@@ -45,7 +56,7 @@ body {
 }
 
 #wrap > .container {
-  padding: 60px 15px 0;
+  padding: 15px 15px 0;
 }
 .container .credit {
   margin: 20px 0;
@@ -63,8 +74,75 @@ code {
   font-size: 80%;
 }
 
+.navbar-default {
+  .navbar-brand {
+    font-weight: bold;
+  }
+}
+
+.odp-nav .navbar-nav > .active > a,
+.odp-nav .navbar-nav > .active > a:hover,
+.odp-nav .navbar-nav > li > a:hover{
+  background-color: @gray-lighter;
+}
+
 /* Homepage
 ==================== */
+
+.half-rule {
+  width: 100px;
+  margin: 20px auto;
+}
+
+.state-banner {
+  padding-top: 60px;
+  padding-bottom: 40px;
+  font-size: 24px;
+  text-align: left;
+  background-color: @brand-primary;
+  color: @brand-secondary;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .5);
+
+  .container {
+    position: relative;
+
+    h1 {
+      color: white;
+    }
+    .state {
+      margin-top: 30px;
+    }
+
+    @media (max-width: @screen-sm-min) {
+      p {
+        font-size: 18px;
+      }
+    }
+  }
+}
+
+.state-featurette {
+  margin-top: 30px;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-image: url("/static/img/press-conf-blue-80-cropped.jpg");
+  background-position: center top;
+  color: white;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .5);
+
+  blockquote {
+    border-left: 0;
+    font-size: 22px;
+    footer {
+      color: @brand-secondary;
+    }
+  }
+  @media (max-width: @screen-sm-min) {
+    blockquote {
+      font-size: 18px;
+    }
+  }
+}
 
 body#home {
   #map {
