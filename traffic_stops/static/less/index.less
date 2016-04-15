@@ -85,6 +85,10 @@ code {
   font-size: 80%;
 }
 
+.navbar-fixed-top {
+  border-bottom: 0;
+}
+
 .navbar-default {
   .navbar-brand {
     font-weight: bold;
@@ -93,8 +97,22 @@ code {
 
 .odp-nav .navbar-nav > .active > a,
 .odp-nav .navbar-nav > .active > a:hover,
-.odp-nav .navbar-nav > li > a:hover{
+.odp-nav .navbar-nav > li > a:hover {
   background-color: @gray-lighter;
+}
+
+.odp-nav .state-nav {
+  a .name {
+    text-align: center;
+  }
+}
+
+.odp-nav .navbar-nav > li.state-nav > a {
+  background-color: @gray-lighter;
+
+  &:hover {
+
+  }
 }
 
 /* Homepage
