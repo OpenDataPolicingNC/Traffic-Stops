@@ -6,11 +6,25 @@
   {{block.super}} | {{object}}
 {% endblock title %}
 
-{% block content %}
+{% block content-outer %}
 
-  <h1>{{ object }}{% if officer_id %}: officer {{officer_id}} {% endif %}</h1>
+<div class="state-banner small">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-sm-6">
+        <h1>{{ object }}{% if officer_id %}: officer {{officer_id}} {% endif %}</h1>
+      </div>
+      <div class="col-md-4 col-sm-6 hidden-xs">
+        <img src="{% static "svg/noun_19625_cc-white.svg" %}" class="state">
+      </div>
+      <div class="clearfix visible-xs-block"></div>
+    </div>
+  </div>
+</div>
 
+<div class="container">
   <!-- census data -->
+  <span class="start" />
   <div id="census_row" class="row">
     <div class="col-md-12">
       <h2>2010 census data</h2>
@@ -340,7 +354,7 @@
 
     </div>
   </div>
-
+</div>
 {% endblock %}
 
 {% block extra-css %}
@@ -398,7 +412,7 @@
       new UseOfForceBarChart({handler: uf_handler, selector: "#use_force_race_line", showEthnicity: showEthnicity});
       new UseOfForceTable({handler: uf_handler, selector: "#use_force_race__data", showEthnicity: showEthnicity});
 
-      new RaceToggle("{% url 'update_session' %}", showEthnicity).render($('h1'));
+      new RaceToggle("{% url 'update_session' %}", showEthnicity).render($('span.start'));
 
     });
   </script>
