@@ -20,12 +20,23 @@
 @brand-quaternary: #041F37;
 @link-color:       @brand-tertiary;
 @link-hover-color: darken(@link-color, 30%);
+@border-radius-base: 2px;
 
 @navbar-default-link-color: @brand-primary;
 @navbar-default-link-hover-color: @brand-quaternary;
 
 /* Sitewide
 ==================== */
+
+@navbar-inverse-bg: @brand-primary;
+@navbar-inverse-border: @brand-primary;
+@navbar-inverse-link-color: white;
+
+.odp-nav.navbar-inverse .navbar-nav > .active > a,
+.odp-nav.navbar-inverse .navbar-nav > .active > a:hover,
+.odp-nav.navbar-inverse .navbar-nav > li > a:hover{
+  background-color: @brand-secondary;
+}
 
 /* Sticky footer styles
 -------------------------------------------------- */
@@ -89,6 +100,54 @@ code {
 /* Homepage
 ==================== */
 
+.state-picker {
+  padding-top: 70px;
+  padding-bottom: 40px;
+  text-align: center;
+  background-color: @brand-primary;
+  color: white;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .5);
+
+  h1.title{
+    font-size: 60px;
+  }
+  p.tagline {
+    font-size: 20px;
+    margin-bottom: 50px;
+    color: @brand-secondary;
+  }
+
+  img.state {
+    height: 16ex;
+    margin-bottom: 10px;
+  }
+  p.stop-count {
+    color: @brand-secondary;
+  }
+  .btn {
+    margin-top: 10px;
+    background-color: transparent;
+    color: white;
+    border-color: @brand-tertiary;
+    padding: 12px 20px;
+    border-width: 2px;
+    font-size: 16px;
+
+    &:hover {
+      background-color: @brand-tertiary;
+    }
+  }
+  @media (max-width: @screen-sm-min) {
+    .btn.nc {
+      margin-bottom: 40px;
+    }
+  }
+
+}
+
+/* State homepage
+========================================= */
+
 .half-rule {
   width: 100px;
   margin: 20px auto;
@@ -122,7 +181,6 @@ code {
 }
 
 .state-featurette {
-  margin-top: 30px;
   padding-top: 40px;
   padding-bottom: 40px;
   background-image: url("/static/img/press-conf-blue-80-cropped.jpg");
@@ -144,7 +202,7 @@ code {
   }
 }
 
-body#home {
+body#state {
   #map {
     position: fixed;
     width: 100%;
@@ -177,7 +235,6 @@ body#home {
     font-size: 110%;
   }
 }
-
 
 /* Dashboard data tables
 ========================================= */
