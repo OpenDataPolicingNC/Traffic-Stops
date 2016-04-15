@@ -24,18 +24,21 @@
 
 @navbar-default-link-color: @brand-primary;
 @navbar-default-link-hover-color: @brand-quaternary;
-
-/* Sitewide
-==================== */
-
 @navbar-inverse-bg: @brand-primary;
 @navbar-inverse-border: @brand-primary;
 @navbar-inverse-link-color: white;
+
+/* Sitewide
+==================== */
 
 .odp-nav.navbar-inverse .navbar-nav > .active > a,
 .odp-nav.navbar-inverse .navbar-nav > .active > a:hover,
 .odp-nav.navbar-inverse .navbar-nav > li > a:hover{
   background-color: @brand-secondary;
+}
+
+h1, h2, h3, h4, h5 {
+  color: @brand-primary;
 }
 
 /* Sticky footer styles
@@ -126,6 +129,9 @@ code {
   color: white;
   text-shadow: 0 1px 0 rgba(0, 0, 0, .5);
 
+  h1 {
+    color: white;
+  }
   p.tagline {
     font-size: 20px;
     margin-bottom: 50px;
@@ -226,6 +232,14 @@ code {
       font-size: 18px;
     }
   }
+}
+
+p.nc-agency-intro {
+  margin-bottom: 20px;
+}
+
+.agency-dashboard-block {
+  margin-bottom: 30px;
 }
 
 body#state {

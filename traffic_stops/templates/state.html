@@ -40,137 +40,107 @@
   </div>
 </div>
 
-<div class="container">
-  <div class="row">
-    <div class="col-sm-7">
-      <h2>About</h2>
-      <p>
-          Open Data Policing NC aggregates, visualizes, and publishes public
-          records related to all known traffic stops to have occurred in North
-          Carolina since January 1, 2002.  Enter an agency name into the search
-          field to the right to review data on the racial and ethnic demographics of
-          people stopped, searched, and subjected to force in the course of
-          traffic stops in a given jurisdiction.  Data is available for most
-          North Carolina departments and officers serving populations greater
-          than 10,000.
-      </p>
-      <p>
-          North Carolina law requires all such agencies to report their data
-          on a monthly basis to the NC Department of Justice; however, some
-          datasets are incomplete or remain unreported.  Where data sets are
-          incomplete or missing from the website it is because they have not
-          been reported to the state agency from which the site derives its
-          records. Open Data Policing does not have access to, nor does it
-          publish, the names of officers, drivers, or passengers involved in
-          traffic stops.
-      </p>
-    </div>
-    <div class="col-sm-5">
-      <h2>Find Agency</h2>
-      <p>
-        Enter an agency name into the search field or browse a list of all <a href="{% url "agency-list" %}">NC agencies</a>:
-      </p>
-      <form role="form" id="agency_search" action='{% url "nc-home" %}' method="get" accept-charset="utf-8">
-          <div class="form-group">
-          {% csrf_token %}
-          {{ agency_form.agency }}
-          {% if agency_form.agency.errors %}
-              <div class="alert alert-warning alert-dismissible">
-                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                  <ul>
-                  {% for error in agency_form.agency.errors %}
-                      <li><strong>{{ error }}</strong></li>
-                  {% endfor %}
-                  </ul>
-              </div>
-          {% endif %}
-          </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-<div class="state-featurette">
+<div class="agency-dashboard-block">
   <div class="container">
     <div class="row">
-      <div class="col-md-10 col-md-offset-1">
-        <blockquote>
-          <p>"This platform presents the information in a manner that increases the transparency of the Fayetteville Police Department and improves the community and police relationship."</p>
-          <footer>Harold Medlock, Fayetteville Police Chief</footer>
-        </blockquote>
-      </div>
-    </div>
-    <hr class="half-rule">
-    <div class="row">
-      <div class="col-sm-4">
-        <h3>Feature A</h3>
-        <p>
-          Etiam at mollis nisi, a fringilla lorem. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec placerat tempor felis, ac ullamcorper orci tincidunt viverra.
+      <div class="col-md-5 col-sm-6">
+        <h2>Agencies</h2>
+        <p class='nc-agency-intro'>
+          Review agency-level data on the racial and ethnic demographics of people
+          stopped, searched, and subjected to force in the course of traffic stops
+          in a given jurisdiction.
         </p>
+        <h4>Largest Cities</h4>
+        <table class='table table-condensed table-hover'>
+          <tr>
+            <th>City</th>
+            <th>Stops</th>
+          </tr>
+          <tr>
+            <td><a href="{% url "agency-detail" "192" %}">NC State Highway Patrol</a></td>
+            <td class="text-right">9,474,397</td>
+          </tr>
+          <tr>
+            <td><a href="{% url "agency-detail" "51" %}">Charlotte-Mecklenburg Police Department</a></td>
+            <td class="text-right">1,628,374</td>
+          </tr>
+          <tr>
+            <td><a href="{% url "agency-detail" "223" %}">Raleigh Police Department</a></td>
+            <td class="text-right">870,245</td>
+          </tr>
+          <tr>
+            <td><a href="{% url "agency-detail" "104" %}">Greensboro Police Department</a></td>
+            <td class="text-right">569,612</td>
+          </tr>
+          <tr>
+            <td><a href="{% url "agency-detail" "104" %}">Winston-Salem Police Department</a></td>
+            <td class="text-right">452,352</td>
+          </tr>
+        </table>
+        <h4>View Agency Dashboard</h4>
+        <form role="form" id="agency_search" action='{% url "nc-home" %}' method="get" accept-charset="utf-8">
+            <div class="form-group">
+            {% csrf_token %}
+            <div class="input-group">
+              {{ agency_form.agency }}
+              <span class="input-group-btn">
+                <button class="btn btn-primary" type="button">View</button>
+              </span>
+            </div><!-- /input-group -->
+            {% if agency_form.agency.errors %}
+                <div class="alert alert-warning alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <ul>
+                    {% for error in agency_form.agency.errors %}
+                        <li><strong>{{ error }}</strong></li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            </div>
+        </form>
       </div>
-      <div class="col-sm-4">
-        <h3>Feature B</h3>
+      <div class="col-sm-7">
+        <h2>About</h2>
         <p>
-          Etiam malesuada, mauris vitae laoreet pulvinar, tortor eros egestas tellus, vehicula gravida tellus tellus euismod nisl. Cras consequat orci mi, efficitur finibus turpis ultricies nec.
+            Open Data Policing aggregates, visualizes, and publishes public
+            records related to all known traffic stops to have occurred in North
+            Carolina since January 1, 2002. Data is available for most
+            North Carolina departments and officers serving populations greater
+            than 10,000.
         </p>
-      </div>
-      <div class="col-sm-4">
-        <h3>Feature C</h3>
         <p>
-          Sed egestas, nulla id sollicitudin lobortis, mi libero semper tellus, vel faucibus ligula libero at lectus. Morbi iaculis neque justo, at varius velit molestie quis.
+            North Carolina law requires all such agencies to report their data
+            on a monthly basis to the NC Department of Justice; however, some
+            datasets are incomplete or remain unreported.  Where data sets are
+            incomplete or missing from the website it is because they have not
+            been reported to the state agency from which the site derives its
+            records. Open Data Policing does not have access to, nor does it
+            publish, the names of officers, drivers, or passengers involved in
+            traffic stops.
         </p>
+        <h4>Dataset Facts</h4>
+        <table class='table table-condensed table-hover'>
+          <tr>
+            <th>Timeframe</th>
+            <td>Jan 4 2002 - Dec 13, 2015</td>
+          </tr>
+          <tr>
+            <th>Stops</th>
+            <td>20,462,591</td>
+          </tr>
+          <tr>
+            <th>Searches</th>
+            <td>2,196,298</td>
+          </tr>
+          <tr>
+            <th>Agencies</th>
+            <td>311</td>
+          </tr>
+        </table>
       </div>
     </div>
   </div>
 </div>
-<div class="row">
 
-</div>
-
-<!-- <div id="map"></div>
-<div id="quick-search">
-    <div class="row-fluid">
-        <div class="col-xs-11 col-sm-10 col-md-8 col-lg-5 col-md-offset-1">
-            <h1>Open Data Policing NC</h1>
-            <form role="form" id="agency_search" action='{% url "home" %}' method="get" accept-charset="utf-8">
-                <div class="form-group">
-                {% csrf_token %}
-                {{ agency_form.agency }}
-                {% if agency_form.agency.errors %}
-                    <div class="alert alert-warning alert-dismissible">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <ul>
-                        {% for error in agency_form.agency.errors %}
-                            <li><strong>{{ error }}</strong></li>
-                        {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
-                </div>
-            </form>
-            <div id="elevator">
-                <p>
-                    Open Data Policing NC aggregates, visualizes, and publishes public
-                    records related to all known traffic stops to have occurred in North
-                    Carolina since January 1, 2002.  Enter an agency name into the search
-                    field above to review data on the racial and ethnic demographics of
-                    people stopped, searched, and subjected to force in the course of
-                    traffic stops in a given jurisdiction.  Data is available for most
-                    North Carolina departments and officers serving populations greater
-                    than 10,000.
-                </p>
-                <p>
-                    North Carolina law requires all such agencies to report their data
-                    on a monthly basis to the NC Department of Justice; however, some
-                    datasets are incomplete or remain unreported.  Where data sets are
-                    incomplete or missing from the website it is because they have not
-                    been reported to the state agency from which the site derives its
-                    records. Open Data Policing does not have access to, nor does it
-                    publish, the names of officers, drivers, or passengers involved in
-                    traffic stops.
-                </p>
-            </div>
-        </div>
-    </div>
-</div> -->
 {% endblock %}
