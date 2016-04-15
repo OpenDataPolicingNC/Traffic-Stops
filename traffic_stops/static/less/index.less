@@ -126,9 +126,6 @@ code {
   color: white;
   text-shadow: 0 1px 0 rgba(0, 0, 0, .5);
 
-  h1.title{
-    font-size: 60px;
-  }
   p.tagline {
     font-size: 20px;
     margin-bottom: 50px;
@@ -160,7 +157,18 @@ code {
       margin-bottom: 40px;
     }
   }
+  @media (min-width: @screen-sm-min) {
+    h1.title{
+      font-size: 60px;
+    }
+  }
+}
 
+.about-footer {
+  padding-bottom: 10px;
+  .links a {
+    font-size: 16px;
+  }
 }
 
 /* State homepage
