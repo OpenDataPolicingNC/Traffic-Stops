@@ -4,6 +4,7 @@ import os
 from django.conf import settings
 from django.db import connections
 
+from nc import models as nc
 from tsdata.util import call, line_count, download_and_unzip_data
 
 
@@ -14,6 +15,7 @@ cursor = connections['traffic_stops_nc'].cursor()
 def run(url, destination=None, download=True):
     """Download NC data, extract, convert to CSV, and load into PostgreSQL"""
     logger.info('*** NC Data Import Started ***')
+    truncate_database()
     download_and_unzip_data(url, destination)
     # convert data files to CSV for database importing
     convert_to_csv(destination)
@@ -30,6 +32,20 @@ def run(url, destination=None, download=True):
     logger.info("Adding table constraints")
     cursor.execute(add_constraints)
     logger.info("NC Data Import Complete")
+
+
+def truncate_database():
+    """Truncate all NC tables to prep database for fresh import"""
+    models = (nc.SearchBasis,
+              nc.Contraband,
+              nc.Search,
+              nc.Person,
+              nc.Stop,
+              nc.Agency)
+    for model in models:
+        table = model._meta.db_table
+        cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(table))
+    cursor.execute('VACUUM ANALYZE')
 
 
 def create_schema(format_path, schema_path):
