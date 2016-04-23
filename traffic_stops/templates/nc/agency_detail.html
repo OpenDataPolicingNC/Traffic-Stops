@@ -22,335 +22,349 @@
 </div>
 
 <div class="container">
-  <!-- census data -->
-  <span class="start" />
-  <div id="census_row" class="row">
-    <div class="col-md-12">
-      <h2>2010 census data</h2>
-    </div>
-
-    <div class="col-md-4">
-      <h3>Percentage by race/ethnicity</h3>
-      <svg id="census_pie"></svg>
-
-      <p class="help-block">
-        This graph reflects the racial composition of the jurisdiction at the
-        time of the last census (2010). It is included for comparative purposes.
-        The actual driving population within a given jurisdiction may vary
-        significantly from census figures.
-      </p>
-    </div>
-
-    <div class="col-md-8">
-      <h3>Data table</h3>
-      <br><br>
-      <div id="census_data"></div>
-
-      <p class="help-block">
-        This data table reflects the jurisdiction's racial and ethnic
-        composition at the time of the last census (2010). It is included for
-        comparative purposes. The actual driving population within a given
-        jurisdiction may vary significantly from census figures.
-      </p>
-
-    </div>
-  </div>
-  <hr>
-
-  <!-- stop data -->
   <div class="row">
-    <div class="col-md-12">
-      <h2>Stops data</h2>
-    </div>
-
-    <div class="col-md-4">
-      <h3>Stops by race/ethnicity</h3>
-
-      <div>
-        <svg id="stop_race_pie"></svg>
-      </div>
-
-      <p class="help-block">
-        This graph reflects the racial composition of drivers stopped by law
-        enforcement officers in the jurisdiction since the department began
-        reporting its data to the NC Department of Justice. Adjusting the drop
-        down menu will display the racial breakdown of stops on a year-by-year
-        basis.
-      </p>
-    </div>
-
-    <div id="stop_div" class="col-md-8">
-      <h3>Annual percent of stops by race/ethnicity</h3>
-
-      <div role="tabpanel">
-
-        <!-- Nav tabs -->
-        <ul class="nav nav-tabs" role="tablist">
-          <li role="presentation" class="active">
-            <a href="#stop_race_line_div" aria-controls="stop_race_line_div" role="tab" data-toggle="tab">Chart</a></li>
-          <li role="presentation">
-            <a href="#stop_race_data" aria-controls="stop_race_data" role="tab" data-toggle="tab">Data</a></li>
-        </ul>
-
-        <!-- Tab panes -->
-        <div class="tab-content">
-          <div role="tabpanel" class="tab-pane active" id="stop_race_line_div">
-            <svg id="stop_race_line"></svg>
-          </div>
-          <div role="tabpanel" class="tab-pane" id="stop_race_data">
-          </div>
+    <div class="col-md-9" role="main">
+      <!-- census data -->
+      <span class="start" />
+      <div id="census_row" class="row">
+        <div class="col-md-12">
+          <h2 id='demographics'>2010 census data</h2>
         </div>
 
-      </div>
+        <div class="col-md-4">
+          <h3>Percentage by race/ethnicity</h3>
+          <svg id="census_pie"></svg>
 
-      <p class="help-block">
-        This graph is a longitudinal representation of the racial and ethnic
-        composition of drivers stopped by the department since it began
-        reporting its data to the NC Department of Justice. Drag the cursor
-        over the graph to see the racial/ethnic breakdown for any given year.
-        <br><br>
-        Click the "Data" tab to review the actual raw counts from the
-        NC Department of Justice.
-      </p>
-
-    </div>
-  </div>
-  <hr>
-
-  <!-- Fraction of stops searched -->
-  <div class="row">
-     <div class="col-md-offset-2 col-md-8">
-      <h3>{% if officer_id %}Officer{% else %}Departmental{% endif %} search rate</h3>
-
-      <div role="tabpanel">
-
-        <!-- Nav tabs -->
-        <ul class="nav nav-tabs" role="tablist">
-          <li role="presentation" class="active">
-            <a href="#stop_search_line_div" role="tab" data-toggle="tab">Chart</a></li>
-          <li role="presentation">
-            <a href="#stop_search_data" role="tab" data-toggle="tab">Data</a></li>
-        </ul>
-
-        <!-- Tab panes -->
-        <div class="tab-content">
-          <div role="tabpanel" class="tab-pane active" id="stop_search_line_div">
-            <svg id="stop_search_line"></svg>
-          </div>
-          <div role="tabpanel" class="tab-pane" id="stop_search_data">
-          </div>
+          <p class="help-block">
+            This graph reflects the racial composition of the jurisdiction at the
+            time of the last census (2010). It is included for comparative purposes.
+            The actual driving population within a given jurisdiction may vary
+            significantly from census figures.
+          </p>
         </div>
 
-      </div>
-
-      <p class="help-block">
-        This chart is a longitudinal representation of the average departmental
-        search rate for vehicle stops since the department began reporting its
-        data to the NC Department of Justice.  The black line represents the
-        overall search rate for all motorists.
-        <br><br>
-        Click the "Data" tab to review the actual stop/search counts from the
-        NC Department of Justice.
-      </p>
-    </div>
-  </div>
-  <hr>
-
-  <!-- search data -->
-  <div class="row">
-    <div class="col-md-12">
-      <h2>Search data</h2>
-    </div>
-
-    <div class="col-md-4">
-      <h3>Search by race/ethnicity</h3>
-
-      <div>
-        <svg id="search_race_pie"></svg>
-      </div>
-
-      <p class="help-block">
-        This graph reflects the racial composition of drivers searched by law
-        enforcement officers in the jurisdiction since the department began
-        reporting its data to the NC Department of Justice. Adjusting the drop
-        down menu will display the racial breakdown of stops on a year-by-year
-        basis.
-      </p>
-    </div>
-
-    <div id="search_div" class="col-md-8">
-      <h3>Annual percent of search by race/ethnicity</h3>
-
-      <div role="tabpanel">
-
-        <!-- Nav tabs -->
-        <ul class="nav nav-tabs" role="tablist">
-          <li role="presentation" class="active">
-            <a href="#search_race_line_div" aria-controls="search_race_line_div" role="tab" data-toggle="tab">Chart</a></li>
-          <li role="presentation">
-            <a href="#search_race_data" aria-controls="stop_race_data" role="tab" data-toggle="tab">Data</a></li>
-        </ul>
-
-        <!-- Tab panes -->
-        <div class="tab-content">
-          <div role="tabpanel" class="tab-pane active" id="search_race_line_div">
-            <svg id="search_race_line"></svg>
-          </div>
-          <div role="tabpanel" class="tab-pane" id="search_race_data">
-          </div>
-        </div>
-
-        <p class="help-block">
-          This graph is a longitudinal representation of the racial and ethnic
-          composition of drivers searched by the department since it began
-          reporting its data to the NC Department of Justice. Drag the cursor
-          over the graph to see the racial/ethnic breakdown for any given year.
+        <div class="col-md-8">
+          <h3>Data table</h3>
           <br><br>
-          Click the "Data" tab to review the actual raw counts from the
-          NC Department of Justice.
-        </p>
+          <div id="census_data"></div>
 
+          <p class="help-block">
+            This data table reflects the jurisdiction's racial and ethnic
+            composition at the time of the last census (2010). It is included for
+            comparative purposes. The actual driving population within a given
+            jurisdiction may vary significantly from census figures.
+          </p>
+
+        </div>
       </div>
+      <hr>
 
-    </div>
-  </div>
-
-  <div class="row">
-    <div id="lhs_div" class="col-md-offset-2 col-md-8">
-      <h3>Likelihood of search by stop-cause</h3>
-
-      <div role="tabpanel">
-
-        <!-- Nav tabs -->
-        <ul class="nav nav-tabs" role="tablist">
-          <li role="presentation" class="active">
-            <a href="#lsb_div" aria-controls="lsb_div" role="tab" data-toggle="tab">Chart</a></li>
-          <li role="presentation">
-            <a href="#lsb_data" aria-controls="lsb_data" role="tab" data-toggle="tab">Data</a></li>
-        </ul>
-
-        <!-- Tab panes -->
-        <div class="tab-content">
-          <div role="tabpanel" class="tab-pane active" id="lsb_div">
-            <svg id="lsb"></svg>
-          </div>
-          <div role="tabpanel" class="tab-pane" id="lsb_data">
-          </div>
+      <!-- stop data -->
+      <div class="row">
+        <div class="col-md-12">
+          <h2 id="stop-percentage">Stops data</h2>
         </div>
 
-      </div>
+        <div class="col-md-4">
+          <h3>Stops by race/ethnicity</h3>
 
-      <p class="help-block">
-        This chart displays the relative statistical likelihood of one
-        racial/ethnic group being searched as compared to another group for a
-        given stop cause. Adjusting the drop down menu will display the relative
-        likelihood of search relative to another racial group on a year-by-year
-        basis. Click the colored circles above the graph to display the
-        comparisons between various racial and ethnic groups.
-        <br><br>
-        Click the "Data" tab to review the actual raw counts from the
-        NC Department of Justice.
-      </p>
-
-    </div>
-  </div>
-  <hr>
-
-  <div class="row">
-    <div id="contraband_div" class="col-md-offset-2 col-md-8">
-      <h3>Contraband hit-rate</h3>
-
-      <div role="tabpanel">
-
-        <!-- Nav tabs -->
-        <ul class="nav nav-tabs" role="tablist">
-          <li role="presentation" class="active">
-            <a href="#chr_div" aria-controls="chr_div" role="tab" data-toggle="tab">Chart</a></li>
-          <li role="presentation">
-            <a href="#chr_data" aria-controls="chr_data" role="tab" data-toggle="tab">Data</a></li>
-        </ul>
-
-        <!-- Tab panes -->
-        <div class="tab-content">
-          <div role="tabpanel" class="tab-pane active" id="chr_div">
-            <svg id="chr"></svg>
+          <div>
+            <svg id="stop_race_pie"></svg>
           </div>
-          <div role="tabpanel" class="tab-pane" id="chr_data">
-          </div>
+
+          <p class="help-block">
+            This graph reflects the racial composition of drivers stopped by law
+            enforcement officers in the jurisdiction since the department began
+            reporting its data to the NC Department of Justice. Adjusting the drop
+            down menu will display the racial breakdown of stops on a year-by-year
+            basis.
+          </p>
         </div>
 
-      </div>
+        <div id="stop_div" class="col-md-8">
+          <h3>Annual percent of stops by race/ethnicity</h3>
 
-      <p class="help-block">
-        This chart displays the percentage of searches that uncovered contraband
-        for a given racial or ethnic group. Adjusting the drop down menu will
-        display the hit rate on a year-by-year basis.
-        <br><br>
-        Click the "Data" tab to review the actual raw counts from the
-        NC Department of Justice.
-      </p>
+          <div role="tabpanel">
 
-    </div>
-  </div>
-  <hr>
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#stop_race_line_div" aria-controls="stop_race_line_div" role="tab" data-toggle="tab">Chart</a></li>
+              <li role="presentation">
+                <a href="#stop_race_data" aria-controls="stop_race_data" role="tab" data-toggle="tab">Data</a></li>
+            </ul>
 
-  <!-- use-of-force data -->
-  <div class="row">
-    <div class="col-md-12">
-      <h2>Use-of-force data</h2>
-    </div>
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane active" id="stop_race_line_div">
+                <svg id="stop_race_line"></svg>
+              </div>
+              <div role="tabpanel" class="tab-pane" id="stop_race_data">
+              </div>
+            </div>
 
-    <div class="col-md-4">
-      <h3>Use-of-force by race/ethnicity</h3>
-
-      <div>
-        <svg id="use_force_race_pie"></svg>
-      </div>
-
-      <p class="help-block">
-        This graph reflects the racial composition of drivers against whom law
-        enforcement officers in the jurisdiction reported using force since the
-        department began reporting its data to the NC Department of Justice.
-        Adjusting the drop down menu will display the racial breakdown of
-        use-of-force incidents on a year-by-year basis.
-      </p>
-    </div>
-
-    <div id="use_force_div" class="col-md-8">
-      <h3>Annual use-of-force by race/ethnicity</h3>
-
-      <div role="tabpanel">
-
-        <!-- Nav tabs -->
-        <ul class="nav nav-tabs" role="tablist">
-          <li role="presentation" class="active">
-            <a href="#use_force_race_line_div" aria-controls="use_force_race_line_div" role="tab" data-toggle="tab">Chart</a></li>
-          <li role="presentation">
-            <a href="#use_force_race__data" aria-controls="use_force_race__data" role="tab" data-toggle="tab">Data</a></li>
-        </ul>
-
-        <!-- Tab panes -->
-        <div class="tab-content">
-          <div role="tabpanel" class="tab-pane active" id="use_force_race_line_div">
-            <svg id="use_force_race_line"></svg>
           </div>
-          <div role="tabpanel" class="tab-pane" id="use_force_race__data">
+
+          <p class="help-block">
+            This graph is a longitudinal representation of the racial and ethnic
+            composition of drivers stopped by the department since it began
+            reporting its data to the NC Department of Justice. Drag the cursor
+            over the graph to see the racial/ethnic breakdown for any given year.
+            <br><br>
+            Click the "Data" tab to review the actual raw counts from the
+            NC Department of Justice.
+          </p>
+
+        </div>
+      </div>
+      <hr>
+
+      <!-- Fraction of stops searched -->
+      <div class="row">
+         <div class="col-md-offset-2 col-md-8">
+          <h3 id="search-percentage-dept">{% if officer_id %}Officer{% else %}Departmental{% endif %} search rate</h3>
+
+          <div role="tabpanel">
+
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#stop_search_line_div" role="tab" data-toggle="tab">Chart</a></li>
+              <li role="presentation">
+                <a href="#stop_search_data" role="tab" data-toggle="tab">Data</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane active" id="stop_search_line_div">
+                <svg id="stop_search_line"></svg>
+              </div>
+              <div role="tabpanel" class="tab-pane" id="stop_search_data">
+              </div>
+            </div>
+
           </div>
+
+          <p class="help-block">
+            This chart is a longitudinal representation of the average departmental
+            search rate for vehicle stops since the department began reporting its
+            data to the NC Department of Justice.  The black line represents the
+            overall search rate for all motorists.
+            <br><br>
+            Click the "Data" tab to review the actual stop/search counts from the
+            NC Department of Justice.
+          </p>
+        </div>
+      </div>
+      <hr>
+
+      <!-- search data -->
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Search data</h2>
         </div>
 
+        <div class="col-md-4">
+          <h3>Search by race/ethnicity</h3>
+
+          <div>
+            <svg id="search_race_pie"></svg>
+          </div>
+
+          <p class="help-block">
+            This graph reflects the racial composition of drivers searched by law
+            enforcement officers in the jurisdiction since the department began
+            reporting its data to the NC Department of Justice. Adjusting the drop
+            down menu will display the racial breakdown of stops on a year-by-year
+            basis.
+          </p>
+        </div>
+
+        <div id="search_div" class="col-md-8">
+          <h3>Annual percent of search by race/ethnicity</h3>
+
+          <div role="tabpanel">
+
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#search_race_line_div" aria-controls="search_race_line_div" role="tab" data-toggle="tab">Chart</a></li>
+              <li role="presentation">
+                <a href="#search_race_data" aria-controls="stop_race_data" role="tab" data-toggle="tab">Data</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane active" id="search_race_line_div">
+                <svg id="search_race_line"></svg>
+              </div>
+              <div role="tabpanel" class="tab-pane" id="search_race_data">
+              </div>
+            </div>
+
+            <p class="help-block">
+              This graph is a longitudinal representation of the racial and ethnic
+              composition of drivers searched by the department since it began
+              reporting its data to the NC Department of Justice. Drag the cursor
+              over the graph to see the racial/ethnic breakdown for any given year.
+              <br><br>
+              Click the "Data" tab to review the actual raw counts from the
+              NC Department of Justice.
+            </p>
+
+          </div>
+
+        </div>
       </div>
 
-      <p class="help-block">
-        This graph is a longitudinal representation of the racial and ethnic
-        composition of drivers against whom law enforcement officers in the
-        jurisdiction reported using force since the department began reporting
-        its data to the NC Department of Justice. Drag the cursor over the
-        graph to see the racial/ethnic breakdown for any given year.
-        <br><br>
-        Click the "Data" tab to review the actual raw counts from the
-        NC Department of Justice.
-      </p>
+      <div class="row">
+        <div id="lhs_div" class="col-md-offset-2 col-md-8">
+          <h3>Likelihood of search by stop-cause</h3>
 
+          <div role="tabpanel">
+
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#lsb_div" aria-controls="lsb_div" role="tab" data-toggle="tab">Chart</a></li>
+              <li role="presentation">
+                <a href="#lsb_data" aria-controls="lsb_data" role="tab" data-toggle="tab">Data</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane active" id="lsb_div">
+                <svg id="lsb"></svg>
+              </div>
+              <div role="tabpanel" class="tab-pane" id="lsb_data">
+              </div>
+            </div>
+
+          </div>
+
+          <p class="help-block">
+            This chart displays the relative statistical likelihood of one
+            racial/ethnic group being searched as compared to another group for a
+            given stop cause. Adjusting the drop down menu will display the relative
+            likelihood of search relative to another racial group on a year-by-year
+            basis. Click the colored circles above the graph to display the
+            comparisons between various racial and ethnic groups.
+            <br><br>
+            Click the "Data" tab to review the actual raw counts from the
+            NC Department of Justice.
+          </p>
+
+        </div>
+      </div>
+      <hr>
+
+      <div class="row">
+        <div id="contraband_div" class="col-md-offset-2 col-md-8">
+          <h3>Contraband hit-rate</h3>
+
+          <div role="tabpanel">
+
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#chr_div" aria-controls="chr_div" role="tab" data-toggle="tab">Chart</a></li>
+              <li role="presentation">
+                <a href="#chr_data" aria-controls="chr_data" role="tab" data-toggle="tab">Data</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane active" id="chr_div">
+                <svg id="chr"></svg>
+              </div>
+              <div role="tabpanel" class="tab-pane" id="chr_data">
+              </div>
+            </div>
+
+          </div>
+
+          <p class="help-block">
+            This chart displays the percentage of searches that uncovered contraband
+            for a given racial or ethnic group. Adjusting the drop down menu will
+            display the hit rate on a year-by-year basis.
+            <br><br>
+            Click the "Data" tab to review the actual raw counts from the
+            NC Department of Justice.
+          </p>
+
+        </div>
+      </div>
+      <hr>
+
+      <!-- use-of-force data -->
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Use-of-force data</h2>
+        </div>
+
+        <div class="col-md-4">
+          <h3>Use-of-force by race/ethnicity</h3>
+
+          <div>
+            <svg id="use_force_race_pie"></svg>
+          </div>
+
+          <p class="help-block">
+            This graph reflects the racial composition of drivers against whom law
+            enforcement officers in the jurisdiction reported using force since the
+            department began reporting its data to the NC Department of Justice.
+            Adjusting the drop down menu will display the racial breakdown of
+            use-of-force incidents on a year-by-year basis.
+          </p>
+        </div>
+
+        <div id="use_force_div" class="col-md-8">
+          <h3>Annual use-of-force by race/ethnicity</h3>
+
+          <div role="tabpanel">
+
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#use_force_race_line_div" aria-controls="use_force_race_line_div" role="tab" data-toggle="tab">Chart</a></li>
+              <li role="presentation">
+                <a href="#use_force_race__data" aria-controls="use_force_race__data" role="tab" data-toggle="tab">Data</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane active" id="use_force_race_line_div">
+                <svg id="use_force_race_line"></svg>
+              </div>
+              <div role="tabpanel" class="tab-pane" id="use_force_race__data">
+              </div>
+            </div>
+
+          </div>
+
+          <p class="help-block">
+            This graph is a longitudinal representation of the racial and ethnic
+            composition of drivers against whom law enforcement officers in the
+            jurisdiction reported using force since the department began reporting
+            its data to the NC Department of Justice. Drag the cursor over the
+            graph to see the racial/ethnic breakdown for any given year.
+            <br><br>
+            Click the "Data" tab to review the actual raw counts from the
+            NC Department of Justice.
+          </p>
+
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3" role="complementary">
+      <nav id="sidebar">
+        <h5>{{ object }}{% if officer_id %}: officer {{officer_id}} {% endif %}</h5>
+        <ul class="sidenav nav nav-pills nav-stacked">
+          <li><a href="#demographics">Census Demographics</a></li>
+          <li><a href="#stop-percentage">Stop Percentage</a></li>
+          <li><a href="#search-percentage-dept">Departmental Search Rate</a></li>
+        </ul>
+      </nav>
     </div>
   </div>
 </div>
@@ -412,6 +426,25 @@
       new UseOfForceTable({handler: uf_handler, selector: "#use_force_race__data", showEthnicity: showEthnicity});
 
       new RaceToggle("{% url 'update_session' %}", showEthnicity).render($('span.start'));
+
+      $('body').scrollspy({ target: '#sidebar', offset: 60 });
+      $('window').on('load', function () {
+        $('body').scrollspy('refresh')
+      });
+
+      $('#sidebar').affix({
+        offset: {
+          top: function () {
+            var offsetTop      = $('#sidebar').offset().top
+            var sideBarMargin  = parseInt($('#sidebar').children(0).css('margin-top'), 10)
+            var navOuterHeight = $('.odp-nav').height()
+            return (this.top = offsetTop - navOuterHeight - sideBarMargin);
+          },
+          bottom: function () {
+            return (this.bottom = $('.footer').outerHeight(true))
+          }
+        }
+      });
 
     });
   </script>

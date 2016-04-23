@@ -51,6 +51,10 @@ body {
   font-family: 'Droid Sans', sans-serif;
 }
 
+body {
+  position: relative;
+}
+
 /* Wrapper for page content to push down footer */
 #wrap {
   background-color: #efefef;
@@ -220,6 +224,20 @@ code {
       font-size: 28px;
     }
   }
+}
+
+#sidebar {
+  border-left: 2px solid @gray-light;
+  padding-left: 15px;
+
+  h5 {
+    font-weight: bold;
+    font-size: 16px;
+  }
+}
+
+#sidebar.affix {
+  top: 80px;
 }
 
 .state-featurette {
