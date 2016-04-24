@@ -6,8 +6,6 @@ TRUNCATE "nc_stop" CASCADE;
 ANALYZE;
 COMMIT;
 
-SET ROLE :owner;
-
 -- import stops
 \set import_file :data_dir '/STOP.csv'
 BEGIN;

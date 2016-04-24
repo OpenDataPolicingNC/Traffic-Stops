@@ -122,10 +122,8 @@ def get_constraints_sql(select_sql):
 def copy_from(destination):
     """Execute copy.sql to COPY csv data files into PostgreSQL database"""
     sql_file = os.path.join(os.path.dirname(__file__), 'copy.sql')
-    owner = settings.DATABASES['traffic_stops_nc']['USER']
     cmd = ['psql',
            '-v', 'data_dir={}'.format(destination),
-           '-v', 'owner={}'.format(owner),
            '-f', sql_file,
            settings.DATABASES['traffic_stops_nc']['NAME']]
     if settings.DATABASE_ETL_USER:
