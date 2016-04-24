@@ -8,7 +8,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('--dest', default=None)
-        url = "https://s3-us-west-2.amazonaws.com/openpolicingdata/TS_2016_02_22T10.49.52.640.zip"  # noqa
+        url = "https://s3-us-west-2.amazonaws.com/openpolicingdata/TS_2016_04_13T13.38.34.887.zip"  # noqa
         parser.add_argument('--url', default=url)
 
     def handle(self, *args, **options):
