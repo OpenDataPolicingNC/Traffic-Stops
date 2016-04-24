@@ -20,6 +20,7 @@ DATABASES['traffic_stops_nc']['USER'] = 'traffic_stops_%s' % ENVIRONMENT.lower()
 DATABASES['traffic_stops_nc']['HOST'] = os.environ.get('DB_HOST', '')
 DATABASES['traffic_stops_nc']['PORT'] = os.environ.get('DB_PORT', '')
 DATABASES['traffic_stops_nc']['PASSWORD'] = os.environ.get('DB_PASSWORD', '')
+DATABASE_ETL_USER = 'etl'
 
 WEBSERVER_ROOT = '/var/www/traffic_stops/'
 

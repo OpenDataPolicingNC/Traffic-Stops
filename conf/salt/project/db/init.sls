@@ -6,6 +6,14 @@ include:
   - postgresql
   - ufw
 
+user-etl:
+  postgres_user.present:
+    - name: etl
+    - superuser: True
+    - encrypted: True
+    - require:
+      - service: postgresql
+
 user-{{ pillar['project_name'] }}:
   postgres_user.present:
     - name: {{ pillar['project_name'] }}_{{ pillar['environment'] }}

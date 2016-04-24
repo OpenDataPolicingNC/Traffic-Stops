@@ -38,6 +38,7 @@ DATABASES = {
 }
 
 DATABASE_ROUTERS = ['traffic_stops.routers.StateDatasetRouter']
+DATABASE_ETL_USER = ''
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name

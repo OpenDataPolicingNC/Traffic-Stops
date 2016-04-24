@@ -6,6 +6,8 @@ TRUNCATE "nc_stop" CASCADE;
 ANALYZE;
 COMMIT;
 
+SET ROLE :owner;
+
 -- import stops
 \set import_file :data_dir '/STOP.csv'
 BEGIN;
@@ -54,16 +56,16 @@ COMMIT;
 
 -- -- populate nc_agency lookup table
 BEGIN;
-INSERT INTO nc_agency (name) ( 
+INSERT INTO nc_agency (name) (
     SELECT DISTINCT(agency_description) from nc_stop ORDER BY agency_description
 );
 COMMIT;
 
 -- populate nc_stop.agency_id foreign key
 BEGIN;
-UPDATE nc_stop SET agency_id = nc_agency.id 
+UPDATE nc_stop SET agency_id = nc_agency.id
 FROM
-   nc_agency 
+   nc_agency
 WHERE
    nc_stop.agency_description = nc_agency.name;
 COMMIT;
