@@ -129,7 +129,7 @@ def copy_from(destination):
            '-f', sql_file,
            settings.DATABASES['traffic_stops_nc']['NAME']]
     if settings.DATABASE_ETL_USER:
-        cmd.append(DATABASE_ETL_USER)
+        cmd.append(settings.DATABASE_ETL_USER)
     call(cmd)
 
 
