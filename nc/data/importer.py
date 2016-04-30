@@ -4,7 +4,6 @@ import os
 from django.conf import settings
 from django.db import connections
 
-from nc import models as nc
 from tsdata.util import call, line_count, download_and_unzip_data
 
 
