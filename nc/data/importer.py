@@ -15,37 +15,12 @@ cursor = connections['traffic_stops_nc'].cursor()
 def run(url, destination=None, download=True):
     """Download NC data, extract, convert to CSV, and load into PostgreSQL"""
     logger.info('*** NC Data Import Started ***')
-    truncate_database()
     download_and_unzip_data(url, destination)
     # convert data files to CSV for database importing
     convert_to_csv(destination)
-    # inspect table constraints so we can toggle them off during import
-    drop_constraints = get_constraints_sql(SELECT_DROP_CONSTRAINTS_SQL)
-    add_constraints = get_constraints_sql(SELECT_ADD_CONSTRAINTS_SQL)
-    # drop constraints to speed up import
-    if drop_constraints:
-        logger.info("Dropping table constraints")
-        cursor.execute(drop_constraints)
     # use COPY to load CSV files as quickly as possible
     copy_from(destination)
-    # add constraints back
-    logger.info("Adding table constraints")
-    cursor.execute(add_constraints)
     logger.info("NC Data Import Complete")
-
-
-def truncate_database():
-    """Truncate all NC tables to prep database for fresh import"""
-    models = (nc.SearchBasis,
-              nc.Contraband,
-              nc.Search,
-              nc.Person,
-              nc.Stop,
-              nc.Agency)
-    for model in models:
-        table = model._meta.db_table
-        cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(table))
-    cursor.execute('VACUUM ANALYZE')
 
 
 def create_schema(format_path, schema_path):
@@ -107,18 +82,6 @@ def convert_to_csv(destination):
             logger.error('CSV {}'.format(csv_count))
 
 
-def get_constraints_sql(select_sql):
-    """
-    Simple wrapper function used to execute a SQL query that returns a
-    list of SQL commands to be run later.
-    """
-    cursor.execute(select_sql)
-    sql = ''
-    for row in cursor.fetchall():
-        sql += row[0]
-    return sql
-
-
 def copy_from(destination):
     """Execute copy.sql to COPY csv data files into PostgreSQL database"""
     sql_file = os.path.join(os.path.dirname(__file__), 'copy.sql')
@@ -129,26 +92,3 @@ def copy_from(destination):
     if settings.DATABASE_ETL_USER:
         cmd.append(settings.DATABASE_ETL_USER)
     call(cmd)
-
-
-# SQL commands to drop/create all nc_* table constraints
-# Adapted from: http://blog.hagander.net/archives/131-Automatically-dropping-and-creating-constraints.html    # noqa
-
-
-SELECT_DROP_CONSTRAINTS_SQL = """
-SELECT 'ALTER TABLE "'||nspname||'"."'||relname||'" DROP CONSTRAINT IF EXISTS "'||conname||'";'
-FROM pg_constraint
-INNER JOIN pg_class ON conrelid=pg_class.oid
-INNER JOIN pg_namespace ON pg_namespace.oid=pg_class.relnamespace
-WHERE relname LIKE 'nc_%'
-ORDER BY CASE WHEN contype='f' THEN 0 ELSE 1 END,contype,nspname,relname,conname;
-"""  # noqa
-
-SELECT_ADD_CONSTRAINTS_SQL = """
-SELECT 'ALTER TABLE "'||nspname||'"."'||relname||'" ADD CONSTRAINT "'||conname||'" '||pg_get_constraintdef(pg_constraint.oid)||';'
-FROM pg_constraint
-INNER JOIN pg_class ON conrelid=pg_class.oid
-INNER JOIN pg_namespace ON pg_namespace.oid=pg_class.relnamespace
-WHERE relname LIKE 'nc_%'
-ORDER BY CASE WHEN contype='f' THEN 0 ELSE 1 END DESC,contype DESC,nspname DESC,relname DESC,conname DESC;
-"""  # noqa
