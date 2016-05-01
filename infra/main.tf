@@ -50,8 +50,9 @@ resource "aws_instance" "app" {
     instance_type = "${var.instance_type}"
     key_name = "${var.key_name}"
     security_groups = ["${aws_security_group.default.name}"]
+    ebs_optimized = true
     root_block_device {
-      volume_type = "standard"
+      volume_type = "gp2"
       volume_size = "${var.ebs_size}"
     }
     tags {

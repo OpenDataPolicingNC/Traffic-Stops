@@ -76,6 +76,7 @@ Run the import command:
 
 .. code-block:: bash
 
+    sudo su - traffic_stops
     cd /var/www/traffic-stops
     source ./env/bin/activate
     ./manage.sh import_nc --dest=/var/www/traffic_stops/data
