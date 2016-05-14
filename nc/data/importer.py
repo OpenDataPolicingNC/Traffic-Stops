@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 def run(url, destination=None, download=True):
     """Download NC data, extract, convert to CSV, and load into PostgreSQL"""
     logger.info('*** NC Data Import Started ***')
-    download_and_unzip_data(url, destination)
+    destination = download_and_unzip_data(url, destination)
     # convert data files to CSV for database importing
     convert_to_csv(destination)
     # drop constraints/indexes
