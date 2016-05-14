@@ -44,7 +44,7 @@ def download_and_unzip_data(url, destination, prefix='state-'):
     # don't redownload data if directory already exists with data files
     if not download:
         logger.debug("{} exists, skipping download".format(destination))
-        return
+        return destination
     zip_filename = os.path.join(destination, url.split('/')[-1])
     logger.debug("Downloading data to {}".format(zip_filename))
     response = requests.get(url, stream=True)
