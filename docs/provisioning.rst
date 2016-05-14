@@ -395,6 +395,7 @@ _______
 Terraform:
 
 .. code-block:: bash
+
   terraform plan -var-file="secrets.tfvars" -var-file="staging.tfvars"
   terraform apply -var-file="secrets.tfvars" -var-file="staging.tfvars"
 

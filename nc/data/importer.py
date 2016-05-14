@@ -4,11 +4,11 @@ import os
 from django.conf import settings
 from django.db import connections
 
+from tsdata.sql import drop_constraints_and_indexes
 from tsdata.util import call, line_count, download_and_unzip_data
 
 
 logger = logging.getLogger(__name__)
-cursor = connections['traffic_stops_nc'].cursor()
 
 
 def run(url, destination=None, download=True):
@@ -17,6 +17,8 @@ def run(url, destination=None, download=True):
     download_and_unzip_data(url, destination)
     # convert data files to CSV for database importing
     convert_to_csv(destination)
+    # drop constraints/indexes
+    drop_constraints_and_indexes(connections['traffic_stops_nc'].cursor())
     # use COPY to load CSV files as quickly as possible
     copy_from(destination)
     logger.info("NC Data Import Complete")
