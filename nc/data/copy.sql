@@ -1,9 +1,16 @@
 -- http://www.postgresql.org/docs/current/interactive/populate.html
 
+\set ON_ERROR_STOP true
+
 BEGIN;
 
 -- get rid of all the original data (cascades throughout app)
 TRUNCATE "nc_stop" CASCADE;
+TRUNCATE "nc_person" CASCADE;
+TRUNCATE "nc_search" CASCADE;
+TRUNCATE "nc_searchbasis" CASCADE;
+TRUNCATE "nc_contraband" CASCADE;
+TRUNCATE "nc_agency" CASCADE;
 
 -- import stops
 \set import_file :data_dir '/STOP.csv'
