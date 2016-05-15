@@ -20,7 +20,7 @@ class Dataset(models.Model):
     date_received = models.DateField()
     url = models.URLField("URL", unique=True)
     destination = models.CharField(blank=True, max_length=1024,
-                                   help_text="Absolute path to destination directory (helpful for testing)")
+                                   help_text="Absolute path to destination directory (helpful for testing)")  # noqa
 
     def __str__(self):
         return "{}: {}".format(self.get_state_display(), self.name)
