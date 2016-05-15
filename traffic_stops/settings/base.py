@@ -144,7 +144,7 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.sites',  # required by django-allauth
+    # 'django.contrib.sites',  # required by django-allauth
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
@@ -156,6 +156,7 @@ INSTALLED_APPS = (
     'el_pagination',
     'rest_framework',
     # Custom apps
+    'tsdata',
     'nc',
     'md',
 )
