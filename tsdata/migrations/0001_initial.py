@@ -13,18 +13,19 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Dataset',
             fields=[
-                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
-                ('state', models.CharField(max_length=2, choices=[('nc', 'North Carolina'), ('md', 'Maryland')])),
-                ('name', models.CharField(max_length=255, unique=True)),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
+                ('state', models.CharField(choices=[('nc', 'North Carolina'), ('md', 'Maryland')], max_length=2)),
+                ('name', models.CharField(unique=True, max_length=255)),
                 ('date_added', models.DateTimeField(auto_now_add=True)),
+                ('date_received', models.DateField()),
                 ('url', models.URLField(unique=True, verbose_name='URL')),
-                ('destination', models.CharField(help_text='Optional destination abs. path', max_length=1024, blank=True)),
+                ('destination', models.CharField(blank=True, max_length=1024, help_text='Absolute path to destination directory (helpful for testing)')),
             ],
         ),
         migrations.CreateModel(
             name='Import',
             fields=[
-                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
                 ('date_started', models.DateTimeField(auto_now_add=True)),
                 ('date_finished', models.DateTimeField(null=True)),
                 ('successful', models.BooleanField(default=False)),

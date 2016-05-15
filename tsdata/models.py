@@ -17,6 +17,7 @@ class Dataset(models.Model):
     state = models.CharField(choices=STATE_CHOICES, max_length=2)
     name = models.CharField(max_length=255, unique=True)
     date_added = models.DateTimeField(auto_now_add=True)
+    date_received = models.DateField()
     url = models.URLField("URL", unique=True)
     destination = models.CharField(blank=True, max_length=1024,
                                    help_text="Absolute path to destination directory (helpful for testing)")

@@ -4,11 +4,11 @@ from tsdata.tasks import import_dataset
 
 
 class DatasetAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'state', 'date_added', 'destination')
+    list_display = ('id', 'name', 'state', 'date_received', 'destination')
     list_filter = ('state',)
-    ordering = ('-date_added',)
+    ordering = ('-date_received',)
     search_fields = ('name', 'url')
-    date_hierarchy = 'date_added'
+    date_hierarchy = 'date_received'
     actions = ['import_dataset']
 
     def import_dataset(self, request, queryset):
@@ -26,6 +26,8 @@ class ImportAdmin(admin.ModelAdmin):
     list_display = ('id', 'dataset', 'date_started', 'date_finished',
                     'successful')
     list_filter = ('successful',)
+    date_hierarchy = 'date_started'
+    search_fields = ('dataset__name', 'dataset__state', 'dataset__url')
     ordering = ('-date_started',)
 
 
