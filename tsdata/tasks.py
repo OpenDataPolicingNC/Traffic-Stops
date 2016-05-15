@@ -3,7 +3,7 @@ from nc.data.importer import run as nc_run
 from md.data.importer import run as md_run
 from traffic_stops.celery import app
 from tsdata.models import Dataset, Import
-from datetime import datetime
+from django.utils import timezone
 
 
 logger = get_task_logger(__name__)
@@ -25,10 +25,10 @@ def import_dataset(dataset_id):
     try:
         state_import(dataset.url, destination=dataset.destination)
     except:
-        run.date_finished = datetime.now()
+        run.date_finished = timezone.now()
         run.save()
         raise
     run.successful = True
-    run.date_finished = datetime.now()
+    run.date_finished = timezone.now()
     run.save()
     logger.info("Import complete")
