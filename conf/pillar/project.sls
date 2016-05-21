@@ -9,7 +9,7 @@ postgres_extensions: [postgis]
 
 python_headers: [libxft-dev]
 
-margarita_version: 1.5.0
+margarita_version: 1.7.0
 
 instances:
   - nc
