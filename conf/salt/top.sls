@@ -17,6 +17,7 @@ base:
   'roles:web':
     - match: grain
     - project.web.app
+    - project.web.migrate_instances
   'roles:worker':
     - match: grain
     - project.worker.default
