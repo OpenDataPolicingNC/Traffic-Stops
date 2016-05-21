@@ -249,6 +249,7 @@ def margarita():
     execute(state, 'margarita', target="-G 'roles:salt-master'")
     with settings(host_string=env.master):
         sudo('service salt-master restart')
+    time.sleep(10)
 
 
 @task
