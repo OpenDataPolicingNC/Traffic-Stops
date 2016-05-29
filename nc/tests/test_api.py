@@ -2,29 +2,46 @@ from django.core.urlresolvers import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from nc.models import Agency
+from nc.tests import factories
 
 
 class AgencyTests(APITestCase):
 
     def test_list_agencies(self):
         """Test Agency list"""
-        Agency.objects.create(name="Durham")
+        agency = factories.AgencyFactory()
         url = reverse('agency-api-list')
-        data = [{'id': 1, 'name': 'Durham'}]
+        data = [{'id': agency.pk, 'name': agency.name}]
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, data)
 
     def test_stops_api(self):
         """Test Agency stops API endpoint"""
-        agency = Agency.objects.create(name="Durham")
+        agency = factories.AgencyFactory()
         url = reverse('agency-api-stops', args=[agency.pk])
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_stops_count(self):
+        """Test Agency stop counts"""
+        agency = factories.AgencyFactory()
+        factories.StopFactory(person__race='B', agency=agency,
+                              person__ethnicity='N', year=2010)
+        factories.StopFactory(person__race='B', agency=agency,
+                              person__ethnicity='N', year=2010)
+        factories.StopFactory(person__race='W', agency=agency,
+                              person__ethnicity='N', year=2012)
+        url = reverse('agency-api-stops', args=[agency.pk])
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.data[0]['year'], 2010)
+        self.assertEqual(response.data[0]['black'], 2)
+        self.assertEqual(response.data[1]['year'], 2012)
+        self.assertEqual(response.data[1]['white'], 1)
+
     def test_stops_by_reason(self):
         """Test Agency stops_by_reason API endpoint"""
-        agency = Agency.objects.create(name="Durham")
+        agency = factories.AgencyFactory()
         url = reverse('agency-api-stops-by-reason', args=[agency.pk])
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
