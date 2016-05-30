@@ -38,6 +38,7 @@ DATABASES = {
 }
 
 DATABASE_ROUTERS = ['traffic_stops.routers.StateDatasetRouter']
+DATABASE_ETL_USER = ''
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -144,7 +145,7 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.sites',  # required by django-allauth
+    # 'django.contrib.sites',  # required by django-allauth
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
@@ -156,6 +157,7 @@ INSTALLED_APPS = (
     'el_pagination',
     'rest_framework',
     # Custom apps
+    'tsdata',
     'nc',
     'md',
 )
@@ -165,10 +167,10 @@ INSTALLED_APPS = (
 # the site admins on every HTTP 500 error when DEBUG=False.
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
-if os.path.exists("/dev/log"):
-    SYSLOG_PATH = "/dev/log"
-else:
-    SYSLOG_PATH = "/var/run/syslog"
+SYSLOG_PATH = None
+for path in ("/dev/log", "/var/run/syslog"):
+    if os.path.exists(path):
+        SYSLOG_PATH = path
 
 LOGGING = {
     'version': 1,
@@ -276,8 +278,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # on how the site uses SSL.
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
 X_FRAME_OPTIONS = 'DENY'
 

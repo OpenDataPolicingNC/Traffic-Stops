@@ -7,7 +7,9 @@ less_version: 2.1.0
 postgres_version: 9.4
 postgres_extensions: [postgis]
 
-margarita_version: 1.5.0
+python_headers: [libxft-dev]
+
+margarita_version: 1.7.0
 
 instances:
   - nc

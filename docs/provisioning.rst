@@ -392,14 +392,26 @@ Quickstart
 Staging
 _______
 
+Terraform:
+
+.. code-block:: bash
+
+  terraform plan -var-file="secrets.tfvars" -var-file="staging.tfvars"
+  terraform apply -var-file="secrets.tfvars" -var-file="staging.tfvars"
+
+  terraform plan -destroy -var-file="secrets.tfvars" -var-file="staging.tfvars"
+  terraform destroy -var-file="secrets.tfvars" -var-file="staging.tfvars"
+
+Salt:
+
 .. code-block:: bash
 
     ssh-keygen -f "$HOME/.ssh/known_hosts" -R dev.opendatapolicingnc.com
     ssh-keygen -f "$HOME/.ssh/known_hosts" -R 52.6.26.10
     fab -u ubuntu -i ~/.ssh/traffic-stops.pem staging setup_master
-    fab staging encrypt:DB_PASSWORD=`make generate-secret`
-    fab staging encrypt:SECRET_KEY=`make generate-secret length=64`
-    fab staging encrypt:BROKER_PASSWORD=`make generate-secret`
+    fab staging encrypt:DB_PASSWORD=`pwgen --secure -1 32`
+    fab staging encrypt:SECRET_KEY=`pwgen --secure -1 64`
+    fab staging encrypt:BROKER_PASSWORD=`pwgen --secure -1 32`
     fab staging encrypt:LOG_DESTINATION='<fill-me-in>'
     fab staging encrypt:admin='<fill-me-in>'
     fab staging encrypt:NEW_RELIC_LICENSE_KEY='<fill-me-in>'
