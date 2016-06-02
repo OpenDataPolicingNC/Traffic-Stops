@@ -143,3 +143,18 @@ class Agency(CachingMixin, models.Model):
 
     def __str__(self):
         return self.name
+
+
+class ComputedAnnualStats(models.Model):
+    agency_id = models.IntegerField(primary_key=True)
+    year = models.IntegerField()
+    race = models.CharField(max_length=2, choices=RACE_CHOICES)
+    ethnicity = models.CharField(max_length=2, choices=ETHNICITY_CHOICES)
+    purpose = models.PositiveSmallIntegerField(choices=PURPOSE_CHOICES)
+    use_of_force = models.BooleanField()
+    stops = models.IntegerField()
+    searches = models.IntegerField()
+
+    class Meta(object):
+        managed = False
+        db_table = 'computed_annual_stats'
