@@ -5,12 +5,12 @@
 BEGIN;
 
 -- get rid of all the original data (cascades throughout app)
-TRUNCATE "nc_stop" CASCADE;
-TRUNCATE "nc_person" CASCADE;
-TRUNCATE "nc_search" CASCADE;
-TRUNCATE "nc_searchbasis" CASCADE;
-TRUNCATE "nc_contraband" CASCADE;
-TRUNCATE "nc_agency" CASCADE;
+TRUNCATE "nc_stop" RESTART IDENTITY CASCADE;
+TRUNCATE "nc_person" RESTART IDENTITY CASCADE;
+TRUNCATE "nc_search" RESTART IDENTITY CASCADE;
+TRUNCATE "nc_searchbasis" RESTART IDENTITY CASCADE;
+TRUNCATE "nc_contraband" RESTART IDENTITY CASCADE;
+TRUNCATE "nc_agency" RESTART IDENTITY CASCADE;
 
 -- import stops
 \set import_file :data_dir '/STOP.csv'
