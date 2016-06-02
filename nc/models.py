@@ -146,10 +146,11 @@ class Agency(CachingMixin, models.Model):
 
 
 class ComputedAnnualStats(models.Model):
-    agency_id = models.IntegerField(primary_key=True)
+    id = models.IntegerField(primary_key=True)
+    agency_id = models.IntegerField()
     year = models.IntegerField()
-    race = models.CharField(max_length=2, choices=RACE_CHOICES)
-    ethnicity = models.CharField(max_length=2, choices=ETHNICITY_CHOICES)
+    race = models.CharField(max_length=2,
+                            choices=RACE_CHOICES + ETHNICITY_CHOICES)
     purpose = models.PositiveSmallIntegerField(choices=PURPOSE_CHOICES)
     use_of_force = models.BooleanField()
     stops = models.IntegerField()
