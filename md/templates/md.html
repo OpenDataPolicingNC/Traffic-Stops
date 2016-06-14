@@ -1,0 +1,25 @@
+{% extends 'state.html' %}
+
+{% load staticfiles %}
+
+{% block state-name %}
+  Maryland
+{% endblock state-name %}
+
+{% block state-subtitle %}
+  Browse all known traffic stops to have occurred in Maryland since
+  January 1, 1970
+{% endblock state-subtitle %}
+
+{% block state-header-graphic %}
+  <img src="{% static "svg/noun_19618_cc-white.svg" %}" class="state md">
+{% endblock state-header-graphic %}
+
+{% block agencies-table %}
+{% endblock agencies-table %}
+
+{% block about-text %}
+{% endblock about-text %}
+
+{% block dataset-facts %}
+{% endblock dataset-facts %}
