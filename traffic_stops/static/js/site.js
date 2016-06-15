@@ -6,14 +6,6 @@ window.log = function f(){ log.history = log.history || []; log.history.push(arg
 (function(a){function b(){}for(var c="assert,count,debug,dir,dirxml,error,exception,group,groupCollapsed,groupEnd,info,log,markTimeline,profile,profileEnd,time,timeEnd,trace,warn".split(","),d;!!(d=c.pop());){a[d]=a[d]||b;}})
 (function(){try{console.log();return window.console;}catch(a){return (window.console={});}}());
 
-// printf helper function for strings
-String.prototype.printf = function(){
-  //http://stackoverflow.com/questions/610406/
-  var args = arguments;
-  return this.replace(/{(\d+)}/g, function(match, number){
-    return typeof args[number] !== 'undefined' ? args[number] : match;
-  });
-};
 
 // Traffic Stops global defaults
 var Stops = {
@@ -390,7 +382,7 @@ var StopSearchHandler = AggregateDataHandlerBase.extend({
             row.push("-");
             lines.get(race).push({x:yr , y:undefined});
           } else {
-            row.push("{0}/{1}".printf(se, st));
+            row.push(`${se}/${st}`);
             lines.get(race).push({x:yr , y:se/st});
           }
         });
@@ -486,7 +478,7 @@ var CensusRatioDonut = VisualBase.extend({
           .attr('width', "100%")
           .attr('height', "100%")
           .attr("preserveAspectRatio", "xMinYMin")
-          .attr('viewBox', '0 0 {0} {1}'.printf(self.get("width"), self.get("height")))
+          .attr('viewBox', `0 0 ${self.get('width')} ${self.get('height')}`)
           .call(self.chart);
     });
   },
@@ -537,7 +529,7 @@ var StopRatioDonut = VisualBase.extend({
     var self = this,
         selector = $('<select>'),
         year_options = this.data.pie.keys(),
-        opts = year_options.map(function(v){return '<option value="{0}">{0}</option>'.printf(v);}),
+        opts = year_options.map((v) => `<option value="${v}">${v}</option>`),
         getData = function(){
           var value = selector.val();
           self.dataset =  self.data.pie.get(value);
@@ -566,7 +558,7 @@ var StopRatioDonut = VisualBase.extend({
           .attr('width', "100%")
           .attr('height', "100%")
           .attr("preserveAspectRatio", "xMinYMin")
-          .attr('viewBox', '0 0 {0} {1}'.printf(self.get("width"), self.get("height")))
+          .attr('viewBox', `0 0 ${self.get('width')} ${self.get('height')}`)
           .call(self.chart);
     });
   },
@@ -627,7 +619,7 @@ var StopRatioTimeSeries = VisualBase.extend({
           .attr('width', "100%")
           .attr('height', "100%")
           .attr('preserveAspectRatio', "xMinYMin")
-          .attr('viewBox', "0 0 {0} {1}".printf(self.get("width"), self.get("height")))
+          .attr('viewBox', `0 0 ${self.get('width')} ${self.get('height')}`)
           .call(self.chart);
       });
   },
@@ -687,7 +679,7 @@ var LikelihoodOfSearch = VisualBase.extend({
     var self = this,
         selector = $('<select>'),
         year_options = this.data.years,
-        opts = year_options.map(function(v){return '<option value="{0}">{0}</option>'.printf(v);}),
+        opts = year_options.map((v) => `<option value="${v}">${v}</option>`),
         getData = function(){
           var year = selector.val();
           year = parseInt(year, 10) || year;
@@ -714,7 +706,7 @@ var LikelihoodOfSearch = VisualBase.extend({
       .attr('width', "100%")
       .attr('height', "100%")
       .attr('preserveAspectRatio', "xMinYMin")
-      .attr('viewBox', "0 0 {0} {1}".printf(this.get("width"), this.get("height")))
+      .attr('viewBox', `0 0 ${this.get('width')} ${this.get('height')}`)
       .call(this.chart);
 
     nv.utils.windowResize(this.chart.update);
@@ -745,7 +737,7 @@ var LikelihoodOfSearch = VisualBase.extend({
 
       var bar = {
           color: Stops.colors[i],
-          key: "{0} vs. {1}".printf(Stops.pprint.get(race), baseUpper),
+          key: `${Stops.pprint.get(race)} vs. ${baseUpper}`,
           values: [],
           disabled: (race !== defRace)
       };
@@ -873,7 +865,7 @@ var UseOfForceBarChart = VisualBase.extend({
           .attr('width', "100%")
           .attr('height', "100%")
           .attr('preserveAspectRatio', "xMinYMin")
-          .attr('viewBox', "0 0 {0} {1}".printf(self.get("width"), self.get("height")))
+          .attr('viewBox', `0 0 ${self.get('width')} ${self.get('height')}`)
           .call(self.chart);
         self.svg
           .find(".nv-x .tick line")
@@ -939,7 +931,7 @@ var ContrabandHitRateBar = VisualBase.extend({
     var self = this,
         selector = $('<select>'),
         year_options = this.data.years,
-        opts = year_options.map(function(v){return '<option value="{0}">{0}</option>'.printf(v);}),
+        opts = year_options.map((v) => `<option value="${v}">${v}</option>`),
         getData = function(){
           var year = selector.val();
           year = parseInt(year, 10) || year;
@@ -966,7 +958,7 @@ var ContrabandHitRateBar = VisualBase.extend({
             .attr('width', "100%")
             .attr('height', "100%")
             .attr('preserveAspectRatio', "xMinYMin")
-            .attr('viewBox', "0 0 {0} {1}".printf(this.get("width"), this.get("height")))
+            .attr('viewBox', `0 0 ${this.get('width')} ${this.get('height')}`)
             .call(this.chart);
 
     nv.utils.windowResize(this.chart.update);
@@ -1185,7 +1177,7 @@ var LikelihoodSearchTable = TableBase.extend({
         get_row = function(stops, searches, term){
           var stop = (stops !== undefined) ? stops[term] : 0,
               search = (searches !== undefined) ? searches[term] : 0;
-          return "{0}/{1}".printf(search, stop);
+          return `${search}/${stop}`;
         };
 
     // create data rows
