@@ -1,92 +1,67 @@
 from django.db import models
 
-# 'datetime',
-#  'Location',
-#  'Agency',
-#  'Gender',
-#  'DOB',
-#  'Age at the time of stop',
-#  'Unnamed: 7',
-#  'Race',
-#  'State of Residence',
-#  'Registration (tag)',
-#  'State of Registration',
-#  'County of Residence',
-#  'Stop Reason (Abbreviated)',
-#  'Stop Reason',
-#  'Search',
-#  'Search Reason',
-#  'Disposition',
-#  'Outcome',
-#  'Arrest Reason',
-#  'Arrest Made',
-#  'Search Conducted',
-#  'Duration of Search (in minutes)',
-#  'Duration of Stop      (in minutes)',
-#  'Reason for Search or Stop Article',
-#  'Reason for Search  or Stop Section',
-#  'Reason for Search or Stop Sub-Section',
-#  'Reason for Search or Stop Paragraph',
-#  'Crime Charged Article',
-#  'Crime Charged Section',
-#  'Crime Charged Sub-Section',
-#  'Crime Charged Paragraph'
+# Columns in CSV:
+#
+# index
+# date
+# STOPDATE
+# TIME_OF_STOP
+# LOCATION
+# DURATION
+# STOP_REASON
+# SEARCH_CONDUCTED
+# SEARCH_REASON
+# WHATSEARCHED
+# SEIZED
+# STOPOUTCOME
+# CRIME_CHARGED
+# REGISTRATION_STATE
+# GENDER
+# DOB
+# RESIDENCE_STATE
+# MD_COUNTY
+# ETHNICITY
+# OFFICERID
+# AGENCY
 
-RESIDENCE_CHOICES = (("i", "In"),
-                     ("o", "Out"))
 
-RACE_CHOICES = (("h", "Hispanic"),
-                ("a", "Asian"),
-                ("w", "White"),
-                ("b", "Black"),
-                ("u", "Unknown"),
-                ("o", "Other"))
+YN_CHOICES = (
+    ("Y", "Yes"),
+    ("N", "No")
+)
 
-GENDER_CHOICES = (("m", "Male"),
-                  ("f", "Female"))
-
-SEARCH_TYPE_CHOICES = (("both", "Both"),
-                       ("prop", "Property"),
-                       ("pers", "Person"))
-
-SEARCH_REASON_CHOICES = (("incarrest", "incarrest"),
-                         ("cons", "cons"),
-                         ("other", "other"),
-                         ("prob", "prob"),
-                         ("k9", "k9"),
-                         ("exigent", "exigent"))
-
-DISPOSITION_CHOICES = (("contra", "Contraband"),
-                       ("both", "Both"),
-                       ("prop", "Property"))
-
-OUTCOME_CHOICES = (("sero", "sero"),
-                   ("warn", "Warning"),
-                   ("cit", "Citation"),
-                   ("arr", "Arrest"))
+GENDER_CHOICES = (
+    ("M", "Male"),
+    ("F", "Female")
+)
 
 
 class Stop(models.Model):
-    location_text = models.CharField(max_length=1024)
-    agency_description = models.CharField(max_length=100)
+    """
+    "null=True" for some fields is a temporary solution for this import
+    error: "null value in column "what_searched" violates not-null constraint"
+    """
+    stop_id = models.IntegerField(primary_key=True, default=1)
     stop_date = models.DateTimeField(null=True)
-    gender = models.CharField(max_length=2, choices=GENDER_CHOICES, blank=True)
-    dob = models.DateField(null=True)
-    race = models.CharField(max_length=1, choices=RACE_CHOICES, blank=True)
-    residence_county = models.CharField(max_length=100)
-    residence_state = models.CharField(max_length=1, blank=True,
-                                       choices=RESIDENCE_CHOICES)
-    registration_state = models.CharField(max_length=1, blank=True,
-                                          choices=RESIDENCE_CHOICES)
+    stop_date_text = models.CharField(max_length=20, blank=True, default='')
+    stop_time_text = models.CharField(max_length=20, blank=True, default='')
+    location_text = models.CharField(max_length=1024)
+    duration_text = models.CharField(max_length=20, blank=True, null=True)
     stop_reason = models.CharField(max_length=64)
-    search_type = models.CharField(max_length=4, choices=SEARCH_TYPE_CHOICES,
-                                   blank=True)
-    search_reason = models.CharField(max_length=16, blank=True,
-                                     choices=SEARCH_REASON_CHOICES)
-    disposition = models.CharField(max_length=8, blank=True,
-                                   choices=DISPOSITION_CHOICES)
-    outcome = models.CharField(max_length=8, blank=True,
-                               choices=OUTCOME_CHOICES)
+    search_conducted = models.CharField(max_length=1, choices=YN_CHOICES, blank=True)
+    search_reason = models.CharField(max_length=64, blank=True)
+    what_searched = models.CharField(max_length=64, blank=True, null=True)
+    seized = models.CharField(max_length=64, blank=True)
+    stop_outcome = models.CharField(max_length=20, blank=True)
+    crime_charged = models.CharField(max_length=20, blank=True, null=True)
+    registration_state = models.CharField(max_length=20)
+    gender = models.CharField(max_length=6, choices=GENDER_CHOICES, blank=True)  # "female" "MALE" are in error
+    date_of_birth_text = models.CharField(max_length=20, blank=True, null=True)
+    residence_state = models.CharField(max_length=3, blank=True)  # "mfd" is in error
+    county = models.CharField(max_length=25, blank=True)
+    ethnicity = models.CharField(max_length=20, blank=True)
+    officer_id = models.IntegerField(blank=True, default=None)
+    agency_description = models.CharField(max_length=100)
     agency = models.ForeignKey('Agency', null=True, related_name='stops')
 
 

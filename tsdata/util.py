@@ -29,7 +29,7 @@ def line_count(fname):
 
 
 def download_and_unzip_data(url, destination, prefix='state-'):
-    """Download an unzip data into destionation directory"""
+    """Download and unzip data into destination directory"""
     download = True
     # make sure destination exists or create a temporary directory
     if not destination:
@@ -41,7 +41,7 @@ def download_and_unzip_data(url, destination, prefix='state-'):
             logger.info("Created {}".format(destination))
         else:
             download = False
-    # don't redownload data if directory already exists with data files
+    # don't re-download data if directory already exists with data files
     if not download:
         logger.debug("{} exists, skipping download".format(destination))
         return destination
