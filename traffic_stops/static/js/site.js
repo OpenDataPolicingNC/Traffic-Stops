@@ -6,14 +6,6 @@ window.log = function f(){ log.history = log.history || []; log.history.push(arg
 (function(a){function b(){}for(var c="assert,count,debug,dir,dirxml,error,exception,group,groupCollapsed,groupEnd,info,log,markTimeline,profile,profileEnd,time,timeEnd,trace,warn".split(","),d;!!(d=c.pop());){a[d]=a[d]||b;}})
 (function(){try{console.log();return window.console;}catch(a){return (window.console={});}}());
 
-// printf helper function for strings
-String.prototype.printf = function(){
-  //http://stackoverflow.com/questions/610406/
-  var args = arguments;
-  return this.replace(/{(\d+)}/g, function(match, number){
-    return typeof args[number] !== 'undefined' ? args[number] : match;
-  });
-};
 
 // Traffic Stops global defaults
 var Stops = {
@@ -69,14 +61,13 @@ var DataHandlerBase = Backbone.Model.extend({
     Backbone.Model.apply(this, arguments);
     this.get_data();
   },
-  get_data: function(){
-    var self = this;
-    d3.json(this.get("url"), function(error, data) {
-      if(error) return self.trigger("dataRequestFailed");
-      self.set("raw_data", data);
-      self.set("data", undefined);
-      self.clean_data();
-      self.trigger("dataLoaded", self.get("data"));
+  get_data: function () {
+    d3.json(this.get("url"), (error, data) => {
+      if(error) return this.trigger("dataRequestFailed");
+      this.set("raw_data", data);
+      this.set("data", undefined);
+      this.clean_data();
+      this.trigger("dataLoaded", this.get("data"));
     });
   },
   clean_data: function(){
@@ -324,16 +315,15 @@ var ContrabandHitRateHandler = DataHandlerBase.extend({
 
 var AggregateDataHandlerBase = DataHandlerBase.extend({
   get_data: function(){
-    var self = this,
-        datas = [],
-        checkIfComplete = function(data){
-          self.numRemaining = self.numRemaining - 1;
+    var datas = [],
+        checkIfComplete = (data) => {
+          this.numRemaining = this.numRemaining - 1;
           datas.push(data);
-          if(self.numRemaining === 0){
-            self.set("raw_data", datas);
-            self.set("data", undefined);
-            self.clean_data();
-            self.trigger("dataLoaded", self.get("data"));
+          if(this.numRemaining === 0){
+            this.set("raw_data", datas);
+            this.set("data", undefined);
+            this.clean_data();
+            this.trigger("dataLoaded", this.get("data"));
           }
         };
 
@@ -390,7 +380,7 @@ var StopSearchHandler = AggregateDataHandlerBase.extend({
             row.push("-");
             lines.get(race).push({x:yr , y:undefined});
           } else {
-            row.push("{0}/{1}".printf(se, st));
+            row.push(`${se}/${st}`);
             lines.get(race).push({x:yr , y:se/st});
           }
         });
@@ -476,18 +466,17 @@ var CensusRatioDonut = VisualBase.extend({
   },
   drawStartup: function(){},
   drawChart: function(){
-    var self = this,
-        data = this._formatData();
+    var data = this._formatData();
 
-    nv.addGraph(function() {
-      d3.select(self.svg[0])
+    nv.addGraph(() => {
+      d3.select(this.svg[0])
           .datum(data)
         .transition().duration(1200)
           .attr('width', "100%")
           .attr('height', "100%")
           .attr("preserveAspectRatio", "xMinYMin")
-          .attr('viewBox', '0 0 {0} {1}'.printf(self.get("width"), self.get("height")))
-          .call(self.chart);
+          .attr('viewBox', `0 0 ${this.get('width')} ${this.get('height')}`)
+          .call(this.chart);
     });
   },
   _formatData: function(){
@@ -534,14 +523,13 @@ var StopRatioDonut = VisualBase.extend({
   drawStartup: function(){
 
     // get year options for pulldown menu
-    var self = this,
-        selector = $('<select>'),
+    var selector = $('<select>'),
         year_options = this.data.pie.keys(),
-        opts = year_options.map(function(v){return '<option value="{0}">{0}</option>'.printf(v);}),
-        getData = function(){
+        opts = year_options.map((v) => `<option value="${v}">${v}</option>`),
+        getData = () => {
           var value = selector.val();
-          self.dataset =  self.data.pie.get(value);
-          self.drawChart();
+          this.dataset =  this.data.pie.get(value);
+          this.drawChart();
         };
 
     selector
@@ -556,18 +544,17 @@ var StopRatioDonut = VisualBase.extend({
     getData();
   },
   drawChart: function(){
-    var self = this,
-        data = this._formatData();
+    var data = this._formatData();
 
-    nv.addGraph(function() {
-      d3.select(self.svg[0])
+    nv.addGraph(() => {
+      d3.select(this.svg[0])
           .datum(data)
         .transition().duration(1200)
           .attr('width', "100%")
           .attr('height', "100%")
           .attr("preserveAspectRatio", "xMinYMin")
-          .attr('viewBox', '0 0 {0} {1}'.printf(self.get("width"), self.get("height")))
-          .call(self.chart);
+          .attr('viewBox', `0 0 ${this.get('width')} ${this.get('height')}`)
+          .call(this.chart);
     });
   },
   _formatData: function(){
@@ -618,17 +605,16 @@ var StopRatioTimeSeries = VisualBase.extend({
   },
   drawStartup: function(){},
   drawChart: function(){
-    var self = this,
-        data = this._formatData();
+    var data = this._formatData();
 
-    nv.addGraph(function() {
-        d3.select(self.svg[0])
+    nv.addGraph(() => {
+        d3.select(this.svg[0])
           .datum(data)
           .attr('width', "100%")
           .attr('height', "100%")
           .attr('preserveAspectRatio', "xMinYMin")
-          .attr('viewBox', "0 0 {0} {1}".printf(self.get("width"), self.get("height")))
-          .call(self.chart);
+          .attr('viewBox', `0 0 ${this.get('width')} ${this.get('height')}`)
+          .call(this.chart);
       });
   },
   _formatData: function(){
@@ -684,15 +670,14 @@ var LikelihoodOfSearch = VisualBase.extend({
   },
   drawStartup: function(){
     // get year options for pulldown menu
-    var self = this,
-        selector = $('<select>'),
+    var selector = $('<select>'),
         year_options = this.data.years,
-        opts = year_options.map(function(v){return '<option value="{0}">{0}</option>'.printf(v);}),
-        getData = function(){
+        opts = year_options.map((v) => `<option value="${v}">${v}</option>`),
+        getData = () => {
           var year = selector.val();
           year = parseInt(year, 10) || year;
-          self.dataset =  self._getDataset(year);
-          self.drawChart();
+          this.dataset =  this._getDataset(year);
+          this.drawChart();
         };
 
     selector
@@ -714,7 +699,7 @@ var LikelihoodOfSearch = VisualBase.extend({
       .attr('width', "100%")
       .attr('height', "100%")
       .attr('preserveAspectRatio', "xMinYMin")
-      .attr('viewBox', "0 0 {0} {1}".printf(this.get("width"), this.get("height")))
+      .attr('viewBox', `0 0 ${this.get('width')} ${this.get('height')}`)
       .call(this.chart);
 
     nv.utils.windowResize(this.chart.update);
@@ -745,7 +730,7 @@ var LikelihoodOfSearch = VisualBase.extend({
 
       var bar = {
           color: Stops.colors[i],
-          key: "{0} vs. {1}".printf(Stops.pprint.get(race), baseUpper),
+          key: `${Stops.pprint.get(race)} vs. ${baseUpper}`,
           values: [],
           disabled: (race !== defRace)
       };
@@ -864,18 +849,17 @@ var UseOfForceBarChart = VisualBase.extend({
   },
   drawStartup: function(){},
   drawChart: function(){
-    var self = this,
-        data = this._formatData();
+    var data = this._formatData();
 
-    nv.addGraph(function() {
-        d3.select(self.svg[0])
+    nv.addGraph(() => {
+        d3.select(this.svg[0])
           .datum(data)
           .attr('width', "100%")
           .attr('height', "100%")
           .attr('preserveAspectRatio', "xMinYMin")
-          .attr('viewBox', "0 0 {0} {1}".printf(self.get("width"), self.get("height")))
-          .call(self.chart);
-        self.svg
+          .attr('viewBox', `0 0 ${this.get('width')} ${this.get('height')}`)
+          .call(this.chart);
+        this.svg
           .find(".nv-x .tick line")
           .css("opacity", "0");
       });
@@ -936,15 +920,14 @@ var ContrabandHitRateBar = VisualBase.extend({
   },
   drawStartup: function(){
     // get year options for pulldown menu
-    var self = this,
-        selector = $('<select>'),
+    var selector = $('<select>'),
         year_options = this.data.years,
-        opts = year_options.map(function(v){return '<option value="{0}">{0}</option>'.printf(v);}),
-        getData = function(){
+        opts = year_options.map((v) => `<option value="${v}">${v}</option>`),
+        getData = () => {
           var year = selector.val();
           year = parseInt(year, 10) || year;
-          self.dataset =  self._getDataset(year);
-          self.drawChart();
+          this.dataset =  this._getDataset(year);
+          this.drawChart();
         };
 
     selector
@@ -966,7 +949,7 @@ var ContrabandHitRateBar = VisualBase.extend({
             .attr('width', "100%")
             .attr('height', "100%")
             .attr('preserveAspectRatio', "xMinYMin")
-            .attr('viewBox', "0 0 {0} {1}".printf(this.get("width"), this.get("height")))
+            .attr('viewBox', `0 0 ${this.get('width')} ${this.get('height')}`)
             .call(this.chart);
 
     nv.utils.windowResize(this.chart.update);
@@ -1185,7 +1168,7 @@ var LikelihoodSearchTable = TableBase.extend({
         get_row = function(stops, searches, term){
           var stop = (stops !== undefined) ? stops[term] : 0,
               search = (searches !== undefined) ? searches[term] : 0;
-          return "{0}/{1}".printf(search, stop);
+          return `${search}/${stop}`;
         };
 
     // create data rows
@@ -1221,8 +1204,7 @@ var RaceToggle = function(updateUrl, showEthnicity){
 }
 _.extend(RaceToggle.prototype, {
   render: function($div){
-    var self = this,
-        id,
+    var id,
         inpDiv = $('<div class="radio">')
           .append('<label><input type="radio" name="raceType" id="raceTypeRace" value="race">Race &nbsp;</label>')
           .append('<label><input type="radio" name="raceType" id="raceTypeEthnicity" value="ethnicity">Ethnicity</label>'),
@@ -1234,10 +1216,10 @@ _.extend(RaceToggle.prototype, {
     id = (this.showEthnicity) ? "#raceTypeEthnicity" : "#raceTypeRace";
     inpDiv.find(id).prop("checked", true);
 
-    inpDiv.find('input').on('change', function(){
-      self.showEthnicity = $(this).val()==="ethnicity";
-      $.post(self.updateUrl, {"showEthnicity": self.showEthnicity});
-      $(document).trigger('raceToggle.change', self.showEthnicity);
+    inpDiv.find('input').on('change', (e) => {
+      this.showEthnicity = $(e.target).val()==="ethnicity";
+      $.post(this.updateUrl, {"showEthnicity": this.showEthnicity});
+      $(document).trigger('raceToggle.change', this.showEthnicity);
     });
   }
 });

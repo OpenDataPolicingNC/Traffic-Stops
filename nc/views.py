@@ -14,7 +14,7 @@ def home(request):
     else:
         form = forms.AgencySearchForm()
     context = {'agency_form': form}
-    return render(request, 'home.html', context)
+    return render(request, 'state.html', context)
 
 
 class About(TemplateView):

@@ -129,6 +129,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'traffic_stops.middleware.StateMiddleware',
 )
 
 ROOT_URLCONF = 'traffic_stops.urls'
