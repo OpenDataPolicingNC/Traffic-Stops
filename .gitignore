@@ -31,3 +31,4 @@ node_modules
 */static/css
 secrets.tfvars
 terraform.tfstate*
+.idea/
