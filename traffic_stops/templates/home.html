@@ -1,80 +1,110 @@
 {% extends "base.html" %}
-{% load selectable_tags %}
+{% load staticfiles %}
 
 {% block body_id %}home{% endblock %}
-
-{% block extra-css %}
-    {% include_ui_theme %}
-    {{ agency_form.media.css }}
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
-{% endblock %}
-
-{% block extra-js %}
-<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
-{{ agency_form.media.js }}
-<script type="text/javascript">
-    var map = L.map('map', {
-        zoomControl: false
-    }).setView([35.5, -80], 8);
-    L.tileLayer('http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
-        maxZoom: 18,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map);
-    $(document).ready(function() {
-        var quick_search = $('#agency_search :input[name=agency_0]');
-        quick_search.bind('djselectableselect', function(event, ui) {
-            $(this).parents("form").submit();
-        });
-    });
-</script>
-{% endblock %}
+{% block body_class %}navbar-inverse{% endblock %}
 
 {% block content-outer %}
-<div id="map"></div>
-<div id="quick-search">
-    <div class="row-fluid">
-        <div class="col-xs-11 col-sm-10 col-md-8 col-lg-5 col-md-offset-1">
-            <h1>Open Data Policing NC</h1>
-            <form role="form" id="agency_search" action='{% url "home" %}' method="get" accept-charset="utf-8">
-                <div class="form-group">
-                {% csrf_token %}
-                {{ agency_form.agency }}
-                {% if agency_form.agency.errors %}
-                    <div class="alert alert-warning alert-dismissible">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <ul>
-                        {% for error in agency_form.agency.errors %}
-                            <li><strong>{{ error }}</strong></li>
-                        {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
-                </div>
-            </form>
-            <div id="elevator">
-                <p>
-                    Open Data Policing NC aggregates, visualizes, and publishes public
-                    records related to all known traffic stops to have occurred in North
-                    Carolina since January 1, 2002.  Enter an agency name into the search
-                    field above to review data on the racial and ethnic demographics of
-                    people stopped, searched, and subjected to force in the course of
-                    traffic stops in a given jurisdiction.  Data is available for most
-                    North Carolina departments and officers serving populations greater
-                    than 10,000.
-                </p>
-                <p>
-                    North Carolina law requires all such agencies to report their data
-                    on a monthly basis to the NC Department of Justice; however, some
-                    datasets are incomplete or remain unreported.  Where data sets are
-                    incomplete or missing from the website it is because they have not
-                    been reported to the state agency from which the site derives its
-                    records. Open Data Policing does not have access to, nor does it
-                    publish, the names of officers, drivers, or passengers involved in
-                    traffic stops.
-                </p>
-            </div>
+
+<div class="state-picker">
+    <div class="container">
+      <div class="row">
+        <h1 class='title'>Open Data Policing</h1>
+        <p class='tagline'>Search all known North Carolina and Maryland traffic stops</p>
+      </div>
+      <div class="row">
+        <div class="col-sm-5 col-sm-offset-1 col-md-4 col-md-offset-2">
+          <!-- <h2>North Carolina</h2> -->
+          <img src="{% static "svg/noun_19625_cc-white.svg" %}" class="state nc">
+          <p class='stop-count'>20+ million stops</p>
+          <a href="{% url 'nc-home' %}" class="btn btn-default nc">Search NC</a>
         </div>
+        <div class="col-sm-5 col-md-4">
+          <!-- <h2>Maryland</h2> -->
+          <img src="{% static "svg/noun_19618_cc-white.svg" %}" class="state md">
+          <p class='stop-count'>6+ million stops</p>
+          <a href="{% url 'md-home' %}" class="btn btn-default">Search MD</a>
+        </div>
+      </div>
     </div>
 </div>
+
+<div class="state-featurette">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-10 col-md-offset-1">
+        <blockquote>
+          <p>"This platform presents the information in a manner that increases the transparency of the Fayetteville Police Department and improves the community and police relationship."</p>
+          <footer>Harold Medlock, Fayetteville Police Chief</footer>
+        </blockquote>
+      </div>
+    </div>
+    <hr class="half-rule">
+    <div class="row">
+      <div class="col-sm-4">
+        <h3>Feature A</h3>
+        <p>
+          Etiam at mollis nisi, a fringilla lorem. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec placerat tempor felis, ac ullamcorper orci tincidunt viverra.
+        </p>
+      </div>
+      <div class="col-sm-4">
+        <h3>Feature B</h3>
+        <p>
+          Etiam malesuada, mauris vitae laoreet pulvinar, tortor eros egestas tellus, vehicula gravida tellus tellus euismod nisl. Cras consequat orci mi, efficitur finibus turpis ultricies nec.
+        </p>
+      </div>
+      <div class="col-sm-4">
+        <h3>Feature C</h3>
+        <p>
+          Sed egestas, nulla id sollicitudin lobortis, mi libero semper tellus, vel faucibus ligula libero at lectus. Morbi iaculis neque justo, at varius velit molestie quis.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="about-footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6">
+        <h3>About OpenDataPolicing</h3>
+        <p>
+          Aenean ut sem a enim malesuada consectetur a et nulla. Pellentesque
+          habitant morbi tristique senectus et netus et malesuada fames ac
+          turpis egestas. Phasellus ante metus, mattis sit amet fermentum vel,
+          ornare eu ligula. Nulla vulputate eros eros, a consequat urna porta
+          sed. Suspendisse potenti. Quisque cursus nunc in magna sollicitudin
+          consectetur.
+        </p>
+        <p>
+          Sed in pellentesque purus. Integer aliquet ligula vulputate magna
+          rutrum, et suscipit nisl euismod. Nullam ornare fermentum eros, eu
+          finibus sem consequat sit amet. Donec ligula mi, venenatis nec ligula
+          ac, maximus tristique odio. In varius, turpis vitae viverra
+          pellentesque, ante tortor condimentum tellus, vel viverra sapien
+          ligula non mi.
+        </p>
+      </div>
+      <div class="col-sm-3">
+        <h3>Donate</h3>
+        <p>
+          Sed in pellentesque purus. Integer aliquet ligula vulputate magna
+          rutrum, et suscipit nisl euismod.
+          <ul class="links list-unstyled">
+            <li><a href="#">Donate</a></li>
+          </ul>
+        </p>
+      </div>
+      <div class="col-sm-3">
+        <h3>Connect</h3>
+        <ul class="links list-unstyled">
+          <li><a href="#">Email</a></li>
+          <li><a href="#">Twitter</a></li>
+          <li><a href="#">Facebook</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}

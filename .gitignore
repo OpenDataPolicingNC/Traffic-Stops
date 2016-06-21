@@ -32,3 +32,6 @@ node_modules
 secrets.tfvars
 terraform.tfstate*
 /.idea/
+=======
+*.tar
+*.tar.zip
