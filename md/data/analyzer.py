@@ -30,6 +30,8 @@ def run(url, report, destination=None, download=True):
 def analyze(stops, report):
     stops['datetime'] = pd.to_datetime(stops['STOPDATE'])
     years = stops['datetime'].map(lambda x: x.year)
+    old_max_rows = pd.options.display.max_rows
+    pd.options.display.max_rows = 1000
     for col in COLUMNS_TO_ANALYZE:
         print('Column %s:' % col, file=report)
         print('', file=report)
@@ -40,3 +42,4 @@ def analyze(stops, report):
         print(stops.groupby([years, getattr(stops, col)])[col].count(), file=report)
         print('', file=report)
         print('-' * 50, file=report)
+    pd.options.display.max_rows = old_max_rows
