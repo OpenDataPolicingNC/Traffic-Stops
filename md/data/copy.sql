@@ -11,7 +11,7 @@ COMMIT;
 -- import stops
 \set import_file :data_file
 BEGIN;
-COPY md_stop (stop_id, stop_date, stop_date_text, stop_time_text,
+COPY md_stop (stop_id, date, stop_date_text, stop_time_text,
               location_text, duration_text, stop_reason, search_conducted,
               search_reason, what_searched, seized, stop_outcome,
               crime_charged, registration_state, gender,

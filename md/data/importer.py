@@ -1,16 +1,40 @@
 import logging
 import os
 import pandas as pd
+import re
 
 from django.conf import settings
-from django.db import connections
 
 from md.data import DATASET_BASENAME
 from tsdata.util import call, line_count, download_and_unzip_data
 
 
 logger = logging.getLogger(__name__)
-cursor = connections['traffic_stops_nc'].cursor()
+
+TIME_OF_STOP_re = re.compile(r'((\d?\d):(\d\d)|(\d?\d):(\d\d) [AP]M)$')
+TIME_OF_STOP_re = re.compile(r'(\d?\d):(\d\d)( [AP]M)?$')
+DEFAULT_TIME_OF_STOP = '00:00'
+
+
+def fix_TIME_OF_STOP(s):
+    # print(s)
+    s = s.strip()
+    m = TIME_OF_STOP_re.match(s)
+    if not m:
+        return DEFAULT_TIME_OF_STOP
+    hour = int(m.group(1))
+    minute = int(m.group(2))
+    if not 0 <= hour < 24:
+        return DEFAULT_TIME_OF_STOP
+    if not 0 <= minute < 60:
+        return DEFAULT_TIME_OF_STOP
+    # if m.group(3) and m.group(3) == ' PM':
+    #     print(s)
+
+    # XXX Check converted CSV to see if we need to fix up the handling
+    #     of 'PM', which can be appended to times before or after 12:00 p.m.
+    # IOW, does the right thing happen for both '8:53 PM' and '20:53 PM'?
+    return s
 
 
 def load_xls(xls_path):
@@ -22,15 +46,21 @@ def load_xls(xls_path):
     )
     for i in range(1, num_sheets):
         df_dict[i].columns = df_dict[0].columns
-    df = pd.concat(
+    stops = pd.concat(
         [df_dict[k] for k in sorted(df_dict.keys())],
         ignore_index=True
     )
-    # Add index and date columns to front
-    df['index'] = range(1, len(df) + 1)  # adds column at end
-    df['date'] = pd.to_datetime(df['STOPDATE'])
-    df = df[df.columns.tolist()[-2:] + df.columns.tolist()[:-2]]
-    return df
+
+    # Fix data
+    stops['TIME_OF_STOP'] = stops['TIME_OF_STOP'].apply(fix_TIME_OF_STOP)
+
+    # Add index and date columns
+    stops['index'] = range(1, len(stops) + 1)  # adds column at end
+    blank = pd.DataFrame({'blank': ' '}, index=range(len(stops['STOPDATE'])))
+    stops['date'] = pd.to_datetime(stops['STOPDATE'].map(str) + blank['blank'].map(str) + stops['TIME_OF_STOP'].map(str))
+    # move the new columns to the front
+    stops = stops[stops.columns.tolist()[-2:] + stops.columns.tolist()[:-2]]
+    return stops
 
 
 def xls_to_csv(xls_path, csv_path):
@@ -67,7 +97,6 @@ def copy_from(csv_path):
            settings.DATABASES['traffic_stops_md']['NAME']]
     if settings.DATABASES['traffic_stops_md']['USER']:
         cmd.append(settings.DATABASES['traffic_stops_md']['USER'])
-    print(cmd)
     call(cmd)
 
 

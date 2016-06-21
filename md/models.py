@@ -42,7 +42,7 @@ class Stop(models.Model):
     error: "null value in column "what_searched" violates not-null constraint"
     """
     stop_id = models.IntegerField(primary_key=True, default=1)
-    stop_date = models.DateTimeField(null=True)
+    date = models.DateTimeField(null=True)
     stop_date_text = models.CharField(max_length=20, blank=True, default='')
     stop_time_text = models.CharField(max_length=20, blank=True, default='')
     location_text = models.CharField(max_length=1024)
