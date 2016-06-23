@@ -1,0 +1,86 @@
+{% extends 'state.html' %}
+
+{% load staticfiles %}
+
+{% block state-name %}
+  Maryland
+{% endblock state-name %}
+
+{% block state-subtitle %}
+  Browse all known traffic stops to have occurred in Maryland since
+  January 1, 2012
+{% endblock state-subtitle %}
+
+{% block state-header-graphic %}
+  <img src="{% static "svg/noun_19618_cc-white.svg" %}" class="state md">
+{% endblock state-header-graphic %}
+
+{% block agencies-table %}
+  <table class='table table-condensed table-hover'>
+    <tr>
+      <th>City</th>
+      <th class="text-right">Stops</th>
+    </tr>
+    <tr>
+      <td><a href="{% url "agency-detail" "192" %}">MSP</a></td>
+      <td class="text-right">641,952</td>
+    </tr>
+    <tr>
+      <td><a href="{% url "agency-detail" "51" %}">Montgomery</a></td>
+      <td class="text-right">230,317</td>
+    </tr>
+    <tr>
+      <td><a href="{% url "agency-detail" "223" %}">BACOPD</a></td>
+      <td class="text-right">222,241</td>
+    </tr>
+    <tr>
+      <td><a href="{% url "agency-detail" "104" %}">MDTA</a></td>
+      <td class="text-right">180,312</td>
+    </tr>
+    <tr>
+      <td><a href="{% url "agency-detail" "104" %}">AACOPD</a></td>
+      <td class="text-right">126,123</td>
+    </tr>
+  </table>
+{% endblock agencies-table %}
+
+{% block about-text %}
+  <p>
+      Open Data Policing aggregates, visualizes, and publishes public
+      records related to all known traffic stops to have occurred in Maryland
+      since January 1, 2012. Data is available for most
+      Maryland departments and officers serving populations greater
+      than <i>n</i>.
+  </p>
+  <p>
+      Maryland law requires all such agencies to report their data
+      on a monthly basis to the MD Department of Justice; however, some
+      datasets are incomplete or remain unreported.  Where data sets are
+      incomplete or missing from the website it is because they have not
+      been reported to the state agency from which the site derives its
+      records. Open Data Policing does not have access to, nor does it
+      publish, the names of officers, drivers, or passengers involved in
+      traffic stops.
+  </p>
+{% endblock about-text %}
+
+{% block dataset-facts %}
+  <table class='table table-condensed table-hover'>
+    <tr>
+      <th>Timeframe</th>
+      <td>Jan 1 2012 - Dec 31, 2015</td>
+    </tr>
+    <tr>
+      <th>Stops</th>
+      <td>2,257,860</td>
+    </tr>
+    <tr>
+      <th>Searches</th>
+      <td>79,586</td>
+    </tr>
+    <tr>
+      <th>Agencies</th>
+      <td>127</td>
+    </tr>
+  </table>
+{% endblock dataset-facts %}

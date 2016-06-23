@@ -1,19 +1,17 @@
-{% extends "base.html" %}
-{% load humanize %}
+{% extends "agency_detail.html" %}
+
 {% load static from staticfiles %}
 
-{% block title %}
-  {{block.super}} | {{object}}
-{% endblock title %}
+{% block state-img %}
+  <img src="{% static "svg/noun_19625_cc-white.svg" %}" class="state">
+{% endblock state-img %}
 
-{% block content %}
-
-  <h1>{{ object }}{% if officer_id %}: officer {{officer_id}} {% endif %}</h1>
-
+{% block census-display %}
   <!-- census data -->
+  <span class="start" />
   <div id="census_row" class="row">
     <div class="col-md-12">
-      <h2>2010 census data</h2>
+      <h2 id='demographics'>2010 census data</h2>
     </div>
 
     <div class="col-md-4">
@@ -42,12 +40,13 @@
 
     </div>
   </div>
-  <hr>
+{% endblock census-display %}
 
+{% block stop-display %}
   <!-- stop data -->
   <div class="row">
     <div class="col-md-12">
-      <h2>Stops data</h2>
+      <h2 id="stop-percentage">Stops data</h2>
     </div>
 
     <div class="col-md-4">
@@ -102,12 +101,13 @@
 
     </div>
   </div>
-  <hr>
+{% endblock stop-display %}
 
+{% block search-rate-display %}
   <!-- Fraction of stops searched -->
   <div class="row">
      <div class="col-md-offset-2 col-md-8">
-      <h3>{% if officer_id %}Officer{% else %}Departmental{% endif %} search rate</h3>
+      <h3 id="search-percentage-dept">{% if officer_id %}Officer{% else %}Departmental{% endif %} search rate</h3>
 
       <div role="tabpanel">
 
@@ -141,8 +141,9 @@
       </p>
     </div>
   </div>
-  <hr>
+{% endblock search-rate-display %}
 
+{% block search-display %}
   <!-- search data -->
   <div class="row">
     <div class="col-md-12">
@@ -201,7 +202,9 @@
 
     </div>
   </div>
+{% endblock search-display %}
 
+{% block lsb-display %}
   <div class="row">
     <div id="lhs_div" class="col-md-offset-2 col-md-8">
       <h3>Likelihood of search by stop-cause</h3>
@@ -241,8 +244,9 @@
 
     </div>
   </div>
-  <hr>
+{% endblock lsb-display %}
 
+{% block contraband-display %}
   <div class="row">
     <div id="contraband_div" class="col-md-offset-2 col-md-8">
       <h3>Contraband hit-rate</h3>
@@ -279,8 +283,9 @@
 
     </div>
   </div>
-  <hr>
+{% endblock contraband-display %}
 
+{% block use-of-force-display %}
   <!-- use-of-force data -->
   <div class="row">
     <div class="col-md-12">
@@ -340,66 +345,55 @@
 
     </div>
   </div>
+{% endblock use-of-force-display %}
 
-{% endblock %}
+{% block graph-code %}
+{% comment %}<script>{% endcomment %}
 
-{% block extra-css %}
-  <link href="//cdnjs.cloudflare.com/ajax/libs/nvd3/1.1.15-beta/nv.d3.min.css" rel="stylesheet" type="text/css">
-{% endblock %}
+var showEthnicity = {{request.session.showEthnicity|lower|default:"false"}},
+    census_handler = new NC.CensusHandler({url: "{% static 'js/census.temporary.json' %}", agency: "{{object}}"});
+{% if officer_id %}
+  // Retrieve data from API using data-handlers
+  var stop_handler = new NC.StopsHandler({url: "{% url 'agency-api-stops' object.pk %}?officer={{officer_id|urlencode}}"}),
+      search_handler = new NC.SearchHandler({url: "{% url 'agency-api-searches' object.pk %}?officer={{officer_id|urlencode}}"}),
+      uf_handler = new NC.UseOfForceHandler({url: "{% url 'agency-api-use-of-force' object.pk %}?officer={{officer_id|urlencode}}"}),
+      lhs_handler = new NC.LikelihoodSearchHandler({url: "{% url 'agency-api-stops-by-reason' object.pk %}?officer={{officer_id|urlencode}}"}),
+      chr_handler = new NC.ContrabandHitRateHandler({url: "{% url 'agency-api-contraband-hit-rate' object.pk %}?officer={{officer_id|urlencode}}"});
+{% else %}
+  // Retrieve data from API using data-handlers
+  var stop_handler = new NC.StopsHandler({url: "{% url 'agency-api-stops' object.pk %}"}),
+      search_handler = new NC.SearchHandler({url: "{% url 'agency-api-searches' object.pk %}"}),
+      uf_handler = new NC.UseOfForceHandler({url: "{% url 'agency-api-use-of-force' object.pk %}"}),
+      lhs_handler = new NC.LikelihoodSearchHandler({url: "{% url 'agency-api-stops-by-reason' object.pk %}"}),
+      chr_handler = new NC.ContrabandHitRateHandler({url: "{% url 'agency-api-contraband-hit-rate' object.pk %}"});
+{% endif %}
+var stop_search_handler = new NC.StopSearchHandler({handlers: [stop_handler, search_handler]});
 
-{% block extra-js %}
-  <!-- <script charset="utf-8" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
-  <script charset="utf-8" src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
-  <script charset="utf-8" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js"></script>
-  <script charset="utf-8" src="//cdnjs.cloudflare.com/ajax/libs/nvd3/1.1.15-beta/nv.d3.min.js"></script>
-  <script charset="utf-8" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
-  <script type="text/javascript">
-    $(document).ready(function(){
-      var showEthnicity = {{request.session.showEthnicity|lower|default:"false"}},
-          census_handler = new CensusHandler({url: "{% static 'js/census.temporary.json' %}", agency: "{{object}}"});
-      {% if officer_id %}
-        // Retrieve data from API using data-handlers
-        var stop_handler = new StopsHandler({url: "{% url 'agency-api-stops' object.pk %}?officer={{officer_id|urlencode}}"}),
-            search_handler = new SearchHandler({url: "{% url 'agency-api-searches' object.pk %}?officer={{officer_id|urlencode}}"}),
-            uf_handler = new UseOfForceHandler({url: "{% url 'agency-api-use-of-force' object.pk %}?officer={{officer_id|urlencode}}"}),
-            lhs_handler = new LikelihoodSearchHandler({url: "{% url 'agency-api-stops-by-reason' object.pk %}?officer={{officer_id|urlencode}}"}),
-            chr_handler = new ContrabandHitRateHandler({url: "{% url 'agency-api-contraband-hit-rate' object.pk %}?officer={{officer_id|urlencode}}"});
-      {% else %}
-        // Retrieve data from API using data-handlers
-        var stop_handler = new StopsHandler({url: "{% url 'agency-api-stops' object.pk %}"}),
-            search_handler = new SearchHandler({url: "{% url 'agency-api-searches' object.pk %}"}),
-            uf_handler = new UseOfForceHandler({url: "{% url 'agency-api-use-of-force' object.pk %}"}),
-            lhs_handler = new LikelihoodSearchHandler({url: "{% url 'agency-api-stops-by-reason' object.pk %}"}),
-            chr_handler = new ContrabandHitRateHandler({url: "{% url 'agency-api-contraband-hit-rate' object.pk %}"});
-      {% endif %}
-      var stop_search_handler = new StopSearchHandler({handlers: [stop_handler, search_handler]});
+new NC.CensusRatioDonut({handler: census_handler, selector: "#census_pie", showEthnicity: showEthnicity});
+new NC.CensusTable({handler: census_handler, selector: "#census_data", showEthnicity: showEthnicity});
 
-      new CensusRatioDonut({handler: census_handler, selector: "#census_pie", showEthnicity: showEthnicity});
-      new CensusTable({handler: census_handler, selector: "#census_data", showEthnicity: showEthnicity});
+new NC.StopRatioDonut({handler: stop_handler, selector: "#stop_race_pie", showEthnicity: showEthnicity});
+new NC.StopRatioTimeSeries({handler: stop_handler, selector: "#stop_race_line", showEthnicity: showEthnicity});
+new NC.StopsTable({handler: stop_handler, selector: "#stop_race_data", showEthnicity: showEthnicity});
 
-      new StopRatioDonut({handler: stop_handler, selector: "#stop_race_pie", showEthnicity: showEthnicity});
-      new StopRatioTimeSeries({handler: stop_handler, selector: "#stop_race_line", showEthnicity: showEthnicity});
-      new StopsTable({handler: stop_handler, selector: "#stop_race_data", showEthnicity: showEthnicity});
+new NC.StopSearchTimeSeries({handler: stop_search_handler, selector: "#stop_search_line", showEthnicity: showEthnicity});
+new NC.StopSearchTable({handler: stop_search_handler, selector: "#stop_search_data", showEthnicity: showEthnicity});
 
-      new StopSearchTimeSeries({handler: stop_search_handler, selector: "#stop_search_line", showEthnicity: showEthnicity});
-      new StopSearchTable({handler: stop_search_handler, selector: "#stop_search_data", showEthnicity: showEthnicity});
+new NC.SearchRatioDonut({handler: search_handler, selector: "#search_race_pie", showEthnicity: showEthnicity});
+new NC.SearchRatioTimeSeries({handler: search_handler, selector: "#search_race_line", showEthnicity: showEthnicity});
+new NC.SearchTable({handler: search_handler, selector: "#search_race_data", showEthnicity: showEthnicity});
 
-      new SearchRatioDonut({handler: search_handler, selector: "#search_race_pie", showEthnicity: showEthnicity});
-      new SearchRatioTimeSeries({handler: search_handler, selector: "#search_race_line", showEthnicity: showEthnicity});
-      new SearchTable({handler: search_handler, selector: "#search_race_data", showEthnicity: showEthnicity});
+new NC.LikelihoodOfSearch({handler: lhs_handler, selector: "#lsb", showEthnicity: showEthnicity});
+new NC.LikelihoodSearchTable({handler: lhs_handler, selector: "#lsb_data", showEthnicity: showEthnicity});
 
-      new LikelihoodOfSearch({handler: lhs_handler, selector: "#lsb", showEthnicity: showEthnicity});
-      new LikelihoodSearchTable({handler: lhs_handler, selector: "#lsb_data", showEthnicity: showEthnicity});
+new NC.ContrabandHitRateBar({handler: chr_handler, selector: "#chr", showEthnicity: showEthnicity});
+new NC.ContrabandTable({handler: chr_handler, selector: "#chr_data", showEthnicity: showEthnicity});
 
-      new ContrabandHitRateBar({handler: chr_handler, selector: "#chr", showEthnicity: showEthnicity});
-      new ContrabandTable({handler: chr_handler, selector: "#chr_data", showEthnicity: showEthnicity});
+new NC.UseOfForceDonut({handler: uf_handler, selector: "#use_force_race_pie", showEthnicity: showEthnicity});
+new NC.UseOfForceBarChart({handler: uf_handler, selector: "#use_force_race_line", showEthnicity: showEthnicity});
+new NC.UseOfForceTable({handler: uf_handler, selector: "#use_force_race__data", showEthnicity: showEthnicity});
 
-      new UseOfForceDonut({handler: uf_handler, selector: "#use_force_race_pie", showEthnicity: showEthnicity});
-      new UseOfForceBarChart({handler: uf_handler, selector: "#use_force_race_line", showEthnicity: showEthnicity});
-      new UseOfForceTable({handler: uf_handler, selector: "#use_force_race__data", showEthnicity: showEthnicity});
+new NC.RaceToggle("{% url 'update_session' %}", showEthnicity).render($('span.start'));
 
-      new RaceToggle("{% url 'update_session' %}", showEthnicity).render($('h1'));
-
-    });
-  </script>
-{% endblock extra-js %}
+{% comment %}</script>{% endcomment %}
+{% endblock graph-code %}
