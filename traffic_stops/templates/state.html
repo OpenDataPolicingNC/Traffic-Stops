@@ -12,13 +12,14 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.js"></script>
 {{ agency_form.media.js }}
 <script type="text/javascript">
-    $(document).ready(function() {
-        var quick_search = $('#agency_search :input[name=agency_0]');
-        quick_search.bind('djselectableselect', function(event, ui) {
-            $(this).parents("form").submit();
-        });
+  $(document).ready(function() {
+    var quick_search = $('#agency_search :input[name=agency_0]');
+    quick_search.bind('djselectableselect', function(event, ui) {
+        $(this).parents("form").submit();
     });
+  });
 </script>
+
 {% endblock %}
 
 {% block content-outer %}
@@ -44,38 +45,51 @@
 <div class="agency-dashboard-block">
   <div class="container">
     <div class="row">
-      <div class="col-md-5 col-sm-6">
-        <h2>Agencies</h2>
-        <p class='nc-agency-intro'>
-          Review agency-level data on the racial and ethnic demographics of people
-          stopped, searched, and subjected to force in the course of traffic stops
-          in a given jurisdiction.
-        </p>
-        <h4>Largest Agencies</h4>
-        {% block agencies-table %}
-        {% endblock agencies-table %}
-        <h4>View Agency Dashboard</h4>
-        <form role="form" id="agency_search" action='{% url "nc-home" %}' method="get" accept-charset="utf-8">
-            <div class="form-group">
-            {% csrf_token %}
-            <div class="input-group">
-              {{ agency_form.agency }}
-              <span class="input-group-btn">
-                <button class="btn btn-primary" type="button">View</button>
-              </span>
-            </div><!-- /input-group -->
-            {% if agency_form.agency.errors %}
-                <div class="alert alert-warning alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <ul>
-                    {% for error in agency_form.agency.errors %}
-                        <li><strong>{{ error }}</strong></li>
-                    {% endfor %}
-                    </ul>
+      <div class="col-md-5 col-sm-6" id="explore-data" data-toggle="tabslet">
+        <ul class="tabs">
+          <li class="active"><a href="#agencies"><h2 class="active">Agencies</h2></a></li>
+          <li><a href="#find-a-stop"><h2>Find a Stop</h2></a></li>
+        </ul>
+
+        <div id="agencies">
+          <p class='nc-agency-intro'>
+            Review agency-level data on the racial and ethnic demographics of people
+            stopped, searched, and subjected to force in the course of traffic stops
+            in a given jurisdiction.
+          </p>
+
+          {% block search-form %}
+            <h4>View Agency Dashboard</h4>
+            <form role="form" id="agency_search" action='{% url "nc-home" %}' method="get" accept-charset="utf-8">
+                <div class="form-group">
+                {% csrf_token %}
+                <div class="input-group">
+                  {{ agency_form.agency }}
+                  <span class="input-group-btn">
+                    <button class="btn btn-primary" type="button">View</button>
+                  </span>
+                </div><!-- /input-group -->
+                {% if agency_form.agency.errors %}
+                    <div class="alert alert-warning alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <ul>
+                        {% for error in agency_form.agency.errors %}
+                            <li><strong>{{ error }}</strong></li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
                 </div>
-            {% endif %}
-            </div>
-        </form>
+            </form>
+          {% endblock search-form %}
+
+          <h4>Largest Agencies</h4>
+          {% block agencies-table %}
+          {% endblock agencies-table %}
+        </div>
+
+        <div id="find-a-stop"></div>
+
       </div>
       <div class="col-sm-7">
         <h2>About</h2>

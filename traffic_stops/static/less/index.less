@@ -9,6 +9,7 @@
 ==================== */
 
 @import "node_modules/bootstrap/less/bootstrap";
+@import (reference) "node_modules/@caktus/flexless/flex.less";
 
 /* Variables
 ==================== */
@@ -301,6 +302,44 @@ body#state {
   }
   #elevator {
     font-size: 110%;
+  }
+}
+
+/**
+ * Tabs widget [tabslet]
+ *
+ * ul.tabs : tabs list
+ *   ul.tabs > li : tabs
+ */
+ul.tabs {
+  .flex-layout();
+  .flex-direction(row);
+  .flex-wrap(nowrap);
+
+  list-style: none;
+  padding: 1rem 0 0 0;
+  margin: 0 0 1rem 0;
+  border-bottom: 1px solid #333333;
+
+  li {
+    .flex-layout();
+    .align-items(center); // for vertical text centering
+
+    &.active {
+      background-color: white;
+      border-style: solid;
+      border-color: #333333;
+      border-width: 1px 1px 0 1px;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    h2 {
+      margin: 0;
+      padding: 1rem;
+    }
   }
 }
 
