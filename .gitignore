@@ -31,3 +31,5 @@ node_modules
 */static/css
 secrets.tfvars
 terraform.tfstate*
+*.tar
+*.tar.zip
