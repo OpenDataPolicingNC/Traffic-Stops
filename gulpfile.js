@@ -111,7 +111,7 @@ var browserifyTask = function (options) {
 
 var cssTask = function (options) {
     var lessOpts = {
-      relativeUrls: true,
+      relativeUrls: true
     };
     if (options.development) {
       var run = function () {

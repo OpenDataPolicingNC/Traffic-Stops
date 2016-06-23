@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "description": "The traffic_stops Project",
   "main": "",
-  "engines" : {
-    "node" : ">=4.2 <4.3"
+  "engines": {
+    "node": ">=4.2 <4.3"
   },
   "directories": {
     "doc": "docs"
@@ -26,10 +26,13 @@
   "homepage": "https://github.com/[ORGANIZATION]/PROJECT_NAME#readme",
   "dependencies": {},
   "devDependencies": {
+    "@caktus/flexless": "^0.1.1",
     "babel-preset-es2015": "^6.1.18",
     "babelify": "^7.2.0",
+    "backbone": "1.1.2",
     "bootstrap": "^3.3.6",
     "browserify": "^12.0.1",
+    "d3": "3.4.11",
     "file-exists": "^1.0.0",
     "glob": "^6.0.1",
     "gulp": "^3.8.9",
@@ -40,21 +43,20 @@
     "gulp-jasmine2-phantomjs": "^0.1.1",
     "gulp-less": "^3.0.5",
     "gulp-livereload": "^2.1.1",
-    "gulp-notify": "^1.4.2",
     "gulp-modernizr": "0.0.0",
+    "gulp-notify": "^1.4.2",
     "gulp-rename": "^1.2.2",
     "gulp-streamify": "0.0.5",
     "gulp-uglify": "^0.3.1",
     "gulp-util": "^3.0.0",
     "jquery": "^2.1",
     "less": "^2.5.3",
+    "nvd3": "1.1.15",
+    "tabslet": "^1.7.2",
+    "underscore": "1.7.0",
     "vinyl-source-stream": "^0.1.1",
     "watchify": "^2.1.1",
-    "yargs": "^3.31.0",
-    "d3": "3.4.11",
-    "nvd3": "1.1.15",
-    "underscore": "1.7.0",
-    "backbone": "1.1.2"
+    "yargs": "^3.31.0"
   },
   "browserify": {
     "transform": [
