@@ -1,7 +1,9 @@
 import logging
 import os
-import pandas as pd
 import re
+
+import numpy as np
+import pandas as pd
 
 from django.conf import settings
 
@@ -15,9 +17,61 @@ TIME_OF_STOP_re = re.compile(r'((\d?\d):(\d\d)|(\d?\d):(\d\d) [AP]M)$')
 TIME_OF_STOP_re = re.compile(r'(\d?\d):(\d\d)( [AP]M)?$')
 DEFAULT_TIME_OF_STOP = '00:00'
 
+GENDER_MALE_re = re.compile(r'^(M|male|MALE|m +)$')
+GENDER_FEMALE_re = re.compile(r'^(F|female|w|F +)$')
+
+SEIZED_CONTRABAND_re = re.compile(r'^(Contraband.*|paraphernalia.*|Both)$')
+
+ETHNICITY_WHITE_re = re.compile(r'^(WHITE|W|W.)$')
+ETHNICITY_BLACK_re = re.compile(r'^(BLACK|BLK)$')
+ETHNICITY_TO_CODE = {
+    'HISPANIC': 'H',
+    'ASIAN': 'A',
+    'NATIVE AMERICAN': 'I',
+}
+
+STOP_REASON_re = re.compile(r'^ *(\d+) *- *(\d+) *\(.*\) *$')
+
+MD_COLUMNS_TO_DROP = (
+    'WHATSEARCHED', 'STOPOUTCOME', 'CRIME_CHARGED',
+    'REGISTRATION_STATE', 'RESIDENCE_STATE', 'MD_COUNTY',
+)
+
+
+def fix_ETHNICITY(s):
+    if ETHNICITY_WHITE_re.match(s):
+        return 'W'
+    elif ETHNICITY_BLACK_re.match(s):
+        return 'B'
+    else:
+        return ETHNICITY_TO_CODE.get(s, 'U')
+
+
+def fix_GENDER(s):
+    if GENDER_MALE_re.match(s):
+        return 'M'
+    elif GENDER_FEMALE_re.match(s):
+        return 'F'
+    else:
+        return 'U'
+
+
+def fix_SEIZED(s):
+    if SEIZED_CONTRABAND_re.match(s):
+        return 'Y'
+    else:
+        return 'N'
+
+
+def fix_STOP_REASON(s):
+    m = STOP_REASON_re.match(s)
+    if m:
+        return m.group(1) + '-' + m.group(2)
+    else:
+        return s
+
 
 def fix_TIME_OF_STOP(s):
-    # print(s)
     s = s.strip()
     m = TIME_OF_STOP_re.match(s)
     if not m:
@@ -28,13 +82,21 @@ def fix_TIME_OF_STOP(s):
         return DEFAULT_TIME_OF_STOP
     if not 0 <= minute < 60:
         return DEFAULT_TIME_OF_STOP
-    # if m.group(3) and m.group(3) == ' PM':
-    #     print(s)
 
     # XXX Check converted CSV to see if we need to fix up the handling
     #     of 'PM', which can be appended to times before or after 12:00 p.m.
     # IOW, does the right thing happen for both '8:53 PM' and '20:53 PM'?
     return s
+
+
+def compute_AGE(row):
+    stop_date = row['date']
+    dob = row['DOB_as_dt']
+    if pd.isnull(dob) or dob > stop_date:
+        return 0
+    else:
+        delta = stop_date - dob
+        return int(delta.days / 365.25)
 
 
 def load_xls(xls_path):
@@ -50,25 +112,40 @@ def load_xls(xls_path):
         [df_dict[k] for k in sorted(df_dict.keys())],
         ignore_index=True
     )
+    return stops
+
+
+def process_raw_data(stops):
+    # Drop some columns
+    stops.drop(list(MD_COLUMNS_TO_DROP), axis=1, inplace=True)
 
     # Fix data
     stops['TIME_OF_STOP'] = stops['TIME_OF_STOP'].apply(fix_TIME_OF_STOP)
+    stops['GENDER'] = stops['GENDER'].apply(fix_GENDER)
+    stops['SEIZED'] = stops['SEIZED'].apply(fix_SEIZED)
+    stops['ETHNICITY'] = stops['ETHNICITY'].apply(fix_ETHNICITY)
 
-    # Add index and date columns
-    stops['index'] = range(1, len(stops) + 1)  # adds column at end
+    # Add age, index, and date columns
     blank = pd.DataFrame({'blank': ' '}, index=range(len(stops['STOPDATE'])))
     stops['date'] = pd.to_datetime(stops['STOPDATE'].map(str) + blank['blank'].map(str) + stops['TIME_OF_STOP'].map(str))
-    # move the new columns to the front
-    stops = stops[stops.columns.tolist()[-2:] + stops.columns.tolist()[:-2]]
+
+    stops['DOB_as_dt'] = pd.to_datetime(stops.DOB)
+    stops['computed_AGE'] = stops.apply(compute_AGE, axis=1)
+    stops.drop(['DOB_as_dt'], axis=1, inplace=True)
+
+    stops['index'] = range(1, len(stops) + 1)  # adds column at end
+    # move the index column to the front
+    stops = stops[stops.columns.tolist()[-1:] + stops.columns.tolist()[:-1]]
     return stops
 
 
 def xls_to_csv(xls_path, csv_path):
     assert not os.path.exists(csv_path)
-    df = load_xls(xls_path)
+    stops = load_xls(xls_path)
+    stops = process_raw_data(stops)
     logger.info("Converting {} > {}".format(xls_path, csv_path))
-    df.to_csv(csv_path, index=False)
-    return df
+    stops.to_csv(csv_path, index=False)
+    return stops
 
 
 def run(url, destination=None, download=True):

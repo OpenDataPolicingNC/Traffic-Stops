@@ -11,6 +11,16 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RenameField(
+            model_name='stop',
+            old_name='stop_date',
+            new_name='date',
+        ),
+        migrations.RenameField(
+            model_name='stop',
+            old_name='location_text',
+            new_name='stop_location',
+        ),
         migrations.RemoveField(
             model_name='stop',
             name='disposition',
@@ -33,7 +43,15 @@ class Migration(migrations.Migration):
         ),
         migrations.RemoveField(
             model_name='stop',
+            name='registration_state',
+        ),
+        migrations.RemoveField(
+            model_name='stop',
             name='residence_county',
+        ),
+        migrations.RemoveField(
+            model_name='stop',
+            name='residence_state',
         ),
         migrations.RemoveField(
             model_name='stop',
@@ -41,33 +59,28 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='stop',
-            name='county',
-            field=models.CharField(max_length=25, blank=True),
-        ),
-        migrations.AddField(
-            model_name='stop',
-            name='crime_charged',
-            field=models.CharField(max_length=20, blank=True, null=True),
+            name='age',
+            field=models.PositiveSmallIntegerField(default=0),
         ),
         migrations.AddField(
             model_name='stop',
             name='date_of_birth_text',
-            field=models.CharField(max_length=20, blank=True, null=True),
+            field=models.CharField(null=True, max_length=20, blank=True),
         ),
         migrations.AddField(
             model_name='stop',
             name='duration_text',
-            field=models.CharField(max_length=20, blank=True, null=True),
+            field=models.CharField(null=True, max_length=20, blank=True),
         ),
         migrations.AddField(
             model_name='stop',
             name='ethnicity',
-            field=models.CharField(max_length=20, blank=True),
+            field=models.CharField(choices=[('W', 'White'), ('B', 'Black'), ('H', 'Hispanic'), ('A', 'Asian'), ('I', 'Native American'), ('U', 'Unknown')], max_length=20, blank=True),
         ),
         migrations.AddField(
             model_name='stop',
             name='officer_id',
-            field=models.IntegerField(default=None, blank=True),
+            field=models.CharField(max_length=15, blank=True, default=None),
         ),
         migrations.AddField(
             model_name='stop',
@@ -77,47 +90,27 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='stop',
             name='seized',
-            field=models.CharField(max_length=64, blank=True),
+            field=models.CharField(choices=[('Y', 'Yes'), ('N', 'No')], max_length=1, blank=True),
         ),
         migrations.AddField(
             model_name='stop',
             name='stop_date_text',
-            field=models.CharField(default='', max_length=20, blank=True),
+            field=models.CharField(max_length=20, blank=True, default=''),
         ),
         migrations.AddField(
             model_name='stop',
             name='stop_id',
-            field=models.IntegerField(default=1, primary_key=True, serialize=False),
-        ),
-        migrations.AddField(
-            model_name='stop',
-            name='stop_outcome',
-            field=models.CharField(max_length=20, blank=True),
+            field=models.IntegerField(primary_key=True, serialize=False, default=1),
         ),
         migrations.AddField(
             model_name='stop',
             name='stop_time_text',
-            field=models.CharField(default='', max_length=20, blank=True),
-        ),
-        migrations.AddField(
-            model_name='stop',
-            name='what_searched',
-            field=models.CharField(max_length=64, blank=True, null=True),
+            field=models.CharField(max_length=20, blank=True, default=''),
         ),
         migrations.AlterField(
             model_name='stop',
             name='gender',
-            field=models.CharField(choices=[('M', 'Male'), ('F', 'Female')], max_length=6, blank=True),
-        ),
-        migrations.AlterField(
-            model_name='stop',
-            name='registration_state',
-            field=models.CharField(max_length=20),
-        ),
-        migrations.AlterField(
-            model_name='stop',
-            name='residence_state',
-            field=models.CharField(max_length=3, blank=True),
+            field=models.CharField(choices=[('M', 'Male'), ('F', 'Female'), ('U', 'Unknown')], max_length=1, blank=True),
         ),
         migrations.AlterField(
             model_name='stop',
