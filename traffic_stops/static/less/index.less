@@ -305,23 +305,25 @@ body#state {
   }
 }
 
-.tabs {
-  list-style: none;
+/**
+ * Tabs widget [tabslet]
+ *
+ * ul.tabs : tabs list
+ *   ul.tabs > li : tabs
+ */
+ul.tabs {
   .flex-layout();
   .flex-direction(row);
   .flex-wrap(nowrap);
 
+  list-style: none;
   padding: 1rem 0 0 0;
   margin: 0 0 1rem 0;
   border-bottom: 1px solid #333333;
 
-  a {
-    text-decoration: none;
-  }
-
   li {
     .flex-layout();
-    .align-items(center);
+    .align-items(center); // for vertical text centering
 
     &.active {
       background-color: white;
@@ -329,11 +331,15 @@ body#state {
       border-color: #333333;
       border-width: 1px 1px 0 1px;
     }
-  }
 
-  h2 {
-    margin: 0;
-    padding: 1rem;
+    a {
+      text-decoration: none;
+    }
+
+    h2 {
+      margin: 0;
+      padding: 1rem;
+    }
   }
 }
 
