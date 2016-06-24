@@ -33,3 +33,5 @@ secrets.tfvars
 terraform.tfstate*
 *.tar
 *.tar.zip
+mddata
+ncdata
