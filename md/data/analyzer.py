@@ -46,7 +46,7 @@ def stats_for_state_landing_page(stops, report):
 
 def analyze(stops, report):
     """
-    Note: This runs on unprocessed data -- data as loaded from the .xlxs
+    Note: This runs on unprocessed data -- data as loaded from the .xlsx
     """
     stops['date'] = pd.to_datetime(stops['STOPDATE'])
     stops['cleaned-STOP_REASON'] = stops['STOP_REASON'].apply(fix_STOP_REASON)
