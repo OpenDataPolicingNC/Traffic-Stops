@@ -26,6 +26,8 @@ ETHNICITY_TO_CODE = {
     'HISPANIC': 'H',
     'ASIAN': 'A',
     'NATIVE AMERICAN': 'I',
+    'UNKNOWN': 'U',
+    'OTHER': 'U'
 }
 
 STOP_REASON_re = re.compile(r'^ *(\d+) *- *(\d+) *\(.*\) *$')
@@ -42,7 +44,11 @@ def fix_ETHNICITY(s):
     elif ETHNICITY_BLACK_re.match(s):
         return 'B'
     else:
-        return ETHNICITY_TO_CODE.get(s, 'U')
+        code = ETHNICITY_TO_CODE.get(s)
+        if code:
+            return code
+        logger.info('Bad ethnicity: "%s"', s)
+        return 'U'
 
 
 def fix_GENDER(s):
@@ -51,6 +57,7 @@ def fix_GENDER(s):
     elif GENDER_FEMALE_re.match(s):
         return 'F'
     else:
+        logger.info('Bad gender: "%s"', s)
         return 'U'
 
 
@@ -73,12 +80,12 @@ def fix_TIME_OF_STOP(s):
     s = s.strip()
     m = TIME_OF_STOP_re.match(s)
     if not m:
+        logger.info('Bad time of stop: "%s"', s)
         return DEFAULT_TIME_OF_STOP
     hour = int(m.group(1))
     minute = int(m.group(2))
-    if not 0 <= hour < 24:
-        return DEFAULT_TIME_OF_STOP
-    if not 0 <= minute < 60:
+    if not 0 <= hour < 24 or not 0 <= minute < 60:
+        logger.info('Bad time of stop: "%s"', s)
         return DEFAULT_TIME_OF_STOP
     return s
 
@@ -87,6 +94,7 @@ def compute_AGE(row):
     stop_date = row['date']
     dob = row['DOB_as_dt']
     if pd.isnull(dob) or dob > stop_date:
+        logger.info('Bad DOB vs. stop date: "%s", "%s"', dob, stop_date)
         return 0
     else:
         delta = stop_date - dob
