@@ -36,5 +36,3 @@ terraform.tfstate*
 mddata
 ncdata
 .idea/
-mddata/
-npm-debug.og
