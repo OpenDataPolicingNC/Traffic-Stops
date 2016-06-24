@@ -4,7 +4,7 @@ from . import api, views
 
 
 router = DefaultRouter()
-router.register(r'md-agency', api.AgencyViewSet, base_name="md-agency-api")
+router.register(r'agency', api.AgencyViewSet, base_name="agency-api")
 
 
 urlpatterns = [  # noqa
