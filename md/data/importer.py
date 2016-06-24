@@ -181,8 +181,8 @@ def copy_from(csv_path):
            '-v', 'data_file={}'.format(csv_path),
            '-f', sql_file,
            settings.DATABASES['traffic_stops_md']['NAME']]
-    if settings.DATABASES['traffic_stops_md']['USER']:
-        cmd.append(settings.DATABASES['traffic_stops_md']['USER'])
+    if settings.DATABASE_ETL_USER:
+        cmd.append(settings.DATABASE_ETL_USER)
     call(cmd)
 
 
