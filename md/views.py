@@ -34,4 +34,3 @@ class AgencyDetail(DetailView):
             context['officer_id'] = officer_id
 
         return context
->>>>>>> c855b9d... stops endpoint for graphs
