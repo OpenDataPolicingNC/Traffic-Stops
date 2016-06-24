@@ -9,7 +9,7 @@ def home(request):
         form = forms.AgencySearchForm(request.GET)
         if form.is_valid():
             agency = form.cleaned_data['agency']
-            return redirect('nc:agency-detail', agency.pk)
+            return redirect('agency-detail', agency.pk)
     else:
         form = forms.AgencySearchForm()
     context = {'agency_form': form}
