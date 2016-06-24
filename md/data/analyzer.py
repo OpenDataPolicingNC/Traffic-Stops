@@ -1,5 +1,9 @@
+# Implementation of analyze_md command, not used for actual data import
+#
+# This will report some statistics used to understand common field values as
+# well as the dataset facts used on the Maryland landing page.
+
 import logging
-import os
 
 import pandas as pd
 

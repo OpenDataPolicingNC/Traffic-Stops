@@ -1,3 +1,7 @@
+# Implementation of scan_md command, not used for actual data import
+#
+# This will report some of the stranger field values in the raw data.
+
 import csv
 import logging
 import os
