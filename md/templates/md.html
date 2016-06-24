@@ -15,6 +15,31 @@
   <img src="{% static "svg/noun_19618_cc-white.svg" %}" class="state md">
 {% endblock state-header-graphic %}
 
+{% block search-form %}
+  <h4>View Agency Dashboard</h4>
+  <form role="form" id="agency_search" action='{% url "md:home" %}' method="get" accept-charset="utf-8">
+      <div class="form-group">
+      {% csrf_token %}
+      <div class="input-group">
+        {{ agency_form.agency }}
+        <span class="input-group-btn">
+          <button class="btn btn-primary" type="button">View</button>
+        </span>
+      </div><!-- /input-group -->
+      {% if agency_form.agency.errors %}
+          <div class="alert alert-warning alert-dismissible">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <ul>
+              {% for error in agency_form.agency.errors %}
+                  <li><strong>{{ error }}</strong></li>
+              {% endfor %}
+              </ul>
+          </div>
+      {% endif %}
+      </div>
+  </form>
+{% endblock search-form %}
+
 {% block agencies-table %}
   <table class='table table-condensed table-hover'>
     <tr>

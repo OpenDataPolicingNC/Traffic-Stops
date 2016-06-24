@@ -1,7 +1,32 @@
 {% extends "agency_detail.html" %}
 
 {% block census-display %}{% endblock census-display %}
-{% block stop-display %}{% endblock stop-display %}
+
+{% block stop-display %}
+<!-- stop data -->
+<div class="row">
+  <div class="col-md-12">
+    <h2 id="stop-percentage">Stops data</h2>
+  </div>
+
+  <div class="col-md-4">
+    <h3>Stops by ethnicity</h3>
+
+    <div>
+      <svg id="stop_race_pie"></svg>
+    </div>
+
+    <p class="help-block">
+      This graph reflects the racial composition of drivers stopped by law
+      enforcement officers in the jurisdiction since the department began
+      reporting its data to the NC Department of Justice. Adjusting the drop
+      down menu will display the racial breakdown of stops on a year-by-year
+      basis.
+    </p>
+  </div>
+</div>
+{% endblock stop-display %}
+
 {% block search-rate-display %}{% endblock search-rate-display %}
 {% block search-display %}{% endblock search-display %}
 {% block lsb-display %}{% endblock lsb-display %}
@@ -11,7 +36,13 @@
 {% block graph-code %}
 {% comment %}<script>{% endcomment %}
 
-console.log("{% url 'md:agency-api-stops' object.pk %}");
+{% if officer_id %}
+  var stop_handler = new MD.StopsHandler({url: "{% url 'md:agency-api-stops' object.pk %}?officer={{officer_id|urlencode}}"});
+{% else %}
+  var stop_handler = new MD.StopsHandler({url: "{% url 'md:agency-api-stops' object.pk %}"});
+{% endif %}
+
+new MD.StopRatioDonut({handler: stop_handler, selector: "#stop_race_pie"});
 
 {% comment %}</script>{% endcomment %}
 {% endblock graph-code %}
