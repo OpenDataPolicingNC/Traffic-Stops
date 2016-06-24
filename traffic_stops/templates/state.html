@@ -63,6 +63,7 @@
               in a given jurisdiction.
             </p>
 
+<<<<<<< HEAD
             {% block search-form %}
               <h4>View Agency Dashboard</h4>
               <form role="form" id="agency_search" action='{% url "nc-home" %}' method="get" accept-charset="utf-8">
@@ -87,6 +88,10 @@
                   </div>
               </form>
             {% endblock search-form %}
+=======
+          {% block search-form %}
+          {% endblock search-form %}
+>>>>>>> ce5688a... Namespacing URLs
 
             <h4>Largest Agencies</h4>
             {% block agencies-table %}

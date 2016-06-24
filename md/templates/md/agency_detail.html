@@ -8,5 +8,10 @@
 {% block contraband-display %}{% endblock contraband-display %}
 {% block use-of-force-display %}{% endblock use-of-force-display %}
 
-{% block extra-js %}
-{% endblock extra-js %}
+{% block graph-code %}
+{% comment %}<script>{% endcomment %}
+
+console.log("{% url 'md:agency-api-stops' object.pk %}");
+
+{% comment %}</script>{% endcomment %}
+{% endblock graph-code %}

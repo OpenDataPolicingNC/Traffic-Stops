@@ -92,8 +92,8 @@
                 <td>{{ person.get_race_display }}</td>
                 <td>{{ person.get_ethnicity_display }}</td>
                 <td>{{ person.age }}</td>
-                <td><a href='{% url "agency-detail" person.stop.agency_id %}'>{{ person.stop.agency_description|truncatewords:3 }}</a></td>
-                <td><a href='{% url "agency-detail" person.stop.agency_id %}?officer_id={{ person.stop.officer_id|urlencode }}'>{{ person.stop.officer_id }}</a></td>
+                <td><a href='{% url "nc:agency-detail" person.stop.agency_id %}'>{{ person.stop.agency_description|truncatewords:3 }}</a></td>
+                <td><a href='{% url "nc:agency-detail" person.stop.agency_id %}?officer_id={{ person.stop.officer_id|urlencode }}'>{{ person.stop.officer_id }}</a></td>
             </tr>
             {% endfor %}
         </table>
