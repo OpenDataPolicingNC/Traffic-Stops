@@ -80,10 +80,6 @@ def fix_TIME_OF_STOP(s):
         return DEFAULT_TIME_OF_STOP
     if not 0 <= minute < 60:
         return DEFAULT_TIME_OF_STOP
-
-    # XXX Check converted CSV to see if we need to fix up the handling
-    #     of 'PM', which can be appended to times before or after 12:00 p.m.
-    # IOW, does the right thing happen for both '8:53 PM' and '20:53 PM'?
     return s
 
 
@@ -113,6 +109,17 @@ def load_xls(xls_path):
     return stops
 
 
+def add_date_column(stops):
+    blank = pd.DataFrame({'blank': ' '}, index=range(len(stops['STOPDATE'])))
+    stops['date'] = pd.to_datetime(stops['STOPDATE'].map(str) + blank['blank'].map(str) + stops['TIME_OF_STOP'].map(str))
+
+
+def add_age_column(stops):
+    stops['DOB_as_dt'] = pd.to_datetime(stops.DOB)
+    stops['computed_AGE'] = stops.apply(compute_AGE, axis=1)
+    stops.drop(['DOB_as_dt'], axis=1, inplace=True)
+
+
 def process_raw_data(stops):
     # Drop some columns
     stops.drop(list(MD_COLUMNS_TO_DROP), axis=1, inplace=True)
@@ -124,14 +131,10 @@ def process_raw_data(stops):
     stops['ETHNICITY'] = stops['ETHNICITY'].apply(fix_ETHNICITY)
 
     # Add age, index, and date columns
-    blank = pd.DataFrame({'blank': ' '}, index=range(len(stops['STOPDATE'])))
-    stops['date'] = pd.to_datetime(stops['STOPDATE'].map(str) + blank['blank'].map(str) + stops['TIME_OF_STOP'].map(str))
-
-    stops['DOB_as_dt'] = pd.to_datetime(stops.DOB)
-    stops['computed_AGE'] = stops.apply(compute_AGE, axis=1)
-    stops.drop(['DOB_as_dt'], axis=1, inplace=True)
-
+    add_date_column(stops)
+    add_age_column(stops)
     stops['index'] = range(1, len(stops) + 1)  # adds column at end
+
     # move the index column to the front
     stops = stops[stops.columns.tolist()[-1:] + stops.columns.tolist()[:-1]]
     return stops
