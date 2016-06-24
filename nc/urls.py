@@ -9,7 +9,6 @@ router.register(r'agency', api.AgencyViewSet, base_name="agency-api")
 
 
 urlpatterns = [  # noqa
-    url(r'^$', views.home, name='nc-home'),
     url(r'^search/$', views.search, name='stops-search'),
     url(r'^agency/$', views.AgencyList.as_view(), name='agency-list'),
     url(r'^agency/(?P<pk>\d+)/$', views.AgencyDetail.as_view(),

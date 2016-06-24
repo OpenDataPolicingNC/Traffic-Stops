@@ -35,3 +35,6 @@ terraform.tfstate*
 *.tar.zip
 mddata
 ncdata
+.idea/
+mddata/
+npm-debug.og
