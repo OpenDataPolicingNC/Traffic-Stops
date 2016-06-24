@@ -33,6 +33,12 @@ secrets.tfvars
 terraform.tfstate*
 *.tar
 *.tar.zip
+<<<<<<< HEAD
 mddata/
 ncdata/
 
+=======
+.idea/
+mddata/
+npm-debug.og
+>>>>>>> c855b9d... stops endpoint for graphs
