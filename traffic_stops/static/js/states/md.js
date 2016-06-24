@@ -127,9 +127,9 @@ var StopRatioDonut = VisualBase.extend({
 
   setDefaultChart: function(){
     this.chart = nv.models.pieChart()
-      .x(function(d){ return d.key; })
-      .y(function(d){ return d.value; })
-      .color(function(d){ return d.data.color; })
+      .x((d) => d.key)
+      .y((d) => d.value)
+      .color((d) => d.data.color)
       .width(this.get("width"))
       .height(this.get("height"))
       .showLabels(true)
@@ -181,7 +181,7 @@ var StopRatioDonut = VisualBase.extend({
         items = Stops.ethnicities;
 
     // build data specifically for this pie chart
-    items.forEach(function(d, i){
+    items.forEach((d, i) => {
       if (!d) return;
       data.push({
         "key": Stops.pprint.get(d),
@@ -192,7 +192,7 @@ var StopRatioDonut = VisualBase.extend({
 
     return data;
   },
-  triggerRaceToggle: function(e, v){}
+  triggerRaceToggle: () => null
 });
 
 window.MD = {
