@@ -1,4 +1,5 @@
-from django.views.generic import TemplateView
+from django.http import HttpResponse, HttpResponseNotAllowed
+from django.views.generic import ListView, DetailView, View, TemplateView
 
 
 class HomeView(TemplateView):
@@ -8,3 +9,18 @@ class HomeView(TemplateView):
         context = super(HomeView, self).get_context_data(**kwargs)
         context['navbar_inverse'] = True
         return context
+
+
+class About(TemplateView):
+    template_name = "about.html"
+
+
+class UpdateSession(View):
+
+    http_method_names = (u'post', )
+
+    def post(self, request, *args, **kwargs):
+        if not request.is_ajax():
+            return HttpResponseNotAllowed(['POST'])
+        request.session['showEthnicity'] = request.POST.get("showEthnicity", "true") == "true"
+        return HttpResponse(True)

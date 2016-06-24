@@ -33,3 +33,6 @@ secrets.tfvars
 terraform.tfstate*
 *.tar
 *.tar.zip
+.idea/
+mddata/
+npm-debug.og
