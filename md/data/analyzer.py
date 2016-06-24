@@ -3,8 +3,7 @@ import os
 
 import pandas as pd
 
-from tsdata.util import download_and_unzip_data
-from md.data import DATASET_BASENAME
+from tsdata.util import download_and_unzip_data, get_datafile_path
 from md.data.importer import fix_STOP_REASON, load_xls
 
 logger = logging.getLogger(__name__)
@@ -74,6 +73,6 @@ def run(url, report, destination=None, download=True):
     """Download MD data, extract, load, and compute some simple stats"""
     logger.info('*** MD Data Analysis Started ***')
     destination = download_and_unzip_data(url, destination)
-    xls_path = os.path.join(destination, DATASET_BASENAME + '.xlsx')
+    xls_path = get_datafile_path(url, destination)
     stops = load_xls(xls_path)
     analyze(stops, report)

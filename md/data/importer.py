@@ -2,18 +2,16 @@ import logging
 import os
 import re
 
-import numpy as np
 import pandas as pd
 
 from django.conf import settings
 
-from md.data import DATASET_BASENAME
-from tsdata.util import call, line_count, download_and_unzip_data
+from tsdata.util import (call, download_and_unzip_data, get_csv_path,
+     get_datafile_path, line_count)
 
 
 logger = logging.getLogger(__name__)
 
-TIME_OF_STOP_re = re.compile(r'((\d?\d):(\d\d)|(\d?\d):(\d\d) [AP]M)$')
 TIME_OF_STOP_re = re.compile(r'(\d?\d):(\d\d)( [AP]M)?$')
 DEFAULT_TIME_OF_STOP = '00:00'
 
@@ -151,10 +149,10 @@ def xls_to_csv(xls_path, csv_path):
 def run(url, destination=None, download=True):
     """Download MD data, extract, convert to CSV, and load into PostgreSQL"""
     logger.info('*** MD Data Import Started ***')
-    download_and_unzip_data(url, destination)
+    destination = download_and_unzip_data(url, destination)
     # Convert to CSV
-    xls_path = os.path.join(destination, DATASET_BASENAME + '.xlsx')
-    csv_path = os.path.join(destination, DATASET_BASENAME + '.csv')
+    xls_path = get_datafile_path(url, destination)
+    csv_path = get_csv_path(url, destination)
     if not os.path.exists(csv_path):
         xls_to_csv(xls_path, csv_path)
     else:

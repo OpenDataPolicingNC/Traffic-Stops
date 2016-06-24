@@ -3,8 +3,8 @@ import logging
 import os
 import re
 
-from tsdata.util import line_count, download_and_unzip_data
-from md.data import DATASET_BASENAME
+from tsdata.util import (download_and_unzip_data, line_count, get_csv_path,
+    get_datafile_path)
 from md.data.importer import xls_to_csv
 
 logger = logging.getLogger(__name__)
@@ -15,15 +15,14 @@ def run(url, destination=None, download=True):
     logger.info('*** MD Data Scan Started ***')
     destination = download_and_unzip_data(url, destination)
     # Convert to CSV
-    xls_path = os.path.join(destination, DATASET_BASENAME + '.xlsx')
-    csv_path = os.path.join(destination, DATASET_BASENAME + '.csv')
+    xls_path = get_datafile_path(url, destination)
+    csv_path = get_csv_path(url, destination)
     if not os.path.exists(csv_path):
         xls_to_csv(xls_path, csv_path)
     else:
         logger.info("{} exists, skipping XLS->CSV conversion".format(csv_path))
     csv_count = line_count(csv_path)
     logger.debug('Rows: {}'.format(csv_count))
-
     scan([csv_path])
 
 STRAY_RE = re.compile('(^ +|`+$| +$|^[¿`])')
