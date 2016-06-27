@@ -28,8 +28,37 @@ def line_count(fname):
     return int(call(['wc', '-l', fname]).strip().split()[0])
 
 
+def get_zipfile_path(url, destination):
+    """
+    Get full path of the zipfile as if it has been downloaded to destination.
+    """
+    return os.path.join(destination, url.split('/')[-1])
+
+
+def get_datafile_path(url, destination):
+    """
+    Get full path of the datafile within the downloaded zip.
+    Assumptions:
+    1. zip has already been downloaded to destination.
+    2. the first file in the zip is the datafile
+    Datafile may not have been extracted yet.
+    """
+    zip_filename = get_zipfile_path(url, destination)
+    archive = zipfile.ZipFile(zip_filename)
+    return os.path.join(destination, archive.infolist()[0].filename)
+
+
+def get_csv_path(url, destination):
+    """
+    Get full path of the CSV form of the datafile in the downloaded zip.
+    Assumptions: See assumptions of get_datafile_path()
+    """
+    datafile_path = get_datafile_path(url, destination)
+    return os.path.splitext(datafile_path)[0] + '.csv'
+
+
 def download_and_unzip_data(url, destination, prefix='state-'):
-    """Download an unzip data into destionation directory"""
+    """Download and unzip data into destination directory"""
     download = True
     # make sure destination exists or create a temporary directory
     if not destination:
@@ -41,11 +70,11 @@ def download_and_unzip_data(url, destination, prefix='state-'):
             logger.info("Created {}".format(destination))
         else:
             download = False
-    # don't redownload data if directory already exists with data files
+    # don't re-download data if directory already exists with data files
     if not download:
         logger.debug("{} exists, skipping download".format(destination))
         return destination
-    zip_filename = os.path.join(destination, url.split('/')[-1])
+    zip_filename = get_zipfile_path(url, destination)
     logger.debug("Downloading data to {}".format(zip_filename))
     response = requests.get(url, stream=True)
     content_length = int(response.headers.get('content-length'))
