@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for js/index.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">js/</a> index.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">13.33% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>4/30</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">52.94% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>9/17</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">33.33% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>2/6</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">16.67% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>2/12</span>
+      </div>
+      <div class='fl pad1y'>
+        <span class="strong">3 statements, 2 functions, 9 branches</span>
+        <span class="quiet">Ignored</span>  &nbsp;&nbsp;&nbsp;&nbsp;
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" ></span>window.jQuery = window.$ = require('jquery');
+<span class="cstat-no" title="statement not covered" >w</span>indow.d3 = require('d3');
+<span class="cstat-no" title="statement not covered" >v</span>ar nv = require('nvd3');
+<span class="cstat-no" title="statement not covered" >r</span>equire('bootstrap');
+<span class="cstat-no" title="statement not covered" >r</span>equire('tabslet');
+&nbsp;
+<span class="cstat-no" title="statement not covered" >i</span>mport './csrf_ajax.js'
+&nbsp;
+// usage: log('inside coolFunc', this, arguments);
+// paulirish.com/2009/log-a-lightweight-wrapper-for-consolelog/
+<span class="cstat-no" title="statement not covered" >w</span>indow.log = <span class="fstat-no" title="function not covered" >function f(){</span> <span class="cstat-no" title="statement not covered" >log.history = log.history || []; <span class="cstat-no" title="statement not covered" >l</span>og.history.push(arguments); <span class="cstat-no" title="statement not covered" >i</span>f(this.console) { <span class="cstat-no" title="statement not covered" >var args = arguments, newarr; <span class="cstat-no" title="statement not covered" >t</span>ry { <span class="cstat-no" title="statement not covered" >a</span>rgs.callee = f.caller } catch(e) {};</span> <span class="cstat-no" title="statement not covered" >newarr = [].slice.call(args); <span class="cstat-no" title="statement not covered" >i</span></span>f (typeof console.log === 'object') <span class="cstat-no" title="statement not covered" >log.apply.call(console.log, console, newarr); else <span class="cstat-no" title="statement not covered" >c</span></span>onsole.log.apply(console, newarr);}}</span>;
+&nbsp;
+// make it safe to use console.log always
+<span class="cstat-no" title="statement not covered" >(<span class="fstat-no" title="function not covered" ></span>function(a){<span class="fstat-no" title="function not covered" ></span>function b(){</span>}<span class="cstat-no" title="statement not covered" >for(var c="assert,count,debug,dir,dirxml,error,exception,group,groupCollapsed,groupEnd,info,log,markTimeline,profile,profileEnd,time,timeEnd,trace,warn".split(","),d;!!(d=c.pop());){<span class="cstat-no" title="statement not covered" >a</span>[d]=a[d]||b;}}</span>)
+(<span class="fstat-no" title="function not covered" >function(){<span class="cstat-no" title="statement not covered" ></span>try{<span class="cstat-no" title="statement not covered" >console.log();<span class="cstat-no" title="statement not covered" >r</span></span>eturn window.console;}catch(a){<span class="cstat-no" title="statement not covered" >r</span>eturn (window.console={});}}</span>());
+&nbsp;
+<span class="cstat-no" title="statement not covered" >r</span>equire('./states/nc');
+<span class="cstat-no" title="statement not covered" >r</span>equire('./states/md');
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Jun 27 2016 14:47:05 GMT-0400 (EDT)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>
