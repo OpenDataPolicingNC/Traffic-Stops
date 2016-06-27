@@ -10,7 +10,7 @@ from rest_framework_extensions.key_constructor.constructors import DefaultObject
 
 from md.models import Agency, Stop
 from md import serializers
-from md.utils import GroupedData
+from tsdata.utils import GroupedData
 
 
 GROUPS = {'A': 'ASIAN',
