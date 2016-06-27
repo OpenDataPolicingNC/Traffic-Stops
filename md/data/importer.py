@@ -6,8 +6,8 @@ import pandas as pd
 
 from django.conf import settings
 
-from tsdata.util import (call, download_and_unzip_data, get_csv_path,
-     get_datafile_path, line_count)
+from tsdata.utils import (call, download_and_unzip_data, get_csv_path,
+                          get_datafile_path, line_count)
 
 
 logger = logging.getLogger(__name__)

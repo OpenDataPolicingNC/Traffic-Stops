@@ -5,7 +5,7 @@ from django.conf import settings
 from django.db import connections
 
 from tsdata.sql import drop_constraints_and_indexes
-from tsdata.util import call, line_count, download_and_unzip_data
+from tsdata.utils import call, line_count, download_and_unzip_data
 
 
 logger = logging.getLogger(__name__)
