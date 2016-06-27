@@ -37,12 +37,15 @@ export default Backbone.Model.extend({
     $(document).on('raceToggle.change', this.triggerRaceToggle.bind(this));
   },
   drawStartup: function(){
+    /* istanbul ignore next */
     throw "abstract method: requires override";
   },
   drawChart: function(){
+    /* istanbul ignore next */
     throw "abstract method: requires override";
   },
   setDefaultChart: function(){
+    /* istanbul ignore next */
     throw "abstract method: requires override";
   },
   triggerRaceToggle: function(e, v){}
