@@ -1,5 +1,6 @@
 import DataHandlerBase from '../util/DataHandlerBase.js';
 import VisualBase from '../util/VisualBase.js';
+import TableBase from '../util/TableBase.js';
 
 import Backbone from 'backbone';
 import _ from 'underscore';
@@ -256,8 +257,29 @@ var StopRatioTimeSeries = VisualBase.extend({
   triggerRaceToggle: () => null
 });
 
+var StopsTable = TableBase.extend({
+  get_tabular_data: function(){
+    var header, row, rows = [];
+
+    // create header
+    header = ["Year"];
+    header.push.apply(header, Stops.pprint.values());
+    rows.push(header);
+
+    // create data rows
+    this.data.pie.forEach(function(k, v){
+      row = [k];
+      Stops.ethnicities.forEach(function(e){ row.push((v.get(e)||0).toLocaleString()); });
+      rows.push(row);
+    });
+
+    return rows;
+  }
+});
+
 window.MD = {
   StopsHandler,
   StopRatioDonut,
-  StopRatioTimeSeries
+  StopRatioTimeSeries,
+  StopsTable
 }
