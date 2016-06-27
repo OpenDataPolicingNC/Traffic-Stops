@@ -9,82 +9,82 @@ import d3 from 'd3';
 import $ from 'jquery';
 Backbone.$ = $;
 
-var StopsHandler = DataHandlerBase.extend({
-  clean_data: function () {
+export var StopsHandler = DataHandlerBase.extend({
+  clean_data: function(){
 
-    var data = this.get('raw_data'),
+    var data = this.get("raw_data"),
         total = {};
 
-    // build a 'Totals' year which sums by ethnicity for all years
-    if (data.length > 0) {
+    // build a "Totals" year which sums by race/ethnicity for all years
+    if (data.length>0){
       // create new totals object, and reset values
       total = _.clone(data[0]);
-      _.keys(total).forEach((key) => {
+      _.keys(total).forEach(function(key){
         total[key] = 0;
       });
 
       // sum data from all years
-      data.forEach((year) => {
-        _.keys(year).forEach((key) => {
+      data.forEach(function(year){
+        _.keys(year).forEach(function(key){
           total[key] += year[key];
         });
       });
-      total['year'] = 'Total';
+      total["year"] = "Total";
     }
 
     // build-data for pie-chart
     var pie = d3.map();
-
-    data.forEach((v) => {
-      if (v.year >= Stops.start_year) pie.set(v.year, d3.map(v));
+    data.forEach(function(v){
+      if (v.year>=Stops.start_year) pie.set(v.year, d3.map(v));
     });
-
-    pie.set('Total', d3.map(total));
+    pie.set("Total", d3.map(total));
 
     // build data for line-chart
 
     var line = d3.map(),
-        get_total_by_race = (dataType, yr) => {
+        get_total_by_race = function(dataType, yr){
           var total = 0;
-          dataType.forEach((ethnicity) => {
-            total += yr[ethnicity];
+          dataType.forEach(function(race){
+            total += yr[race];
           });
           return total;
         };
 
-    Stops.ethnicities.forEach((v) => {
-      line.set(v, []);
+    [Stops.races, Stops.ethnicities].forEach(function(dataType){
+      dataType.forEach(function(v){
+        line.set(v, []);
+      });
+      data.forEach(function(yr){
+        if (yr.year>=Stops.start_year){
+          var total = get_total_by_race(dataType, yr);
+          dataType.forEach(function(race){
+            line.get(race).push({x: yr.year, y:yr[race]/total});
+          });
+        }
+      });
     });
-    data.forEach((yr) => {
-      if (yr.year >= Stops.start_year) {
-        var total = get_total_by_race(Stops.ethnicities, yr);
-        Stops.ethnicities.forEach((ethnicity) => {
-          line.get(ethnicity).push({x: yr.year, y:yr[ethnicity]/total});
-        })
-      }
-    })
 
     // set object data
-    this.set('data', {
-      type: 'stop',
-      raw: this.get('raw_data'),
+    this.set("data", {
+      type: "stop",
+      raw: this.get("raw_data"),
       pie: pie,
       line: line
     });
   }
 });
 
-var StopRatioDonut = VisualBase.extend({
+export var StopRatioDonut = VisualBase.extend({
   defaults: {
+    showEthnicity: false,
     width: 300,
     height: 300
   },
-
   setDefaultChart: function(){
     this.chart = nv.models.pieChart()
-      .x((d) => d.key)
-      .y((d) => d.value)
-      .color((d) => d.data.color)
+      .x(function(d){ return d.key; })
+      .y(function(d){ return d.value; })
+      .color(function(d){ return d.data.color; })
       .width(this.get("width"))
       .height(this.get("height"))
       .showLabels(true)
@@ -133,11 +133,10 @@ var StopRatioDonut = VisualBase.extend({
   _formatData: function(){
     var data = [],
         selected = this.dataset,
-        items = Stops.ethnicities;
+        items = (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races;
 
     // build data specifically for this pie chart
-    items.forEach((d, i) => {
-      if (!d) return;
+    items.forEach(function(d, i){
       data.push({
         "key": Stops.pprint.get(d),
         "value": selected.get(d),
@@ -147,11 +146,15 @@ var StopRatioDonut = VisualBase.extend({
 
     return data;
   },
-  triggerRaceToggle: () => null
+  triggerRaceToggle: function(e, v){
+    this.set('showEthnicity', v);
+    this.drawChart();
+  }
 });
 
-var StopRatioTimeSeries = VisualBase.extend({
+export var StopRatioTimeSeries = VisualBase.extend({
   defaults: {
+    showEthnicity: false,
     width: 750,
     height: 375
   },
@@ -189,7 +192,7 @@ var StopRatioTimeSeries = VisualBase.extend({
   },
   _formatData: function(){
     var data = [],
-        items = Stops.ethnicities,
+        items = (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races,
         subset = [],
         i = 0,
         disabled;
@@ -208,10 +211,13 @@ var StopRatioTimeSeries = VisualBase.extend({
     });
     return data;
   },
-  triggerRaceToggle: () => null
+  triggerRaceToggle: function(e, v){
+    this.set('showEthnicity', v);
+    this.drawChart();
+  }
 });
 
-var StopsTable = TableBase.extend({
+export var StopsTable = TableBase.extend({
   get_tabular_data: function(){
     var header, row, rows = [];
 
@@ -223,6 +229,7 @@ var StopsTable = TableBase.extend({
     // create data rows
     this.data.pie.forEach(function(k, v){
       row = [k];
+      Stops.races.forEach(function(r){ row.push((v.get(r)||0).toLocaleString()); });
       Stops.ethnicities.forEach(function(e){ row.push((v.get(e)||0).toLocaleString()); });
       rows.push(row);
     });
@@ -231,9 +238,9 @@ var StopsTable = TableBase.extend({
   }
 });
 
-if (typeof window.MD === 'undefined') window.MD = {};
+if (typeof window.NC === 'undefined') window.NC = {};
 
-Object.assign(window.MD, {
+Object.assign(window.NC, {
   StopsHandler,
   StopRatioDonut,
   StopRatioTimeSeries,
