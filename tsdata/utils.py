@@ -129,4 +129,3 @@ class GroupedData(object):
             row.update(data)
             response.append(row)
         return response
-
