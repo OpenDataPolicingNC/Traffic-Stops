@@ -20,27 +20,27 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">89.19% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>99/111</span>
+        <span class='fraction'>111/111</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">92% </span>
+        <span class="strong">98% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>46/50</span>
+        <span class='fraction'>49/50</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">80.77% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>21/26</span>
+        <span class='fraction'>26/26</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">36.84% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>7/19</span>
+        <span class='fraction'>19/19</span>
       </div>
       <div class='fl pad1y'>
-        <span class="strong">38 statements, 12 functions, 30 branches</span>
+        <span class="strong">37 statements, 12 functions, 30 branches</span>
         <span class="quiet">Ignored</span>  &nbsp;&nbsp;&nbsp;&nbsp;
       </div>
     </div>
@@ -102,12 +102,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
@@ -115,22 +121,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-yes">9×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import $ from 'jquery';
@@ -143,14 +143,14 @@ export default Backbone.Model.extend({
     this.listenTo(this.get("handler"), "dataLoaded", this.update);
     this.listenTo(this.get("handler"), "dataRequestFailed", this.showError);
   },
-  update: <span class="fstat-no" title="function not covered" >function(data){</span>
-    if(data===undefined) return;  // temporary for dummy census data
-<span class="cstat-no" title="statement not covered" >    t</span>his.data = data;
-<span class="cstat-no" title="statement not covered" >    t</span>his.draw_table();
+  update: function(data){
+    <span class="missing-if-branch" title="if path not taken" >I</span>if(data===undefined) return;  // temporary for dummy census data
+    this.data = data;
+    this.draw_table();
   },
-  get_tabular_data: <span class="fstat-no" title="function not covered" >function(){</span>
+  get_tabular_data: function(){
     // should return list of lists, one list per row
-<span class="cstat-no" title="statement not covered" >    t</span>hrow "abstract method: requires override";
+    throw "abstract method: requires override";
   },
   showError: function(){
     var div = $(this.get("selector")),
@@ -158,22 +158,22 @@ export default Backbone.Model.extend({
           .append('&lt;p&gt;An error occurred in fetching the data.&lt;/p&gt;')
           .prependTo(div);
   },
-  draw_table: <span class="fstat-no" title="function not covered" >function(){</span>
-<span class="cstat-no" title="statement not covered" >    v</span>ar div = $(this.get("selector")),
+  draw_table: function(){
+    var div = $(this.get("selector")),
         matrix = this.get_tabular_data(),
         tbl = $('&lt;table&gt;').attr("class", "table table-striped table-condensed dash-tables"),
         tbody = $('&lt;tbody&gt;');
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    m</span>atrix.forEach(<span class="fstat-no" title="function not covered" >function(row, i){</span>
-<span class="cstat-no" title="statement not covered" >      v</span>ar tr = $('&lt;tr&gt;');
-<span class="cstat-no" title="statement not covered" >      r</span>ow.forEach(<span class="fstat-no" title="function not covered" >function(d){</span>
-<span class="cstat-no" title="statement not covered" >        v</span>ar cell = (i === 0) ? $('&lt;th&gt;') : $('&lt;td&gt;');
-<span class="cstat-no" title="statement not covered" >        t</span>r.append(cell.append(d));
+    matrix.forEach(function(row, i){
+      var tr = $('&lt;tr&gt;');
+      row.forEach(function(d){
+        var cell = (i === 0) ? $('&lt;th&gt;') : $('&lt;td&gt;');
+        tr.append(cell.append(d));
       });
-<span class="cstat-no" title="statement not covered" >      t</span>body.append(tr);
+      tbody.append(tr);
     });
-<span class="cstat-no" title="statement not covered" >    t</span>bl.append(tbody);
-<span class="cstat-no" title="statement not covered" >    d</span>iv.prepend(tbl);
+    tbl.append(tbody);
+    div.prepend(tbl);
   }
 });
 &nbsp;</pre></td></tr>
@@ -182,7 +182,7 @@ export default Backbone.Model.extend({
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Jun 27 2016 15:30:59 GMT-0400 (EDT)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Jun 27 2016 15:52:25 GMT-0400 (EDT)
 </div>
 </div>
 <script src="../prettify.js"></script>
