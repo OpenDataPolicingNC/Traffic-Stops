@@ -10,7 +10,7 @@ from rest_framework_extensions.key_constructor.constructors import DefaultObject
 
 from nc.models import Agency, Stop
 from nc import serializers
-from nc.utils import GroupedData
+from tsdata.utils import GroupedData
 
 
 GROUPS = {'A': 'asian',
