@@ -1,6 +1,6 @@
-import DataHandlerBase from '../util/DataHandlerBase.js';
-import VisualBase from '../util/VisualBase.js';
-import TableBase from '../util/TableBase.js';
+import DataHandlerBase from '../../base/DataHandlerBase.js';
+import VisualBase from '../../base/VisualBase.js';
+import TableBase from '../../base/TableBase.js';
 
 import Backbone from 'backbone';
 import _ from 'underscore';
@@ -277,9 +277,11 @@ var StopsTable = TableBase.extend({
   }
 });
 
-window.MD = {
+if (typeof window.MD === 'undefined') window.MD = {};
+
+Object.assign(window.MD, {
   StopsHandler,
   StopRatioDonut,
   StopRatioTimeSeries,
   StopsTable
-}
+});
