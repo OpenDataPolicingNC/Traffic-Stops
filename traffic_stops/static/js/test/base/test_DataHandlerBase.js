@@ -45,6 +45,57 @@ describe('base', () => {
 
         dhb.get_data()
       })
+
+      it('receives data and sets its raw_data property', () => {
+        let dataAccept = 'foo'
+
+        DHB.__Rewire__('d3', {
+          json: (url, cb) => {
+            cb(undefined, dataAccept)
+          }
+        })
+
+        let DataHandlerBase_ = DataHandlerBase.extend({
+          constructor: function () {
+            Backbone.Model.apply(this, arguments);
+          },
+          clean_data: () => null
+        })
+
+        let dhb = new DataHandlerBase_({
+          url: 'bar'
+        })
+
+        dhb.get_data()
+
+        assert.equal(dataAccept, dhb.get('raw_data'))
+
+        DHB.__ResetDependency__('d3')
+      })
+
+      it('triggers dataLoaded when it is done', (done) => {
+        DHB.__Rewire__('d3', {
+          json: (url, cb) => {
+            cb(undefined, null)
+          }
+        })
+
+        let DataHandlerBase_ = DataHandlerBase.extend({
+          constructor: function () {
+            Backbone.Model.apply(this, arguments);
+          },
+          clean_data: () => null
+        })
+
+        let dhb = new DataHandlerBase_()
+
+        dhb.on('dataLoaded', () => {
+          DHB.__ResetDependency__('d3')
+          done()
+        })
+
+        dhb.get_data()
+      })
     })
 
     describe('clean_data', () => {
