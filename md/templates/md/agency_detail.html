@@ -24,6 +24,42 @@
       basis.
     </p>
   </div>
+
+  <div id="stop_div" class="col-md-8">
+    <h3>Annual percent of stops by race/ethnicity</h3>
+
+    <div role="tabpanel">
+
+      <!-- Nav tabs -->
+      <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active">
+          <a href="#stop_race_line_div" aria-controls="stop_race_line_div" role="tab" data-toggle="tab">Chart</a></li>
+        <li role="presentation">
+          <a href="#stop_race_data" aria-controls="stop_race_data" role="tab" data-toggle="tab">Data</a></li>
+      </ul>
+
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="stop_race_line_div">
+          <svg id="stop_race_line"></svg>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="stop_race_data">
+        </div>
+      </div>
+
+    </div>
+
+    <p class="help-block">
+      This graph is a longitudinal representation of the racial and ethnic
+      composition of drivers stopped by the department since it began
+      reporting its data to the NC Department of Justice. Drag the cursor
+      over the graph to see the racial/ethnic breakdown for any given year.
+      <br><br>
+      Click the "Data" tab to review the actual raw counts from the
+      NC Department of Justice.
+    </p>
+
+  </div>
 </div>
 {% endblock stop-display %}
 
@@ -43,6 +79,7 @@
 {% endif %}
 
 new MD.StopRatioDonut({handler: stop_handler, selector: "#stop_race_pie"});
+new MD.StopRatioTimeSeries({handler: stop_handler, selector: "#stop_race_line"});
 
 {% comment %}</script>{% endcomment %}
 {% endblock graph-code %}
