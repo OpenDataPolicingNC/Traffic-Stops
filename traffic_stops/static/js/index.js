@@ -2,7 +2,6 @@ window.jQuery = window.$ = require('jquery');
 window.d3 = require('d3');
 var nv = require('nvd3');
 require('bootstrap');
-require('tabslet');
 
 import './csrf_ajax.js'
 
