@@ -7,8 +7,8 @@ import logging
 import os
 import re
 
-from tsdata.util import (download_and_unzip_data, line_count, get_csv_path,
-    get_datafile_path)
+from tsdata.utils import (download_and_unzip_data, line_count, get_csv_path,
+                          get_datafile_path)
 from md.data.importer import xls_to_csv
 
 logger = logging.getLogger(__name__)

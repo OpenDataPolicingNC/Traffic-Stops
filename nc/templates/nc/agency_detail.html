@@ -354,18 +354,18 @@ var showEthnicity = {{request.session.showEthnicity|lower|default:"false"}},
     census_handler = new NC.CensusHandler({url: "{% static 'js/census.temporary.json' %}", agency: "{{object}}"});
 {% if officer_id %}
   // Retrieve data from API using data-handlers
-  var stop_handler = new NC.StopsHandler({url: "{% url 'agency-api-stops' object.pk %}?officer={{officer_id|urlencode}}"}),
-      search_handler = new NC.SearchHandler({url: "{% url 'agency-api-searches' object.pk %}?officer={{officer_id|urlencode}}"}),
-      uf_handler = new NC.UseOfForceHandler({url: "{% url 'agency-api-use-of-force' object.pk %}?officer={{officer_id|urlencode}}"}),
-      lhs_handler = new NC.LikelihoodSearchHandler({url: "{% url 'agency-api-stops-by-reason' object.pk %}?officer={{officer_id|urlencode}}"}),
-      chr_handler = new NC.ContrabandHitRateHandler({url: "{% url 'agency-api-contraband-hit-rate' object.pk %}?officer={{officer_id|urlencode}}"});
+  var stop_handler = new NC.StopsHandler({url: "{% url 'nc:agency-api-stops' object.pk %}?officer={{officer_id|urlencode}}"}),
+      search_handler = new NC.SearchHandler({url: "{% url 'nc:agency-api-searches' object.pk %}?officer={{officer_id|urlencode}}"}),
+      uf_handler = new NC.UseOfForceHandler({url: "{% url 'nc:agency-api-use-of-force' object.pk %}?officer={{officer_id|urlencode}}"}),
+      lhs_handler = new NC.LikelihoodSearchHandler({url: "{% url 'nc:agency-api-stops-by-reason' object.pk %}?officer={{officer_id|urlencode}}"}),
+      chr_handler = new NC.ContrabandHitRateHandler({url: "{% url 'nc:agency-api-contraband-hit-rate' object.pk %}?officer={{officer_id|urlencode}}"});
 {% else %}
   // Retrieve data from API using data-handlers
-  var stop_handler = new NC.StopsHandler({url: "{% url 'agency-api-stops' object.pk %}"}),
-      search_handler = new NC.SearchHandler({url: "{% url 'agency-api-searches' object.pk %}"}),
-      uf_handler = new NC.UseOfForceHandler({url: "{% url 'agency-api-use-of-force' object.pk %}"}),
-      lhs_handler = new NC.LikelihoodSearchHandler({url: "{% url 'agency-api-stops-by-reason' object.pk %}"}),
-      chr_handler = new NC.ContrabandHitRateHandler({url: "{% url 'agency-api-contraband-hit-rate' object.pk %}"});
+  var stop_handler = new NC.StopsHandler({url: "{% url 'nc:agency-api-stops' object.pk %}"}),
+      search_handler = new NC.SearchHandler({url: "{% url 'nc:agency-api-searches' object.pk %}"}),
+      uf_handler = new NC.UseOfForceHandler({url: "{% url 'nc:agency-api-use-of-force' object.pk %}"}),
+      lhs_handler = new NC.LikelihoodSearchHandler({url: "{% url 'nc:agency-api-stops-by-reason' object.pk %}"}),
+      chr_handler = new NC.ContrabandHitRateHandler({url: "{% url 'nc:agency-api-contraband-hit-rate' object.pk %}"});
 {% endif %}
 var stop_search_handler = new NC.StopSearchHandler({handlers: [stop_handler, search_handler]});
 

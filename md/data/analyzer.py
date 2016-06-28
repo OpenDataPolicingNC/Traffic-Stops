@@ -7,7 +7,7 @@ import logging
 
 import pandas as pd
 
-from tsdata.util import download_and_unzip_data, get_datafile_path
+from tsdata.utils import download_and_unzip_data, get_datafile_path
 from md.data.importer import fix_STOP_REASON, load_xls
 
 logger = logging.getLogger(__name__)

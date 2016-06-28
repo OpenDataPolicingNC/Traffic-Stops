@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect, Http404
-from django.views.generic import ListView, DetailView, View, TemplateView
-from django.http import HttpResponse, HttpResponseNotAllowed
-from nc.models import Stop, Agency, Person
-from nc import forms
+from django.views.generic import ListView, DetailView
+from .models import Stop, Agency, Person
+from . import forms
 
 
 def home(request):
@@ -15,21 +14,6 @@ def home(request):
         form = forms.AgencySearchForm()
     context = {'agency_form': form}
     return render(request, 'nc.html', context)
-
-
-class About(TemplateView):
-    template_name = "about.html"
-
-
-class UpdateSession(View):
-
-    http_method_names = (u'post', )
-
-    def post(self, request, *args, **kwargs):
-        if not request.is_ajax():
-            return HttpResponseNotAllowed(['POST'])
-        request.session['showEthnicity'] = request.POST.get("showEthnicity", "true") == "true"
-        return HttpResponse(True)
 
 
 def search(request):
