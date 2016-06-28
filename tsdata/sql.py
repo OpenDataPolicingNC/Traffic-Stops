@@ -31,7 +31,10 @@ def get_sql_statements(cursor, select_sql):
     Simple wrapper function used to execute a SQL query that returns a
     list of SQL commands to be run later.
     """
-    cursor.execute(select_sql)
+    # Explicitly pass None for params to avoid different behavior when
+    # running through Django Debug Toolbar (it defaults params to (),
+    # Django expects None for no params).
+    cursor.execute(select_sql, params=None)
     sql = ''
     for row in cursor.fetchall():
         sql += '{}\n'.format(row[0])
