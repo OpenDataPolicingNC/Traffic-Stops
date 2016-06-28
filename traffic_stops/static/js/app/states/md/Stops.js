@@ -12,7 +12,7 @@ Backbone.$ = $;
 /***
  * StopsHandler data processing helper functions
  */
-function build_totals (data) {
+export function build_totals (data) {
   let total = {};
   // build a 'Totals' year which sums by ethnicity for all years
   if (data.length > 0) {
@@ -36,7 +36,7 @@ function build_totals (data) {
   return total;
 }
 
-function build_pie_data (data, total, Stops) {
+export function build_pie_data (data, total, Stops) {
   let pie = d3.map();
 
   data.forEach((v) => {

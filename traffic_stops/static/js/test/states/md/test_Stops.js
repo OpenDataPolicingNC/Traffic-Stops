@@ -14,7 +14,57 @@ describe('states', () => {
         clean_data: () => null
       })
 
-      describe('helpers', () => {})
+      describe('helpers', () => {
+        describe('build_totals', () => {
+          it('adds up each item in "data"', () => {
+            let input = [
+              {
+                'foo': 1,
+                'bar': 2
+              },
+              {
+                'foo': 1,
+                'bar': 2
+              }
+            ]
+            let acceptOut = {
+              'foo': 2,
+              'bar': 4,
+            }
+            let out = S.build_totals(input)
+            assert.equal('Total', out.year)
+            assert.equal(acceptOut.foo, out.foo)
+            assert.equal(acceptOut.bar, out.bar)
+          })
+        })
+
+        describe('build_pie_data', () => {
+          it('sets the pie map total to "total"', () => {
+            let totalAccept = 'totalAccept'
+            let pie = S.build_pie_data([], {totalAccept}, {})
+            assert.equal(totalAccept, pie.get('Total').get('totalAccept'))
+          })
+
+          it('iterates over data and sets year values on pie', () => {
+            let data = [
+              {
+                'year': 2012,
+                'accept': true
+              },
+              {
+                'year': 2013,
+                'accept': true
+              }
+            ]
+            let Stops = {
+              'start_year': 2012
+            }
+            let pie = S.build_pie_data(data, {}, Stops)
+            assert.isTrue(pie.get(2012).get('accept'))
+            assert.isTrue(pie.get(2013).get('accept'))
+          })
+        })
+      })
 
       describe('clean_data', () => {
         let StopsHandler_ = Stubbed.extend({

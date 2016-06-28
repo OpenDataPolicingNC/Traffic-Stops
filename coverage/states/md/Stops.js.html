@@ -20,27 +20,27 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">60.2% </span>
+        <span class="strong">68.47% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>121/201</span>
+        <span class='fraction'>139/203</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">80.3% </span>
+        <span class="strong">83.33% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>53/66</span>
+        <span class='fraction'>55/66</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">35.19% </span>
+        <span class="strong">46.3% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>19/54</span>
+        <span class='fraction'>25/54</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">24.24% </span>
+        <span class="strong">39.39% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>24/99</span>
+        <span class='fraction'>39/99</span>
       </div>
       <div class='fl pad1y'>
-        <span class="strong">33 statements, 10 functions, 27 branches</span>
+        <span class="strong">31 statements, 10 functions, 25 branches</span>
         <span class="quiet">Ignored</span>  &nbsp;&nbsp;&nbsp;&nbsp;
       </div>
     </div>
@@ -324,39 +324,39 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">4×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
@@ -585,40 +585,40 @@ Backbone.$ = $;
 /***
  * StopsHandler data processing helper functions
  */
-<span class="fstat-no" title="function not covered" >function build_totals (data) {</span>
-<span class="cstat-no" title="statement not covered" >  l</span>et total = {};
+export function build_totals (data) {
+  let total = {};
   // build a 'Totals' year which sums by ethnicity for all years
-<span class="cstat-no" title="statement not covered" >  if (data.length &gt; 0) {</span>
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (data.length &gt; 0) {
     // create new totals object, and reset values
-<span class="cstat-no" title="statement not covered" >    t</span>otal = _.clone(data[0]);
+    total = _.clone(data[0]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    _</span>.keys(total).forEach(<span class="fstat-no" title="function not covered" >(key) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      t</span>otal[key] = 0;
+    _.keys(total).forEach((key) =&gt; {
+      total[key] = 0;
     });
 &nbsp;
     // sum data from all years
-<span class="cstat-no" title="statement not covered" >    d</span>ata.forEach(<span class="fstat-no" title="function not covered" >(year) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      _</span>.keys(year).forEach(<span class="fstat-no" title="function not covered" >(key) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        t</span>otal[key] += year[key];
+    data.forEach((year) =&gt; {
+      _.keys(year).forEach((key) =&gt; {
+        total[key] += year[key];
       });
     });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    t</span>otal['year'] = 'Total';
+    total['year'] = 'Total';
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  r</span>eturn total;
+  return total;
 }
 &nbsp;
-<span class="fstat-no" title="function not covered" >function build_pie_data (data, total, Stops) {</span>
-<span class="cstat-no" title="statement not covered" >  l</span>et pie = d3.map();
+export function build_pie_data (data, total, Stops) {
+  let pie = d3.map();
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  d</span>ata.forEach(<span class="fstat-no" title="function not covered" >(v) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (v.year &gt;= Stops.start_year) <span class="cstat-no" title="statement not covered" >p</span></span>ie.set(v.year, d3.map(v));
+  data.forEach((v) =&gt; {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (v.year &gt;= Stops.start_year) pie.set(v.year, d3.map(v));
   });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  p</span>ie.set('Total', d3.map(total));
+  pie.set('Total', d3.map(total));
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  r</span>eturn pie;
+  return pie;
 }
 &nbsp;
 <span class="fstat-no" title="function not covered" >function build_line_data (data, Stops) {</span>
@@ -839,7 +839,7 @@ Object.assign(window.MD, {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jun 28 2016 09:05:05 GMT-0400 (EDT)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jun 28 2016 09:26:46 GMT-0400 (EDT)
 </div>
 </div>
 <script src="../../prettify.js"></script>
