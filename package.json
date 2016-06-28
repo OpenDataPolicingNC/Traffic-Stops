@@ -62,7 +62,6 @@
     "mocha": "^2.5.3",
     "mocha-jsdom": "^1.1.0",
     "nvd3": "1.1.15",
-    "tabslet": "^1.7.2",
     "underscore": "1.7.0",
     "vinyl-source-stream": "^0.1.1",
     "watchify": "^2.1.1",
