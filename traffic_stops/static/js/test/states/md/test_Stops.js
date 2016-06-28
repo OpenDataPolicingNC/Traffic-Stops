@@ -3,6 +3,7 @@ import * as S from '../../../app/states/md/Stops.js'
 import { __RewireAPI__ as SS } from '../../../app/states/md/Stops.js'
 import Backbone from 'backbone'
 import $ from 'jquery'
+import _ from 'underscore'
 import DATA from './mock_data.js'
 
 describe('states', () => {
@@ -62,6 +63,34 @@ describe('states', () => {
             let pie = S.build_pie_data(data, {}, Stops)
             assert.isTrue(pie.get(2012).get('accept'))
             assert.isTrue(pie.get(2013).get('accept'))
+          })
+        })
+
+        describe('build_line_data', () => {
+          it('creates a map with Stops.ethnicities as keys', () => {
+            let ethnicities = ['foo', 'bar']
+            let line = S.build_line_data([], { ethnicities })
+            assert.isTrue(_.isEqual(ethnicities, line.keys()))
+          })
+
+          it('pushes an object with year and quotient to each ethnicity', () => {
+            let Stops = {
+              ethnicities: ['foo', 'bar'],
+              start_year: 2012
+            }
+            let data = [
+              {
+                'foo': 12,
+                'bar': 34,
+                'year': 2012
+              }
+            ]
+
+            let line = S.build_line_data(data, Stops)
+
+            assert.equal(2012, line.get('foo')[0].x)
+
+            assert.equal(12/(12+34), line.get('foo')[0].y)
           })
         })
       })

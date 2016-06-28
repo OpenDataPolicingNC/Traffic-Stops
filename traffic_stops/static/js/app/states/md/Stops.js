@@ -48,15 +48,16 @@ export function build_pie_data (data, total, Stops) {
   return pie;
 }
 
-function build_line_data (data, Stops) {
-  var line = d3.map(),
-      get_total_by_race = (dataType, yr) => {
-        var total = 0;
-        dataType.forEach((ethnicity) => {
-          total += yr[ethnicity];
-        });
-        return total;
-      };
+export function get_total_by_race (dataType, yr) {
+  var total = 0;
+  dataType.forEach((ethnicity) => {
+    total += yr[ethnicity];
+  });
+  return total;
+}
+
+export function build_line_data (data, Stops) {
+  var line = d3.map();
 
   Stops.ethnicities.forEach((v) => {
     line.set(v, []);
