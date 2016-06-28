@@ -9,60 +9,81 @@ import d3 from 'd3';
 import $ from 'jquery';
 Backbone.$ = $;
 
-var StopsHandler = DataHandlerBase.extend({
+/***
+ * StopsHandler data processing helper functions
+ */
+function build_totals (data) {
+  let total = {};
+  // build a 'Totals' year which sums by ethnicity for all years
+  if (data.length > 0) {
+    // create new totals object, and reset values
+    total = _.clone(data[0]);
+
+    _.keys(total).forEach((key) => {
+      total[key] = 0;
+    });
+
+    // sum data from all years
+    data.forEach((year) => {
+      _.keys(year).forEach((key) => {
+        total[key] += year[key];
+      });
+    });
+
+    total['year'] = 'Total';
+  }
+
+  return total;
+}
+
+function build_pie_data (data, total, Stops) {
+  let pie = d3.map();
+
+  data.forEach((v) => {
+    if (v.year >= Stops.start_year) pie.set(v.year, d3.map(v));
+  });
+
+  pie.set('Total', d3.map(total));
+
+  return pie;
+}
+
+function build_line_data (data, Stops) {
+  var line = d3.map(),
+      get_total_by_race = (dataType, yr) => {
+        var total = 0;
+        dataType.forEach((ethnicity) => {
+          total += yr[ethnicity];
+        });
+        return total;
+      };
+
+  Stops.ethnicities.forEach((v) => {
+    line.set(v, []);
+  });
+  data.forEach((yr) => {
+    if (yr.year >= Stops.start_year) {
+      var total = get_total_by_race(Stops.ethnicities, yr);
+      Stops.ethnicities.forEach((ethnicity) => {
+        line.get(ethnicity).push({x: yr.year, y:yr[ethnicity]/total});
+      })
+    }
+  })
+  return line;
+}
+
+export var StopsHandler = DataHandlerBase.extend({
   clean_data: function () {
 
-    var data = this.get('raw_data'),
-        total = {};
-
-    // build a 'Totals' year which sums by ethnicity for all years
-    if (data.length > 0) {
-      // create new totals object, and reset values
-      total = _.clone(data[0]);
-      _.keys(total).forEach((key) => {
-        total[key] = 0;
-      });
-
-      // sum data from all years
-      data.forEach((year) => {
-        _.keys(year).forEach((key) => {
-          total[key] += year[key];
-        });
-      });
-      total['year'] = 'Total';
-    }
+    // build totals
+    var data = this.get('raw_data');
+    var total = build_totals(data);
 
     // build-data for pie-chart
-    var pie = d3.map();
-
-    data.forEach((v) => {
-      if (v.year >= Stops.start_year) pie.set(v.year, d3.map(v));
-    });
-
-    pie.set('Total', d3.map(total));
+    var pie = build_pie_data(data, total, Stops);
 
     // build data for line-chart
-
-    var line = d3.map(),
-        get_total_by_race = (dataType, yr) => {
-          var total = 0;
-          dataType.forEach((ethnicity) => {
-            total += yr[ethnicity];
-          });
-          return total;
-        };
-
-    Stops.ethnicities.forEach((v) => {
-      line.set(v, []);
-    });
-    data.forEach((yr) => {
-      if (yr.year >= Stops.start_year) {
-        var total = get_total_by_race(Stops.ethnicities, yr);
-        Stops.ethnicities.forEach((ethnicity) => {
-          line.get(ethnicity).push({x: yr.year, y:yr[ethnicity]/total});
-        })
-      }
-    })
+    var line = build_line_data(data, Stops);
 
     // set object data
     this.set('data', {

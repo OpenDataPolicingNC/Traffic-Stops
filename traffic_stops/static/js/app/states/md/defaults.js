@@ -1,3 +1,5 @@
+import d3 from 'd3';
+
 // Traffic Stops global defaults
 export default {
   start_year: 2012,     // start-year for reporting requirement
