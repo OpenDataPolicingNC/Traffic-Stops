@@ -20,27 +20,27 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">93.04% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>107/115</span>
+        <span class='fraction'>115/115</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">95.83% </span>
+        <span class="strong">97.92% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>46/48</span>
+        <span class='fraction'>47/48</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">82.76% </span>
+        <span class="strong">86.21% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>24/29</span>
+        <span class='fraction'>25/29</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">65.22% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>15/23</span>
+        <span class='fraction'>23/23</span>
       </div>
       <div class='fl pad1y'>
-        <span class="strong">38 statements, 12 functions, 30 branches</span>
+        <span class="strong">40 statements, 12 functions, 30 branches</span>
         <span class="quiet">Ignored</span>  &nbsp;&nbsp;&nbsp;&nbsp;
       </div>
     </div>
@@ -96,7 +96,10 @@
 47
 48
 49
-50</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+50
+51
+52
+53</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -128,20 +131,23 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -175,22 +181,25 @@ export default Backbone.Model.extend({
   loader_hide: function(){
     this.loader_div.remove();
   },
-  update: <span class="fstat-no" title="function not covered" >function(data){</span>
-    if(data===undefined) return;  // temporary for dummy census data
-<span class="cstat-no" title="statement not covered" >    t</span>his.data = data;
-<span class="cstat-no" title="statement not covered" >    t</span>his.loader_hide();
-<span class="cstat-no" title="statement not covered" >    t</span>his.drawStartup();
-<span class="cstat-no" title="statement not covered" >    t</span>his.drawChart();
-<span class="cstat-no" title="statement not covered" >    $</span>(document).on('raceToggle.change', this.triggerRaceToggle.bind(this));
+  update: function(data){
+    <span class="missing-if-branch" title="if path not taken" >I</span>if(data===undefined) return;  // temporary for dummy census data
+    this.data = data;
+    this.loader_hide();
+    this.drawStartup();
+    this.drawChart();
+    $(document).on('raceToggle.change', this.triggerRaceToggle.bind(this));
   },
   drawStartup: <span class="fstat-no" title="function not covered" >function(){</span>
-<span class="cstat-no" title="statement not covered" >    t</span>hrow "abstract method: requires override";
+    /* istanbul ignore next */
+<span class="cstat-skip" title="statement not covered" >    t</span>hrow "abstract method: requires override";
   },
   drawChart: <span class="fstat-no" title="function not covered" >function(){</span>
-<span class="cstat-no" title="statement not covered" >    t</span>hrow "abstract method: requires override";
+    /* istanbul ignore next */
+<span class="cstat-skip" title="statement not covered" >    t</span>hrow "abstract method: requires override";
   },
   setDefaultChart: <span class="fstat-no" title="function not covered" >function(){</span>
-<span class="cstat-no" title="statement not covered" >    t</span>hrow "abstract method: requires override";
+    /* istanbul ignore next */
+<span class="cstat-skip" title="statement not covered" >    t</span>hrow "abstract method: requires override";
   },
   triggerRaceToggle: <span class="fstat-no" title="function not covered" >function(e, v){</span>}
 });
@@ -200,7 +209,7 @@ export default Backbone.Model.extend({
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Jun 27 2016 16:20:55 GMT-0400 (EDT)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jun 28 2016 08:03:47 GMT-0400 (EDT)
 </div>
 </div>
 <script src="../prettify.js"></script>

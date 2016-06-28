@@ -171,5 +171,21 @@ describe('base', () => {
         assert.equal(0, $('.fail').length)
       })
     })
+
+    describe('update', () => {
+      it('invokes loader_hide, drawStartup, drawChart', () => {
+        let counter = []
+        let updater = () => counter.push('updated')
+        let VisualBase_ = Stubbed.extend({
+          update: VisualBase.prototype.update,
+          loader_hide: updater,
+          drawStartup: updater,
+          drawChart: updater
+        })
+        let vb = new VisualBase_()
+        vb.update('data')
+        assert.equal(3, counter.length)
+      })
+    })
   })
 })
