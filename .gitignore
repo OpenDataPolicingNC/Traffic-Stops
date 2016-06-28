@@ -36,3 +36,4 @@ terraform.tfstate*
 mddata
 ncdata
 .idea/
+coverage

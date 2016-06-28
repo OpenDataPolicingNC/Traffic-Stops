@@ -20,12 +20,12 @@
   <form role="form" id="agency_search" action='{% url "nc:home" %}' method="get" accept-charset="utf-8">
       <div class="form-group">
       {% csrf_token %}
-      <div class="input-group">
-        {{ agency_form.agency }}
-        <span class="input-group-btn">
-          <button class="btn btn-primary" type="button">View</button>
-        </span>
-      </div><!-- /input-group -->
+        <div class="input-group">
+          {{ agency_form.agency }}
+          <span class="input-group-btn">
+            <button class="btn btn-primary" type="button">View</button>
+          </span>
+        </div><!-- /input-group -->
       {% if agency_form.agency.errors %}
           <div class="alert alert-warning alert-dismissible">
               <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>

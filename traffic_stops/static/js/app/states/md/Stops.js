@@ -96,7 +96,7 @@ export var StopsHandler = DataHandlerBase.extend({
   }
 });
 
-var StopRatioDonut = VisualBase.extend({
+export var StopRatioDonut = VisualBase.extend({
   defaults: {
     width: 300,
     height: 300
