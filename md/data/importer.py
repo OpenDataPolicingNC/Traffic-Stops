@@ -6,8 +6,10 @@ import re
 
 import pandas as pd
 
+from django.db import connections
 from django.conf import settings
 
+from tsdata.sql import drop_constraints_and_indexes
 from tsdata.util import (call, download_and_unzip_data, get_csv_path,
      get_datafile_path, line_count)
 
@@ -186,6 +188,8 @@ def run(url, destination=None, download=True):
         logger.info("{} exists, skipping XLS->CSV conversion".format(csv_path))
     csv_count = line_count(csv_path)
     logger.debug('Rows: {}'.format(csv_count))
+    # drop constraints/indexes
+    drop_constraints_and_indexes(connections['traffic_stops_md'].cursor())
     # use COPY to load CSV files as quickly as possible
     copy_from(csv_path)
 

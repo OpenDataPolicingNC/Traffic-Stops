@@ -1,16 +1,15 @@
 -- http://www.postgresql.org/docs/current/interactive/populate.html
 
-\set ON_ERROR_STOP 1
+\set ON_ERROR_STOP true
+
+BEGIN;
 
 -- get rid of all the original data (cascades throughout app)
-BEGIN;
-TRUNCATE "md_stop" CASCADE;
-ANALYZE;
-COMMIT;
+TRUNCATE "md_stop" RESTART IDENTITY CASCADE;
+TRUNCATE "md_agency" RESTART IDENTITY CASCADE;
 
 -- import stops
 \set import_file :data_file
-BEGIN;
 COPY md_stop (stop_id, stop_date_text, stop_time_text,
               stop_location, duration_text, stop_reason, search_conducted,
               search_reason, seized, gender,
@@ -21,24 +20,22 @@ COPY md_stop (stop_id, stop_date_text, stop_time_text,
     NULL AS ''
     CSV HEADER
     FORCE NOT NULL search_conducted, search_reason, seized, stop_reason, gender, ethnicity, stop_location;
-COMMIT;
 
 -- -- populate md_agency lookup table
-BEGIN;
 INSERT INTO md_agency (name) (
     SELECT DISTINCT(agency_description) from md_stop ORDER BY agency_description
 );
-COMMIT;
 
 -- populate md_stop.agency_id foreign key
-BEGIN;
 UPDATE md_stop SET agency_id = md_agency.id
 FROM
    md_agency
 WHERE
    md_stop.agency_description = md_agency.name;
-COMMIT;
 
-BEGIN;
+ANALYZE;
+
+CREATE INDEX md_stop_169fc544 ON md_stop USING btree (agency_id);
+
 ANALYZE;
 COMMIT;
