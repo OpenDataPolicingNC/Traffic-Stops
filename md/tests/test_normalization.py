@@ -3,8 +3,9 @@
 from django.test import TestCase
 import pandas as pd
 
-from md.data.importer import (add_age_column, add_date_column, fix_ETHNICITY,
-    fix_GENDER, fix_SEIZED, fix_STOP_REASON, fix_TIME_OF_STOP)
+from md.data.importer import (add_age_column, add_date_column,
+    fix_ETHNICITY, fix_GENDER, fix_SEIZED, fix_STOP_REASON,
+    fix_TIME_OF_STOP)
 
 
 class TestFieldNormalization(TestCase):
@@ -96,17 +97,18 @@ class TestFieldNormalization(TestCase):
 
     def test_computed_age(self):
         stops = pd.DataFrame({
-            'STOPDATE': ['03/04/13', '12/31/12', '1/1/15'],
-            'TIME_OF_STOP': ['00:21', '11:50', '11:50'],
-            'DOB': ['05/27/89', '', '1/1/20']
+            'STOPDATE': [
+                '03/04/13', '12/31/12', '1/1/15'
+            ],
+            'TIME_OF_STOP': [
+                '00:21', '11:50', '11:50'
+            ],
+            'DOB': [
+                '05/27/89', '', '01/01/20'
+            ]
         })
         add_date_column(stops)
         add_age_column(stops)
         self.assertEqual(stops.computed_AGE[0], 23)
         self.assertEqual(stops.computed_AGE[1], 0)
-        # Bug in age computation
-        # Fix in ODPM-27
-        # Conversion to datetime should assume a two-digit year
-        # greater than the current two-digit year is from the
-        # previous century.
-        # NO!  self.assertEqual(stops.computed_AGE[2], 0)
+        self.assertEqual(stops.computed_AGE[2], 95)
