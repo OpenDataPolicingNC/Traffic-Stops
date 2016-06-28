@@ -35,6 +35,11 @@ WHERE
 
 ANALYZE;
 
+ALTER TABLE "public"."md_stop" ADD CONSTRAINT "md_stop_pkey" PRIMARY KEY (stop_id);
+ALTER TABLE "public"."md_agency" ADD CONSTRAINT "md_agency_pkey" PRIMARY KEY (id);
+ALTER TABLE "public"."django_migrations" ADD CONSTRAINT "django_migrations_pkey" PRIMARY KEY (id);
+ALTER TABLE "public"."md_stop" ADD CONSTRAINT "md_stop_age_check" CHECK ((age >= 0));
+ALTER TABLE "public"."md_stop" ADD CONSTRAINT "md_stop_agency_id_39a3e53ab65af866_fk_md_agency_id" FOREIGN KEY (agency_id) REFERENCES md_agency(id) DEFERRABLE INITIALLY DEFERRED;
 CREATE INDEX md_stop_169fc544 ON md_stop USING btree (agency_id);
 
 ANALYZE;
