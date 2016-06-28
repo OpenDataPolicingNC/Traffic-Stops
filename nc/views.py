@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, Http404
-from django.views.generic import ListView, DetailView, View, TemplateView
+from django.views.generic import ListView, DetailView
 from .models import Stop, Agency, Person
 from . import forms
 
