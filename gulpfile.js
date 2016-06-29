@@ -172,6 +172,7 @@ gulp.task('default', function (cb) {
   var args = ["manage.py", "runserver", argv.address+":"+argv.port];
   // Newer versions of npm mess with the PATH, sometimes putting /usr/bin at the front,
   // so make sure we invoke the python from our virtual env explicitly.
+  // (from a later version of django-project-template)
   var python = process.env['VIRTUAL_ENV'] + '/bin/python';
   var runserver = spawn(python, args, {
     stdio: "inherit",
