@@ -14,7 +14,7 @@
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         {% if request.state %}
-        <li class="dropdown state-nav navbar-inverse">
+        <li class="dropdown state-nav {% if navbar_inverse %}navbar-inverse{% endif %}">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% if request.state == "nc" %}North Carolina{% else %}Maryland{% endif %} <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href='{% url "nc:agency-list" %}'>Agencies</a></li>

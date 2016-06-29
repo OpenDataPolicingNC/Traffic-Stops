@@ -1,13 +1,17 @@
+import datetime
 import logging
+import math
 import os
 import re
 
 import pandas as pd
 
+from django.db import connections
 from django.conf import settings
 
+from tsdata.sql import drop_constraints_and_indexes
 from tsdata.utils import (call, download_and_unzip_data, get_csv_path,
-                          get_datafile_path, line_count)
+     get_datafile_path, line_count)
 
 
 logger = logging.getLogger(__name__)
@@ -31,6 +35,8 @@ ETHNICITY_TO_CODE = {
 }
 
 STOP_REASON_re = re.compile(r'^ *(\d+) *- *(\d+) *\(.*\) *$')
+
+DOB_re = re.compile(r'^(\d\d?)/(\d\d?)/(\d\d?)$')
 
 MD_COLUMNS_TO_DROP = (
     'WHATSEARCHED', 'STOPOUTCOME', 'CRIME_CHARGED',
@@ -91,14 +97,28 @@ def fix_TIME_OF_STOP(s):
 
 
 def compute_AGE(row):
+    dob = row['DOB']
     stop_date = row['date']
-    dob = row['DOB_as_dt']
-    if pd.isnull(dob) or dob > stop_date:
-        logger.info('Bad DOB vs. stop date: "%s", "%s"', dob, stop_date)
-        return 0
+
+    m = DOB_re.match(dob)
+    if not m:
+        age = 0
     else:
+        dob_year = int(m.group(3))
+        stop_date_year = stop_date.year
+        stop_date_year_of_century = stop_date_year % 100
+        stop_date_century = int(math.floor(stop_date_year / 100.0)) * 100
+
+        if dob_year >= stop_date_year_of_century:
+            dob_year += (stop_date_century - 100)
+        else:
+            dob_year += stop_date_century
+
+        dob = datetime.datetime(dob_year, int(m.group(1)), int(m.group(2)))
         delta = stop_date - dob
-        return int(delta.days / 365.25)
+        age = int(delta.days / 365.25)
+
+    return age
 
 
 def load_xls(xls_path):
@@ -123,9 +143,7 @@ def add_date_column(stops):
 
 
 def add_age_column(stops):
-    stops['DOB_as_dt'] = pd.to_datetime(stops.DOB)
     stops['computed_AGE'] = stops.apply(compute_AGE, axis=1)
-    stops.drop(['DOB_as_dt'], axis=1, inplace=True)
 
 
 def process_raw_data(stops):
@@ -170,6 +188,8 @@ def run(url, destination=None, download=True):
         logger.info("{} exists, skipping XLS->CSV conversion".format(csv_path))
     csv_count = line_count(csv_path)
     logger.debug('Rows: {}'.format(csv_count))
+    # drop constraints/indexes
+    drop_constraints_and_indexes(connections['traffic_stops_md'].cursor())
     # use COPY to load CSV files as quickly as possible
     copy_from(csv_path)
 
