@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseNotAllowed
-from django.views.generic import ListView, DetailView, View, TemplateView
+from django.views.generic import View, TemplateView
 
 
 class HomeView(TemplateView):
