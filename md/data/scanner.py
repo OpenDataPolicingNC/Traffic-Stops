@@ -1,4 +1,4 @@
-# Implementation of scan_md command, not used for actual data import
+-A# Implementation of scan_md command, not used for actual data import
 #
 # This will report some of the stranger field values in the raw data.
 
@@ -7,8 +7,8 @@ import logging
 import os
 import re
 
-from tsdata.util import (download_and_unzip_data, line_count, get_csv_path,
-    get_datafile_path)
+from tsdata.utils import (download_and_unzip_data, line_count, get_csv_path,
+                          get_datafile_path)
 from md.data.importer import xls_to_csv
 
 logger = logging.getLogger(__name__)
