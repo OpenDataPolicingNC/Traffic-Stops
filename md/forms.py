@@ -8,50 +8,15 @@ from md import models as stops
 from md.lookups import AgencyLookup
 
 
-def addNoneOpt(choices):
-    opts = list(choices)
-    opts.insert(0, (None, "---"))
-    return opts
-
-
 class SearchForm(forms.Form):
     agency = forms.CharField(
         label='Agency Name',
         widget=AutoCompleteWidget(AgencyLookup),
-        help_text="ex: Durham Police Department")
+        help_text="ex: Montgomery County Police")
     officer = forms.CharField(
         required=False,
         help_text="ex: 227")
-    # start_date = forms.DateField(
-    #     required=False,
-    #     help_text="ex: 8/13/2013")
-    # end_date = forms.DateField(
-    #     required=False,
-    #     help_text="ex: 8/13/2014")
-    # age = forms.IntegerField(
-    #     required=False,
-    #     min_value=0,
-    #     max_value=130)
-    # gender = forms.ChoiceField(
-    #     required=False,
-    #     initial=None,
-    #     choices=addNoneOpt(stops.GENDER_CHOICES))
-    # race = forms.ChoiceField(
-    #     required=False,
-    #     initial=None,
-    #     choices=addNoneOpt(stops.RACE_CHOICES))
-    # ethnicity = forms.ChoiceField(
-    #     required=False,
-    #     initial=None,
-    #     choices=addNoneOpt(stops.ETHNICITY_CHOICES))
-    # purpose = forms.MultipleChoiceField(
-    #     required=False,
-    #     choices=stops.PURPOSE_CHOICES,
-    #     widget=forms.CheckboxSelectMultiple)
-    # action = forms.MultipleChoiceField(
-    #     required=False,
-    #     choices=stops.ACTION_CHOICES,
-    #     widget=forms.CheckboxSelectMultiple)
+
 
     def clean(self):
         cleaned_data = super(SearchForm, self).clean()
