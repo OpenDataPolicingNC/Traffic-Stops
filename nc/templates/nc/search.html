@@ -11,11 +11,11 @@
                 $end = $("#id_end_date"),
                 now = new Date(),
                 opts = {
-                    minDate: new Date(Stops.start_year, 0, 1),
-                    maxDate: new Date(Stops.end_year, 11, 31),
+                        minDate: new Date(NC.Stops.start_year, 0, 1),
+                    maxDate: new Date(NC.Stops.end_year, 11, 31),
                     changeMonth: true,
                     changeYear: true,
-                    yearRange: Stops.start_year + ':' + Stops.end_year,
+                    yearRange: NC.Stops.start_year + ':' + NC.Stops.end_year,
                     dateFormat: "mm/dd/yy",
                 };
 

@@ -241,6 +241,7 @@ export var StopsTable = TableBase.extend({
 if (typeof window.NC === 'undefined') window.NC = {};
 
 Object.assign(window.NC, {
+  Stops,
   StopsHandler,
   StopRatioDonut,
   StopRatioTimeSeries,
