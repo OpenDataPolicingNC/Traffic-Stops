@@ -13,6 +13,7 @@ margarita_version: 1.7.0
 
 instances:
   - nc
+  - md
 
 env:
     NEW_RELIC_LOG: "/var/log/newrelic/agent.log"
