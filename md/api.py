@@ -15,7 +15,7 @@ from md.utils import GroupedData
 
 GROUPS = {'A': 'ASIAN',
           'B': 'BLACK',
-          'I': 'NATIVE AMERIOCAN',
+          'I': 'NATIVE AMERICAN',
           'U': 'OTHER',
           'W': 'WHITE',
           'H': 'HISPANIC'}
