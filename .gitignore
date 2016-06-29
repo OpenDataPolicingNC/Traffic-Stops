@@ -37,3 +37,4 @@ mddata/
 ncdata/
 .idea/
 coverage/
+npm-debug.log
