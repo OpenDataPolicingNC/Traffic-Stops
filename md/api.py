@@ -25,7 +25,7 @@ GROUPS = {'A': 'ASIAN',
 GROUP_DEFAULTS = {'ASIAN': 0,
                   'BLACK': 0,
                   'NATIVE AMERICAN': 0,
-                  'OTHER': 0,
+                  'UNKNOWN': 0,
                   'WHITE': 0,
                   'HISPANIC': 0,
                   }
