@@ -171,7 +171,8 @@ export var StopRatioTimeSeries = VisualBase.extend({
                   .height(this.get("height"));
 
     this.chart.xAxis
-        .axisLabel('Year');
+        .axisLabel('Year')
+        .tickFormat(d3.format('.0d'));
 
     this.chart.yAxis
         .axisLabel('Percentage of stops by race')
