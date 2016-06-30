@@ -23,7 +23,7 @@ ETHNICITY_CHOICES = (
     ('H', 'Hispanic'),
     ('A', 'Asian'),
     ('I', 'Native American'),
-    ('U', 'Unknown'), # unknown uncludes "Other"
+    ('U', 'Unknown'),  # unknown includes "Other"
 )
 
 
