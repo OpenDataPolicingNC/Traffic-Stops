@@ -14,5 +14,7 @@ urlpatterns = [  # noqa
     url(r'^agency/$', views.AgencyList.as_view(), name='agency-list'),
     url(r'^agency/(?P<pk>\d+)/$', views.AgencyDetail.as_view(),
         name='agency-detail'),
+    url(r'^agency/(?P<slug>.+)/$', views.AgencyDetail.as_view(),
+        name='agency-detail-by-name'),
     url(r'^api/', include(router.urls)),
 ]
