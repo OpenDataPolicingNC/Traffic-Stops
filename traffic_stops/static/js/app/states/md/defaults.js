@@ -27,7 +27,6 @@ export default {
     "#66ADDD",
     "#3cd6c4",
     "#F2AC29",
-    "#f27829",
   ],
   baseline_color: "black",
   single_color: "#5C0808",
