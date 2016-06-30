@@ -10,7 +10,6 @@ export default {
     'NATIVE AMERICAN',
     'HISPANIC',
     'ASIAN',
-    'OTHER',
     'UNKNOWN',
   ],
   pprint: d3.map({
@@ -19,7 +18,6 @@ export default {
     'HISPANIC': 'Hispanic',
     'NATIVE AMERICAN': 'Native American',
     'ASIAN': 'Asian',
-    'OTHER': 'Other',
     'UNKNOWN': 'Unknown',
   }),
   colors: [

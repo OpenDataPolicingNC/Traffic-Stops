@@ -3,23 +3,7 @@ from django.db import models
 from caching.base import CachingManager, CachingMixin
 
 # Columns in CSV:
-#
-# index
-# STOPDATE
-# TIME_OF_STOP
-# LOCATION
-# DURATION
-# STOP_REASON
-# SEARCH_CONDUCTED
-# SEARCH_REASON
-# SEIZED
-# GENDER
-# DOB
-# ETHNICITY
-# OFFICERID
-# AGENCY
-# date
-# computed_AGE
+# get applicable columns from md csv
 
 
 YN_CHOICES = (
@@ -39,7 +23,7 @@ ETHNICITY_CHOICES = (
     ('H', 'Hispanic'),
     ('A', 'Asian'),
     ('I', 'Native American'),
-    ('U', 'Unknown'),
+    ('U', 'Unknown'), # unknown uncludes "Other"
 )
 
 

@@ -10,7 +10,7 @@ from django.db import connections
 from django.conf import settings
 
 from tsdata.sql import drop_constraints_and_indexes
-from tsdata.util import (call, download_and_unzip_data, get_csv_path,
+from tsdata.utils import (call, download_and_unzip_data, get_csv_path,
      get_datafile_path, line_count)
 
 
