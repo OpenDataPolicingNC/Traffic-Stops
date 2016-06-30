@@ -26,7 +26,8 @@ export function build_totals (data) {
     // sum data from all years
     data.forEach((year) => {
       _.keys(year).forEach((key) => {
-        total[key] += year[key];
+        if (typeof total[key] === 'undefined') total[key] = 0;
+        total[key] += (typeof year[key] === 'undefined') ? 0 : year[key];
       });
     });
 
@@ -43,6 +44,8 @@ export function build_pie_data (data, total, Stops) {
     if (v.year >= Stops.start_year) pie.set(v.year, d3.map(v));
   });
 
+  console.log(total, pie)
+
   pie.set('Total', d3.map(total));
 
   return pie;
@@ -51,7 +54,7 @@ export function build_pie_data (data, total, Stops) {
 export function get_total_by_race (dataType, yr) {
   var total = 0;
   dataType.forEach((ethnicity) => {
-    total += yr[ethnicity];
+    total += (typeof yr[ethnicity] === 'undefined') ? 0 : yr[ethnicity];
   });
   return total;
 }
@@ -66,7 +69,7 @@ export function build_line_data (data, Stops) {
     if (yr.year >= Stops.start_year) {
       var total = get_total_by_race(Stops.ethnicities, yr);
       Stops.ethnicities.forEach((ethnicity) => {
-        line.get(ethnicity).push({x: yr.year, y:yr[ethnicity]/total});
+        line.get(ethnicity).push({x: yr.year, y:(yr[ethnicity] > 0 ? yr[ethnicity]/total : 0)});
       })
     }
   })

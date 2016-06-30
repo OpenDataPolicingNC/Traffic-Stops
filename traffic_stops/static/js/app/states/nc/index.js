@@ -74,7 +74,13 @@ var UseOfForceHandler = DataHandlerBase.extend({
       data.forEach(function(yr){
         if (yr.year>=Stops.start_year){
           dataType.forEach(function(race){
-            line.get(race).push({x: yr.year, y:yr[race]});
+            line
+              .get(race)
+              .push({
+                x: yr.year,
+                y: (yr[race] > 0 ? yr[race] : 0)
+              })
+            ;
           });
         }
       });

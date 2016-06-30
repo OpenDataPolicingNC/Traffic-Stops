@@ -26,7 +26,8 @@ export var StopsHandler = DataHandlerBase.extend({
       // sum data from all years
       data.forEach(function(year){
         _.keys(year).forEach(function(key){
-          total[key] += year[key];
+          if (typeof total[key] === 'undefined') total[key] = 0;
+          total[key] += (typeof year[key] === 'undefined') ? 0 : year[key];
         });
       });
       total["year"] = "Total";
@@ -45,7 +46,7 @@ export var StopsHandler = DataHandlerBase.extend({
         get_total_by_race = function(dataType, yr){
           var total = 0;
           dataType.forEach(function(race){
-            total += yr[race];
+            total += (typeof yr[race] === 'undefined') ? 0 : yr[race];
           });
           return total;
         };
@@ -58,7 +59,7 @@ export var StopsHandler = DataHandlerBase.extend({
         if (yr.year>=Stops.start_year){
           var total = get_total_by_race(dataType, yr);
           dataType.forEach(function(race){
-            line.get(race).push({x: yr.year, y:yr[race]/total});
+            line.get(race).push({x: yr.year, y:(yr[race] > 0 ? yr[race]/total : 0)});
           });
         }
       });
