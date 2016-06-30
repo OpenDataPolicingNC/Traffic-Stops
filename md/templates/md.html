@@ -15,6 +15,31 @@
   <img src="{% static "svg/noun_19618_cc-white.svg" %}" class="state md">
 {% endblock state-header-graphic %}
 
+{% block search-form %}
+  <h4>View Agency Dashboard</h4>
+  <form role="form" id="agency_search" action='{% url "md:home" %}' method="get" accept-charset="utf-8">
+      <div class="form-group">
+      {% csrf_token %}
+      <div class="input-group">
+        {{ agency_form.agency }}
+        <span class="input-group-btn">
+          <button class="btn btn-primary" type="button">View</button>
+        </span>
+      </div><!-- /input-group -->
+      {% if agency_form.agency.errors %}
+          <div class="alert alert-warning alert-dismissible">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <ul>
+              {% for error in agency_form.agency.errors %}
+                  <li><strong>{{ error }}</strong></li>
+              {% endfor %}
+              </ul>
+          </div>
+      {% endif %}
+      </div>
+  </form>
+{% endblock search-form %}
+
 {% block agencies-table %}
   <table class='table table-condensed table-hover'>
     <tr>
@@ -22,23 +47,23 @@
       <th class="text-right">Stops</th>
     </tr>
     <tr>
-      <td><a href="{% url "agency-detail" "192" %}">MSP</a></td>
+      <td><a href="{% url "md:agency-detail" "80" %}">MSP</a></td>
       <td class="text-right">641,952</td>
     </tr>
     <tr>
-      <td><a href="{% url "agency-detail" "51" %}">Montgomery</a></td>
+      <td><a href="{% url "md:agency-detail" "77" %}">Montgomery</a></td>
       <td class="text-right">230,317</td>
     </tr>
     <tr>
-      <td><a href="{% url "agency-detail" "223" %}">BACOPD</a></td>
+      <td><a href="{% url "md:agency-detail" "7" %}">BACOPD</a></td>
       <td class="text-right">222,241</td>
     </tr>
     <tr>
-      <td><a href="{% url "agency-detail" "104" %}">MDTA</a></td>
+      <td><a href="{% url "md:agency-detail" "76" %}">MDTA</a></td>
       <td class="text-right">180,312</td>
     </tr>
     <tr>
-      <td><a href="{% url "agency-detail" "104" %}">AACOPD</a></td>
+      <td><a href="{% url "md:agency-detail" "2" %}">AACOPD</a></td>
       <td class="text-right">126,123</td>
     </tr>
   </table>
@@ -54,7 +79,7 @@
   </p>
   <p>
       Maryland law requires all such agencies to report their data
-      on a monthly basis to the MD Department of Justice; however, some
+      on a monthly basis to the MD state government; however, some
       datasets are incomplete or remain unreported.  Where data sets are
       incomplete or missing from the website it is because they have not
       been reported to the state agency from which the site derives its

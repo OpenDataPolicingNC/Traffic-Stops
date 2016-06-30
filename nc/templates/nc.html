@@ -15,6 +15,31 @@
   <img src="{% static "svg/noun_19625_cc-white.svg" %}" class="state">
 {% endblock state-header-graphic %}
 
+{% block search-form %}
+  <h4>View Agency Dashboard</h4>
+  <form role="form" id="agency_search" action='{% url "nc:home" %}' method="get" accept-charset="utf-8">
+      <div class="form-group">
+      {% csrf_token %}
+        <div class="input-group">
+          {{ agency_form.agency }}
+          <span class="input-group-btn">
+            <button class="btn btn-primary" type="button">View</button>
+          </span>
+        </div><!-- /input-group -->
+      {% if agency_form.agency.errors %}
+          <div class="alert alert-warning alert-dismissible">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <ul>
+              {% for error in agency_form.agency.errors %}
+                  <li><strong>{{ error }}</strong></li>
+              {% endfor %}
+              </ul>
+          </div>
+      {% endif %}
+      </div>
+  </form>
+{% endblock search-form %}
+
 {% block agencies-table %}
   <table class='table table-condensed table-hover'>
     <tr>
@@ -22,23 +47,23 @@
       <th class="text-right">Stops</th>
     </tr>
     <tr>
-      <td><a href="{% url "agency-detail" "192" %}">NC State Highway Patrol</a></td>
+      <td><a href="{% url "nc:agency-detail" "192" %}">NC State Highway Patrol</a></td>
       <td class="text-right">9,474,397</td>
     </tr>
     <tr>
-      <td><a href="{% url "agency-detail" "51" %}">Charlotte-Mecklenburg Police Department</a></td>
+      <td><a href="{% url "nc:agency-detail" "51" %}">Charlotte-Mecklenburg Police Department</a></td>
       <td class="text-right">1,628,374</td>
     </tr>
     <tr>
-      <td><a href="{% url "agency-detail" "223" %}">Raleigh Police Department</a></td>
+      <td><a href="{% url "nc:agency-detail" "223" %}">Raleigh Police Department</a></td>
       <td class="text-right">870,245</td>
     </tr>
     <tr>
-      <td><a href="{% url "agency-detail" "104" %}">Greensboro Police Department</a></td>
+      <td><a href="{% url "nc:agency-detail" "104" %}">Greensboro Police Department</a></td>
       <td class="text-right">569,612</td>
     </tr>
     <tr>
-      <td><a href="{% url "agency-detail" "104" %}">Winston-Salem Police Department</a></td>
+      <td><a href="{% url "nc:agency-detail" "104" %}">Winston-Salem Police Department</a></td>
       <td class="text-right">452,352</td>
     </tr>
   </table>
