@@ -163,7 +163,7 @@ export var StopRatioDonut = VisualBase.extend({
     items.forEach((d, i) => {
       if (!d) return;
       data.push({
-        "key": Stops.pprint.get(d),
+        "key": d,
         "value": selected.get(d) || 0,
         "color": Stops.colors[i]
       });
@@ -191,7 +191,8 @@ var StopRatioTimeSeries = VisualBase.extend({
                   .height(this.get("height"));
 
     this.chart.xAxis
-        .axisLabel('Year');
+        .axisLabel('Year')
+        .tickFormat(d3.format('.0d'));
 
     this.chart.yAxis
         .axisLabel('Percentage of stops by race')
@@ -223,7 +224,7 @@ var StopRatioTimeSeries = VisualBase.extend({
       // disable by default if maximum value < 5%
       disabled = d3.max(vals, function(d){return d.y;})<0.05;
       data.push({
-        key: Stops.pprint.get(key),
+        key: key,
         values: vals,
         color: Stops.colors[i],
         disabled: disabled
@@ -241,7 +242,7 @@ var StopsTable = TableBase.extend({
 
     // create header
     header = ["Year"];
-    header.push.apply(header, Stops.pprint.values());
+    header.push.apply(header, Stops.ethnicities);
     rows.push(header);
 
     // create data rows
