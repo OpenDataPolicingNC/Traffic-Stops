@@ -5,21 +5,13 @@ export default {
   start_year: 2012,     // start-year for reporting requirement
   end_year: new Date().getUTCFullYear(),       // end-date for latest dataset
   ethnicities: [
-    'WHITE',
-    'BLACK',
-    'NATIVE AMERICAN',
-    'HISPANIC',
-    'ASIAN',
-    'UNKNOWN',
+    'White',
+    'Black',
+    'Native American',
+    'Hispanic',
+    'Asian',
+    'Unknown',
   ],
-  pprint: d3.map({
-    'WHITE': 'White',
-    'BLACK': 'Black',
-    'HISPANIC': 'Hispanic',
-    'NATIVE AMERICAN': 'Native American',
-    'ASIAN': 'Asian',
-    'UNKNOWN': 'Unknown',
-  }),
   colors: [
     "#1a9641",
     "#0571b0",

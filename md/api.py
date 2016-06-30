@@ -10,6 +10,7 @@ from rest_framework_extensions.key_constructor.constructors import DefaultObject
 
 from md.models import Agency, Stop
 from md import serializers
+from md.models import ETHNICITY_CHOICES
 from tsdata.utils import GroupedData
 
 
@@ -22,7 +23,7 @@ GROUPS = {'A': 'ASIAN',
 
 # PURPOSE_CHOICES to be added after ODPM-31
 
-GROUP_DEFAULTS = {k: 0 for k in GROUPS.values()}
+GROUP_DEFAULTS = {k: 0 for k in dict(ETHNICITY_CHOICES).values()}
 
 class QueryKeyConstructor(DefaultObjectKeyConstructor):
     params_query = bits.QueryParamsKeyBit(['officer'])
@@ -53,7 +54,7 @@ class AgencyViewSet(viewsets.ReadOnlyModelViewSet):
                 data['year'] = stop['year'].year
             # XXX check for 'purpose' here after ODPM-31 is delivered.
             if 'ethnicity' in group_by:
-                ethnicity = GROUPS.get(stop['ethnicity'],
+                ethnicity = dict(ETHNICITY_CHOICES).get(stop['ethnicity'],
                                        stop['ethnicity'])
                 data[ethnicity] = stop['count']
             results.add(**data)
