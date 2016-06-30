@@ -22,14 +22,7 @@ GROUPS = {'A': 'ASIAN',
 
 # PURPOSE_CHOICES to be added after ODPM-31
 
-GROUP_DEFAULTS = {'ASIAN': 0,
-                  'BLACK': 0,
-                  'NATIVE AMERICAN': 0,
-                  'UNKNOWN': 0,
-                  'WHITE': 0,
-                  'HISPANIC': 0,
-                  }
-
+GROUP_DEFAULTS = {k: 0 for k in GROUPS.values()}
 
 class QueryKeyConstructor(DefaultObjectKeyConstructor):
     params_query = bits.QueryParamsKeyBit(['officer'])
