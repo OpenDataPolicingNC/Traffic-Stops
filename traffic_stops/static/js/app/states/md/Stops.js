@@ -26,6 +26,7 @@ export function build_totals (data) {
     // sum data from all years
     data.forEach((year) => {
       _.keys(year).forEach((key) => {
+        if (key === 'OTHER') return; // ignore 'OTHER' from bad API output
         if (typeof total[key] === 'undefined') total[key] = 0;
         total[key] += (typeof year[key] === 'undefined') ? 0 : year[key];
       });
@@ -43,8 +44,6 @@ export function build_pie_data (data, total, Stops) {
   data.forEach((v) => {
     if (v.year >= Stops.start_year) pie.set(v.year, d3.map(v));
   });
-
-  console.log(total, pie)
 
   pie.set('Total', d3.map(total));
 
@@ -165,7 +164,7 @@ export var StopRatioDonut = VisualBase.extend({
       if (!d) return;
       data.push({
         "key": Stops.pprint.get(d),
-        "value": selected.get(d),
+        "value": selected.get(d) || 0,
         "color": Stops.colors[i]
       });
     });
