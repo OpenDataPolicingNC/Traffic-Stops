@@ -5,9 +5,8 @@ export default [
         "WHITE": 2614,
         "NATIVE AMERICAN": 16,
         "BLACK": 2941,
-        "OTHER": 161,
         "HISPANIC": 201,
-        "UNKNOWN": 1,
+        "UNKNOWN": 162,
         "": 1
     },
     {
@@ -16,9 +15,8 @@ export default [
         "WHITE": 29335,
         "NATIVE AMERICAN": 536,
         "BLACK": 35470,
-        "OTHER": 2016,
         "HISPANIC": 2863,
-        "UNKNOWN": 15,
+        "UNKNOWN": 2031,
         "": 8
     },
     {
@@ -27,9 +25,8 @@ export default [
         "WHITE": 29171,
         "NATIVE AMERICAN": 514,
         "BLACK": 37657,
-        "OTHER": 2313,
         "HISPANIC": 3017,
-        "UNKNOWN": 9,
+        "UNKNOWN": 2322,
         "": 7
     },
     {
@@ -38,9 +35,8 @@ export default [
         "WHITE": 27427,
         "NATIVE AMERICAN": 462,
         "BLACK": 33836,
-        "OTHER": 2304,
         "HISPANIC": 3028,
-        "UNKNOWN": 8,
+        "UNKNOWN": 2312,
         "": 3
     },
     {
@@ -49,7 +45,6 @@ export default [
         "WHITE": 0,
         "NATIVE AMERICAN": 0,
         "BLACK": 1,
-        "OTHER": 0,
         "HISPANIC": 0,
         "UNKNOWN": 0
     }
