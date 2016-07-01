@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='agency',
             name='slug',
-            field=django_extensions.db.fields.AutoSlugField(unique=True, populate_from='name', blank=True, editable=False),
+            field=django_extensions.db.fields.AutoSlugField(unique=True, populate_from='name', blank=True, editable=False, max_length=255),
         ),
     ]

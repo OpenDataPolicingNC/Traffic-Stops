@@ -136,7 +136,7 @@ class SearchBasis(CachingMixin, models.Model):
 
 class Agency(CachingMixin, models.Model):
     name = models.CharField(max_length=255)
-    slug = AutoSlugField(populate_from='name', unique=True)
+    slug = AutoSlugField(populate_from='name', unique=True, max_length=255)
 
     objects = CachingManager()
 
