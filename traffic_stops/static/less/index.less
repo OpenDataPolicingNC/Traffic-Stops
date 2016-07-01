@@ -42,6 +42,29 @@ h1, h2, h3, h4, h5 {
   color: @brand-primary;
 }
 
+.nav-tabs {
+  margin-top: 1rem;
+
+  > li {
+    > a {
+      > h2 {
+        margin: 0;
+      }
+
+      &:hover {
+        background-color: #e3e3e3;
+      }
+    }
+
+    &.active {
+      > a {
+        background-color: transparent !important;
+        border-bottom-color: #efefef !important;
+      }
+    }
+  }
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 
@@ -302,23 +325,6 @@ body#state {
   }
   #elevator {
     font-size: 110%;
-  }
-
-  .nav-tabs {
-    margin-top: 1rem;
-
-    .flex-layout();
-    .flex-direction(row);
-    .flex-wrap(nowrap);
-    .align-items(flex-end);
-
-    > li {
-      > a {
-        > h4 {
-          margin: 0;
-        }
-      }
-    }
   }
 }
 
