@@ -14,15 +14,7 @@ from md.models import ETHNICITY_CHOICES
 from tsdata.utils import GroupedData
 
 
-GROUPS = {'A': 'ASIAN',
-          'B': 'BLACK',
-          'I': 'NATIVE AMERICAN',
-          'U': 'UNKNOWN',
-          'W': 'WHITE',
-          'H': 'HISPANIC'}
-
 # PURPOSE_CHOICES to be added after ODPM-31
-
 GROUP_DEFAULTS = {k: 0 for k in dict(ETHNICITY_CHOICES).values()}
 
 class QueryKeyConstructor(DefaultObjectKeyConstructor):
