@@ -1,3 +1,4 @@
+require("babel-polyfill");
 window.jQuery = window.$ = require('jquery');
 window.d3 = require('d3');
 var nv = require('nvd3');
