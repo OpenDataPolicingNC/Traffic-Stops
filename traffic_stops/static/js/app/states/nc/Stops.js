@@ -92,7 +92,10 @@ export var StopRatioDonut = VisualBase.extend({
       .labelType("percent")
       .donutRatio(0.35)
       .labelThreshold(0.05)
-      .donut(true);
+      .donut(true)
+      .tooltipContent((key, y, e, graph) => (
+        `<h3 class="stops donut-label">${ key }</h3><p>${ y.replace(/\.\d\d/, '') }</p>`
+      ));
   },
   drawStartup: function(){
 
