@@ -94,7 +94,7 @@ export var StopRatioDonut = VisualBase.extend({
       .labelThreshold(0.05)
       .donut(true)
       .tooltipContent((key, y, e, graph) => (
-        `<h3 class="stops donut-label">${ key }</h3><p>${ y.replace(/\.\d\d/, '') }</p>`
+        `<h3 class="stops donut-label">${ key }</h3><p>${ y.replace(/\.\d*/, '') }</p>`
       ));
   },
   drawStartup: function(){
