@@ -16,6 +16,7 @@ traffic_stops.log.1
 reports
 env
 jmeter.log
+npm-debug.log
 .transifexrc
 locale/en/
 data/nc/*
@@ -34,3 +35,7 @@ terraform.tfstate*
 *.tar
 *.tar.zip
 mddata/
+ncdata/
+.idea/
+coverage/
+npm-debug.log

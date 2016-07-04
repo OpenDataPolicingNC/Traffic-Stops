@@ -42,6 +42,29 @@ h1, h2, h3, h4, h5 {
   color: @brand-primary;
 }
 
+.nav-tabs {
+  margin-top: 1rem;
+
+  > li {
+    > a {
+      > h2 {
+        margin: 0;
+      }
+
+      &:hover {
+        background-color: #e3e3e3;
+      }
+    }
+
+    &.active {
+      > a {
+        background-color: transparent !important;
+        border-bottom-color: #efefef !important;
+      }
+    }
+  }
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 
@@ -264,7 +287,7 @@ code {
 }
 
 p.nc-agency-intro {
-  margin-bottom: 20px;
+  margin: 20px 0;
 }
 
 .agency-dashboard-block {
@@ -349,4 +372,8 @@ body#state {
 
 .nvd3 .nv-groups path.nv-line {
   stroke-width: 5px;
+}
+
+h3.donut-label {
+  font-size: 16px;
 }

@@ -20,6 +20,11 @@ DATABASES['traffic_stops_nc']['USER'] = 'traffic_stops_%s' % ENVIRONMENT.lower()
 DATABASES['traffic_stops_nc']['HOST'] = os.environ.get('DB_HOST', '')
 DATABASES['traffic_stops_nc']['PORT'] = os.environ.get('DB_PORT', '')
 DATABASES['traffic_stops_nc']['PASSWORD'] = os.environ.get('DB_PASSWORD', '')
+DATABASES['traffic_stops_md']['NAME'] = 'traffic_stops_md_%s' % ENVIRONMENT.lower()
+DATABASES['traffic_stops_md']['USER'] = 'traffic_stops_%s' % ENVIRONMENT.lower()
+DATABASES['traffic_stops_md']['HOST'] = os.environ.get('DB_HOST', '')
+DATABASES['traffic_stops_md']['PORT'] = os.environ.get('DB_PORT', '')
+DATABASES['traffic_stops_md']['PASSWORD'] = os.environ.get('DB_PASSWORD', '')
 DATABASE_ETL_USER = 'etl'
 
 WEBSERVER_ROOT = '/var/www/traffic_stops/'

@@ -11,11 +11,11 @@
                 $end = $("#id_end_date"),
                 now = new Date(),
                 opts = {
-                    minDate: new Date(Stops.start_year, 0, 1),
-                    maxDate: new Date(Stops.end_year, 11, 31),
+                        minDate: new Date(NC.Stops.start_year, 0, 1),
+                    maxDate: new Date(NC.Stops.end_year, 11, 31),
                     changeMonth: true,
                     changeYear: true,
-                    yearRange: Stops.start_year + ':' + Stops.end_year,
+                    yearRange: NC.Stops.start_year + ':' + NC.Stops.end_year,
                     dateFormat: "mm/dd/yy",
                 };
 
@@ -64,7 +64,7 @@
 {% bootstrap_messages %}
 <div class="row">
     <div class="col-md-3">
-        <form action="{% url 'stops-search' %}" method="get" class="form">
+        <form action="{% url 'nc:stops-search' %}" method="get" class="form">
             {% bootstrap_form form %}
             {% buttons %}
                 <button type="submit" class="btn btn-primary">
@@ -92,8 +92,8 @@
                 <td>{{ person.get_race_display }}</td>
                 <td>{{ person.get_ethnicity_display }}</td>
                 <td>{{ person.age }}</td>
-                <td><a href='{% url "agency-detail" person.stop.agency_id %}'>{{ person.stop.agency_description|truncatewords:3 }}</a></td>
-                <td><a href='{% url "agency-detail" person.stop.agency_id %}?officer_id={{ person.stop.officer_id|urlencode }}'>{{ person.stop.officer_id }}</a></td>
+                <td><a href='{% url "nc:agency-detail" person.stop.agency_id %}'>{{ person.stop.agency_description|truncatewords:3 }}</a></td>
+                <td><a href='{% url "nc:agency-detail" person.stop.agency_id %}?officer_id={{ person.stop.officer_id|urlencode }}'>{{ person.stop.officer_id }}</a></td>
             </tr>
             {% endfor %}
         </table>

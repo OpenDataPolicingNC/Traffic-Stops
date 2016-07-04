@@ -31,7 +31,10 @@ def get_sql_statements(cursor, select_sql):
     Simple wrapper function used to execute a SQL query that returns a
     list of SQL commands to be run later.
     """
-    cursor.execute(select_sql)
+    # Explicitly pass None for params to avoid different behavior when
+    # running through Django Debug Toolbar (it defaults params to (),
+    # Django expects None for no params).
+    cursor.execute(select_sql, params=None)
     sql = ''
     for row in cursor.fetchall():
         sql += '{}\n'.format(row[0])
@@ -67,7 +70,7 @@ SELECT 'ALTER TABLE "'||nspname||'"."'||relname||'" ADD CONSTRAINT "'||conname||
 FROM pg_constraint
 INNER JOIN pg_class ON conrelid=pg_class.oid
 INNER JOIN pg_namespace ON pg_namespace.oid=pg_class.relnamespace
-WHERE relname LIKE 'nc_%'
+WHERE relname NOT LIKE 'pg_%'
 ORDER BY CASE WHEN contype='f' THEN 0 ELSE 1 END DESC,contype DESC,nspname DESC,relname DESC,conname DESC;
 """  # noqa
 
