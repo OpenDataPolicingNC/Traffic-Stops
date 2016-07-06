@@ -13,6 +13,19 @@ on that day.
 
 Example invalid values: ":", "24:44"
 
+STOP_REASON
+-----------
+
+The input data consists of code references like "13-411(f)", "13-411",
+"21-801.1", "64*", and so on.
+
+The initial processing performed on the code values is to remove blanks.  Next, the code is
+searched for in a spreadsheet provided by SCSJ which maps codes to a small
+number of groupings referred to as "purposes" in the implementation.
+
+XXXXXX
+
+
 GENDER
 ------
 
