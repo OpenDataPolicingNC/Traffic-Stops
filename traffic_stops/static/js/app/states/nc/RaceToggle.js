@@ -27,8 +27,6 @@ _.extend(RaceToggle.prototype, {
   }
 });
 
-if (typeof window.NC === 'undefined') window.NC = {};
-
-Object.assign(window.NC, {
+export default {
   RaceToggle
-});
+};

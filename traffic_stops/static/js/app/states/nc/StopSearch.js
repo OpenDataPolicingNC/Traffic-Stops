@@ -128,10 +128,8 @@ var StopSearchTable = TableBase.extend({
   }
 });
 
-if (typeof window.NC === 'undefined') window.NC = {};
-
-Object.assign(window.NC, {
+export default {
   StopSearchHandler,
   StopSearchTimeSeries,
   StopSearchTable
-});
+};

@@ -141,11 +141,9 @@ var UseOfForceBarChart = VisualBase.extend({
 
 var UseOfForceTable = StopsTable.extend({});
 
-if (typeof window.NC === 'undefined') window.NC = {};
-
-Object.assign(window.NC, {
+export default {
   UseOfForceHandler,
   UseOfForceDonut,
   UseOfForceBarChart,
   UseOfForceTable
-});
+};

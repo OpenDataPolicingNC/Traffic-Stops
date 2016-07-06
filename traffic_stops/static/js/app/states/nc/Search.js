@@ -13,11 +13,9 @@ var SearchRatioDonut = StopRatioDonut.extend({});
 var SearchRatioTimeSeries = StopRatioTimeSeries.extend({});
 var SearchTable = StopsTable.extend({});
 
-if (typeof window.NC === 'undefined') window.NC = {};
-
-Object.assign(window.NC, {
+export default {
   SearchHandler,
   SearchRatioDonut,
   SearchRatioTimeSeries,
   SearchTable
-});
+};

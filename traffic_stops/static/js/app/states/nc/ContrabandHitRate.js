@@ -182,10 +182,8 @@ var ContrabandTable = TableBase.extend({
   }
 });
 
-if (typeof window.NC === 'undefined') window.NC = {};
-
-Object.assign(window.NC, {
+export default {
   ContrabandHitRateHandler,
   ContrabandHitRateBar,
   ContrabandTable
-});
+};

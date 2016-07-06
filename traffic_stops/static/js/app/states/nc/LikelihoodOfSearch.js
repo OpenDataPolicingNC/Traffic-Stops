@@ -246,10 +246,8 @@ var LikelihoodSearchTable = TableBase.extend({
   }
 });
 
-if (typeof window.NC === 'undefined') window.NC = {};
-
-Object.assign(window.NC, {
+export default {
   LikelihoodSearchHandler,
   LikelihoodOfSearch,
   LikelihoodSearchTable
-});
+};
