@@ -3,10 +3,11 @@ import VisualBase from '../../base/VisualBase.js';
 import TableBase from '../../base/TableBase.js';
 import Stops from './defaults.js';
 
-var _ = require('underscore');
-var d3 = require('d3');
-var Backbone = require('backbone');
-var $ = require('jquery');
+import _ from 'underscore';
+import d3 from 'd3';
+import Backbone from 'backbone';
+import $ from 'jquery';
+
 Backbone.$ = $;
 
 var ContrabandHitRateHandler = DataHandlerBase.extend({

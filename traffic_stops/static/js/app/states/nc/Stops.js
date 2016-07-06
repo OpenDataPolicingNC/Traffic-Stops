@@ -7,6 +7,7 @@ import Backbone from 'backbone';
 import _ from 'underscore';
 import d3 from 'd3';
 import $ from 'jquery';
+
 Backbone.$ = $;
 
 export var StopsHandler = DataHandlerBase.extend({

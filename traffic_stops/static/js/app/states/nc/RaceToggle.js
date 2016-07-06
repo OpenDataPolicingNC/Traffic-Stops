@@ -1,5 +1,5 @@
-var _ = require('underscore');
-var $ = require('jquery');
+import _ from 'underscore';
+import $ from 'jquery';
 
 var RaceToggle = function(updateUrl, showEthnicity){
   this.updateUrl = updateUrl;
