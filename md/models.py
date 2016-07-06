@@ -1,5 +1,4 @@
 from django.db import models
-from django_extensions.db.fields import AutoSlugField
 
 from caching.base import CachingManager, CachingMixin
 
@@ -82,7 +81,6 @@ class Stop(CachingMixin, models.Model):
 
 class Agency(CachingMixin, models.Model):
     name = models.CharField(max_length=255)
-    slug = AutoSlugField(populate_from='name', unique=True, max_length=255)
 
     objects = CachingManager()
 
