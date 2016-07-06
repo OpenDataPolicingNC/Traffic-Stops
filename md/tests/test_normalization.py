@@ -3,9 +3,11 @@
 from django.test import TestCase
 import pandas as pd
 
-from md.data.importer import (add_age_column, add_date_column,
-    fix_ETHNICITY, fix_GENDER, fix_SEIZED, fix_STOP_REASON,
-    fix_TIME_OF_STOP)
+from md.data.importer import (
+    add_age_column, add_date_column, add_purpose_column, fix_ETHNICITY,
+    fix_GENDER, fix_SEIZED, fix_STOP_REASON, fix_TIME_OF_STOP
+)
+from md.models import UNKNOWN_PURPOSE
 
 
 class TestFieldNormalization(TestCase):
@@ -112,3 +114,26 @@ class TestFieldNormalization(TestCase):
         self.assertEqual(stops.computed_AGE[0], 23)
         self.assertEqual(stops.computed_AGE[1], 0)
         self.assertEqual(stops.computed_AGE[2], 95)
+
+    def test_purpose(self):
+        data = (
+            # (value-from-raw-data-after-removing-blanks, corresponding-value-from-PURPOSE_CHOICES)
+            #
+            # Most of the purposes are never assigned explicitly in the code, so
+            # "constants" don't exist for most.
+            ('21-202(h1)', 2),
+            ('16-303(c)', 9),
+            ('21-901.1(b)', 1),
+            ('21-1124.1(b)', 9),
+            ('64*', 5),
+            ('409-b', UNKNOWN_PURPOSE),
+            ('22-216', 5),
+        )
+        stops = pd.DataFrame({
+            'STOP_REASON': [
+                x for x, _ in data
+            ]
+        })
+        add_purpose_column(stops)
+        for i, e in enumerate(data):
+            self.assertEqual(stops.purpose[i], e[1])
