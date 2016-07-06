@@ -3,9 +3,7 @@ from md.models import Agency
 
 
 class AgencyAdmin(admin.ModelAdmin):
-    prepopulated_fields = {
-        "slug": ("name",),
-    }
+    pass
 
 
 admin.site.register(Agency, AgencyAdmin)
