@@ -13,6 +13,16 @@ on that day.
 
 Example invalid values: ":", "24:44"
 
+STOP_REASON
+-----------
+
+The input data consists of code references like "13-411(f)", "13-411", "21-801.1",
+"64*", and so on.  This is transformed to a stop purpose, like 'Seat Belt Violation',
+'Driving While Impaired', and so on.  A spreadsheet provided by SCSJ maps stop
+reasons (codes) to the various purposes.  The codes are simplified in the spreadsheet
+reflecting that subsections, paragraphs, etc. aren't relevant to the mapping, so
+the raw stop codes are similarly simplified before looking them up.
+
 GENDER
 ------
 
