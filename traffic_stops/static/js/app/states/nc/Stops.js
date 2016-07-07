@@ -7,6 +7,7 @@ import Backbone from 'backbone';
 import _ from 'underscore';
 import d3 from 'd3';
 import $ from 'jquery';
+
 Backbone.$ = $;
 
 export var StopsHandler = DataHandlerBase.extend({
@@ -243,12 +244,10 @@ export var StopsTable = TableBase.extend({
   }
 });
 
-if (typeof window.NC === 'undefined') window.NC = {};
-
-Object.assign(window.NC, {
+export default {
   Stops,
   StopsHandler,
   StopRatioDonut,
   StopRatioTimeSeries,
   StopsTable
-});
+};
