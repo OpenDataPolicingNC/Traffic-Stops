@@ -60,13 +60,6 @@ class TestFieldNormalization(TestCase):
         for original, normalized in data:
             self.assertEqual(fix_SEIZED(original), normalized)
 
-    def test_stop_reason(self):
-        """
-        Final STOP_REASON normalization not yet determined;
-        don't bother testing yet.
-        """
-        fix_STOP_REASON('13-111(a)')
-
     def test_time_of_stop(self):
         data = (
             ('11:23', '11:23'),
@@ -117,23 +110,32 @@ class TestFieldNormalization(TestCase):
 
     def test_purpose(self):
         data = (
-            # (value-from-raw-data-after-removing-blanks, corresponding-value-from-PURPOSE_CHOICES)
+            # (STOP_REASON-value-from-raw-data, cleaned-STOP_REASON, corresponding-value-from-PURPOSE_CHOICES)
             #
             # Most of the purposes are never assigned explicitly in the code, so
-            # "constants" don't exist for most.
-            ('21-202(h1)', 2),
-            ('16-303(c)', 9),
-            ('21-901.1(b)', 1),
-            ('21-1124.1(b)', 9),
-            ('64*', 5),
-            ('409-b', UNKNOWN_PURPOSE),
-            ('22-216', 5),
+            # "constants" like UNKNOWN_PURPOSE don't exist for most.
+            ('21-202(h1)', '21-202', 2),
+            (' 16-303(c)', '16-303', 9),
+            ('21-901.1(b)', '21-901', 1),
+            ('21-1124.1(b)', '21-1124', 9),
+            ('64*', '64', 5),
+            ('64 ', '64', 5),
+            ('409-b', '409-b', UNKNOWN_PURPOSE),
+            (' 22 - 216', '22-216', 5),
+            ('22-412.3(b)', '22-412', 0),
+            ('22-412.3(c2)', '22-412', 0),
+            ('22-412', '22-412', 0),
         )
         stops = pd.DataFrame({
             'STOP_REASON': [
-                x for x, _ in data
+                x for x, _, _ in data
             ]
         })
+        stops['STOP_REASON'] = stops['STOP_REASON'].apply(fix_STOP_REASON)
         add_purpose_column(stops)
         for i, e in enumerate(data):
-            self.assertEqual(stops.purpose[i], e[1])
+            raw_reason, cleaned_reason, expected_purpose = e
+            self.assertEqual(stops.STOP_REASON[i], cleaned_reason)
+            self.assertEqual(stops.purpose[i], expected_purpose, 'Expected purpose %d for "%s", got %d' % (
+                expected_purpose, raw_reason, stops.purpose[i]
+            ))

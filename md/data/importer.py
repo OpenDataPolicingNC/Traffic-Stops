@@ -39,8 +39,11 @@ ETHNICITY_TO_CODE = {
     'OTHER': 'U'
 }
 
-STOP_REASON_cleanup_re = re.compile(r'^ *(\d+) *- *(\d+) *\(.*\) *$')  # used to remove blanks
-STOP_REASON_simplify_re = re.compile(r'^(\d+)-(\d+)')  # used to ignore minor references
+# Helpers for cleaning raw STOP_REASON:
+# used to remove blanks and paragraph
+STOP_REASON_cleanup_a_re = re.compile(r'^ *(\d+) *- *(\d+)\.?\d?\d? *(\(.*\))? *$')
+# used to remove blanks and asterisk
+STOP_REASON_cleanup_b_re = re.compile(r'^ *(\d\d)\*? *$')
 
 DOB_re = re.compile(r'^(\d\d?)/(\d\d?)/(\d\d?)$')
 
@@ -60,16 +63,33 @@ def load_STOP_REASON_normalization_rules():
 
     Output: Fill in global dictionary PURPOSE_BY_STOP_REASON.
     """
-    CELL_re = re.compile(r'^(\d\d?-\d\d\d\d?|\d\d\*|\d\d)')
-    BLANK_re = re.compile(r'^ *$')
+
+    # expressions used to clean stop reasons as they appear in
+    # STOP_REASON_CSV
+    twodigit_code_re = re.compile(r'^(\d\d)\*? *$')
+    complex_code_re = re.compile(r'^(\d\d?-\d\d\d\d?)(\(|\.|-| |$)')
+    blank_re = re.compile(r'^ *$')
 
     def clean_cell(s, line_number):
-        m = CELL_re.match(s)
-        if not m:
-            raise ValueError('Line %d of %s has bad cell value "%s"' % (
+        """
+        Extract a two-digit or complex code from a cell of the CSV,
+        removing extraneous text.
+
+        E.g.,
+          "64*" => "64"
+          "22-412 - Seat belts required" => "22-412"
+          "13-106(d2)" => "13-106"
+          "10-309 (c)" => "13-309"
+        """
+        m = twodigit_code_re.match(s)
+        if m:
+            return m.group(1)
+        m = complex_code_re.match(s)
+        if m:
+            return m.group(1)
+        raise ValueError('Line %d of %s has bad cell value "%s"' % (
                 line_number, STOP_REASON_CSV, s
-            ))
-        return m.group(1)
+        ))
 
     with open(STOP_REASON_CSV, 'r', encoding='utf-8') as csvfile:
         reader = csv.reader(csvfile)
@@ -90,8 +110,14 @@ def load_STOP_REASON_normalization_rules():
         for row in reader:
             line_number += 1
             for i, val in enumerate(row):
-                if not BLANK_re.match(val):
+                if not blank_re.match(val):
                     val = clean_cell(val, line_number)
+                    # Does STOP_REASON_CSV have the same stop reason in multiple
+                    # columns?
+                    if val in PURPOSE_BY_STOP_REASON and PURPOSE_BY_STOP_REASON[val] != i:
+                        raise ValueError('"%s" is in columns %d and %d' % (
+                            val, PURPOSE_BY_STOP_REASON[val], i
+                        ))
                     PURPOSE_BY_STOP_REASON[val] = i
 
 
@@ -126,21 +152,25 @@ def fix_SEIZED(s):
 
 
 def fix_STOP_REASON(s):
-    m = STOP_REASON_cleanup_re.match(s)
+    """
+    This takes a raw STOP_REASON value and clean it up and simplify
+    it enough to find it in STOP_REASON_CSV.
+    """
+    m = STOP_REASON_cleanup_a_re.match(s)
     if m:
         return m.group(1) + '-' + m.group(2)
+    m = STOP_REASON_cleanup_b_re.match(s)
+    if m:
+        return m.group(1)
     else:
         return s
 
 
 def purpose_from_STOP_REASON(s):
     normalized = PURPOSE_BY_STOP_REASON.get(s)
-    if not normalized:
-        m = STOP_REASON_simplify_re.match(s)
-        if m:
-            normalized = PURPOSE_BY_STOP_REASON.get('%s-%s' % (m.group(1), m.group(2)))
-    if not normalized:
-        logger.info('Bad STOP_REASON: "%s"', s)
+    if normalized is None:
+        if s not in ('', '-'):
+            logger.info('Bad STOP_REASON: "%s"', s)
         normalized = UNKNOWN_PURPOSE
     return normalized
 
@@ -223,6 +253,7 @@ def process_raw_data(stops):
     stops['GENDER'] = stops['GENDER'].apply(fix_GENDER)
     stops['SEIZED'] = stops['SEIZED'].apply(fix_SEIZED)
     stops['ETHNICITY'] = stops['ETHNICITY'].apply(fix_ETHNICITY)
+    stops['STOP_REASON'] = stops['STOP_REASON'].apply(fix_STOP_REASON)
 
     # Add date, age, purpose, and index columns
     add_date_column(stops)
