@@ -1,5 +1,5 @@
 from django.db import connections
-from django.db.models import Count
+from django.db.models import Count, Q
 
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
@@ -10,11 +10,10 @@ from rest_framework_extensions.key_constructor.constructors import DefaultObject
 
 from md.models import Agency, Stop
 from md import serializers
-from md.models import ETHNICITY_CHOICES
+from md.models import ETHNICITY_CHOICES, PURPOSE_CHOICES
 from tsdata.utils import GroupedData
 
 
-# PURPOSE_CHOICES to be added after ODPM-31
 GROUP_DEFAULTS = {k: 0 for k in dict(ETHNICITY_CHOICES).values()}
 
 class QueryKeyConstructor(DefaultObjectKeyConstructor):
@@ -44,7 +43,10 @@ class AgencyViewSet(viewsets.ReadOnlyModelViewSet):
             data = {}
             if 'year' in group_by:
                 data['year'] = stop['year'].year
-            # XXX check for 'purpose' here after ODPM-31 is delivered.
+            if 'purpose' in group_by:
+                purpose = dict(PURPOSE_CHOICES).get(stop['purpose'],
+                                              stop['purpose'])
+                data['purpose'] = purpose
             if 'ethnicity' in group_by:
                 ethnicity = dict(ETHNICITY_CHOICES).get(stop['ethnicity'],
                                        stop['ethnicity'])
@@ -57,6 +59,45 @@ class AgencyViewSet(viewsets.ReadOnlyModelViewSet):
         results = GroupedData(by='year', defaults=GROUP_DEFAULTS)
         self.query(results, group_by=('year', 'ethnicity'))
         return Response(results.flatten())
+
+    @detail_route(methods=['get'])
+    @cache_response(key_func=query_cache_key_func)
+    def stops_by_reason(self, request, pk=None):
+        response = {}
+        # stops
+        results = GroupedData(by=('purpose', 'year'), defaults=GROUP_DEFAULTS)
+        self.query(results, group_by=('purpose', 'year', 'ethnicity'))
+        response['stops'] = results.flatten()
+        # searches
+        results = GroupedData(by=('purpose', 'year'), defaults=GROUP_DEFAULTS)
+        self.query(results, group_by=('purpose', 'year', 'ethnicity'),
+                   filter_=Q(search_conducted='Y'))
+        response['searches'] = results.flatten()
+        return Response(response)
+
+    @detail_route(methods=['get'])
+    @cache_response(key_func=query_cache_key_func)
+    def searches(self, request, pk=None):
+        results = GroupedData(by='year', defaults=GROUP_DEFAULTS)
+        q = Q(search_conducted='Y')
+        self.query(results, group_by=('year', 'ethnicity'), filter_=q)
+        return Response(results.flatten())
+
+    @detail_route(methods=['get'])
+    @cache_response(key_func=query_cache_key_func)
+    def contraband_hit_rate(self, request, pk=None):
+        response = {}
+        # searches
+        results = GroupedData(by='year', defaults=GROUP_DEFAULTS)
+        q = Q(search_conducted='Y')
+        self.query(results, group_by=('year', 'ethnicity'), filter_=q)
+        response['searches'] = results.flatten()
+        # searches
+        results = GroupedData(by='year', defaults=GROUP_DEFAULTS)
+        q = Q(seized='Y')
+        self.query(results, group_by=('year', 'ethnicity'), filter_=q)
+        response['contraband'] = results.flatten()
+        return Response(response)
 
     # for additional methods related to searches, look first at most recent
     # corresponding nc code
