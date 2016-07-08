@@ -177,7 +177,7 @@ export var StopRatioDonut = VisualBase.extend({
   triggerRaceToggle: () => null
 });
 
-var StopRatioTimeSeries = VisualBase.extend({
+export var StopRatioTimeSeries = VisualBase.extend({
   defaults: {
     width: 750,
     height: 375
@@ -239,7 +239,7 @@ var StopRatioTimeSeries = VisualBase.extend({
   triggerRaceToggle: () => null
 });
 
-var StopsTable = TableBase.extend({
+export var StopsTable = TableBase.extend({
   get_tabular_data: function(){
     var header, row, rows = [];
 
@@ -259,11 +259,9 @@ var StopsTable = TableBase.extend({
   }
 });
 
-if (typeof window.MD === 'undefined') window.MD = {};
-
-Object.assign(window.MD, {
+export default {
   StopsHandler,
   StopRatioDonut,
   StopRatioTimeSeries,
   StopsTable
-});
+};
