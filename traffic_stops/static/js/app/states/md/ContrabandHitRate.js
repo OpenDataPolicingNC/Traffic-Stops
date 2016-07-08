@@ -11,26 +11,26 @@ import $ from 'jquery';
 Backbone.$ = $;
 
 var ContrabandHitRateHandler = DataHandlerBase.extend({
-  clean_data: function(){
+  clean_data: function () {
 
     var years,
         raw = this.get("raw_data");
 
     // get available years
-    years = d3.set(raw.searches.map(function(v){return v.year;})).values();
-    years.filter(function(v){return (v >= Stops.start_year);});
+    years = d3.set(raw.searches.map((v) => v.year)).values();
+    years.filter((v) => (v >= Stops.start_year));
     years.push("Total");
 
     // build totals for all years
-    var getTotals = function(arr){
+    var getTotals = (arr) => {
       var total = _.clone(arr[0]);
-      _.keys(total).forEach(function(key){
+      _.keys(total).forEach((key) => {
         total[key] = 0;
       });
 
       // sum data from all years
-      arr.forEach(function(year){
-        _.keys(year).forEach(function(key){
+      arr.forEach((year) => {
+        _.keys(year).forEach((key) => {
           total[key] += year[key];
         });
       });
@@ -59,11 +59,12 @@ var ContrabandHitRateBar = VisualBase.extend({
     width: 750,
     height: 375
   },
-  setDefaultChart: function(){
+
+  setDefaultChart: function () {
     this.chart = nv.models.multiBarHorizontalChart()
-      .x(function(d){ return d.label; })
-      .y(function(d){ return d.value; })
-      .barColor(function(d,i){return Stops.colors[1];})
+      .x((d) => d.label)
+      .y((d) => d.value)
+      .barColor((d, i) => Stops.colors[1])
       .width(this.get("width"))
       .height(this.get("height"))
       .margin({top: 20, right: 50, bottom: 20, left: 180})
@@ -80,7 +81,8 @@ var ContrabandHitRateBar = VisualBase.extend({
 
     this.chart.valueFormat(d3.format('%'));
   },
-  drawStartup: function(){
+
+  drawStartup: function () {
     // get year options for pulldown menu
     var selector = $('<select>'),
         year_options = this.data.years,
@@ -104,7 +106,8 @@ var ContrabandHitRateBar = VisualBase.extend({
 
     this.selector = selector;
   },
-  drawChart: function(){
+
+  drawChart: function () {
 
     d3.select(this.svg[0])
             .datum(this.dataset)
@@ -116,16 +119,17 @@ var ContrabandHitRateBar = VisualBase.extend({
 
     nv.utils.windowResize(this.chart.update);
   },
-  _getDataset: function(year){
+
+  _getDataset: function (year) {
     var raw = this.data.raw,
-        searches_arr = raw.searches.filter(function(v){return v.year===year;}),
-        contraband_arr = raw.contraband.filter(function(v){return v.year===year;}),
+        searches_arr = raw.searches.filter((v) => v.year===year),
+        contraband_arr = raw.contraband.filter((v) => v.year===year),
         dataset = {
             color: Stops.single_color,
             key: "Contraband hit-rates",
             values: []
         },
-        items = (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races,
+        items = Stops.ethnicities,
         ratio;
 
     if (searches_arr.length===1 && contraband_arr.length===1){
@@ -133,12 +137,12 @@ var ContrabandHitRateBar = VisualBase.extend({
       searches_arr = searches_arr[0];
       contraband_arr = contraband_arr[0];
 
-      // build a bar for each race
-      items.forEach(function(race, i){
-        ratio = contraband_arr[race] / searches_arr[race] || 0;
+      // build a bar for each ethnicity
+      items.forEach((ethnicity, i) => {
+        ratio = (contraband_arr[ethnicity] / searches_arr[ethnicity]) || 0;
         if (!isFinite(ratio)) ratio = undefined;
         dataset.values.push({
-          "label": Stops.pprint.get(race),
+          "label": ethnicity,
           "value": ratio
         });
       });
@@ -146,32 +150,27 @@ var ContrabandHitRateBar = VisualBase.extend({
     }
     return [dataset];
   },
-  triggerRaceToggle: function(e, v){
-    this.set('showEthnicity', v);
-    this.selector.trigger('change');
-  }
+
+  triggerRaceToggle: () => null
 });
 
 var ContrabandTable = TableBase.extend({
-  get_tabular_data: function(){
+  get_tabular_data: function () {
     var header, row, rows = [], se, cb;
 
     // create header
     header = ["Year"];
-    header.push.apply(header, Stops.pprint.values());
+    header.push.apply(header, Stops.ethnicities);
     rows.push(header);
 
     var raw = this.data.raw,
         searches = _.object(_.pluck(raw.searches, 'year'), raw.searches),
         contrabands = _.object(_.pluck(raw.contraband, 'year'), raw.contraband);
 
-    _.keys(searches).forEach(function(yr){
+    _.keys(searches).forEach((yr) => {
       se = searches[yr];
       cb = contrabands[yr] || {};
       row = [yr];
-      Stops.races.forEach(function(r){
-        row.push((cb[r]||0).toLocaleString() + "/" + (se[r]||0).toLocaleString());
-      });
       Stops.ethnicities.forEach(function(e){
         row.push((cb[e]||0).toLocaleString() + "/" + (se[e]||0).toLocaleString());
       });
