@@ -125,7 +125,48 @@
 </div>
 {% endblock search-display %}
 
-{% block lsb-display %}{% endblock lsb-display %}
+{% block lsb-display %}
+  <div class="row">
+    <div id="lhs_div" class="col-md-offset-2 col-md-8">
+      <h3>Likelihood of search by stop-cause</h3>
+
+      <div role="tabpanel">
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active">
+            <a href="#lsb_div" aria-controls="lsb_div" role="tab" data-toggle="tab">Chart</a></li>
+          <li role="presentation">
+            <a href="#lsb_data" aria-controls="lsb_data" role="tab" data-toggle="tab">Data</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="lsb_div">
+            <svg id="lsb"></svg>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="lsb_data">
+          </div>
+        </div>
+
+      </div>
+
+      <p class="help-block">
+        This chart displays the relative statistical likelihood of one
+        ethnic group being searched as compared to another group for a
+        given stop cause. Adjusting the drop down menu will display the relative
+        likelihood of search relative to another ethnic group on a year-by-year
+        basis. Click the colored circles above the graph to display the
+        comparisons between various ethnic groups.
+        <br><br>
+        Click the "Data" tab to review the actual raw counts from the
+        MD Department of Justice.
+      </p>
+
+    </div>
+  </div>
+{% endblock lsb-display %}
+
 {% block contraband-display %}{% endblock contraband-display %}
 {% block use-of-force-display %}{% endblock use-of-force-display %}
 
@@ -135,9 +176,11 @@
 {% if officer_id %}
   var stop_handler = new MD.StopsHandler({url: "{% url 'md:agency-api-stops' object.pk %}?officer={{officer_id|urlencode}}"});
   var search_handler = new MD.SearchHandler({url: "{% url 'md:agency-api-searches' object.pk %}?officer={{officer_id|urlencode}}"});
+  var lhs_handler = new MD.LikelihoodSearchHandler({url: "{% url 'md:agency-api-stops-by-reason' object.pk %}?officer={{officer_id|urlencode}}"});
 {% else %}
   var stop_handler = new MD.StopsHandler({url: "{% url 'md:agency-api-stops' object.pk %}"});
   var search_handler = new MD.SearchHandler({url: "{% url 'md:agency-api-searches' object.pk %}"});
+  var lhs_handler = new MD.LikelihoodSearchHandler({url: "{% url 'md:agency-api-stops-by-reason' object.pk %}"});
 {% endif %}
 
 new MD.StopRatioDonut({handler: stop_handler, selector: "#stop_race_pie"});
@@ -147,6 +190,9 @@ new MD.StopsTable({handler: stop_handler, selector: "#stop_race_data"});
 new MD.SearchRatioDonut({handler: search_handler, selector: "#search_race_pie"});
 new MD.SearchRatioTimeSeries({handler: search_handler, selector: "#search_race_line"});
 new MD.SearchTable({handler: search_handler, selector: "#search_race_data"});
+
+new MD.LikelihoodOfSearch({handler: lhs_handler, selector: "#lsb"});
+new MD.LikelihoodSearchTable({handler: lhs_handler, selector: "#lsb_data"});
 
 {% comment %}</script>{% endcomment %}
 {% endblock graph-code %}
