@@ -16,6 +16,7 @@ from tsdata.utils import GroupedData
 
 GROUP_DEFAULTS = {k: 0 for k in dict(ETHNICITY_CHOICES).values()}
 
+
 class QueryKeyConstructor(DefaultObjectKeyConstructor):
     params_query = bits.QueryParamsKeyBit(['officer'])
 
@@ -45,11 +46,11 @@ class AgencyViewSet(viewsets.ReadOnlyModelViewSet):
                 data['year'] = stop['year'].year
             if 'purpose' in group_by:
                 purpose = dict(PURPOSE_CHOICES).get(stop['purpose'],
-                                              stop['purpose'])
+                                                stop['purpose'])
                 data['purpose'] = purpose
             if 'ethnicity' in group_by:
                 ethnicity = dict(ETHNICITY_CHOICES).get(stop['ethnicity'],
-                                       stop['ethnicity'])
+                                                    stop['ethnicity'])
                 data[ethnicity] = stop['count']
             results.add(**data)
 
@@ -92,12 +93,9 @@ class AgencyViewSet(viewsets.ReadOnlyModelViewSet):
         q = Q(search_conducted='Y')
         self.query(results, group_by=('year', 'ethnicity'), filter_=q)
         response['searches'] = results.flatten()
-        # searches
+        # contraband
         results = GroupedData(by='year', defaults=GROUP_DEFAULTS)
         q = Q(seized='Y')
         self.query(results, group_by=('year', 'ethnicity'), filter_=q)
         response['contraband'] = results.flatten()
         return Response(response)
-
-    # for additional methods related to searches, look first at most recent
-    # corresponding nc code
