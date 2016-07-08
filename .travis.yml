@@ -23,9 +23,6 @@ before_script:
   - createdb -E UTF-8 traffic_stops -U postgres -O $USER
   - createdb -E UTF-8 traffic_stops_nc -U postgres -O $USER
   - createdb -E UTF-8 traffic_stops_md -U postgres -O $USER
-  - python manage.py migrate --database=traffic_stops_nc nc
-  - python manage.py migrate --database=traffic_stops_md md
-  - python manage.py migrate
 
 script:
   - coverage run manage.py test

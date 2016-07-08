@@ -1,5 +1,4 @@
 from django.db import models
-from django_extensions.db.fields import AutoSlugField
 
 from caching.base import CachingManager, CachingMixin
 
@@ -11,6 +10,26 @@ YN_CHOICES = (
     ("Y", "Yes"),
     ("N", "No")
 )
+
+UNKNOWN_PURPOSE = 11
+PURPOSE_CHOICES = (
+    (0, 'Seat Belt Violation'),
+    (1, 'Speed Limit Violation'),
+    (2, 'Stop Light/Sign Violation'),
+    (3, 'Driving While Impaired'),
+    (4, 'Safe Movement Violation'),
+    (5, 'Vehicle Equipment Violation'),
+    (6, 'Vehicle Regulatory Violation'),
+    (7, 'Investigation'),
+    (8, 'Non-motor Vehicle Violations'),
+    (9, 'Other Motor Vehicle Violation'),
+    (10, 'Failure to remain at scene of accident'),
+    (UNKNOWN_PURPOSE, 'Unable to find statute/other'),
+)
+
+PURPOSE_BY_INDEX = [
+    x for _, x in PURPOSE_CHOICES
+]
 
 GENDER_CHOICES = (
     ("M", "Male"),
@@ -35,6 +54,7 @@ class Stop(CachingMixin, models.Model):
     """
     stop_id = models.IntegerField(primary_key=True, default=1)
     date = models.DateTimeField(null=True)
+    purpose = models.PositiveSmallIntegerField(choices=PURPOSE_CHOICES, default=UNKNOWN_PURPOSE)
     stop_date_text = models.CharField(max_length=20, blank=True, default='')
     stop_time_text = models.CharField(max_length=20, blank=True, default='')
     stop_location = models.CharField(max_length=1024)
@@ -61,7 +81,6 @@ class Stop(CachingMixin, models.Model):
 
 class Agency(CachingMixin, models.Model):
     name = models.CharField(max_length=255)
-    slug = AutoSlugField(populate_from='name', unique=True, max_length=255)
 
     objects = CachingManager()
 

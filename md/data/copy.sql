@@ -14,12 +14,12 @@ COPY md_stop (stop_id, stop_date_text, stop_time_text,
               stop_location, duration_text, stop_reason, search_conducted,
               search_reason, seized, gender,
               date_of_birth_text, ethnicity,
-              officer_id, agency_description, date, age
+              officer_id, agency_description, date, age, purpose
              ) FROM :'import_file' WITH
     DELIMITER ','
     NULL AS ''
     CSV HEADER
-    FORCE NOT NULL search_conducted, search_reason, seized, stop_reason, gender, ethnicity, stop_location;
+    FORCE NOT NULL search_conducted, search_reason, seized, stop_reason, gender, ethnicity, stop_location, purpose;
 
 -- -- populate md_agency lookup table
 INSERT INTO md_agency (name) (
