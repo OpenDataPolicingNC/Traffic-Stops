@@ -86,30 +86,23 @@ export var StopRatioTimeSeries = C.StopRatioTimeSeriesBase.extend({
       });
       i += 1;
     });
-    
+
     return data;
   },
 
   triggerRaceToggle: () => null
 });
 
-export var StopsTable = TableBase.extend({
+export var StopsTable = C.StopsTableBase.extend({
   get_tabular_data: function(){
-    var header, row, rows = [];
+    let rows = [];
 
     // create header
-    header = ["Year"];
+    let header = ["Year"];
     header.push.apply(header, Stops.ethnicities);
     rows.push(header);
 
-    // create data rows
-    this.data.pie.forEach(function(k, v){
-      row = [k];
-      Stops.ethnicities.forEach(function(e){ row.push((v.get(e)||0).toLocaleString()); });
-      rows.push(row);
-    });
-
-    return rows;
+    return this.add_data_rows(rows, [Stops.ethnicities]);
   }
 });
 

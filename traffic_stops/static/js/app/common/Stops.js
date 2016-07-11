@@ -2,6 +2,7 @@ import _ from 'underscore';
 import d3 from 'd3';
 
 import VisualBase from '../base/VisualBase.js';
+import TableBase from '../base/TableBase.js';
 
 /***
  * StopsHandler data processing helper functions
@@ -166,5 +167,21 @@ export const StopRatioTimeSeriesBase = VisualBase.extend({
           .attr('viewBox', `0 0 ${this.get('width')} ${this.get('height')}`)
           .call(this.chart);
       });
+  }
+});
+
+
+export const StopsTableBase = TableBase.extend({
+  add_data_rows: function (rows = [], categories) {
+    // create data rows
+    this.data.pie.forEach((k, v) => {
+      let row = [k];
+      categories.forEach((type) => {
+        type.forEach((r) => { row.push((v.get(r)||0).toLocaleString()); });
+      })
+      rows.push(row);
+    });
+
+    return rows;
   }
 });
