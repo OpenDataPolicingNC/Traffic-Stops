@@ -1,5 +1,6 @@
 import DataHandlerBase from '../base/DataHandlerBase.js';
 import VisualBase from '../base/VisualBase.js';
+import TableBase from '../base/TableBase.js';
 import d3 from 'd3';
 import _ from 'underscore';
 import $ from 'jquery';
@@ -203,5 +204,52 @@ export const LikelihoodOfSearchBase = VisualBase.extend({
     });
 
     return dataset;
+  }
+});
+
+export const LikelihoodSearchTableBase = TableBase.extend({
+  defaults: {},
+  _get_header_rows: function () { throw "abstract method: requires override"; },
+
+  get_tabular_data: function(){
+    var header, row, rows = [];
+
+    // create header
+    header = ["Year", "Stop-reason"];
+    header.push.apply(header, this._get_header_rows());
+    rows.push(header);
+
+    var stop, search, stop_purp, search_purp, v1, v2,
+        purposes = this.defaults.purpose_order.keys(),
+        stops = this.data.raw.stops,
+        searches = this.data.raw.searches,
+        get_row = (stops, searches, term) => {
+          var stop = (stops !== undefined) ? stops[term] : 0,
+              search = (searches !== undefined) ? searches[term] : 0;
+          return `${search}/${stop}`;
+        };
+
+    // create data rows
+    this.data.years.forEach((yr) => {
+        stop = stops.filter((d) => d.year == yr);
+        search = searches.filter((d) => d.year == yr);
+        purposes.forEach((purp) => {
+          row = [yr, purp];
+          stop_purp = (stop.length > 0) ? stop.filter((d) =>  d.purpose == purp) : undefined;
+          search_purp = (search.length > 0) ? search.filter((d) => d.purpose == purp) : undefined;
+          stop_purp = (stop_purp && stop_purp.length === 1) ? stop_purp[0] : undefined;
+          search_purp = (search_purp && search_purp.length === 1) ? search_purp[0] : undefined;
+
+          this.types.forEach((type) => {
+            type.forEach((r) => {
+              row.push(get_row(stop_purp, search_purp, r));
+            })
+          })
+
+          rows.push(row);
+        });
+    });
+
+    return rows;
   }
 });
