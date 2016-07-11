@@ -54,7 +54,7 @@ export const LikelihoodSearchHandlerBase = DataHandlerBase.extend({
 
   clean_data: function () {
     let raw = this.get("raw_data");
-    let years = get_years(raw, this.defaults);
+    let years = get_years(raw, this.Stops);
 
     if (raw.stops.length>0) {
       raw.stops = get_totals(raw.stops, this.types);
@@ -73,7 +73,7 @@ export const LikelihoodSearchHandlerBase = DataHandlerBase.extend({
 });
 
 export const LikelihoodOfSearchBase = VisualBase.extend({
-  defaults: {},
+  defaults: { }, // abstract property, requires override
   _items: function () { throw "abstract method: requires override"; },
   _base: function () { throw "abstract method: requires override"; },
   _defRace: function () { throw "abstract method: requires override"; },
@@ -160,14 +160,14 @@ export const LikelihoodOfSearchBase = VisualBase.extend({
       if (race === base) return;
 
       var bar = {
-          color: this.defaults.Stops.colors[i],
+          color: this.Stops.colors[i],
           key: `${this._pprint(race)} vs. ${baseUpper}`,
           values: [],
           disabled: (race !== defRace)
       };
 
       // build a bar for each violation
-      this.defaults.Stops.purpose_order.forEach((purpose) => {
+      this.Stops.purpose_order.forEach((purpose) => {
         // optional reporting requirement; remove as it's generally unreported
         if (purpose === "Checkpoint") return;
 
@@ -193,7 +193,7 @@ export const LikelihoodOfSearchBase = VisualBase.extend({
           bar.values.push({
             label: purpose,
             value: rate,
-            order: this.defaults.Stops.purpose_order.get(purpose)
+            order: this.Stops.purpose_order.get(purpose)
           });
         }
       });
@@ -208,11 +208,11 @@ export const LikelihoodOfSearchBase = VisualBase.extend({
 });
 
 export const LikelihoodSearchTableBase = TableBase.extend({
-  defaults: {},
+  Stops: { }, // abstract property, requires override
   types: [],
   _get_header_rows: function () { throw "abstract method: requires override"; },
 
-  get_tabular_data: function(){
+  get_tabular_data: function () {
     var header, row, rows = [];
 
     // create header
@@ -221,7 +221,7 @@ export const LikelihoodSearchTableBase = TableBase.extend({
     rows.push(header);
 
     var stop, search, stop_purp, search_purp, v1, v2,
-        purposes = this.defaults.purpose_order.keys(),
+        purposes = this.Stops.purpose_order.keys(),
         stops = this.data.raw.stops,
         searches = this.data.raw.searches,
         get_row = (stops, searches, term) => {

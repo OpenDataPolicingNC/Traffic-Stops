@@ -40,7 +40,7 @@ export const ContrabandHitRateHandlerBase = DataHandlerBase.extend({
   clean_data: function () {
 
     let raw = this.get("raw_data");
-    let years = get_years(raw, this.defaults);
+    let years = get_years(raw, this.Stops);
 
     if (raw.searches.length > 0) {
       raw.searches = get_totals(raw.searches);
@@ -59,6 +59,7 @@ export const ContrabandHitRateHandlerBase = DataHandlerBase.extend({
 });
 
 export const ContrabandHitRateBarBase = VisualBase.extend({
+  Stops: { }, // abstract property, requires override
   _items: function () { throw "abstract method: requires override"; },
   _pprint: function () { throw "abstract method: requires override"; },
   triggerRaceToggle: function () { throw "abstract method: requires override"; },
@@ -67,7 +68,7 @@ export const ContrabandHitRateBarBase = VisualBase.extend({
     this.chart = nv.models.multiBarHorizontalChart()
       .x((d) => d.label)
       .y((d) => d.value)
-      .barColor((d, i) => this.defaults.Stops.colors[1])
+      .barColor((d, i) => this.Stops.colors[1])
       .width(this.get("width"))
       .height(this.get("height"))
       .margin({top: 20, right: 50, bottom: 20, left: 180})
@@ -127,7 +128,7 @@ export const ContrabandHitRateBarBase = VisualBase.extend({
         searches_arr = raw.searches.filter((v) => v.year === year),
         contraband_arr = raw.contraband.filter((v) => v.year === year),
         dataset = {
-            color: this.defaults.Stops.single_color,
+            color: this.Stops.single_color,
             key: "Contraband hit-rates",
             values: []
         },

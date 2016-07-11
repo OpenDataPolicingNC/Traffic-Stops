@@ -76,7 +76,7 @@ export function build_line_data (data, types, Stops) {
 
 export const StopsHandlerBase = DataHandlerBase.extend({
   types: [],
-  defaults: {},
+  Stops: {},
 
   clean_data: function () {
 
@@ -85,10 +85,10 @@ export const StopsHandlerBase = DataHandlerBase.extend({
     let total = build_totals(data);
 
     // build data for pie-chart
-    let pie = build_pie_data(data, total, this.defaults);
+    let pie = build_pie_data(data, total, this.Stops);
 
     // build data for line-chart
-    let line = build_line_data(data, this.types, this.defaults);
+    let line = build_line_data(data, this.types, this.Stops);
 
     // set object data
     this.set('data', {
@@ -101,6 +101,7 @@ export const StopsHandlerBase = DataHandlerBase.extend({
 })
 
 export const StopRatioDonutBase = VisualBase.extend({
+  Stops: { }, // abstract property, requires override
   _items: function () { throw "abstract method: requires override"; },
   _pprint: function () { throw "abstract method: requires override"; },
   triggerRaceToggle: function () { throw "abstract method: requires override"; },
@@ -173,7 +174,7 @@ export const StopRatioDonutBase = VisualBase.extend({
       data.push({
         "key": this._pprint(d),
         "value": selected.get(d) || 0,
-        "color": this.defaults.Stops.colors[i]
+        "color": this.Stops.colors[i]
       });
     });
 
@@ -182,6 +183,7 @@ export const StopRatioDonutBase = VisualBase.extend({
 });
 
 export const StopRatioTimeSeriesBase = VisualBase.extend({
+  Stops: { }, // abstract property, requires override
   _items: function () { throw "abstract method: requires override"; },
   _pprint: function () { throw "abstract method: requires override"; },
 
@@ -236,7 +238,7 @@ export const StopRatioTimeSeriesBase = VisualBase.extend({
       data.push({
         key: this._pprint(key),
         values: vals,
-        color: this.defaults.Stops.colors[i],
+        color: this.Stops.colors[i],
         disabled: disabled
       });
       i += 1;

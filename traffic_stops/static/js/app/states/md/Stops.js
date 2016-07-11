@@ -13,15 +13,16 @@ Backbone.$ = $;
 
 export const StopsHandler = C.StopsHandlerBase.extend({
   types: [Stops.ethnicities],
-  defaults: Stops
+  Stops: Stops
 });
 
 export const StopRatioDonut = C.StopRatioDonutBase.extend({
   defaults: {
     width: 300,
-    height: 300,
-    Stops: Stops
+    height: 300
   },
+
+  Stops: Stops,
 
   _items: function () {
     return Stops.ethnicities;
@@ -38,8 +39,9 @@ export const StopRatioTimeSeries = C.StopRatioTimeSeriesBase.extend({
   defaults: {
     width: 750,
     height: 375,
-    Stops: Stops
   },
+
+  Stops: Stops,
 
   _items: function () {
     return Stops.ethnicities;

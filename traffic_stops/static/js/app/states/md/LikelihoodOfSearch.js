@@ -14,16 +14,17 @@ Backbone.$ = $;
 
 const LikelihoodSearchHandler = C.LikelihoodSearchHandlerBase.extend({
   types: [Stops.ethnicities],
-  defaults: Stops
+  Stops: Stops
 });
 
 const LikelihoodOfSearch = C.LikelihoodOfSearchBase.extend({
   defaults: {
     showEthnicity: true,
     width: 750,
-    height: 375,
-    Stops: Stops
+    height: 375
   },
+
+  Stops: Stops,
 
   _items: function () {
     return Stops.ethnicities;
@@ -47,7 +48,7 @@ const LikelihoodOfSearch = C.LikelihoodOfSearchBase.extend({
 const LikelihoodSearchTable = C.LikelihoodSearchTableBase.extend({
   types: [Stops.ethnicities],
 
-  defaults: Stops,
+  Stops: Stops,
 
   _get_header_rows: function () {
     return Stops.ethnicities

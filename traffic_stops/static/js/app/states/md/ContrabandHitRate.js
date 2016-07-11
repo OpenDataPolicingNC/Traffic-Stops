@@ -13,7 +13,7 @@ import $ from 'jquery';
 Backbone.$ = $;
 
 const ContrabandHitRateHandler = C.ContrabandHitRateHandlerBase.extend({
-  defaults: Stops
+  Stops: Stops
 });
 
 // dashboard visuals
@@ -22,9 +22,10 @@ const ContrabandHitRateBar = C.ContrabandHitRateBarBase.extend({
   defaults: {
     showEthnicity: true,
     width: 750,
-    height: 375,
-    Stops: Stops
+    height: 375
   },
+
+  Stops: Stops,
 
   _items: function () {
     return Stops.ethnicities;

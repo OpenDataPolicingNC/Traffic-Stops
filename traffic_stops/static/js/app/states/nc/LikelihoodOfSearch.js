@@ -14,16 +14,17 @@ Backbone.$ = $;
 
 const LikelihoodSearchHandler = C.LikelihoodSearchHandlerBase.extend({
   types: [Stops.races, Stops.ethnicities],
-  defaults: Stops
+  Stops: Stops
 });
 
 const LikelihoodOfSearch = C.LikelihoodOfSearchBase.extend({
   defaults: {
     showEthnicity: true,
     width: 750,
-    height: 375,
-    Stops: Stops
+    height: 375
   },
+
+  Stops: Stops,
 
   _items: function () {
     return (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races;
@@ -38,7 +39,7 @@ const LikelihoodOfSearch = C.LikelihoodOfSearchBase.extend({
   },
 
   _pprint: function (type) {
-    return this.defaults.Stops.pprint.get(type);
+    return Stops.pprint.get(type);
   },
 
   triggerRaceToggle: function (e, v) {
@@ -50,7 +51,7 @@ const LikelihoodOfSearch = C.LikelihoodOfSearchBase.extend({
 const LikelihoodSearchTable = C.LikelihoodSearchTableBase.extend({
   types: [Stops.races, Stops.ethnicities],
 
-  defaults: Stops,
+  Stops: Stops,
 
   _get_header_rows: function () {
     return Stops.pprint.values();
