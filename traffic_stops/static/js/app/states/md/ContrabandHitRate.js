@@ -18,7 +18,7 @@ const ContrabandHitRateHandler = C.ContrabandHitRateHandlerBase.extend({
 
 // dashboard visuals
 
-var ContrabandHitRateBar = C.ContrabandHitRateBarBase.extend({
+const ContrabandHitRateBar = C.ContrabandHitRateBarBase.extend({
   defaults: {
     showEthnicity: true,
     width: 750,
@@ -37,31 +37,12 @@ var ContrabandHitRateBar = C.ContrabandHitRateBarBase.extend({
   triggerRaceToggle: () => null
 });
 
-var ContrabandTable = TableBase.extend({
-  get_tabular_data: function () {
-    var header, row, rows = [], se, cb;
+const ContrabandTable = C.ContrabandTableBase.extend({
+  _get_header_rows: function () {
+    return Stops.ethnicities;
+  },
 
-    // create header
-    header = ["Year"];
-    header.push.apply(header, Stops.ethnicities);
-    rows.push(header);
-
-    var raw = this.data.raw,
-        searches = _.object(_.pluck(raw.searches, 'year'), raw.searches),
-        contrabands = _.object(_.pluck(raw.contraband, 'year'), raw.contraband);
-
-    _.keys(searches).forEach((yr) => {
-      se = searches[yr];
-      cb = contrabands[yr] || {};
-      row = [yr];
-      Stops.ethnicities.forEach(function(e){
-        row.push((cb[e]||0).toLocaleString() + "/" + (se[e]||0).toLocaleString());
-      });
-      rows.push(row);
-    });
-
-    return rows;
-  }
+  types: [Stops.ethnicities]
 });
 
 export default {

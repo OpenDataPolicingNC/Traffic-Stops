@@ -209,6 +209,7 @@ export const LikelihoodOfSearchBase = VisualBase.extend({
 
 export const LikelihoodSearchTableBase = TableBase.extend({
   defaults: {},
+  types: [],
   _get_header_rows: function () { throw "abstract method: requires override"; },
 
   get_tabular_data: function(){

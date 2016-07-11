@@ -1,7 +1,9 @@
 import DataHandlerBase from '../base/DataHandlerBase.js';
 import VisualBase from '../base/VisualBase.js';
+import TableBase from '../base/TableBase.js';
 import d3 from 'd3';
 import _ from 'underscore';
+import $ from 'jquery';
 
 export function get_years (raw, Stops) {
   let years = d3.set(raw.searches.map((v) => v.year)).values();
@@ -149,5 +151,37 @@ export const ContrabandHitRateBarBase = VisualBase.extend({
 
     }
     return [dataset];
+  }
+});
+
+export const ContrabandTableBase = TableBase.extend({
+  types: [],
+  _get_header_rows: function () { throw "abstract method: requires override"; },
+
+  get_tabular_data: function () {
+    var header, row, rows = [], se, cb;
+
+    // create header
+    header = ["Year"];
+    header.push.apply(header, this._get_header_rows());
+    rows.push(header);
+
+    var raw = this.data.raw,
+        searches = _.object(_.pluck(raw.searches, 'year'), raw.searches),
+        contrabands = _.object(_.pluck(raw.contraband, 'year'), raw.contraband);
+
+    _.keys(searches).forEach((yr) => {
+      se = searches[yr];
+      cb = contrabands[yr] || {};
+      row = [yr];
+      this.types.forEach((type) => {
+        type.forEach(function(e){
+          row.push((cb[e]||0).toLocaleString() + "/" + (se[e]||0).toLocaleString());
+        });
+      })
+      rows.push(row);
+    });
+
+    return rows;
   }
 });
