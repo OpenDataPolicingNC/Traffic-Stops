@@ -173,7 +173,7 @@ export const StopRatioDonutBase = VisualBase.extend({
       data.push({
         "key": this._pprint(d),
         "value": selected.get(d) || 0,
-        "color": Stops.colors[i]
+        "color": this.defaults.Stops.colors[i]
       });
     });
 
@@ -182,6 +182,9 @@ export const StopRatioDonutBase = VisualBase.extend({
 });
 
 export const StopRatioTimeSeriesBase = VisualBase.extend({
+  _items: function () { throw "abstract method: requires override"; },
+  _pprint: function () { throw "abstract method: requires override"; },
+
   setDefaultChart: function () {
     this.chart = nv.models.lineChart()
                   .useInteractiveGuideline (true)
@@ -216,11 +219,38 @@ export const StopRatioTimeSeriesBase = VisualBase.extend({
           .attr('viewBox', `0 0 ${this.get('width')} ${this.get('height')}`)
           .call(this.chart);
       });
-  }
+  },
+
+
+  _formatData: function(){
+    let data = [],
+        items = this._items(),
+        subset = [],
+        i = 0,
+        disabled;
+
+    this.data.line.forEach((key, vals) => {
+      if (items.indexOf(key) < 0) return;
+      // disable by default if maximum value < 5%
+      disabled = d3.max(vals, (d) => d.y) < 0.05;
+      data.push({
+        key: this._pprint(key),
+        values: vals,
+        color: this.defaults.Stops.colors[i],
+        disabled: disabled
+      });
+      i += 1;
+    });
+
+    return data;
+  },
 });
 
 
 export const StopsTableBase = TableBase.extend({
+  types: [],
+  _get_header_rows: function () { throw "abstract method: requires override"; },
+
   add_data_rows: function (rows = [], categories) {
     // create data rows
     this.data.pie.forEach((k, v) => {
@@ -236,5 +266,16 @@ export const StopsTableBase = TableBase.extend({
     });
 
     return rows;
+  },
+
+  get_tabular_data: function(){
+    let rows = [];
+
+    // create header
+    let header = ["Year"];
+    header.push.apply(header, this._get_header_rows());
+    rows.push(header);
+
+    return this.add_data_rows(rows, this.types)
   }
 });

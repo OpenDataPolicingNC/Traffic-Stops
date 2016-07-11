@@ -42,30 +42,18 @@ export const StopRatioTimeSeries = C.StopRatioTimeSeriesBase.extend({
   defaults: {
     showEthnicity: false,
     width: 750,
-    height: 375
+    height: 375,
+    Stops: Stops
   },
 
-  _formatData: function(){
-    let data = [],
-        items = (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races,
-        subset = [],
-        i = 0,
-        disabled;
-
-    this.data.line.forEach((key, vals) => {
-      if (items.indexOf(key) < 0) return;
-      // disable by default if maximum value < 5%
-      disabled = d3.max(vals, (d) => d.y)<0.05;
-      data.push({
-        key: Stops.pprint.get(key),
-        values: vals,
-        color: Stops.colors[i],
-        disabled: disabled
-      });
-      i += 1;
-    });
-    return data;
+  _items: function () {
+    return (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races;
   },
+
+  _pprint: function (type) {
+    return Stops.pprint.get(type);
+  },
+
   triggerRaceToggle: function(e, v){
     this.set('showEthnicity', v);
     this.drawChart();
@@ -73,15 +61,10 @@ export const StopRatioTimeSeries = C.StopRatioTimeSeriesBase.extend({
 });
 
 export const StopsTable = C.StopsTableBase.extend({
-  get_tabular_data: function(){
-    let rows = [];
+  types: [Stops.races, Stops.ethnicities],
 
-    // create header
-    let header = ["Year"];
-    header.push.apply(header, Stops.pprint.values());
-    rows.push(header);
-
-    return this.add_data_rows(rows, [Stops.races, Stops.ethnicities])
+  _get_header_rows: function () {
+    return Stops.pprint.values();
   }
 });
 

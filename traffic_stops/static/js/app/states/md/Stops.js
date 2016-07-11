@@ -19,7 +19,8 @@ export const StopsHandler = C.StopsHandlerBase.extend({
 export const StopRatioDonut = C.StopRatioDonutBase.extend({
   defaults: {
     width: 300,
-    height: 300
+    height: 300,
+    Stops: Stops
   },
 
   _items: function () {
@@ -28,7 +29,7 @@ export const StopRatioDonut = C.StopRatioDonutBase.extend({
 
   _pprint: function (x) {
     return x;
-  }
+  },
 
   triggerRaceToggle: () => null
 });
@@ -36,45 +37,26 @@ export const StopRatioDonut = C.StopRatioDonutBase.extend({
 export const StopRatioTimeSeries = C.StopRatioTimeSeriesBase.extend({
   defaults: {
     width: 750,
-    height: 375
+    height: 375,
+    Stops: Stops
   },
 
-  _formatData: function(){
-    let data = [],
-        items = Stops.ethnicities,
-        subset = [],
-        i = 0,
-        disabled;
+  _items: function () {
+    return Stops.ethnicities;
+  },
 
-    this.data.line.forEach((key, vals) => {
-      if (items.indexOf(key) < 0) return;
-      // disable by default if maximum value < 5%
-      disabled = d3.max(vals, (d) => d.y)<0.05;
-      data.push({
-        key: key,
-        values: vals,
-        color: Stops.colors[i],
-        disabled: disabled
-      });
-      i += 1;
-    });
-
-    return data;
+  _pprint: function (x) {
+    return x;
   },
 
   triggerRaceToggle: () => null
 });
 
 export const StopsTable = C.StopsTableBase.extend({
-  get_tabular_data: function(){
-    let rows = [];
+  types: [Stops.ethnicities],
 
-    // create header
-    let header = ["Year"];
-    header.push.apply(header, Stops.ethnicities);
-    rows.push(header);
-
-    return this.add_data_rows(rows, [Stops.ethnicities]);
+  _get_header_rows: function () {
+    return Stops.ethnicities;
   }
 });
 
