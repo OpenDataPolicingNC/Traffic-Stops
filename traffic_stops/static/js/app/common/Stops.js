@@ -1,6 +1,8 @@
 import _ from 'underscore';
 import d3 from 'd3';
 
+import VisualBase from '../base/VisualBase.js';
+
 /***
  * StopsHandler data processing helper functions
  */
@@ -69,3 +71,62 @@ export function build_line_data (data, types, Stops) {
 
   return line;
 }
+
+export const StopRatioDonutBase = VisualBase.extend({
+  setDefaultChart: function(){
+    this.chart = nv.models.pieChart()
+      .x(function(d){ return d.key; })
+      .y(function(d){ return d.value; })
+      .color(function(d){ return d.data.color; })
+      .width(this.get("width"))
+      .height(this.get("height"))
+      .showLabels(true)
+      .labelType("percent")
+      .donutRatio(0.35)
+      .labelThreshold(0.05)
+      .donut(true)
+      .tooltipContent((key, y, e, graph) => (
+        `<h3 class="stops donut-label">${ key }</h3><p>${ y.replace(/\.\d*/, '') }</p>`
+      ));
+  },
+
+  drawStartup: function(){
+
+    // get year options for pulldown menu
+    var selector = $('<select>'),
+        year_options = this.data.pie.keys(),
+        opts = year_options.map((v) => `<option value="${v}">${v}</option>`),
+        getData = () => {
+          var value = selector.val();
+          this.dataset =  this.data.pie.get(value);
+          this.drawChart();
+        };
+
+    selector
+      .append(opts)
+      .val("Total")
+      .on('change', getData);
+
+    $('<div>')
+      .html(selector)
+      .appendTo(this.div);
+
+    getData();
+  },
+
+
+  drawChart: function(){
+    var data = this._formatData();
+
+    nv.addGraph(() => {
+      d3.select(this.svg[0])
+          .datum(data)
+        .transition().duration(1200)
+          .attr('width', "100%")
+          .attr('height', "100%")
+          .attr("preserveAspectRatio", "xMinYMin")
+          .attr('viewBox', `0 0 ${this.get('width')} ${this.get('height')}`)
+          .call(this.chart);
+    });
+  },
+});

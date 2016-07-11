@@ -40,7 +40,7 @@ export var StopRatioDonut = C.StopRatioDonutBase.extend({
     height: 300
   },
 
-  _formatData: function(){
+  _formatData: function () {
     var data = [],
         selected = this.dataset,
         items = Stops.ethnicities;
@@ -57,7 +57,7 @@ export var StopRatioDonut = C.StopRatioDonutBase.extend({
 
     return data;
   },
-  
+
   triggerRaceToggle: () => null
 });
 
