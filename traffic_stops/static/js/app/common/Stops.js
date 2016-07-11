@@ -101,6 +101,10 @@ export const StopsHandlerBase = DataHandlerBase.extend({
 })
 
 export const StopRatioDonutBase = VisualBase.extend({
+  _items: function () { throw "abstract method: requires override"; },
+  _pprint: function () { throw "abstract method: requires override"; },
+  triggerRaceToggle: function () { throw "abstract method: requires override"; },
+
   setDefaultChart: function(){
     this.chart = nv.models.pieChart()
       .x(function(d){ return d.key; })
@@ -157,6 +161,24 @@ export const StopRatioDonutBase = VisualBase.extend({
           .call(this.chart);
     });
   },
+
+  _formatData: function () {
+    let data = [],
+        selected = this.dataset,
+        items = this._items();
+
+    // build data specifically for this pie chart
+    items.forEach((d, i) => {
+      if (!d) return;
+      data.push({
+        "key": this._pprint(d),
+        "value": selected.get(d) || 0,
+        "color": Stops.colors[i]
+      });
+    });
+
+    return data;
+  }
 });
 
 export const StopRatioTimeSeriesBase = VisualBase.extend({

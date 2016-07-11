@@ -22,23 +22,13 @@ export const StopRatioDonut = C.StopRatioDonutBase.extend({
     height: 300
   },
 
-  _formatData: function () {
-    let data = [],
-        selected = this.dataset,
-        items = Stops.ethnicities;
-
-    // build data specifically for this pie chart
-    items.forEach((d, i) => {
-      if (!d) return;
-      data.push({
-        "key": d,
-        "value": selected.get(d) || 0,
-        "color": Stops.colors[i]
-      });
-    });
-
-    return data;
+  _items: function () {
+    return Stops.ethnicities;
   },
+
+  _pprint: function (x) {
+    return x;
+  }
 
   triggerRaceToggle: () => null
 });
