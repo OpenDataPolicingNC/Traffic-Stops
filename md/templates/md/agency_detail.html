@@ -64,7 +64,67 @@
 {% endblock stop-display %}
 
 {% block search-rate-display %}{% endblock search-rate-display %}
-{% block search-display %}{% endblock search-display %}
+
+{% block search-display %}
+<div class="row">
+  <div class="col-md-12">
+    <h2>Search data</h2>
+  </div>
+
+  <div class="col-md-4">
+    <h3>Search by ethnicity</h3>
+
+    <div>
+      <svg id="search_race_pie"></svg>
+    </div>
+
+    <p class="help-block">
+      This graph reflects the ethnic composition of drivers searched by law
+      enforcement officers in the jurisdiction since the department began
+      reporting its data to the MD Department of Justice. Adjusting the drop
+      down menu will display the ethnic breakdown of stops on a year-by-year
+      basis.
+    </p>
+  </div>
+
+  <div id="search_div" class="col-md-8">
+    <h3>Annual percent of search by ethnicity</h3>
+
+    <div role="tabpanel">
+
+      <!-- Nav tabs -->
+      <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active">
+          <a href="#search_race_line_div" aria-controls="search_race_line_div" role="tab" data-toggle="tab">Chart</a></li>
+        <li role="presentation">
+          <a href="#search_race_data" aria-controls="stop_race_data" role="tab" data-toggle="tab">Data</a></li>
+      </ul>
+
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="search_race_line_div">
+          <svg id="search_race_line"></svg>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="search_race_data">
+        </div>
+      </div>
+
+      <p class="help-block">
+        This graph is a longitudinal representation of the ethnic
+        composition of drivers searched by the department since it began
+        reporting its data to the MD Department of Justice. Drag the cursor
+        over the graph to see the ethnic breakdown for any given year.
+        <br><br>
+        Click the "Data" tab to review the actual raw counts from the
+        MD Department of Justice.
+      </p>
+
+    </div>
+
+  </div>
+</div>
+{% endblock search-display %}
+
 {% block lsb-display %}{% endblock lsb-display %}
 {% block contraband-display %}{% endblock contraband-display %}
 {% block use-of-force-display %}{% endblock use-of-force-display %}
@@ -74,13 +134,19 @@
 
 {% if officer_id %}
   var stop_handler = new MD.StopsHandler({url: "{% url 'md:agency-api-stops' object.pk %}?officer={{officer_id|urlencode}}"});
+  var search_handler = new MD.SearchHandler({url: "{% url 'md:agency-api-searches' object.pk %}?officer={{officer_id|urlencode}}"});
 {% else %}
   var stop_handler = new MD.StopsHandler({url: "{% url 'md:agency-api-stops' object.pk %}"});
+  var search_handler = new MD.SearchHandler({url: "{% url 'md:agency-api-searches' object.pk %}"});
 {% endif %}
 
 new MD.StopRatioDonut({handler: stop_handler, selector: "#stop_race_pie"});
 new MD.StopRatioTimeSeries({handler: stop_handler, selector: "#stop_race_line"});
 new MD.StopsTable({handler: stop_handler, selector: "#stop_race_data"});
+
+new MD.SearchRatioDonut({handler: search_handler, selector: "#search_race_pie"});
+new MD.SearchRatioTimeSeries({handler: search_handler, selector: "#search_race_line"});
+new MD.SearchTable({handler: search_handler, selector: "#search_race_data"});
 
 {% comment %}</script>{% endcomment %}
 {% endblock graph-code %}
