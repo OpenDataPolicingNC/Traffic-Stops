@@ -140,7 +140,7 @@ var ContrabandHitRateBar = VisualBase.extend({
       // build a bar for each ethnicity
       items.forEach((ethnicity, i) => {
         ratio = (contraband_arr[ethnicity] / searches_arr[ethnicity]) || 0;
-        if (!isFinite(ratio)) ratio = undefined;
+        if (!isFinite(ratio)) ratio = 0;
         dataset.values.push({
           "label": ethnicity,
           "value": ratio

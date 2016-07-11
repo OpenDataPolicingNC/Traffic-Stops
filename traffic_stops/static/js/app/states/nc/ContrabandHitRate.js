@@ -136,7 +136,7 @@ var ContrabandHitRateBar = VisualBase.extend({
       // build a bar for each race
       items.forEach(function(race, i){
         ratio = contraband_arr[race] / searches_arr[race] || 0;
-        if (!isFinite(ratio)) ratio = undefined;
+        if (!isFinite(ratio)) ratio = 0;
         dataset.values.push({
           "label": Stops.pprint.get(race),
           "value": ratio
