@@ -3,7 +3,7 @@ import VisualBase from '../../base/VisualBase.js';
 import TableBase from '../../base/TableBase.js';
 import Stops from './defaults.js';
 
-import { build_totals } from '../common/Stops.js';
+import * as C from '../../common/Stops.js';
 
 import Backbone from 'backbone';
 import _ from 'underscore';
@@ -13,42 +13,16 @@ import $ from 'jquery';
 Backbone.$ = $;
 
 export var StopsHandler = DataHandlerBase.extend({
-  clean_data: function(){
+  clean_data: function () {
 
     var data = this.get("raw_data");
-    var total = build_totals(data);
+    var total = C.build_totals(data);
 
-    // build-data for pie-chart
-    var pie = d3.map();
-    data.forEach(function(v){
-      if (v.year>=Stops.start_year) pie.set(v.year, d3.map(v));
-    });
-    pie.set("Total", d3.map(total));
+    // build data for pie-chart
+    var pie = C.build_pie_data(data, total, Stops);
 
     // build data for line-chart
-
-    var line = d3.map(),
-        get_total_by_race = function(dataType, yr){
-          var total = 0;
-          dataType.forEach(function(race){
-            total += (typeof yr[race] === 'undefined') ? 0 : yr[race];
-          });
-          return total;
-        };
-
-    [Stops.races, Stops.ethnicities].forEach(function(dataType){
-      dataType.forEach(function(v){
-        line.set(v, []);
-      });
-      data.forEach(function(yr){
-        if (yr.year>=Stops.start_year){
-          var total = get_total_by_race(dataType, yr);
-          dataType.forEach(function(race){
-            line.get(race).push({x: yr.year, y:(yr[race] > 0 ? yr[race]/total : 0)});
-          });
-        }
-      });
-    });
+    var line = C.build_line_data(data, [Stops.races, Stops.ethnicities], Stops);
 
     // set object data
     this.set("data", {
