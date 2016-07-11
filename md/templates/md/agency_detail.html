@@ -167,7 +167,45 @@
   </div>
 {% endblock lsb-display %}
 
-{% block contraband-display %}{% endblock contraband-display %}
+{% block contraband-display %}
+  <div class="row">
+    <div id="contraband_div" class="col-md-offset-2 col-md-8">
+      <h3>Contraband hit-rate</h3>
+
+      <div role="tabpanel">
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active">
+            <a href="#chr_div" aria-controls="chr_div" role="tab" data-toggle="tab">Chart</a></li>
+          <li role="presentation">
+            <a href="#chr_data" aria-controls="chr_data" role="tab" data-toggle="tab">Data</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="chr_div">
+            <svg id="chr"></svg>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="chr_data">
+          </div>
+        </div>
+
+      </div>
+
+      <p class="help-block">
+        This chart displays the percentage of searches that uncovered contraband
+        for a given racial or ethnic group. Adjusting the drop down menu will
+        display the hit rate on a year-by-year basis.
+        <br><br>
+        Click the "Data" tab to review the actual raw counts from the
+        NC Department of Justice.
+      </p>
+
+    </div>
+  </div>
+{% endblock contraband-display %}
+
 {% block use-of-force-display %}{% endblock use-of-force-display %}
 
 {% block graph-code %}
@@ -177,10 +215,12 @@
   var stop_handler = new MD.StopsHandler({url: "{% url 'md:agency-api-stops' object.pk %}?officer={{officer_id|urlencode}}"});
   var search_handler = new MD.SearchHandler({url: "{% url 'md:agency-api-searches' object.pk %}?officer={{officer_id|urlencode}}"});
   var lhs_handler = new MD.LikelihoodSearchHandler({url: "{% url 'md:agency-api-stops-by-reason' object.pk %}?officer={{officer_id|urlencode}}"});
+  var chr_handler = new MD.ContrabandHitRateHandler({url: "{% url 'md:agency-api-contraband-hit-rate' object.pk %}?officer={{officer_id|urlencode}}"});
 {% else %}
   var stop_handler = new MD.StopsHandler({url: "{% url 'md:agency-api-stops' object.pk %}"});
   var search_handler = new MD.SearchHandler({url: "{% url 'md:agency-api-searches' object.pk %}"});
   var lhs_handler = new MD.LikelihoodSearchHandler({url: "{% url 'md:agency-api-stops-by-reason' object.pk %}"});
+  var chr_handler = new MD.ContrabandHitRateHandler({url: "{% url 'md:agency-api-contraband-hit-rate' object.pk %}"});
 {% endif %}
 
 new MD.StopRatioDonut({handler: stop_handler, selector: "#stop_race_pie"});
@@ -193,6 +233,9 @@ new MD.SearchTable({handler: search_handler, selector: "#search_race_data"});
 
 new MD.LikelihoodOfSearch({handler: lhs_handler, selector: "#lsb"});
 new MD.LikelihoodSearchTable({handler: lhs_handler, selector: "#lsb_data"});
+
+new MD.ContrabandHitRateBar({handler: chr_handler, selector: "#chr"});
+new MD.ContrabandTable({handler: chr_handler, selector: "#chr_data"});
 
 {% comment %}</script>{% endcomment %}
 {% endblock graph-code %}
