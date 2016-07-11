@@ -12,17 +12,17 @@ import $ from 'jquery';
 
 Backbone.$ = $;
 
-export var StopsHandler = DataHandlerBase.extend({
+export const StopsHandler = DataHandlerBase.extend({
   clean_data: function () {
 
-    var data = this.get("raw_data");
-    var total = C.build_totals(data);
+    let data = this.get("raw_data");
+    let total = C.build_totals(data);
 
     // build data for pie-chart
-    var pie = C.build_pie_data(data, total, Stops);
+    let pie = C.build_pie_data(data, total, Stops);
 
     // build data for line-chart
-    var line = C.build_line_data(data, [Stops.races, Stops.ethnicities], Stops);
+    let line = C.build_line_data(data, [Stops.races, Stops.ethnicities], Stops);
 
     // set object data
     this.set("data", {
@@ -34,7 +34,7 @@ export var StopsHandler = DataHandlerBase.extend({
   }
 });
 
-export var StopRatioDonut = C.StopRatioDonutBase.extend({
+export const StopRatioDonut = C.StopRatioDonutBase.extend({
   defaults: {
     showEthnicity: false,
     width: 300,
@@ -42,7 +42,7 @@ export var StopRatioDonut = C.StopRatioDonutBase.extend({
   },
 
   _formatData: function () {
-    var data = [],
+    let data = [],
         selected = this.dataset,
         items = (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races;
 
@@ -64,7 +64,7 @@ export var StopRatioDonut = C.StopRatioDonutBase.extend({
   }
 });
 
-export var StopRatioTimeSeries = C.StopRatioTimeSeriesBase.extend({
+export const StopRatioTimeSeries = C.StopRatioTimeSeriesBase.extend({
   defaults: {
     showEthnicity: false,
     width: 750,
@@ -72,7 +72,7 @@ export var StopRatioTimeSeries = C.StopRatioTimeSeriesBase.extend({
   },
 
   _formatData: function(){
-    var data = [],
+    let data = [],
         items = (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races,
         subset = [],
         i = 0,
@@ -98,7 +98,7 @@ export var StopRatioTimeSeries = C.StopRatioTimeSeriesBase.extend({
   }
 });
 
-export var StopsTable = C.StopsTableBase.extend({
+export const StopsTable = C.StopsTableBase.extend({
   get_tabular_data: function(){
     let rows = [];
 

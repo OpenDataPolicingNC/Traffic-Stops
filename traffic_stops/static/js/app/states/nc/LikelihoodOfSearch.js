@@ -12,12 +12,12 @@ import $ from 'jquery';
 
 Backbone.$ = $;
 
-var LikelihoodSearchHandler = C.LikelihoodSearchHandlerBase.extend({
+const LikelihoodSearchHandler = C.LikelihoodSearchHandlerBase.extend({
   types: [Stops.races, Stops.ethnicities],
   defaults: Stops
 });
 
-var LikelihoodOfSearch = C.LikelihoodOfSearchBase.extend({
+const LikelihoodOfSearch = C.LikelihoodOfSearchBase.extend({
   defaults: {
     showEthnicity: true,
     width: 750,
@@ -47,7 +47,7 @@ var LikelihoodOfSearch = C.LikelihoodOfSearchBase.extend({
   }
 });
 
-var LikelihoodSearchTable = C.LikelihoodSearchTableBase.extend({
+const LikelihoodSearchTable = C.LikelihoodSearchTableBase.extend({
   types: [Stops.races, Stops.ethnicities],
 
   defaults: Stops,

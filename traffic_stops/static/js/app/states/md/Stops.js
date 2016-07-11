@@ -11,18 +11,18 @@ import d3 from 'd3';
 import $ from 'jquery';
 Backbone.$ = $;
 
-export var StopsHandler = DataHandlerBase.extend({
+export const StopsHandler = DataHandlerBase.extend({
   clean_data: function () {
 
     // build totals
-    var data = this.get('raw_data');
-    var total = C.build_totals(data);
+    let data = this.get('raw_data');
+    let total = C.build_totals(data);
 
     // build data for pie-chart
-    var pie = C.build_pie_data(data, total, Stops);
+    let pie = C.build_pie_data(data, total, Stops);
 
     // build data for line-chart
-    var line = C.build_line_data(data, [Stops.ethnicities], Stops);
+    let line = C.build_line_data(data, [Stops.ethnicities], Stops);
 
     // set object data
     this.set('data', {
@@ -34,14 +34,14 @@ export var StopsHandler = DataHandlerBase.extend({
   }
 });
 
-export var StopRatioDonut = C.StopRatioDonutBase.extend({
+export const StopRatioDonut = C.StopRatioDonutBase.extend({
   defaults: {
     width: 300,
     height: 300
   },
 
   _formatData: function () {
-    var data = [],
+    let data = [],
         selected = this.dataset,
         items = Stops.ethnicities;
 
@@ -61,14 +61,14 @@ export var StopRatioDonut = C.StopRatioDonutBase.extend({
   triggerRaceToggle: () => null
 });
 
-export var StopRatioTimeSeries = C.StopRatioTimeSeriesBase.extend({
+export const StopRatioTimeSeries = C.StopRatioTimeSeriesBase.extend({
   defaults: {
     width: 750,
     height: 375
   },
 
   _formatData: function(){
-    var data = [],
+    let data = [],
         items = Stops.ethnicities,
         subset = [],
         i = 0,
@@ -93,7 +93,7 @@ export var StopRatioTimeSeries = C.StopRatioTimeSeriesBase.extend({
   triggerRaceToggle: () => null
 });
 
-export var StopsTable = C.StopsTableBase.extend({
+export const StopsTable = C.StopsTableBase.extend({
   get_tabular_data: function(){
     let rows = [];
 
