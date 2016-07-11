@@ -3,6 +3,8 @@ import VisualBase from '../../base/VisualBase.js';
 import TableBase from '../../base/TableBase.js';
 import Stops from './defaults.js';
 
+import { build_totals } from '../common/Stops.js';
+
 import Backbone from 'backbone';
 import _ from 'underscore';
 import d3 from 'd3';
@@ -13,26 +15,8 @@ Backbone.$ = $;
 export var StopsHandler = DataHandlerBase.extend({
   clean_data: function(){
 
-    var data = this.get("raw_data"),
-        total = {};
-
-    // build a "Totals" year which sums by race/ethnicity for all years
-    if (data.length>0){
-      // create new totals object, and reset values
-      total = _.clone(data[0]);
-      _.keys(total).forEach(function(key){
-        total[key] = 0;
-      });
-
-      // sum data from all years
-      data.forEach(function(year){
-        _.keys(year).forEach(function(key){
-          if (typeof total[key] === 'undefined') total[key] = 0;
-          total[key] += (typeof year[key] === 'undefined') ? 0 : year[key];
-        });
-      });
-      total["year"] = "Total";
-    }
+    var data = this.get("raw_data");
+    var total = build_totals(data);
 
     // build-data for pie-chart
     var pie = d3.map();
