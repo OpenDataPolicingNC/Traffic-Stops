@@ -17,137 +17,31 @@ var LikelihoodSearchHandler = C.LikelihoodSearchHandlerBase.extend({
   defaults: Stops
 });
 
-var LikelihoodOfSearch = VisualBase.extend({
+var LikelihoodOfSearch = C.LikelihoodOfSearchBase.extend({
   defaults: {
     showEthnicity: true,
     width: 750,
-    height: 375
+    height: 375,
+    Stops: Stops
   },
-  setDefaultChart: function(){
-    this.chart = nv.models.multiBarHorizontalChart()
-      .x(function(d){ return d.label; })
-      .y(function(d){ return d.value; })
-      .width(this.get("width"))
-      .height(this.get("height"))
-      .margin({top: 20, right: 50, bottom: 20, left: 180})
-      .showValues(true)
-      .tooltips(true)
-      .transitionDuration(350)
-      .showControls(false);
 
-    this.chart.yAxis
-        .axisLabel('Additional percentage or search by search-cause')
-        .tickFormat(d3.format('%'));
-
-    this.chart.valueFormat(d3.format('%'));
+  _items: function () {
+    return (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races;
   },
-  drawStartup: function(){
-    // get year options for pulldown menu
-    var selector = $('<select>'),
-        year_options = this.data.years,
-        opts = year_options.map((v) => `<option value="${v}">${v}</option>`),
-        getData = () => {
-          var year = selector.val();
-          year = parseInt(year, 10) || year;
-          this.dataset =  this._getDataset(year);
-          this.drawChart();
-        };
 
-    selector
-      .append(opts)
-      .val("Total")
-      .on('change', getData)
-      .trigger('change');
-
-    $('<div>')
-      .html(selector)
-      .appendTo(this.div);
-
-    this.selector = selector;
+  _base: function () {
+    return (this.get('showEthnicity')) ? "non-hispanic" : "white"
   },
-  drawChart: function(){
 
-    d3.select(this.svg[0])
-      .datum(this.dataset)
-      .attr('width', "100%")
-      .attr('height', "100%")
-      .attr('preserveAspectRatio', "xMinYMin")
-      .attr('viewBox', `0 0 ${this.get('width')} ${this.get('height')}`)
-      .call(this.chart);
-
-    nv.utils.windowResize(this.chart.update);
+  _defRace: function () {
+    return (this.get('showEthnicity')) ? "hispanic" : "black"
   },
-  _getDataset: function(year){
-    var dataset = [],
-        raw = this.data.raw,
-        stops_arr = raw.stops.filter(function(v){return v.year===year;}),
-        searches_arr = raw.searches.filter(function(v){return v.year===year;}),
-        stops = d3.map(),
-        searches = d3.map(),
-        items = (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races,
-        base = (this.get('showEthnicity')) ? "non-hispanic" : "white",
-        defRace = (this.get('showEthnicity')) ? "hispanic" : "black",
-        baseUpper = function(d){return d.charAt(0).toUpperCase() + d.slice(1);}(base);
 
-    // turn arrays into maps with purpose as the key
-    stops_arr.forEach(function(v){
-      stops.set(v.purpose, v);
-    });
-    searches_arr.forEach(function(v){
-      searches.set(v.purpose, v);
-    });
-
-    // build a set of bars for each race, except for base
-    items.forEach(function(race, i){
-      if(race === base) return;
-
-      var bar = {
-          color: Stops.colors[i],
-          key: `${Stops.pprint.get(race)} vs. ${baseUpper}`,
-          values: [],
-          disabled: (race !== defRace)
-      };
-
-      // build a bar for each violation
-      Stops.purpose_order.forEach(function(purpose){
-        // optional reporting requirement; remove as it's generally unreported
-        if (purpose === "Checkpoint") return;
-
-        // calculate percent-difference of stops which led to searches by race,
-        // in comparison to base-baseline
-        var search = searches.get(purpose),
-            stop  = stops.get(purpose);
-
-        if (search && stop){
-
-          var rate, base_rate, r_rate,
-              base_se = search[base] || 0,
-              base_st = stop[base] || 0,
-              r_se = search[race] || 0,
-              r_st = stop[race] || 0;
-
-          base_rate = base_se/base_st;
-          r_rate = r_se/r_st;
-          rate = (r_rate-base_rate)/base_rate;
-          if(!r_rate || !isFinite(rate)) rate = 0;
-
-          // add purpose to list of values
-          bar.values.push({
-            label: purpose,
-            value: rate,
-            order: Stops.purpose_order.get(purpose)
-          });
-        }
-      });
-
-      // sort bars and then push race to list
-      bar.values.sort(function(a,b){return a.order-b.order;});
-      dataset.push(bar);
-    });
-
-    return dataset;
+  _pprint: function (type) {
+    return this.defaults.Stops.pprint.get(type);
   },
-  triggerRaceToggle: function(e, v){
+
+  triggerRaceToggle: function (e, v) {
     this.set('showEthnicity', v);
     this.selector.trigger('change');
   }
