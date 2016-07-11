@@ -177,7 +177,11 @@ export const StopsTableBase = TableBase.extend({
     this.data.pie.forEach((k, v) => {
       let row = [k];
       categories.forEach((type) => {
-        type.forEach((r) => { row.push((v.get(r)||0).toLocaleString()); });
+        type.forEach((r) => {
+          row.push(
+            (v.get(r) || 0).toLocaleString()
+          );
+        });
       })
       rows.push(row);
     });
