@@ -3,6 +3,8 @@ import VisualBase from '../../base/VisualBase.js';
 import TableBase from '../../base/TableBase.js';
 import Stops from './defaults.js';
 
+import * as C from '../../common/ContrabandHitRate.js';
+
 import _ from 'underscore';
 import d3 from 'd3';
 import Backbone from 'backbone';
@@ -10,45 +12,8 @@ import $ from 'jquery';
 
 Backbone.$ = $;
 
-var ContrabandHitRateHandler = DataHandlerBase.extend({
-  clean_data: function(){
-
-    var years,
-        raw = this.get("raw_data");
-
-    // get available years
-    years = d3.set(raw.searches.map(function(v){return v.year;})).values();
-    years.filter(function(v){return (v >= Stops.start_year);});
-    years.push("Total");
-
-    // build totals for all years
-    var getTotals = function(arr){
-      var total = _.clone(arr[0]);
-      _.keys(total).forEach(function(key){
-        total[key] = 0;
-      });
-
-      // sum data from all years
-      arr.forEach(function(year){
-        _.keys(year).forEach(function(key){
-          total[key] += year[key];
-        });
-      });
-
-      // push to end of array
-      total["year"] = "Total";
-      arr.push(total);
-    };
-
-    if (raw.searches.length>0) getTotals(raw.searches);
-    if (raw.contraband.length>0) getTotals(raw.contraband);
-
-    // set cleaned-data to handler
-    this.set("data", {
-      years: years,
-      raw: raw
-    });
-  }
+const ContrabandHitRateHandler = C.ContrabandHitRateHandlerBase.extend({
+  defaults: Stops
 });
 
 // dashboard visuals
