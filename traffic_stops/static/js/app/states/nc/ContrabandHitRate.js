@@ -18,99 +18,22 @@ const ContrabandHitRateHandler = C.ContrabandHitRateHandlerBase.extend({
 
 // dashboard visuals
 
-var ContrabandHitRateBar = VisualBase.extend({
+var ContrabandHitRateBar = C.ContrabandHitRateBarBase.extend({
   defaults: {
     showEthnicity: true,
     width: 750,
-    height: 375
+    height: 375,
+    Stops: Stops
   },
-  setDefaultChart: function(){
-    this.chart = nv.models.multiBarHorizontalChart()
-      .x(function(d){ return d.label; })
-      .y(function(d){ return d.value; })
-      .barColor(function(d,i){return Stops.colors[1];})
-      .width(this.get("width"))
-      .height(this.get("height"))
-      .margin({top: 20, right: 50, bottom: 20, left: 180})
-      .forceY([0, 1])
-      .showLegend(false)
-      .showValues(true)
-      .tooltips(true)
-      .transitionDuration(350)
-      .showControls(false);
 
-    this.chart.yAxis
-        .axisLabel('Searches resulting in contraband-found')
-        .tickFormat(d3.format('%'));
-
-    this.chart.valueFormat(d3.format('%'));
+  _items: function () {
+    return (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races;
   },
-  drawStartup: function(){
-    // get year options for pulldown menu
-    var selector = $('<select>'),
-        year_options = this.data.years,
-        opts = year_options.map((v) => `<option value="${v}">${v}</option>`),
-        getData = () => {
-          var year = selector.val();
-          year = parseInt(year, 10) || year;
-          this.dataset =  this._getDataset(year);
-          this.drawChart();
-        };
 
-    selector
-      .append(opts)
-      .val("Total")
-      .on('change', getData)
-      .trigger('change');
-
-    $('<div>')
-      .html(selector)
-      .appendTo(this.div);
-
-    this.selector = selector;
+  _pprint: function (type) {
+    return Stops.pprint.get(type);
   },
-  drawChart: function(){
 
-    d3.select(this.svg[0])
-            .datum(this.dataset)
-            .attr('width', "100%")
-            .attr('height', "100%")
-            .attr('preserveAspectRatio', "xMinYMin")
-            .attr('viewBox', `0 0 ${this.get('width')} ${this.get('height')}`)
-            .call(this.chart);
-
-    nv.utils.windowResize(this.chart.update);
-  },
-  _getDataset: function(year){
-    var raw = this.data.raw,
-        searches_arr = raw.searches.filter(function(v){return v.year===year;}),
-        contraband_arr = raw.contraband.filter(function(v){return v.year===year;}),
-        dataset = {
-            color: Stops.single_color,
-            key: "Contraband hit-rates",
-            values: []
-        },
-        items = (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races,
-        ratio;
-
-    if (searches_arr.length===1 && contraband_arr.length===1){
-
-      searches_arr = searches_arr[0];
-      contraband_arr = contraband_arr[0];
-
-      // build a bar for each race
-      items.forEach(function(race, i){
-        ratio = contraband_arr[race] / searches_arr[race] || 0;
-        if (!isFinite(ratio)) ratio = 0;
-        dataset.values.push({
-          "label": Stops.pprint.get(race),
-          "value": ratio
-        });
-      });
-
-    }
-    return [dataset];
-  },
   triggerRaceToggle: function(e, v){
     this.set('showEthnicity', v);
     this.selector.trigger('change');
