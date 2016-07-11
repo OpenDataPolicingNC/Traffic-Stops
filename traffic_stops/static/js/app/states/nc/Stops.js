@@ -64,45 +64,13 @@ export var StopRatioDonut = C.StopRatioDonutBase.extend({
   }
 });
 
-export var StopRatioTimeSeries = VisualBase.extend({
+export var StopRatioTimeSeries = C.StopRatioTimeSeriesBase.extend({
   defaults: {
     showEthnicity: false,
     width: 750,
     height: 375
   },
-  setDefaultChart: function(){
-    this.chart = nv.models.lineChart()
-                  .useInteractiveGuideline (true)
-                  .transitionDuration(350)
-                  .showLegend(true)
-                  .showYAxis(true)
-                  .showXAxis(true)
-                  .forceY([0, 1])
-                  .width(this.get("width"))
-                  .height(this.get("height"));
 
-    this.chart.xAxis
-        .axisLabel('Year')
-        .tickFormat(d3.format('.0d'));
-
-    this.chart.yAxis
-        .axisLabel('Percentage of stops by race')
-        .tickFormat(d3.format('%'));
-  },
-  drawStartup: function(){},
-  drawChart: function(){
-    var data = this._formatData();
-
-    nv.addGraph(() => {
-        d3.select(this.svg[0])
-          .datum(data)
-          .attr('width', "100%")
-          .attr('height', "100%")
-          .attr('preserveAspectRatio', "xMinYMin")
-          .attr('viewBox', `0 0 ${this.get('width')} ${this.get('height')}`)
-          .call(this.chart);
-      });
-  },
   _formatData: function(){
     var data = [],
         items = (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races,
@@ -110,10 +78,10 @@ export var StopRatioTimeSeries = VisualBase.extend({
         i = 0,
         disabled;
 
-    this.data.line.forEach(function(key, vals){
+    this.data.line.forEach((key, vals) => {
       if (items.indexOf(key) < 0) return;
       // disable by default if maximum value < 5%
-      disabled = d3.max(vals, function(d){return d.y;})<0.05;
+      disabled = d3.max(vals, (d) => d.y)<0.05;
       data.push({
         key: Stops.pprint.get(key),
         values: vals,
@@ -122,6 +90,7 @@ export var StopRatioTimeSeries = VisualBase.extend({
       });
       i += 1;
     });
+    
     return data;
   },
   triggerRaceToggle: function(e, v){
