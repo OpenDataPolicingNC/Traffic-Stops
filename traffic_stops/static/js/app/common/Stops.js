@@ -1,6 +1,7 @@
 import _ from 'underscore';
 import d3 from 'd3';
 
+import DataHandlerBase from '../base/DataHandlerBase.js';
 import VisualBase from '../base/VisualBase.js';
 import TableBase from '../base/TableBase.js';
 
@@ -72,6 +73,32 @@ export function build_line_data (data, types, Stops) {
 
   return line;
 }
+
+export const StopsHandlerBase = DataHandlerBase.extend({
+  types: [],
+  defaults: {},
+
+  clean_data: function () {
+
+    // build totals
+    let data = this.get('raw_data');
+    let total = build_totals(data);
+
+    // build data for pie-chart
+    let pie = build_pie_data(data, total, this.defaults);
+
+    // build data for line-chart
+    let line = build_line_data(data, this.types, this.defaults);
+
+    // set object data
+    this.set('data', {
+      type: 'stop',
+      raw: this.get('raw_data'),
+      pie: pie,
+      line: line
+    });
+  }
+})
 
 export const StopRatioDonutBase = VisualBase.extend({
   setDefaultChart: function(){

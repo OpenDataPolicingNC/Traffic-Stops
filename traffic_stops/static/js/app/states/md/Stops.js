@@ -11,27 +11,9 @@ import d3 from 'd3';
 import $ from 'jquery';
 Backbone.$ = $;
 
-export const StopsHandler = DataHandlerBase.extend({
-  clean_data: function () {
-
-    // build totals
-    let data = this.get('raw_data');
-    let total = C.build_totals(data);
-
-    // build data for pie-chart
-    let pie = C.build_pie_data(data, total, Stops);
-
-    // build data for line-chart
-    let line = C.build_line_data(data, [Stops.ethnicities], Stops);
-
-    // set object data
-    this.set('data', {
-      type: 'stop',
-      raw: this.get('raw_data'),
-      pie: pie,
-      line: line
-    });
-  }
+export const StopsHandler = C.StopsHandlerBase.extend({
+  types: [Stops.ethnicities],
+  defaults: Stops
 });
 
 export const StopRatioDonut = C.StopRatioDonutBase.extend({

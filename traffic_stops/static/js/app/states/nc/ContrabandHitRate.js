@@ -43,7 +43,7 @@ const ContrabandHitRateBar = C.ContrabandHitRateBarBase.extend({
 const ContrabandTable = C.ContrabandTableBase.extend({
   _get_header_rows: function () {
     return Stops.pprint.values();
-  }
+  },
 
   types: [Stops.races, Stops.ethnicities]
 });
