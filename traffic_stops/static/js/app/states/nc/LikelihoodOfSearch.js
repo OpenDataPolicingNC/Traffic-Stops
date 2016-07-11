@@ -3,6 +3,8 @@ import VisualBase from '../../base/VisualBase.js';
 import TableBase from '../../base/TableBase.js';
 import Stops from './defaults.js';
 
+import * as C from '../../common/LikelihoodOfSearch.js';
+
 import _ from 'underscore';
 import d3 from 'd3';
 import Backbone from 'backbone';
@@ -10,58 +12,9 @@ import $ from 'jquery';
 
 Backbone.$ = $;
 
-var LikelihoodSearchHandler = DataHandlerBase.extend({
-  clean_data: function(){
-
-    var years,
-        raw = this.get("raw_data");
-
-    // get available years
-    years = d3.set(raw.stops.map(function(v){return v.year;})).values();
-    years.filter(function(v){return (v >= Stops.start_year);});
-    years.push("Total");
-
-    // get total searches/stops for all years by purpose
-    var getTotals = function(arr){
-      // calculate total for all years by purpose; push to array
-      var purposes = d3.nest()
-                       .key(function(d) { return d.purpose; })
-                       .entries(arr);
-
-      purposes.forEach(function(v){
-        // create new totals object, and reset race/ethnicity-values
-        var total = _.clone(v.values[0]);
-
-        _.keys(total).forEach(function(key){
-          if ((Stops.races.indexOf(key)>=0) ||
-              (Stops.ethnicities.indexOf(key)>=0)) {
-            total[key] = 0;
-          }
-        });
-
-        // sum data from all years
-        v.values.forEach(function(year){
-          _.keys(year).forEach(function(key){
-            if ((Stops.races.indexOf(key)>=0) ||
-                (Stops.ethnicities.indexOf(key)>=0)) {
-              total[key] += year[key];
-            }
-          });
-        });
-        total["year"] = "Total";
-        arr.push(total);
-      });
-    };
-
-    if (raw.stops.length>0) getTotals(raw.stops);
-    if (raw.searches.length>0) getTotals(raw.searches);
-
-    // set cleaned-data to handler
-    this.set("data", {
-      years: years,
-      raw: raw
-    });
-  }
+var LikelihoodSearchHandler = C.LikelihoodSearchHandlerBase.extend({
+  types: [Stops.races, Stops.ethnicities],
+  defaults: Stops
 });
 
 var LikelihoodOfSearch = VisualBase.extend({
