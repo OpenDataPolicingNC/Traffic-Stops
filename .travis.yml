@@ -18,6 +18,9 @@ env:
 install:
   - pip install -U pip
   - pip install -U -r requirements/dev.txt
+  - nvm install 4.4
+  - nvm use 4.4
+  - npm install
 
 before_script:
   - createdb -E UTF-8 traffic_stops -U postgres -O $USER
@@ -28,3 +31,4 @@ script:
   - coverage run manage.py test
   - coverage report -m --fail-under 40
   - flake8 .
+  - npm test
