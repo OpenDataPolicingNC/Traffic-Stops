@@ -41,9 +41,9 @@ ETHNICITY_TO_CODE = {
 
 # Helpers for cleaning raw STOP_REASON:
 # used to remove blanks and paragraph
-STOP_REASON_cleanup_a_re = re.compile(r'^ *(\d+) *- *(\d+)\.?\d?\d? *(\(.*\))? *$')
+STOP_REASON_cleanup_a_re = re.compile(r'^ *(\d+) *- *(\d+)\.?\d?\d?-? *[A-Za-z]?\d*[A-Za-z]? *(\(.*\))? *$')
 # used to remove blanks and asterisk
-STOP_REASON_cleanup_b_re = re.compile(r'^ *(\d\d)\*? *$')
+STOP_REASON_cleanup_b_re = re.compile(r'^ *(\d\d)\*?\-?`? *$')
 
 DOB_re = re.compile(r'^(\d\d?)/(\d\d?)/(\d\d?)$')
 

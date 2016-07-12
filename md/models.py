@@ -24,7 +24,7 @@ PURPOSE_CHOICES = (
     (8, 'Non-motor Vehicle Violations'),
     (9, 'Other Motor Vehicle Violation'),
     (10, 'Failure to remain at scene of accident'),
-    (UNKNOWN_PURPOSE, 'Unable to find statute/other'),
+    (UNKNOWN_PURPOSE, 'Other/Unknown'),
 )
 
 PURPOSE_BY_INDEX = [
