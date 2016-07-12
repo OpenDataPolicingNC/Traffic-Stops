@@ -49,9 +49,9 @@ export const StopSearchHandlerBase = AggregateDataHandlerBase.extend({
         _.each(dataType, (type) => {
           st = stop && stop[type] || 0;
           se = search && search[type] || 0;
-          if (st === 0){
+          if (st === 0) {
             row.push("-");
-            lines.get(type).push({x:yr , y:undefined});
+            lines.get(type).push({x:yr , y:0});
           } else {
             row.push(`${se}/${st}`);
             lines.get(type).push({x:yr , y:se/st});
