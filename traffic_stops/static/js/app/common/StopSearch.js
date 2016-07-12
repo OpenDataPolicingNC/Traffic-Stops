@@ -1,4 +1,5 @@
 import AggregateDataHandlerBase from '../base/AggregateDataHandlerBase.js';
+import { StopRatioTimeSeriesBase } from './Stops.js';
 import _ from 'underscore';
 import d3 from 'd3';
 
@@ -61,5 +62,46 @@ export const StopSearchHandlerBase = AggregateDataHandlerBase.extend({
       table: tables,
       table_headers: headerArr,
     });
+  }
+});
+
+export const StopSearchTimeSeriesBase = StopRatioTimeSeriesBase.extend({
+  setDefaultChart: function () {
+    this.chart = nv.models.lineChart()
+                  .useInteractiveGuideline (true)
+                  .transitionDuration(350)
+                  .showLegend(true)
+                  .showYAxis(true)
+                  .showXAxis(true)
+                  .width(this.get("width"))
+                  .height(this.get("height"));
+
+    this.chart.xAxis
+        .axisLabel('Year');
+
+    this.chart.yAxis
+        .tickFormat(d3.format('%'));
+  },
+
+  _formatData: function(){
+
+    var data = StopRatioTimeSeriesBase.prototype._formatData.bind(this)(),
+        total = this.data.line.get('total'),
+        defaultEnabled = this.defaultEnabled;
+
+    // add total-line
+    data.push({
+      key: "Total",
+      values: total,
+      color: this.Stops.baseline_color,
+      disabled: false
+    });
+
+    // predefine enabled/disabled lines on chart
+    _.each(data, (d) => {
+      d.disabled = defaultEnabled.indexOf(d.key) === -1;
+    });
+
+    return data;
   }
 });
