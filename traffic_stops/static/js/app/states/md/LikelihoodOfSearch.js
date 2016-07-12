@@ -1,16 +1,5 @@
-import DataHandlerBase from '../../base/DataHandlerBase.js';
-import VisualBase from '../../base/VisualBase.js';
-import TableBase from '../../base/TableBase.js';
 import Stops from './defaults.js';
-
 import * as C from '../../common/LikelihoodOfSearch.js';
-
-import _ from 'underscore';
-import d3 from 'd3';
-import Backbone from 'backbone';
-import $ from 'jquery';
-
-Backbone.$ = $;
 
 const LikelihoodSearchHandler = C.LikelihoodSearchHandlerBase.extend({
   types: [Stops.ethnicities],

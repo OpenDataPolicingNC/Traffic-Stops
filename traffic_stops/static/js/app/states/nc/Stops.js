@@ -1,16 +1,5 @@
-import DataHandlerBase from '../../base/DataHandlerBase.js';
-import VisualBase from '../../base/VisualBase.js';
-import TableBase from '../../base/TableBase.js';
 import Stops from './defaults.js';
-
 import * as C from '../../common/Stops.js';
-
-import Backbone from 'backbone';
-import _ from 'underscore';
-import d3 from 'd3';
-import $ from 'jquery';
-
-Backbone.$ = $;
 
 export const StopsHandler = C.StopsHandlerBase.extend({
   types: [Stops.races, Stops.ethnicities],
