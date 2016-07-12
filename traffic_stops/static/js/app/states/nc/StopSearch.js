@@ -3,6 +3,8 @@ import TableBase from '../../base/TableBase.js';
 import { StopRatioTimeSeries } from './Stops.js';
 import Stops from './defaults.js';
 
+import * as C from '../../common/StopSearch.js';
+
 import _ from 'underscore';
 import d3 from 'd3';
 import Backbone from 'backbone';
@@ -10,66 +12,14 @@ import $ from 'jquery';
 
 Backbone.$ = $;
 
-var StopSearchHandler = AggregateDataHandlerBase.extend({
-  clean_data: function(){
+const StopSearchHandler = C.StopSearchHandlerBase.extend({
+  Stops: Stops,
 
-    var stops = _.findWhere(this.get("raw_data"), {"type": "stop"}).raw,
-        searches = _.findWhere(this.get("raw_data"), {"type": "search"}).raw,
-        years = _.chain(stops).pluck('year')
-                 .filter(function(yr){return yr>=Stops.start_year})
-                 .sort().value(),
-        lines = d3.map(),
-        tables = [],
-        stop, search, row, st, se, headers;
+  major_type: Stops.races,
 
-    // get total by race
-    _.each([stops, searches], function(data){
-      _.each(data, function(yr){
-        yr.total = d3.sum(_.map(Stops.races, function(race){return yr[race] || 0;}));
-      });
-    });
+  types: [Stops.races, Stops.ethnicities],
 
-    // set defaults
-    _.each([Stops.races, Stops.ethnicities, ["total"]], function(dataType){
-      _.each(dataType, function(race){
-        lines.set(race, []);
-      });
-    });
-
-    // get values for table and for each line
-    headers = [Stops.races, Stops.ethnicities];
-    var headerArr = _.chain(headers).flatten().map(function(d){return Stops.pprint.get(d);}).value();
-    headerArr.unshift("Year");
-    headerArr.push("Total");
-    headers.push(["total"]);
-
-    _.each(years, function(yr){
-      stop = _.findWhere(stops, {"year": yr});
-      search = _.findWhere(searches, {"year": yr});
-      row = [yr];
-      _.each(headers, function(dataType){
-        _.each(dataType, function(race){
-          st = stop && stop[race] || 0;
-          se = search && search[race] || 0;
-          if (st===0){
-            row.push("-");
-            lines.get(race).push({x:yr , y:undefined});
-          } else {
-            row.push(`${se}/${st}`);
-            lines.get(race).push({x:yr , y:se/st});
-          }
-        });
-      });
-      tables.push(row);
-    });
-
-    // set object data
-    this.set("data", {
-      line: lines,
-      table: tables,
-      table_headers: headerArr,
-    });
-  }
+  _pprint: (d) => Stops.pprint.get(d)
 });
 
 var StopSearchTimeSeries = StopRatioTimeSeries.extend({
