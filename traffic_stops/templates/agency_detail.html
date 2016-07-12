@@ -23,7 +23,7 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-9" role="main">
+    <div class="col-md-12" role="main">
       {% block census-display %}
       {% endblock census-display %}
 
@@ -53,6 +53,7 @@
       {% block use-of-force-display %}{% endblock use-of-force-display %}
 
     </div>
+    <!--
     <div class="col-md-3" role="complementary">
       <nav id="sidebar">
         <h5>{{ object }}{% if officer_id %}: officer {{officer_id}} {% endif %}</h5>
@@ -63,6 +64,7 @@
         </ul>
       </nav>
     </div>
+     -->
   </div>
 </div>
 {% endblock %}

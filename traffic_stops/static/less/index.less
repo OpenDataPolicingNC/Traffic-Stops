@@ -328,6 +328,55 @@ body#state {
   }
 }
 
+/* Agency detail page
+========================================= */
+
+.headline {
+  padding-left: 3rem;
+  border-bottom: 1px solid @gray;
+
+  > h2 {
+    margin-bottom: 20px;
+    font-size: 40px;
+  }
+}
+
+p.help-block {
+  font-size: 115%;
+  margin: 2rem 0 4rem 0;
+}
+
+p.graph-help-block {
+  color: @gray-light;
+  font-style: italic;
+  padding: 2rem 2rem;
+}
+
+h4.graph-label {
+  margin-top: 0;
+}
+
+@media (min-width: 992px) {
+  /***
+   * Smaller fonts on md-and-up
+   */
+   p.graph-help-block {
+     font-size: 95%;
+   }
+
+  /***
+   * Adding the divider border to the pie chart & adjusting whitespace
+   * accordingly; only relevant on md and up
+   */
+  .pie-chart-container {
+    border-right: 1px solid @gray-light;
+  }
+
+  .line-chart-container {
+    padding-left: 30px;
+  }
+}
+
 /* Dashboard data tables
 ========================================= */
 
