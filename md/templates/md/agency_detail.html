@@ -4,29 +4,39 @@
 
 {% block stop-display %}
 <!-- stop data -->
-<div class="row">
-  <div class="col-md-12">
-    <h2 id="stop-percentage">Stops data</h2>
+  <div class="row">
+    <div class="col-md-12 headline">
+      <h2 id="stop-percentage">Traffic Stops</h2>
+    </div>
   </div>
 
-  <div class="col-md-4">
+  <div class="row">
+  <div class="col-md-12">
     <h3>Stops by ethnicity</h3>
-
-    <div>
-      <svg id="stop_race_pie"></svg>
-    </div>
 
     <p class="help-block">
       This graph reflects the ethnic composition of drivers stopped by law
       enforcement officers in the jurisdiction since the department began
-      reporting its data to the MD state government. Adjusting the drop
+      reporting its data to the MD state government.
+    </p>
+  </div>
+
+  <div class="col-md-4">
+    <div class="pie-chart-container">
+      <svg id="stop_race_pie"></svg>
+    </div>
+
+    <p class="graph-help-block">
+      Adjusting the drop
       down menu will display the ethnic breakdown of stops on a year-by-year
       basis.
     </p>
   </div>
 
-  <div id="stop_div" class="col-md-8">
-    <h3>Annual percent of stops by ethnicity</h3>
+  <div id="stop_div" class="col-md-8 line-chart-container">
+    <h4 class="graph-label">
+      Longitudinal view of annual traffic stops
+    </h4>
 
     <div role="tabpanel">
 
@@ -50,11 +60,6 @@
     </div>
 
     <p class="help-block">
-      This graph is a longitudinal representation of the ethnic
-      composition of drivers stopped by the department since it began
-      reporting its data to the MD state government. Drag the cursor
-      over the graph to see the ethnic breakdown for any given year.
-      <br><br>
       Click the "Data" tab to review the actual raw counts from the
       MD state government.
     </p>
@@ -68,27 +73,29 @@
 {% block search-display %}
 <div class="row">
   <div class="col-md-12">
-    <h2>Search data</h2>
-  </div>
-
-  <div class="col-md-4">
-    <h3>Search by ethnicity</h3>
-
-    <div>
-      <svg id="search_race_pie"></svg>
-    </div>
+    <h3>Search data</h3>
 
     <p class="help-block">
       This graph reflects the ethnic composition of drivers searched by law
       enforcement officers in the jurisdiction since the department began
-      reporting its data to the MD Department of Justice. Adjusting the drop
+      reporting its data to the MD Department of Justice.
+    </p>
+  </div>
+
+  <div class="col-md-4">
+    <div class="pie-chart-container">
+      <svg id="search_race_pie"></svg>
+    </div>
+
+    <p class="graph-help-block">
+      Adjusting the drop
       down menu will display the ethnic breakdown of stops on a year-by-year
       basis.
     </p>
   </div>
 
-  <div id="search_div" class="col-md-8">
-    <h3>Annual percent of search by ethnicity</h3>
+  <div id="search_div" class="col-md-8 line-chart-container">
+    <h4 class="graph-label">Longitudinal view of annual percent of search by ethnicity</h4>
 
     <div role="tabpanel">
 
@@ -109,12 +116,9 @@
         </div>
       </div>
 
-      <p class="help-block">
-        This graph is a longitudinal representation of the ethnic
-        composition of drivers searched by the department since it began
-        reporting its data to the MD Department of Justice. Drag the cursor
-        over the graph to see the ethnic breakdown for any given year.
-        <br><br>
+      <p class="graph-help-block">
+        Drag the cursor over the graph to see the racial/ethnic breakdown for
+        any given year.
         Click the "Data" tab to review the actual raw counts from the
         MD Department of Justice.
       </p>
@@ -127,9 +131,19 @@
 
 {% block lsb-display %}
   <div class="row">
-    <div id="lhs_div" class="col-md-offset-2 col-md-8">
+    <div id="lhs_div" class="col-md-12">
       <h3>Likelihood of search by stop-cause</h3>
 
+      <p class="help-block">
+        This chart displays the relative statistical likelihood of one
+        ethnic group being searched as compared to another group for a
+        given stop cause. Adjusting the drop down menu will display the relative
+        likelihood of search relative to another ethnic group on a year-by-year
+        basis.
+      </p>
+    </div>
+
+    <div class="col-md-10">
       <div role="tabpanel">
 
         <!-- Nav tabs -->
@@ -151,14 +165,9 @@
 
       </div>
 
-      <p class="help-block">
-        This chart displays the relative statistical likelihood of one
-        ethnic group being searched as compared to another group for a
-        given stop cause. Adjusting the drop down menu will display the relative
-        likelihood of search relative to another ethnic group on a year-by-year
-        basis. Click the colored circles above the graph to display the
+      <p class="graph-help-block">
+        Click the colored circles above the graph to display the
         comparisons between various ethnic groups.
-        <br><br>
         Click the "Data" tab to review the actual raw counts from the
         MD Department of Justice.
       </p>
@@ -169,8 +178,17 @@
 
 {% block contraband-display %}
   <div class="row">
-    <div id="contraband_div" class="col-md-offset-2 col-md-8">
+    <div id="contraband_div" class="col-md-12">
       <h3>Contraband hit-rate</h3>
+
+      <p class="help-block">
+        This chart displays the percentage of searches that uncovered contraband
+        for a given racial or ethnic group. Adjusting the drop down menu will
+        display the hit rate on a year-by-year basis.
+      </p>
+    </div>
+
+    <div class="col-md-10">
 
       <div role="tabpanel">
 
@@ -193,13 +211,9 @@
 
       </div>
 
-      <p class="help-block">
-        This chart displays the percentage of searches that uncovered contraband
-        for a given racial or ethnic group. Adjusting the drop down menu will
-        display the hit rate on a year-by-year basis.
-        <br><br>
+      <p class="graph-help-block">
         Click the "Data" tab to review the actual raw counts from the
-        NC Department of Justice.
+        MD Department of Justice.
       </p>
 
     </div>
