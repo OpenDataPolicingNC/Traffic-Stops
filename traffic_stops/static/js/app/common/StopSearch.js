@@ -5,12 +5,16 @@ import _ from 'underscore';
 import d3 from 'd3';
 
 export const StopSearchHandlerBase = AggregateDataHandlerBase.extend({
+  _year_filter: function (yr) {
+    return yr >= this.Stops.start_year;
+  },
+
   clean_data: function () {
 
     var stops = _.findWhere(this.get("raw_data"), {"type": "stop"}).raw,
         searches = _.findWhere(this.get("raw_data"), {"type": "search"}).raw,
         years = _.chain(stops).pluck('year')
-                 .filter((yr) => yr >= this.Stops.start_year)
+                 .filter(this._year_filter.bind(this))
                  .sort().value(),
         lines = d3.map(),
         tables = [],
@@ -78,7 +82,8 @@ export const StopSearchTimeSeriesBase = StopRatioTimeSeriesBase.extend({
                   .height(this.get("height"));
 
     this.chart.xAxis
-        .axisLabel('Year');
+        .axisLabel('Year')
+        .tickFormat(d3.format('.0d'));
 
     this.chart.yAxis
         .tickFormat(d3.format('%'));
