@@ -1,4 +1,5 @@
 import AggregateDataHandlerBase from '../base/AggregateDataHandlerBase.js';
+import TableBase from '../base/TableBase.js';
 import { StopRatioTimeSeriesBase } from './Stops.js';
 import _ from 'underscore';
 import d3 from 'd3';
@@ -103,5 +104,21 @@ export const StopSearchTimeSeriesBase = StopRatioTimeSeriesBase.extend({
     });
 
     return data;
+  }
+});
+
+export const StopSearchTableBase = TableBase.extend({
+  get_tabular_data: function () {
+    var header, row, rows = [];
+
+    // create header
+    rows.push(this.data.table_headers);
+
+    // create data rows
+    _.each(this.data.table, (k, v) => {
+      rows.push(k)
+    });
+
+    return rows;
   }
 });
