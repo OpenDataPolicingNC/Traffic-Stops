@@ -63,9 +63,9 @@ class AgencyTests(APITestCase):
         purpose_code, purpose_label = PURPOSE_CHOICES[4]
         race_code, _ = RACE_CHOICES[1]
         race_label = GROUPS[race_code]
-        p1 = factories.PersonFactory(race=race_code, stop__agency=agency,
-                                     ethnicity='N', stop__year=2010,
-                                     stop__purpose=purpose_code)
+        factories.PersonFactory(race=race_code, stop__agency=agency,
+                                ethnicity='N', stop__year=2010,
+                                stop__purpose=purpose_code)
         p2 = factories.PersonFactory(race=race_code, stop__agency=agency,
                                      ethnicity='N', stop__year=2010,
                                      stop__purpose=purpose_code)
@@ -118,7 +118,7 @@ class AgencyTests(APITestCase):
         p3 = factories.PersonFactory(race=race_code, stop__agency=agency,
                                      ethnicity='N', stop__year=2012)
         s1 = factories.SearchFactory(stop=p1.stop)
-        s2 = factories.SearchFactory(stop=p2.stop)
+        factories.SearchFactory(stop=p2.stop)
         s3 = factories.SearchFactory(stop=p3.stop)
         factories.ContrabandFactory(search=s1, person=p1, stop=p1.stop)
         factories.ContrabandFactory(search=s3, person=p3, stop=p3.stop)
