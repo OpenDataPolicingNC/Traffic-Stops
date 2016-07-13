@@ -13,6 +13,7 @@ YN_CHOICES = (
 
 UNKNOWN_PURPOSE = 11
 PURPOSE_CHOICES = (
+    # Strings must match purpose_order in app/states/md/defaults.js
     (0, 'Seat Belt Violation'),
     (1, 'Speed Limit Violation'),
     (2, 'Stop Light/Sign Violation'),
