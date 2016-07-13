@@ -1,4 +1,4 @@
-Stop Reason,Stop Reason,Stop Reason,Stop Reason,Stop Reason,Stop Reason,Stop Reason,Stop Reason,Stop Reason,Stop Reason,,
+Stop Reason,Stop Reason,Stop Reason,Stop Reason,Stop Reason,Stop Reason,Stop Reason,Stop Reason,Stop Reason,Stop Reason,Stop Reason,Stop Reason
 Seat Belt Violation,Speed Limit Violation,Stop Light/Sign Violation,Driving while impaired,"Safe Movement Violation (failure to stop at Railroad tracks, following too closely)",Vehicle Equipment Violation,"Vehicle Regulatory Violation (failure to register a car, failure to register disabled plates) ",Investigation,Non-Motor Vehicle Violations,"Other Motor Vehicle Violation (driving without a license, )",Failure to Remain at Scene of Accident,Other/Unknown
 22-412 - Seat belts required,21-801,,21-902,,22-101,13-401,21-904,10-303- chemical test for alcohol or drugs,17-107 (Vehicle not covered by required security),20-102,11-393.9   
 ,21-804,21-202,21-903,21-1001,22-201,13-101,21-904,10-306- admissibility of alcohol/drug test in court,16-101,20-103,22-314
@@ -8,7 +8,7 @@ Seat Belt Violation,Speed Limit Violation,Stop Light/Sign Violation,Driving whil
 ,21-803,21-209                   ,,21-1102,,13-111,,10-310-use of photograph of license plate to collect toll/charge fee,16-112,20-108,9-220
 ,21-806,21-702,,21-1103,22-209,13-112,,10-310,16-113,,11-392
 ,22-602,21-705,,21-1104,22-210,13-113,,10-310,16-301,,24-1124
-,,21-707,,21-1104,22-211,13-402,,10-409-vehicle not labeled hazardous,16-301,,11-393
+,21-805,21-707,,21-1104,22-211,13-402,,10-409-vehicle not labeled hazardous,16-301,,11-393
 ,,,,21-1111,22-214,13-401,,10-501- oil should be labeled with API/SAE classification,16-303,,10-406
 ,,,,21-1112,22-217,13-409,,21-1003- standing within 20 ft of crosswalk,16-303,,11-395
 ,,,,21-1116,22-218,13-401,,26-203-failure to sign citation,21-1124,,11-396
@@ -18,25 +18,25 @@ Seat Belt Violation,Speed Limit Violation,Stop Light/Sign Violation,Driving whil
 ,,,,21-204,22-226,13-621,,25-202-abandoning vehicle on public property,21-103,,22-4123
 ,,,,,22-227,13-625,,21-502-ped rights at crosswalk,14-102,,24-111
 ,,,,21-301,22-230,13-701,,21-503-ped not crossing at crosswalk,14-104,,21-2091
-,,,,21-303,22-301,13-940,,21-203-ped control signalss. Walk/don’t walk,15-104,,21-8011
+,,,,21-303,22-301,13-940,,21-203-ped control signals. Walk/don’t walk,15-104,,21-8011
 ,,,,21-304,22-401,13-941,,14-107- falsifying VIN,16-807,,7-705
 ,,,,21-308,22-402,17-104,,14-108- prohibited actions for registration and VIN,18-106 (it has been repealed),,22-2011
-,,,,21-309,22-403,,,15-302- license required to be a business dealer,24-103,,
-,,,,,22-404,13-410,,18-103- requirements for renting vehicles,24-104,,
-,,,,21-309,22-406,13-415,,21-509 (ped cannot walk on highway),24-105,,
-,,,,21-309,,13-106,,,26-102,,
-,,,,21-310,23-104,13-414,,,16-115,,
-,,,,21-401,24-101,13-423,,,,,
-,,,,21-402,24-106,13-501,,,,,
-,,,,21-405,24-107,13-604,,,,,
-,,,,21-404,24-112,13-605,,,,,
-,,,,21-405,24-202,13-607,,,,,
-,,,,21-601,24-203,13-708,,,,,
-,,,,21-604,55*,13-921,,,,,
-,,,,21-605,56*,13-936,,,,,
-,,,,21-706,60*,13-946,,,,,
-,,,,,61*,23-109,,,,,
-,,,,21-1408,64*,23-302,,,,,
+,,,,21-309,22-403,,,15-302- license required to be a business dealer,24-103,,801
+,,,,,22-404,13-410,,18-103- requirements for renting vehicles,24-104,,22-000
+,,,,21-309,22-406,13-415,,21-509 (ped cannot walk on highway),24-105,,412
+,,,,21-309,,13-106,,,26-102,,406
+,,,,21-310,23-104,13-414,,,16-115,,201
+,,,,21-401,24-101,13-423,,,16-104,,11-1527
+,,,,21-402,24-106,13-501,,,17-106 (lapse of insurance),,901
+,,,,21-405,24-107,13-604,,,8-409 (use of bike path),,411
+,,,,21-404,24-112,13-605,,,11-172 (def of truck tractor),,412
+,,,,21-405,24-202,13-607,,,15-402,,10-305
+,,,,21-601,24-203,13-708,,,16-304,,11-383
+,,,,21-604,55*,13-921,,,16-808,,12-301 (ID card req't)
+,,,,21-605,56*,13-936,,,,,06-b1b
+,,,,21-706,60*,13-946,,,,,11-140210
+,,,,,61*,23-109,,,,,15-502 (license req't for scrap processor)
+,,,,21-1408,64*,23-302,,,,,16-815 (not license to drive that class veh)
 ,,,,21-1122,68*,13-703,,,,,
 ,,,,21-403,71*,13-702,,,,,
 ,,,,21-1214,73*,,,,,,
@@ -74,15 +74,22 @@ Seat Belt Violation,Speed Limit Violation,Stop Light/Sign Violation,Driving whil
 ,,,,21-1406                   ,59*,,,,,,
 ,,,,21-1409                   ,89*,,,,,,
 ,,,,21-1413                  ,50*,,,,,,
-,,,,21-312,,,,,,,
-,,,,21-504,,,,,,,
-,,,,21-505,,,,,,,
-,,,,21-603,,,,,,,
-,,,,21-606,,,,,,,
-,,,,21-701,,,,,,,
-,,,,21-703,,,,,,,
-,,,,21-314,,,,,,,
-,,,,21-1412,,,,,,,
-,,,,21-307,,,,,,,
-,,,,21-508,,,,,,,
-,,,,21-1412,,,,,,,
+,,,,21-312,67*,,,,,,
+,,,,21-504,72*,,,,,,
+,,,,21-505,77*,,,,,,
+,,,,21-603,21*,,,,,,
+,,,,21-606,70*,,,,,,
+,,,,21-701,27*,,,,,,
+,,,,21-703,22-104,,,,,,
+,,,,21-314,22-224,,,,,,
+,,,,21-1412,22-414,,,,,,
+,,,,21-307,22-228,,,,,,
+,,,,21-508,22-202,,,,,,
+,,,,21-1412,22-225,,,,,,
+,,,,21-1302,,,,,,,
+,,,,21-106,,,,,,,
+,,,,24-109,,,,,,,
+,,,,21-313,,,,,,,
+,,,,21-104,,,,,,,
+,,,,24-102,,,,,,,
+,,,,21-1115,,,,,,,

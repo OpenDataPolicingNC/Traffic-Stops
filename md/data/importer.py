@@ -41,9 +41,11 @@ ETHNICITY_TO_CODE = {
 
 # Helpers for cleaning raw STOP_REASON:
 # used to remove blanks and paragraph
-STOP_REASON_cleanup_a_re = re.compile(r'^ *(\d+) *- *(\d+)\.?\d?\d?-? *[A-Za-z]?\d*[A-Za-z]? *(\(.*\))? *$')
-# used to remove blanks and asterisk
+STOP_REASON_cleanup_a_re = re.compile(r'^ *(\d\d?) *- *(\d+)\.?\d?\d?-? *[A-Za-z]?\d*[A-Za-z]? *(\(.*\))? *$')
+# used to remove extraneous characters from two-digit codes
 STOP_REASON_cleanup_b_re = re.compile(r'^ *(\d\d)\*?\-?`? *$')
+# used to remove extraneous characters from three-digit codes
+STOP_REASON_cleanup_c_re = re.compile(r'^ *(\d\d\d)($|\-|\.)')
 
 DOB_re = re.compile(r'^(\d\d?)/(\d\d?)/(\d\d?)$')
 
@@ -68,18 +70,21 @@ def load_STOP_REASON_normalization_rules():
     # STOP_REASON_CSV
     twodigit_code_re = re.compile(r'^(\d\d)\*? *$')
     complex_code_re = re.compile(r'^(\d\d?-\d\d\d\d?)(\(|\.|-| |$)')
+    threedigit_code_re = re.compile(r'^(\d\d\d)$')
+    # match a small number of odd codes in column L ("Unknown") of STOP_REASON_CSV
+    known_weird_re = re.compile(r'^(06-b1b|11-140210) *$')
     blank_re = re.compile(r'^ *$')
 
     def clean_cell(s, line_number):
         """
-        Extract a two-digit or complex code from a cell of the CSV,
-        removing extraneous text.
+        Extract a code from a cell of the CSV, removing extraneous text.
 
         E.g.,
           "64*" => "64"
           "22-412 - Seat belts required" => "22-412"
           "13-106(d2)" => "13-106"
           "10-309 (c)" => "13-309"
+          "401" => "401"
         """
         m = twodigit_code_re.match(s)
         if m:
@@ -87,6 +92,14 @@ def load_STOP_REASON_normalization_rules():
         m = complex_code_re.match(s)
         if m:
             return m.group(1)
+        m = threedigit_code_re.match(s)
+        if m:
+            return m.group(1)
+        m = known_weird_re.match(s)
+        if m:
+            # XXX One of the weird codes is lower-case in the spreadsheet
+            #     but upper-case in the raw data.
+            return m.group(1).upper()
         raise ValueError('Line %d of %s has bad cell value "%s"' % (
                 line_number, STOP_REASON_CSV, s
         ))
@@ -159,7 +172,7 @@ def fix_STOP_REASON(s):
     m = STOP_REASON_cleanup_a_re.match(s)
     if m:
         return m.group(1) + '-' + m.group(2)
-    m = STOP_REASON_cleanup_b_re.match(s)
+    m = STOP_REASON_cleanup_b_re.match(s) or STOP_REASON_cleanup_c_re.match(s)
     if m:
         return m.group(1)
     else:

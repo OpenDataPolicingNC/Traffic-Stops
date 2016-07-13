@@ -123,7 +123,12 @@ class TestFieldNormalization(TestCase):
             ('64 ', '64', 5),
             ('64-', '64', 5),
             ('64*-`', '64', 5),
-            ('409-b', '409-b', UNKNOWN_PURPOSE),
+            ('409-b', '409', UNKNOWN_PURPOSE),
+            ('412-3', '412', UNKNOWN_PURPOSE),
+            ('412.3-b', '412', UNKNOWN_PURPOSE),
+            ('801.1', '801', UNKNOWN_PURPOSE),
+            ('801-1', '801', UNKNOWN_PURPOSE),
+            ('201-a(1)', '201', UNKNOWN_PURPOSE),
             (' 22 - 216', '22-216', 5),
             ('22-412.3(b)', '22-412', 0),
             ('22-412.3(c2)', '22-412', 0),
@@ -137,6 +142,8 @@ class TestFieldNormalization(TestCase):
             ('13-936  E(2iI)', '13-936', 6),
             ('21-2091(iiT)', '21-2091', UNKNOWN_PURPOSE),
             ('21-201-a(1)', '21-201', 4),
+            ('9-220', '9-220', UNKNOWN_PURPOSE),
+            ('06-B1B', '06-B1B', UNKNOWN_PURPOSE),
         )
         stops = pd.DataFrame({
             'STOP_REASON': [
