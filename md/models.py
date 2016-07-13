@@ -13,6 +13,7 @@ YN_CHOICES = (
 
 UNKNOWN_PURPOSE = 11
 PURPOSE_CHOICES = (
+    # Strings must match purpose_order in app/states/md/defaults.js
     (0, 'Seat Belt Violation'),
     (1, 'Speed Limit Violation'),
     (2, 'Stop Light/Sign Violation'),
@@ -24,7 +25,7 @@ PURPOSE_CHOICES = (
     (8, 'Non-motor Vehicle Violations'),
     (9, 'Other Motor Vehicle Violation'),
     (10, 'Failure to remain at scene of accident'),
-    (UNKNOWN_PURPOSE, 'Unable to find statute/other'),
+    (UNKNOWN_PURPOSE, 'Other/Unknown'),
 )
 
 PURPOSE_BY_INDEX = [
