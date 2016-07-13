@@ -220,7 +220,7 @@ gulp.task('test', function () {
           thresholds: {
             statements: 80
             , branches: 50
-            , lines: 90
+            , lines: 15
             , functions: 50
           }
           , coverageDirectory: './coverage/'
