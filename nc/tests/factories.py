@@ -57,3 +57,14 @@ class SearchFactory(factory.django.DjangoModelFactory):
     stop = factory.SubFactory(StopFactory)
     person = factory.SubFactory(PersonFactory)
     type = factory.fuzzy.FuzzyChoice(x[0] for x in models.SEARCH_TYPE_CHOICES)
+
+
+class ContrabandFactory(factory.django.DjangoModelFactory):
+
+    class Meta(object):
+        model = models.Contraband
+
+    contraband_id = factory.Sequence(lambda x: x)
+    search = factory.SubFactory(SearchFactory)
+    person = factory.SubFactory(PersonFactory)
+    stop = factory.SubFactory(StopFactory)
