@@ -2,21 +2,22 @@ from django.core.urlresolvers import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from md.models import ETHNICITY_CHOICES, PURPOSE_CHOICES
+from md.models import Agency, ETHNICITY_CHOICES, PURPOSE_CHOICES
 from md.tests import factories
 
 
 class AgencyTests(APITestCase):
 
-    # Why "aaa"?  It must run first to get the expected agency list.
-    def test_aaa_list_agencies(self):
+    def test_list_agencies(self):
         """Test Agency list"""
         agency = factories.AgencyFactory()
         url = reverse('md:agency-api-list')
-        data = [{'id': agency.pk, 'name': agency.name}]
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, data)
+        # Other Agencies may have been left around from other tests
+        self.assertIn((agency.pk, agency.name), [
+            (a.pk, a.name) for a in Agency.objects.all()
+        ])
 
     def test_stops_api(self):
         """Test Agency stops API endpoint with no stops"""
