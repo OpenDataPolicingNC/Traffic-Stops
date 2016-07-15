@@ -39,15 +39,20 @@ class StateDatasetRouter(object):
         # traffic_stops_nc  traffic_stops_admin False
         # traffic_stops_nc  traffic_stops_nc    True
         #
-        logger.debug('allow_syncdb({}, {}): {} {}'.format(db, app_label, model_name, hints))
+        logger.debug('allow_syncdb({}, {}): {} {}'.format(db, app_label,
+                                                          model_name, hints))
         db_state = db[-2:]
         app_is_state = app_label in ('nc', 'md')
         if db_state == app_label:
             ret = True
-        elif db == 'default' and app_is_state:
-            ret = False
+        elif db == 'default':
+            if app_is_state:
+                ret = False
+            else:
+                ret = True
         else:
-            ret = True
-
-        logger.debug('allow_syncdb({}, {}): {}'.format(db, app_label, model_name, ret))
+            ret = False
+        logger.debug(
+            'allow_syncdb({}, {}): {} {} {}'.format(db, app_label, model_name,
+                                                    app_label, app_is_state, ret))
         return ret
