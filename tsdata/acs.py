@@ -14,6 +14,9 @@ import census
 import pandas as pd
 from us import states
 
+from tsdata.models import CensusProfile, STATE_CHOICES
+from django.conf import settings
+
 
 # Variables: http://api.census.gov/data/2014/acs5/variables.html
 RACE_VARIABLES = {
@@ -104,3 +107,31 @@ class ACSStatePlaces(ACS):
 
     def call_api(self):
         return self.api.acs.state_place(VARIABLES, self.fips, census.ALL)
+
+
+def refresh_census_models():
+    CensusProfile.objects.all().delete()
+    for state in [key.upper() for key, val in STATE_CHOICES]:
+        data = get_state_census_data(settings.CENSUS_API_KEY, state)
+        data = data[data.location.str.contains('CDP') == False]
+        profiles = []
+        for index, row in data.iterrows():
+            profile = CensusProfile(
+                id=row['id'],
+                location=row['location'],
+                geography=row['geography'],
+                state=row['state'],
+                source=row['source'],
+                white=row['white'],
+                black=row['black'],
+                native_american=row['native_american'],
+                asian=row['asian'],
+                native_hawaiian=row['native_hawaiian'],
+                other=row['other'],
+                two_or_more_races=row['two_or_more_races'],
+                hispanic=row['hispanic'],
+                non_hispanic=row['non_hispanic'],
+                total=row['non_hispanic'],
+            )
+            profiles.append(profile)
+        CensusProfile.objects.bulk_create(profiles)
