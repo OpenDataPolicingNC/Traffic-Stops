@@ -7,7 +7,7 @@
 #
 # Fact Finder:
 #  - Home: http://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml
-#  - Baltimore: http://factfinder.census.gov/bkmk/cf/1.0/en/county/Baltimore city, Maryland/RACE_AND_HISPANIC_ORIGIN
+#  - Baltimore: http://factfinder.census.gov/bkmk/cf/1.0/en/county/Baltimore city, Maryland/RACE_AND_HISPANIC_ORIGIN  # noqa
 #  - Baltimore Races: http://factfinder.census.gov/bkmk/table/1.0/en/ACS/14_5YR/DP05/0500000US24510
 
 import census
