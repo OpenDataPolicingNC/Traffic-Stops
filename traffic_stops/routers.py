@@ -39,8 +39,6 @@ class StateDatasetRouter(object):
         # traffic_stops_nc  traffic_stops_admin False
         # traffic_stops_nc  traffic_stops_nc    True
         #
-        logger.debug('allow_syncdb({}, {}): {} {}'.format(db, app_label,
-                                                          model_name, hints))
         db_state = db[-2:]
         app_is_state = app_label in ('nc', 'md')
         if db_state == app_label:
