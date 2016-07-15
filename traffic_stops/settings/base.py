@@ -233,7 +233,7 @@ LOGGING = {
         },
         'traffic_stops': {
             'handlers': ['file', 'syslog'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': False,
         },
         'tsdata': {
