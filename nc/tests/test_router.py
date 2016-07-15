@@ -1,6 +1,8 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 
+import nc
+import traffic_stops
 from nc.models import Stop
 from traffic_stops.routers import StateDatasetRouter
 
@@ -29,19 +31,19 @@ class StateDatasetRouterTest(TestCase):
     def test_syncdb_state_model_defaultdb(self):
         """State models should not sync to the default DB"""
         router = StateDatasetRouter()
-        self.assertFalse(router.allow_migrate('default', Stop))
+        self.assertFalse(router.allow_migrate('default', nc, Stop))
 
     def test_syncdb_other_model_defaultdb(self):
         """Other models should sync to the default DB"""
         router = StateDatasetRouter()
-        self.assertTrue(router.allow_migrate('default', User))
+        self.assertTrue(router.allow_migrate('default', traffic_stops))
 
     def test_syncdb_state_model_statedb(self):
         """State models should sync to State DBs"""
         router = StateDatasetRouter()
-        self.assertTrue(router.allow_migrate('traffic_stops_nc', Stop))
+        self.assertTrue(router.allow_migrate('traffic_stops_nc', nc))
 
     def test_syncdb_other_model_statedb(self):
         """Other models should not sync to State DBs"""
         router = StateDatasetRouter()
-        self.assertFalse(router.allow_migrate('traffic_stops_nc', User))
+        self.assertFalse(router.allow_migrate('traffic_stops_nc', auth, User))

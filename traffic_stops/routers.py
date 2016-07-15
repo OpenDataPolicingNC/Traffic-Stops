@@ -31,7 +31,7 @@ class StateDatasetRouter(object):
         logger.debug('db_for_write({}): {}'.format(state_db, name))
         return name
 
-    def allow_migrate(self, db, model):
+    def allow_migrate(self, db, app_label, model_name=None, **hints):
         # scenarios:
         #
         # default           traffic_stops_nc    False
@@ -39,16 +39,15 @@ class StateDatasetRouter(object):
         # traffic_stops_nc  traffic_stops_admin False
         # traffic_stops_nc  traffic_stops_nc    True
         #
-        name = self._db_name(model)
-        if db == 'default':
-            if name in settings.DATABASES:
-                ret = False
-            else:
-                ret = True
+        logger.debug('allow_syncdb({}, {}): {} {}'.format(db, app_label, model_name, hints))
+        db_state = db[-2:]
+        app_is_state = app_label in ('nc', 'md')
+        if db_state == app_label:
+            ret = True
+        elif db == 'default' and app_is_state:
+            ret = False
         else:
-            if name in settings.DATABASES and db == name:
-                ret = True
-            else:
-                ret = False
-        logger.debug('allow_syncdb({}, {}): {}'.format(db, model, ret))
+            ret = True
+
+        logger.debug('allow_syncdb({}, {}): {}'.format(db, app_label, model_name, ret))
         return ret
