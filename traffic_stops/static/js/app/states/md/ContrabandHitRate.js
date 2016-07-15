@@ -17,25 +17,22 @@ const ContrabandHitRateBar = C.ContrabandHitRateBarBase.extend({
   Stops: Stops,
 
   _items: function () {
-    return (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races;
+    return Stops.ethnicities;
   },
 
   _pprint: function (type) {
-    return Stops.pprint.get(type);
+    return type;
   },
 
-  triggerRaceToggle: function(e, v){
-    this.set('showEthnicity', v);
-    this.selector.trigger('change');
-  }
+  triggerRaceToggle: () => null
 });
 
 const ContrabandTable = C.ContrabandTableBase.extend({
   _get_header_rows: function () {
-    return Stops.pprint.values();
+    return Stops.ethnicities;
   },
 
-  types: [Stops.races, Stops.ethnicities]
+  types: [Stops.ethnicities]
 });
 
 export default {

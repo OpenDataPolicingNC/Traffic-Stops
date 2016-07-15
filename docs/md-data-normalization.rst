@@ -23,6 +23,20 @@ reasons (codes) to the various purposes.  The codes are simplified in the spread
 reflecting that subsections, paragraphs, etc. aren't relevant to the mapping, so
 the raw stop codes are similarly simplified before looking them up.
 
+Here are typical examples of how the raw data values from MD are simplified
+before matching with values in the spreadsheet:
+
+- ``64*`` => ``64``
+- ``21-202(h1)`` => ``21-202``
+- ``21-507G3I(i1)`` => ``21-507``
+- ``22-412.3(c2)`` => ``22-412``
+- ``409-b`` => ``409``
+- ``412.3-b`` => ``412``
+
+The SCSJ was originally provided as an Excel worksheet; it was saved as CSV from
+LibreOffice.  The spreadsheet is in this repository as
+``md/data/STOP_REASON-normalization.csv``.
+
 GENDER
 ------
 
