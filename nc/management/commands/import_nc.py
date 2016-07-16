@@ -5,7 +5,7 @@ from nc.data import importer
 
 class Command(BaseCommand):
     """Helper command to kickoff NC data import"""
-    url = "https://s3-us-west-2.amazonaws.com/openpolicingdata/TS_2016_04_13T13.38.34.887.zip"
+    url = "https://s3-us-west-2.amazonaws.com/openpolicingdata/TS_2016_06_22T09.52.20.780.zip"
 
     def handle(self, *args, **options):
         dest = None
