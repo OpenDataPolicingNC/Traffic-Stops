@@ -16,6 +16,7 @@ from us import states
 
 from tsdata.models import CensusProfile, STATE_CHOICES
 from django.conf import settings
+from django.db import transaction
 
 
 # Variables: http://api.census.gov/data/2014/acs5/variables.html
@@ -32,14 +33,6 @@ RACE_VARIABLES = {
     'B03002_002E': 'non_hispanic',
 }
 VARIABLES = ['NAME'] + list(RACE_VARIABLES.keys())  # NAME = geography/location
-
-
-def get_state_census_data(key, state_abbr):
-    """Download several Census endpoints into a single DataFrame"""
-    counties = ACSStateCounties(key, state_abbr).get()
-    subdivs = ACSStatePlaces(key, state_abbr).get()
-    df = pd.concat([counties, subdivs])
-    return df
 
 
 class ACS(object):
@@ -108,30 +101,42 @@ class ACSStatePlaces(ACS):
     def call_api(self):
         return self.api.acs.state_place(VARIABLES, self.fips, census.ALL)
 
+    def get(self):
+        df = super(ACSStatePlaces, self).get()
+        # ignore Census Designated Places (CDP)
+        return df[df.location.str.contains('CDP') == False]
 
-def refresh_census_models():
+
+def get_state_census_data(key):
+    """Download several state Census endpoints into a single DataFrame"""
+    profiles = []
+    for state in [abbr.upper() for abbr, name in STATE_CHOICES]:
+        profiles.append(ACSStateCounties(key, state).get())
+        profiles.append(ACSStatePlaces(key, state).get())
+    return pd.concat(profiles)
+
+
+@transaction.atomic
+def refresh_census_models(data):
+    profiles = []
     CensusProfile.objects.all().delete()
-    for state in [key.upper() for key, val in STATE_CHOICES]:
-        data = get_state_census_data(settings.CENSUS_API_KEY, state)
-        data = data[data.location.str.contains('CDP') == False]
-        profiles = []
-        for index, row in data.iterrows():
-            profile = CensusProfile(
-                id=row['id'],
-                location=row['location'],
-                geography=row['geography'],
-                state=row['state'],
-                source=row['source'],
-                white=row['white'],
-                black=row['black'],
-                native_american=row['native_american'],
-                asian=row['asian'],
-                native_hawaiian=row['native_hawaiian'],
-                other=row['other'],
-                two_or_more_races=row['two_or_more_races'],
-                hispanic=row['hispanic'],
-                non_hispanic=row['non_hispanic'],
-                total=row['non_hispanic'],
-            )
-            profiles.append(profile)
-        CensusProfile.objects.bulk_create(profiles)
+    for row in data:
+        profile = CensusProfile(
+            id=row['id'],
+            location=row['location'],
+            geography=row['geography'],
+            state=row['state'],
+            source=row['source'],
+            white=row['white'],
+            black=row['black'],
+            native_american=row['native_american'],
+            asian=row['asian'],
+            native_hawaiian=row['native_hawaiian'],
+            other=row['other'],
+            two_or_more_races=row['two_or_more_races'],
+            hispanic=row['hispanic'],
+            non_hispanic=row['non_hispanic'],
+            total=row['non_hispanic'],
+        )
+        profiles.append(profile)
+    CensusProfile.objects.bulk_create(profiles)
