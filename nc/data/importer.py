@@ -67,11 +67,16 @@ def convert_to_csv(destination):
             continue
         create_schema(format_path, schema_path)
         logger.info("Converting {} > {}".format(data_path, csv_path))
+        if hasattr(settings, 'WEBSERVER_ROOT'):
+            base = os.path.join(settings.WEBSERVER_ROOT, 'env/bin/')
+        else:
+            base = ''
         # Convert to CSV using ISO-8859-1 encoding
         # TODO: This may be incorrect https://en.wikipedia.org/wiki/Windows-1252
-        call(["in2csv -e iso-8859-1 -f fixed -s {} {} > {}".format(schema_path,
-                                                                   data_path,
-                                                                   csv_path)],
+        call(["{}in2csv -e iso-8859-1 -f fixed -s {} {} > {}".format(base,
+                                                                     schema_path,
+                                                                     data_path,
+                                                                     csv_path)],
              shell=True)
         call([r"sed -i 's/\x0//g' {}".format(csv_path)], shell=True)
         data_count = line_count(data_path)
