@@ -17,6 +17,7 @@ GEOGRAPY_CHOICES = (
     ('place', 'Place'),
 )
 
+
 class Dataset(models.Model):
     state = models.CharField(choices=STATE_CHOICES, max_length=2)
     name = models.CharField(max_length=255, unique=True)

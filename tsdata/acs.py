@@ -15,7 +15,6 @@ import pandas as pd
 from us import states
 
 from tsdata.models import CensusProfile, STATE_CHOICES
-from django.conf import settings
 from django.db import transaction
 
 
@@ -104,7 +103,7 @@ class ACSStatePlaces(ACS):
     def get(self):
         df = super(ACSStatePlaces, self).get()
         # ignore Census Designated Places (CDP)
-        return df[df.location.str.contains('CDP') == False]
+        return df[df.location.str.contains('CDP') is False]
 
 
 def get_state_census_data(key):

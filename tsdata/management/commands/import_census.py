@@ -25,19 +25,19 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('--use-api',
-            action='store_true',
-            dest='api',
-            default=False,
-            help='Download data from Census API (requires key)')
+                            action='store_true',
+                            dest='api',
+                            default=False,
+                            help='Download data from Census API (requires key)')
         parser.add_argument('--output',
-            action='store_true',
-            dest='output',
-            default=False,
-            help='Output JSON to stdout rather than importing')
+                            action='store_true',
+                            dest='output',
+                            default=False,
+                            help='Output JSON to stdout rather than importing')
         parser.add_argument('--indent', default=None, type=int)
         parser.add_argument('--url',
-            default=ACS_JSON_URL,
-            help='URL for Census data in JSON format')
+                            default=ACS_JSON_URL,
+                            help='URL for Census data in JSON format')
 
     def handle(self, *args, **options):
         if options['api']:
