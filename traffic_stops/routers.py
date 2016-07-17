@@ -11,6 +11,9 @@ class StateDatasetRouter(object):
     def _db_name(self, model):
         return 'traffic_stops_{}'.format(model._meta.app_label)
 
+    def _db_name_from_label(self, app_label):
+        return 'traffic_stops_{}'.format(app_label)
+
     def db_for_read(self, model, **hints):
         """Return state DB if model's app name is a database"""
         state_db = self._db_name(model)
@@ -39,18 +42,17 @@ class StateDatasetRouter(object):
         # traffic_stops_nc  traffic_stops_admin False
         # traffic_stops_nc  traffic_stops_nc    True
         #
-        db_state = db[-2:]
-        app_is_state = app_label in ('nc', 'md')
-        if db_state == app_label:
-            ret = True
-        elif db == 'default':
-            if app_is_state:
-                ret = False
-            else:
+        state_db = self._db_name_from_label(app_label)
+        app_is_state = state_db in settings.DATABASES
+        if app_is_state:
+            if db[-2:] == app_label:
                 ret = True
+            else:
+                ret = False
+        elif db == 'default':
+            ret = True
         else:
             ret = False
         logger.debug(
-            'allow_syncdb({}, {}): {} {} {}'.format(db, app_label, model_name,
-                                                    app_label, app_is_state, ret))
+            'allow_syncdb({}, {} {}): {}'.format(db, app_label, model_name, ret))
         return ret
