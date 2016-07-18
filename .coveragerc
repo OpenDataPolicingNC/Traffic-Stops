@@ -1,7 +1,7 @@
 [run]
 branch = true
 source = traffic_stops,nc,md
-omit = */tests/*, */migrations/*, */admin.py, */management/*, md/data/analyzer.py, md/data/scanner.py
+omit = */tests/*, */migrations/*, */admin.py, */management/*, md/data/analyzer.py, md/data/scanner.py, traffic_stops/settings/*, traffic_stops/wsgi.py
 
 [report]
 show_missing = true

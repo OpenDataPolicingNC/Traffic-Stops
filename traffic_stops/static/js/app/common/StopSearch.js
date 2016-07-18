@@ -86,7 +86,7 @@ export const StopSearchTimeSeriesBase = StopRatioTimeSeriesBase.extend({
         .tickFormat(d3.format('.0d'));
 
     this.chart.yAxis
-        .tickFormat(d3.format('%'));
+        .tickFormat(d3.format('.1%'));
   },
 
   _formatData: function(){

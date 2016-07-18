@@ -4,7 +4,7 @@ django-debug-toolbar==1.4
 sqlparse==0.1.18
 
 coverage==3.7.1
-factory_boy==2.6.0
+factory_boy==2.7.0
 flake8==2.5.1
 # Required by flake8
 pyflakes==0.8.1
