@@ -45,10 +45,7 @@ class StateDatasetRouter(object):
         state_db = self._db_name_from_label(app_label)
         app_is_state = state_db in settings.DATABASES
         if app_is_state:
-            if db[-2:] == app_label:
-                ret = True
-            else:
-                ret = False
+            ret = db == state_db
         elif db == 'default':
             ret = True
         else:
