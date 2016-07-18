@@ -21,6 +21,17 @@
   </div>
 </div>
 
+<nav class="graphs-nav" id="graphs-nav">
+  <ul class="nav">
+    <li><a href="#demographics">Census Demographics</a></li>
+    <li><a href="#stop-percentage">Stop Percentage</a></li>
+    <li><a href="#search-percentage-dept">Departmental Search Rate</a></li>
+  </ul>
+  {% block race-selector %}{% endblock race-selector %}
+</nav>
+
+<div class="affix-padder"></div>
+
 <div class="container">
   <div class="row">
     <div class="col-md-12" role="main">
@@ -63,21 +74,20 @@
       {% block graph-code %}
       {% endblock graph-code %}
 
-      $('body').scrollspy({ target: '#sidebar', offset: 60 });
+      $('body').scrollspy({ target: '#graphs-nav', offset: 50 });
       $('window').on('load', function () {
         $('body').scrollspy('refresh')
       });
 
-      $('#sidebar').affix({
+      var $graphsNav = $('#graphs-nav');
+
+      $graphsNav.affix({
         offset: {
           top: function () {
-            var offsetTop      = $('#sidebar').offset().top
-            var sideBarMargin  = parseInt($('#sidebar').children(0).css('margin-top'), 10)
-            var navOuterHeight = $('.odp-nav').height()
-            return (this.top = offsetTop - navOuterHeight - sideBarMargin);
+            return $('.state-banner').outerHeight() - $('.odp-nav').innerHeight()
           },
           bottom: function () {
-            return (this.bottom = $('.footer').outerHeight(true))
+            return $('.footer').outerHeight(true)
           }
         }
       });

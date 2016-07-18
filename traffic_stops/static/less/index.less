@@ -342,6 +342,53 @@ body#state {
   }
 }
 
+nav.graphs-nav {
+  padding: 2rem 4rem;
+  background-color: white;
+
+  > ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+
+    display: -webkit-inline-box;
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    .flex-direction(row);
+    .flex-wrap(nowrap);
+    .justify-content(flex-start);
+    .align-items(center);
+
+    > li {
+      a {
+        margin-right: 2rem;
+      }
+      &.active {
+        > a {
+          color: white;
+          background-color: @brand-primary;
+        }
+      }
+    }
+  }
+
+  &.affix {
+    z-index: 1;
+    width: 100%;
+    top: 50px;
+
+    & + .affix-padder {
+      height: 80px;
+      width: 100%;
+    }
+  }
+
+  .raceSelector {
+    display: inline-block;
+  }
+}
+
 p.help-block {
   font-size: 115%;
   margin: 2rem 0 4rem 0;
