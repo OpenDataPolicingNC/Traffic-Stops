@@ -342,6 +342,10 @@ body#state {
   }
 }
 
+/***
+ * Sticky sub-navigation bar on agency detail pages.
+ * *Not* sticky on mobile view.
+ */
 nav.graphs-nav {
   padding: 2rem 4rem;
   background-color: white;
@@ -378,14 +382,53 @@ nav.graphs-nav {
     width: 100%;
     top: 50px;
 
+    /***
+     * When the stickiness is enabled, it will leave behind a gap. To fill
+     * that gap, an element with the same height as the nav is expanded to
+     * fill the space.
+     */
     & + .affix-padder {
-      height: 80px;
-      width: 100%;
+      @media (min-width: 771px) {
+        height: 80px;
+        width: 100%;
+      }
     }
   }
 
   .raceSelector {
     display: inline-block;
+  }
+}
+
+@media (max-width: 770px) {
+  .raceSelector {
+    float: none !important;
+  }
+
+  nav.graphs-nav {
+    .flex-layout();
+    .flex-wrap(wrap);
+    .flex-direction(row);
+    .justify-content(center);
+
+    position: static !important;
+  }
+}
+
+@media (max-width: 440px) {
+  nav.graphs-nav {
+    padding: 2rem 0;
+
+    > ul {
+      > li {
+        padding: 0 8px;
+
+        > a {
+          margin: 0;
+          padding: 10px 8px;
+        }
+      }
+    }
   }
 }
 
