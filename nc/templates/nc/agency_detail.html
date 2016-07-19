@@ -10,6 +10,10 @@
 <span class="start" />
 {% endblock race-selector %}
 
+{% block census-link %}
+<li><a href="#demographics">Census Demographics</a></li>
+{% endblock census-link %}
+
 {% block census-display %}
   <!-- census data -->
   <div id="census_row" class="row">
@@ -17,9 +21,9 @@
       <h2 id='demographics'>2010 census data</h2>
     </div>
 
+
     <div class="col-md-4">
-      <h3>Percentage by race/ethnicity</h3>
-      <svg id="census_pie"></svg>
+      <h3>Driving population (percentage by race/ethnicity)</h3>
 
       <p class="help-block">
         This graph reflects the racial composition of the jurisdiction at the
@@ -27,19 +31,25 @@
         The actual driving population within a given jurisdiction may vary
         significantly from census figures.
       </p>
+
+      <svg id="census_pie"></svg>
+
+      <p class="graph-help-block">
+        Toggle on or off racial/ethnic groups.
+      </p>
     </div>
 
     <div class="col-md-8">
-      <h3>Data table</h3>
+      <h3>Tabular view of 2010 census data</h3>
       <br><br>
       <div id="census_data"></div>
 
-      <p class="help-block">
+      <!-- <p class="help-block">
         This data table reflects the jurisdiction's racial and ethnic
         composition at the time of the last census (2010). It is included for
         comparative purposes. The actual driving population within a given
         jurisdiction may vary significantly from census figures.
-      </p>
+      </p> -->
 
     </div>
   </div>
@@ -60,9 +70,7 @@
       <p class="help-block">
         This graph reflects the racial composition of drivers stopped by law
         enforcement officers in the jurisdiction since the department began
-        reporting its data to the NC Department of Justice. Adjusting the drop
-        down menu will display the racial breakdown of stops on a year-by-year
-        basis.
+        reporting its data to the NC Department of Justice.
       </p>
     </div>
 
@@ -113,16 +121,15 @@
 {% endblock stop-display %}
 
 {% block search-rate-display %}
-  <!-- Fraction of stops searched -->
-  <div class="row">
-    <div class="col-md-12 headline">
-      <h2 id="search-percentage-dept">{% if officer_id %}Officer{% else %}Departmental{% endif %} Search Rate</h2>
-    </div>
+<div class="row">
+  <div class="col-md-12 headline">
+    <h2 id="search-percentage-dept">{% if officer_id %}Officer{% else %}Departmental{% endif %} search rate</h2>
   </div>
+</div>
 
-  <div>
-    <div class="col-md-12">
-      <h3>Average Departmental Search Rate for Vehicle Stops</h3>
+<div class="row">
+   <div class="col-md-12">
+    <h3>Average {% if officer_id %}Officer{% else %}Departmental{% endif %} Search Rate For Vehicle Stops</h3>
 
       <p class="help-block">
         This chart is a longitudinal representation of the average departmental
@@ -274,7 +281,7 @@
 {% block contraband-display %}
   <div class="row">
     <div id="contraband_div" class="col-md-12">
-      <h3>Contraband hit-rate</h3>
+      <h3>Contraband "Hit-Rate"</h3>
     </div>
     <div class="col-md-10">
       <p class="help-block">
