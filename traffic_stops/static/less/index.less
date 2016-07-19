@@ -74,7 +74,7 @@ h1, h2, h3, h4, h5 {
   text-shadow: none;
 
   &:hover {
-    background-color: #7c9ab5;
+    background-color: @brand-tertiary;
   }
 }
 
@@ -424,6 +424,10 @@ nav.graphs-nav {
         > a {
           color: white;
           background-color: @brand-primary;
+
+          &:hover {
+            background-color: @brand-tertiary;
+          }
         }
       }
     }
