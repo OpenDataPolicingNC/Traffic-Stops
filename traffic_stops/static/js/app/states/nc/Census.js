@@ -20,6 +20,8 @@ var CensusHandler = DataHandlerBase.extend({
       this.set("data", data);
     } else {
       $('#census_row').remove();
+      $('#census-link-item').remove();
+      $('body').scrollspy('refresh');
     }
   }
 });
