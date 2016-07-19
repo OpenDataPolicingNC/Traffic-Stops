@@ -9,14 +9,15 @@
 {% block content-outer %}
 
 <div class="state-banner small">
-  <div class="container">
-    <div class="row vertical-align">
-      <div class="col-sm-10">
-        <h1>{{ object }}{% if officer_id %}: officer {{officer_id}} {% endif %}</h1>
-      </div>
-      <div class="col-sm-2 hidden-xs">
-        {% block state-img %}{% endblock state-img %}
-      </div>
+  <div class="row vertical-align">
+    <div class="col-xs-12">
+      <a class="back" href="{% block agency-list-url %}{% endblock %}">◀ Back to "Find An Agency"</a>
+    </div>
+    <div class="col-sm-10 col-xs-12 title-container">
+      <h1>{{ object }}{% if officer_id %}: officer {{officer_id}} {% endif %}</h1>
+    </div>
+    <div class="col-sm-2 col-xs-12">
+      <a class="btn brand" href="{% block search-url %}{% endblock search-url %}">Find a Stop</a>
     </div>
   </div>
 </div>
@@ -43,18 +44,6 @@
       {% block contraband-display %}{% endblock contraband-display %}
       {% block use-of-force-display %}{% endblock use-of-force-display %}
     </div>
-    <!--
-    <div class="col-md-3" role="complementary">
-      <nav id="sidebar">
-        <h5>{{ object }}{% if officer_id %}: officer {{officer_id}} {% endif %}</h5>
-        <ul class="sidenav nav nav-pills nav-stacked">
-          <li><a href="#demographics">Census Demographics</a></li>
-          <li><a href="#stop-percentage">Stop Percentage</a></li>
-          <li><a href="#search-percentage-dept">Departmental Search Rate</a></li>
-        </ul>
-      </nav>
-    </div>
-     -->
   </div>
 </div>
 {% endblock %}

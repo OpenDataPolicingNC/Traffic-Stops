@@ -2,9 +2,9 @@
 
 {% load static from staticfiles %}
 
-{% block state-img %}
-  <img src="{% static "svg/noun_19625_cc-white.svg" %}" class="state">
-{% endblock state-img %}
+{% block agency-list-url %}{% url 'nc:agency-list' %}{% endblock agency-list-url %}
+
+{% block search-url %}{% url 'nc:stops-search' %}{% endblock search-url %}
 
 {% block race-selector %}
 <span class="start" />

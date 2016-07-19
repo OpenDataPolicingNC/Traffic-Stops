@@ -65,6 +65,19 @@ h1, h2, h3, h4, h5 {
   }
 }
 
+.btn.brand {
+  background-color: @brand-secondary;
+  color: white;
+  border-radius: 0;
+  font-size: 16px;
+  padding: 1rem 2rem;
+  text-shadow: none;
+
+  &:hover {
+    background-color: #7c9ab5;
+  }
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 
@@ -214,32 +227,56 @@ code {
 }
 
 .state-banner {
-  padding-top: 70px;
-  padding-bottom: 20px;
+  padding: 60px 20px 50px 20px;
   font-size: 24px;
   text-align: left;
   background-color: @brand-primary;
   color: @brand-secondary;
   text-shadow: 0 1px 0 rgba(0, 0, 0, .5);
 
-  .container {
-    h1 {
-      color: white;
-      margin-top: 0;
-      margin-bottom: 0;
+  h1 {
+    color: white;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  @media (max-width: @screen-sm-min) {
+    padding-bottom: 30px;
+
+    p {
+      font-size: 18px;
     }
-    @media (max-width: @screen-sm-min) {
-      p {
-        font-size: 18px;
-      }
-    }
+  }
+
+  a.back {
+    color: white;
+    text-shadow: none;
+    font-size: 14px;
   }
 }
 
 // http://stackoverflow.com/questions/20547819/vertical-align-with-bootstrap-3
 .vertical-align {
-    display: flex;
-    align-items: center;
+    .flex-layout();
+    .align-items(center);
+    .flex-wrap(wrap);
+
+    @media (max-width: 768px) {
+      > * {
+        text-align: center;
+      }
+
+      .title-container {
+        margin-bottom: 20px;
+        padding: 0 30px;
+      }
+
+      h1 {
+        border-bottom: 1px solid white;
+        display: inline-block;
+        padding-bottom: 20px;
+      }
+    }
 }
 
 .state-banner.small {
@@ -349,11 +386,17 @@ body#state {
 nav.graphs-nav {
   padding: 2rem 4rem;
   background-color: white;
+  .flex-layout();
+  .flex-direction(row);
+  .flex-wrap(nowrap);
+  .justify-content(space-between);
+  .align-items(center);
 
   > ul {
     padding: 0;
     margin: 0;
     list-style: none;
+    font-size: 16px;
 
     display: -webkit-inline-box;
     display: -webkit-inline-flex;
@@ -486,8 +529,7 @@ h4.graph-label {
 
 .raceSelector {
   border: 2px solid rgb(108, 108, 108);
-  border-radius: 10px;
-  padding: 3px;
+  padding: 6px;
   background-color: lightslategrey;
   color: white;
   .radio {

@@ -6,15 +6,17 @@ var RaceToggle = function(updateUrl, showEthnicity){
   this.showEthnicity = showEthnicity;
 }
 _.extend(RaceToggle.prototype, {
-  render: function($div){
+  render: function($span){
     var id,
         inpDiv = $('<div class="radio">')
           .append('<label><input type="radio" name="raceType" id="raceTypeRace" value="race">Race &nbsp;</label>')
           .append('<label><input type="radio" name="raceType" id="raceTypeEthnicity" value="ethnicity">Ethnicity</label>'),
-        container = $('<div class="raceSelector pull-right">')
+        container = $('<div class="raceSelector">')
           .append('<strong>View results by:</strong>')
           .append(inpDiv)
-          .insertBefore($div);
+          .insertBefore($span);
+
+    $span.remove();
 
     id = (this.showEthnicity) ? "#raceTypeEthnicity" : "#raceTypeRace";
     inpDiv.find(id).prop("checked", true);
