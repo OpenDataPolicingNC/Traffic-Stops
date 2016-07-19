@@ -59,28 +59,27 @@
   <script charset="utf-8" src="//cdnjs.cloudflare.com/ajax/libs/nvd3/1.1.15-beta/nv.d3.min.js"></script>
   <script charset="utf-8" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
   <script type="text/javascript">
-    $(document).ready(function(){
+    $(document).ready(function () {
       {% block graph-code %}
       {% endblock graph-code %}
 
-      $('body').scrollspy({ target: '#graphs-nav', offset: 50 });
+      var $body = $('body');
+
+      $body.scrollspy({ target: '#graphs-nav', offset: 50 });
       $('window').on('load', function () {
-        $('body').scrollspy('refresh')
+        $body.scrollspy('refresh');
       });
 
-      var $graphsNav = $('#graphs-nav');
-
-      $graphsNav.affix({
+      $('#graphs-nav').affix({
         offset: {
           top: function () {
-            return $('.state-banner').outerHeight() - $('.odp-nav').innerHeight()
+            return $('.state-banner').outerHeight() - $('.odp-nav').innerHeight();
           },
           bottom: function () {
-            return $('.footer').outerHeight(true)
+            return $('.footer').outerHeight(true);
           }
         }
       });
-
     });
   </script>
 {% endblock extra-js %}
