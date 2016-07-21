@@ -140,7 +140,7 @@ export const StopRatioDonutBase = VisualBase.extend({
       .val("Total")
       .on('change', getData);
 
-    $('<div>')
+    $('<div class="selector-container">')
       .html(selector)
       .appendTo(this.div);
 
