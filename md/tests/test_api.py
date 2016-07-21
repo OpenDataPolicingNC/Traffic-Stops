@@ -1,4 +1,8 @@
+import datetime
+
+from django.conf import settings
 from django.core.urlresolvers import reverse
+import pytz
 from rest_framework import status
 from rest_framework.test import APITestCase
 
@@ -45,6 +49,42 @@ class AgencyTests(APITestCase):
         self.assertEqual(response.data[0][ethnicity_1_label], 2)
         self.assertEqual(response.data[1]['year'], 2012)
         self.assertEqual(response.data[1][ethnicity_3_label], 1)
+
+    def test_grouping_by_year(self):
+        """
+        Create one stop right at the end of the year in Maryland and another
+        stop a day later and ensure that the stops are counted in the expected
+        years.
+        """
+        md_timezone = pytz.timezone(settings.MD_TIME_ZONE)
+        year = 2015
+        end_of_year = md_timezone.localize(datetime.datetime(
+            year=year,
+            month=12,
+            day=31,
+            hour=23,
+            minute=59,
+        ))
+        agency = factories.AgencyFactory()
+        ethnicity_code, ethnicity_label = ETHNICITY_CHOICES[1]
+        factories.StopFactory(
+            ethnicity=ethnicity_code,
+            agency=agency,
+            date=end_of_year
+        )
+        factories.StopFactory(
+            ethnicity=ethnicity_code,
+            agency=agency,
+            date=end_of_year + datetime.timedelta(days=1)
+        )
+        url = reverse('md:agency-api-stops', args=[agency.pk])
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 2)
+        self.assertEqual(response.data[0]['year'], year)
+        self.assertEqual(response.data[0][ethnicity_label], 1)
+        self.assertEqual(response.data[1]['year'], year + 1)
+        self.assertEqual(response.data[1][ethnicity_label], 1)
 
     def test_officer_stops_count(self):
         """Test officer (within an agency) stop counts"""
