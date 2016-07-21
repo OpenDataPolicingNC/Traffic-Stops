@@ -5,7 +5,8 @@ import pandas as pd
 
 from md.data.importer import (
     add_age_column, add_date_column, add_purpose_column, fix_ETHNICITY,
-    fix_GENDER, fix_SEIZED, fix_STOP_REASON, fix_TIME_OF_STOP
+    fix_GENDER, fix_SEIZED, fix_STOP_REASON, fix_TIME_OF_STOP,
+    MD_FIRST_YEAR_TO_KEEP, process_time_of_stop,
 )
 from md.models import UNKNOWN_PURPOSE
 
@@ -70,6 +71,35 @@ class TestFieldNormalization(TestCase):
         )
         for original, normalized in data:
             self.assertEqual(fix_TIME_OF_STOP(original), normalized)
+
+    def test_initial_year_cutoff(self):
+        # Check cutoff of initial year(s)
+        y0 = MD_FIRST_YEAR_TO_KEEP - 1
+        y1 = MD_FIRST_YEAR_TO_KEEP
+        y2 = MD_FIRST_YEAR_TO_KEEP + 1
+        orig_stops = pd.DataFrame({
+            'STOPDATE': [
+                '01/01/%d' % y0,
+                '12/31/%d' % y0,
+                '01/01/%d' % y1,
+                '12/31/%d' % y1,
+                '01/01/%d' % y2,
+                '12/31/%d' % y2,
+            ],
+            'TIME_OF_STOP': [
+                '00:00',
+                '23:59',
+                '00:00',
+                '23:59',
+                '00:00',
+                '23:59',
+            ],
+        })
+        new_stops = process_time_of_stop(orig_stops)
+        self.assertEqual(len(orig_stops), 6)
+        self.assertEqual(len(new_stops), 4)
+        self.assertTrue(all(new_stops.STOPDATE == orig_stops.STOPDATE[2:]))
+        self.assertTrue(all(new_stops.TIME_OF_STOP == orig_stops.TIME_OF_STOP[2:]))
 
     def test_computed_date(self):
         stops = pd.DataFrame({

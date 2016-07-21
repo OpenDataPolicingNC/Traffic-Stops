@@ -53,6 +53,7 @@ MD_COLUMNS_TO_DROP = (
     'WHATSEARCHED', 'STOPOUTCOME', 'CRIME_CHARGED',
     'REGISTRATION_STATE', 'RESIDENCE_STATE', 'MD_COUNTY',
 )
+MD_FIRST_YEAR_TO_KEEP = 2013
 
 
 def load_STOP_REASON_normalization_rules():
@@ -248,6 +249,17 @@ def add_date_column(stops):
     stops['date'] = pd.to_datetime(stops['STOPDATE'].map(str) + blank['blank'].map(str) + stops['TIME_OF_STOP'].map(str))
 
 
+def skip_initial_years(stops):
+    beginning = datetime.date(year=MD_FIRST_YEAR_TO_KEEP, month=1, day=1)
+    return stops.drop(stops[stops.date < beginning].index)
+
+
+def process_time_of_stop(stops):
+    stops['TIME_OF_STOP'] = stops['TIME_OF_STOP'].apply(fix_TIME_OF_STOP)
+    add_date_column(stops)
+    return skip_initial_years(stops)
+
+
 def add_age_column(stops):
     stops['computed_AGE'] = stops.apply(compute_AGE, axis=1)
 
@@ -261,15 +273,17 @@ def process_raw_data(stops):
     # Drop some columns
     stops.drop(list(MD_COLUMNS_TO_DROP), axis=1, inplace=True)
 
-    # Fix data
-    stops['TIME_OF_STOP'] = stops['TIME_OF_STOP'].apply(fix_TIME_OF_STOP)
+    # Date manipulation first, to cut out some of the rows before other
+    # cleanup occurs
+    stops = process_time_of_stop(stops)
+
+    # Fix other data
     stops['GENDER'] = stops['GENDER'].apply(fix_GENDER)
     stops['SEIZED'] = stops['SEIZED'].apply(fix_SEIZED)
     stops['ETHNICITY'] = stops['ETHNICITY'].apply(fix_ETHNICITY)
     stops['STOP_REASON'] = stops['STOP_REASON'].apply(fix_STOP_REASON)
 
-    # Add date, age, purpose, and index columns
-    add_date_column(stops)
+    # Add age, purpose, and index columns
     add_age_column(stops)
     add_purpose_column(stops)
     stops['index'] = range(1, len(stops) + 1)  # adds column at end
