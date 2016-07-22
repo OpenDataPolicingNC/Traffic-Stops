@@ -432,6 +432,18 @@ nav.graphs-nav {
 
     > li {
       &.active {
+        a {
+          color: @brand-primary;
+          margin: 0 1rem;
+
+          &:first-child {
+            margin-left: 0;
+          }
+
+          &:last-child {
+            margin-right: 0;
+          }
+        }
         > a {
           color: white;
           background-color: @brand-primary;
