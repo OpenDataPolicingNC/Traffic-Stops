@@ -8,14 +8,21 @@
 
 {% block content-outer %}
 
-<div class="state-banner agency-detail">
+<div class="state-banner agency-detail{% if officer_id %} officer{% endif %}">
   <div class="row vertical-align">
     <div class="col-xs-12">
       <a class="back" href="{% block agency-list-url %}{% endblock %}">◀ Back to "Find An Agency"</a>
     </div>
-    <div class="col-sm-10 col-xs-12 title-container">
-      <h1>{{ object }}{% if officer_id %}: officer {{officer_id}} {% endif %}</h1>
-    </div>
+    {% if officer_id %}
+      <div class="col-sm-10 col-xs-12 title-container">
+        <h1>Data for Officer Alias: {{officer_id}}</h1>
+        <h2 class="officer">{{ object }}</h2>
+      </div>
+    {% else %}
+      <div class="col-sm-10 col-xs-12 title-container">
+        <h1>{{ object }}</h1>
+      </div>
+    {% endif %}
     <div class="col-sm-2 col-xs-12">
       <a class="btn brand" href="{% block search-url %}{% endblock search-url %}">Find a Stop</a>
     </div>
@@ -25,7 +32,7 @@
 <nav class="graphs-nav" id="graphs-nav">
   <ul class="nav">
     {% block census-link %}{% endblock census-link %}
-    <li><a href="#stop-percentage">Stop Percentage</a></li>
+    <li><a href="#stop-percentage">Traffic Stops</a></li>
     <li><a href="#search-percentage-dept">Departmental Search Rate</a></li>
   </ul>
   {% block race-selector %}{% endblock race-selector %}

@@ -244,7 +244,7 @@ code {
   text-shadow: 0 1px 0 rgba(0, 0, 0, .5);
 
   &.agency-detail {
-    padding: 60px 40px 50px 40px;
+    padding: 70px 40px 60px 40px;
   }
 
   h1 {
@@ -256,6 +256,10 @@ code {
   @media (max-width: @screen-sm-min) {
     padding-bottom: 30px;
 
+    &.agency-detail {
+      padding-top: 60px;
+    }
+
     p {
       font-size: 18px;
     }
@@ -265,6 +269,8 @@ code {
     color: white;
     text-shadow: none;
     font-size: 14px;
+    display: inline-block;
+    padding: 10px 0;
   }
 }
 
@@ -282,12 +288,11 @@ code {
       .title-container {
         margin-bottom: 20px;
         padding: 0 30px;
+        border-bottom: 1px solid white;
       }
 
       h1 {
-        border-bottom: 1px solid white;
         display: inline-block;
-        padding-bottom: 20px;
       }
     }
 }
@@ -381,6 +386,15 @@ body#state {
 /* Agency detail page
 ========================================= */
 
+.state-banner.officer {
+  padding-bottom: 20px;
+}
+
+h2.officer {
+  margin-top: 5px;
+  color: white;
+}
+
 .headline {
   padding-left: 3rem;
   margin-top: 1rem;
@@ -409,7 +423,7 @@ nav.graphs-nav {
     padding: 0;
     margin: 0;
     list-style: none;
-    font-size: 16px;
+    font-size: 18px;
 
     display: -webkit-inline-box;
     display: -webkit-inline-flex;
@@ -421,10 +435,19 @@ nav.graphs-nav {
     .align-items(center);
 
     > li {
-      a {
-        margin-right: 2rem;
-      }
       &.active {
+        a {
+          color: @brand-primary;
+          margin: 0 1rem;
+
+          &:first-child {
+            margin-left: 0;
+          }
+
+          &:last-child {
+            margin-right: 0;
+          }
+        }
         > a {
           color: white;
           background-color: @brand-primary;
