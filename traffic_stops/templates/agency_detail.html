@@ -64,13 +64,15 @@
       {% endblock graph-code %}
 
       var $body = $('body');
+      var $padder = $('.affix-padder');
+      var $graphsNav = $('#graphs-nav');
 
       $body.scrollspy({ target: '#graphs-nav', offset: 50 });
       $('window').on('load', function () {
         $body.scrollspy('refresh');
       });
 
-      $('#graphs-nav').affix({
+      $graphsNav.affix({
         offset: {
           top: function () {
             return $('.state-banner').outerHeight() - $('.odp-nav').innerHeight();
@@ -79,7 +81,28 @@
             return $('.footer').outerHeight(true);
           }
         }
+      })
+      .on('affixed.bs.affix', function () {
+        $padder.height($graphsNav.outerHeight());
+      })
+      .on('affixed-top.bs.affix', function () {
+        $padder.height(0);
       });
+
+      (function fixAnchorElements () {
+        var $anchors = $('.headline > h2');
+        var offset = $('.state-banner').outerHeight();
+
+        $anchors
+          .slice(1, $anchors.length)
+          .each(function () {
+            $(this).css({
+              'padding-top': offset + 'px'
+            , 'margin-top': (-offset) + 'px'
+            })
+          })
+        ;
+      })();
     });
   </script>
 {% endblock extra-js %}
