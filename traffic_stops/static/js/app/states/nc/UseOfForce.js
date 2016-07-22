@@ -86,7 +86,11 @@ var UseOfForceBarChart = VisualBase.extend({
       .showControls(true)
       .groupSpacing(0.1)
       .width(this.get("width"))
-      .height(this.get("height"));
+      .height(this.get("height"))
+      .tooltipContent((key, y, e, graph) => `
+        <h3 class="stops donut-label">${ key }</h3>
+        <p>${ e } in ${ y }</p>
+      `);
 
     this.chart.xAxis
         .axisLabel('Year');
