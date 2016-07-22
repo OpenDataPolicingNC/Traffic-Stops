@@ -2,75 +2,96 @@
 
 {% block census-display %}{% endblock census-display %}
 
+{% block agency-list-url %}{% url 'md:agency-list' %}{% endblock agency-list-url %}
+
+{% block search-url %}{% url 'md:stops-search' %}{% endblock search-url %}
+
 {% block stop-display %}
-<!-- stop data -->
-<div class="row">
-  <div class="col-md-12">
-    <h2 id="stop-percentage">Stops data</h2>
+  <div class="row">
+    <div class="col-md-12 headline">
+      <h2 id="stop-percentage">Traffic Stops</h2>
+    </div>
   </div>
 
-  <div class="col-md-4">
-    <h3>Stops by ethnicity</h3>
+  <div class="row">
+    <div class="col-md-12">
+      <h3>Traffic Stops (percentage by race/ethnicity)</h3>
 
-    <div>
-      <svg id="stop_race_pie"></svg>
+      <p class="help-block">
+        This graph reflects the ethnic composition of drivers stopped by law
+        enforcement officers in the jurisdiction since the department began
+        reporting its data to the MD state government.
+      </p>
     </div>
 
-    <p class="help-block">
-      This graph reflects the ethnic composition of drivers stopped by law
-      enforcement officers in the jurisdiction since the department began
-      reporting its data to the MD state government. Adjusting the drop
-      down menu will display the ethnic breakdown of stops on a year-by-year
-      basis.
-    </p>
-  </div>
-
-  <div id="stop_div" class="col-md-8">
-    <h3>Annual percent of stops by ethnicity</h3>
-
-    <div role="tabpanel">
-
-      <!-- Nav tabs -->
-      <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active">
-          <a href="#stop_race_line_div" aria-controls="stop_race_line_div" role="tab" data-toggle="tab">Chart</a></li>
-        <li role="presentation">
-          <a href="#stop_race_data" aria-controls="stop_race_data" role="tab" data-toggle="tab">Data</a></li>
-      </ul>
-
-      <!-- Tab panes -->
-      <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active" id="stop_race_line_div">
-          <svg id="stop_race_line"></svg>
-        </div>
-        <div role="tabpanel" class="tab-pane" id="stop_race_data">
-        </div>
+    <div class="col-md-4">
+      <div class="pie-chart-container">
+        <svg id="stop_race_pie"></svg>
       </div>
 
+      <p class="graph-help-block">
+        Adjusting the drop down menu will display the ethnic breakdown
+        of stops on a year-by-year basis.
+      </p>
     </div>
 
-    <p class="help-block">
-      This graph is a longitudinal representation of the ethnic
-      composition of drivers stopped by the department since it began
-      reporting its data to the MD state government. Drag the cursor
-      over the graph to see the ethnic breakdown for any given year.
-      <br><br>
-      Click the "Data" tab to review the actual raw counts from the
-      MD state government.
-    </p>
-
-  </div>
-</div>
-{% endblock stop-display %}
-
-{% block search-rate-display %}
-  <!-- Fraction of stops searched -->
-  <div class="row">
-     <div class="col-md-12">
-      <h3 id="search-percentage-dept">{% if officer_id %}Officer{% else %}Departmental{% endif %} search rate</h3>
+    <div id="stop_div" class="col-md-8 line-chart-container">
+      <h4 class="graph-label">
+        Longitudinal view of annual traffic stops
+      </h4>
 
       <div role="tabpanel">
 
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active">
+            <a href="#stop_race_line_div" aria-controls="stop_race_line_div" role="tab" data-toggle="tab">Chart</a></li>
+          <li role="presentation">
+            <a href="#stop_race_data" aria-controls="stop_race_data" role="tab" data-toggle="tab">Data</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="stop_race_line_div">
+            <svg id="stop_race_line"></svg>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="stop_race_data">
+          </div>
+        </div>
+
+      </div>
+
+      <p class="graph-help-block">
+        Drag the cursor over the graph to see the ethnic breakdown for
+        any given year. Click the "Data" tab to review the actual raw counts from the
+        MD state government.
+      </p>
+
+    </div>
+  </div>
+{% endblock stop-display %}
+
+{% block search-rate-display %}
+  <div class="row">
+    <div class="col-md-12 headline">
+      <h2 id="search-percentage-dept">{% if officer_id %}Officer{% else %}Departmental{% endif %} search rate</h2>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+    <h3>Average {% if officer_id %}Officer{% else %}Departmental{% endif %} Search Rate For Vehicle Stops</h3>
+
+    <p class="help-block">
+      This chart is a longitudinal representation of the average departmental
+      search rate for vehicle stops since the department began reporting its
+      data to the MD state government.  The black line represents the
+      overall search rate for all motorists.
+    </p>
+  </div>
+
+    <div class="col-md-10">
+      <div role="tabpanel">
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
           <li role="presentation" class="active">
@@ -87,89 +108,90 @@
           <div role="tabpanel" class="tab-pane" id="stop_search_data">
           </div>
         </div>
-
       </div>
 
-      <p class="help-block">
-        This chart is a longitudinal representation of the average departmental
-        search rate for vehicle stops since the department began reporting its
-        data to the MD Department of Justice.  The black line represents the
-        overall search rate for all motorists.
-        <br><br>
+      <p class="graph-help-block">
+        Drag the cursor over the graph to see the racial/ethnic breakdown for
+        any given year.
         Click the "Data" tab to review the actual stop/search counts from the
-        MD Department of Justice.
+        MD state government.
       </p>
     </div>
   </div>
 {% endblock search-rate-display %}
 
 {% block search-display %}
-<div class="row">
-  <div class="col-md-12">
-    <h2>Search data</h2>
-  </div>
-
-  <div class="col-md-4">
-    <h3>Search by ethnicity</h3>
-
-    <div>
-      <svg id="search_race_pie"></svg>
-    </div>
-
-    <p class="help-block">
-      This graph reflects the ethnic composition of drivers searched by law
-      enforcement officers in the jurisdiction since the department began
-      reporting its data to the MD Department of Justice. Adjusting the drop
-      down menu will display the ethnic breakdown of stops on a year-by-year
-      basis.
-    </p>
-  </div>
-
-  <div id="search_div" class="col-md-8">
-    <h3>Annual percent of search by ethnicity</h3>
-
-    <div role="tabpanel">
-
-      <!-- Nav tabs -->
-      <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active">
-          <a href="#search_race_line_div" aria-controls="search_race_line_div" role="tab" data-toggle="tab">Chart</a></li>
-        <li role="presentation">
-          <a href="#search_race_data" aria-controls="stop_race_data" role="tab" data-toggle="tab">Data</a></li>
-      </ul>
-
-      <!-- Tab panes -->
-      <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active" id="search_race_line_div">
-          <svg id="search_race_line"></svg>
-        </div>
-        <div role="tabpanel" class="tab-pane" id="search_race_data">
-        </div>
-      </div>
+  <div class="row">
+    <div class="col-md-12">
+      <h3>Search Data by Race/Ethnicity</h3>
 
       <p class="help-block">
-        This graph is a longitudinal representation of the ethnic
-        composition of drivers searched by the department since it began
-        reporting its data to the MD Department of Justice. Drag the cursor
-        over the graph to see the ethnic breakdown for any given year.
-        <br><br>
-        Click the "Data" tab to review the actual raw counts from the
-        MD Department of Justice.
+        This graph reflects the ethnic composition of drivers searched by law
+        enforcement officers in the jurisdiction since the department began
+        reporting its data to the MD state government.
       </p>
-
     </div>
 
+    <div class="col-md-4">
+      <div class="pie-chart-container">
+        <svg id="search_race_pie"></svg>
+      </div>
+
+      <p class="graph-help-block">
+        Adjusting the drop down menu will display the ethnic
+        breakdown of stops on a year-by-year basis.
+      </p>
+    </div>
+
+    <div id="search_div" class="col-md-8 line-chart-container">
+      <h4 class="graph-label">Longitudinal view of annual percent of search by ethnicity</h4>
+
+      <div role="tabpanel">
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active">
+            <a href="#search_race_line_div" aria-controls="search_race_line_div" role="tab" data-toggle="tab">Chart</a></li>
+          <li role="presentation">
+            <a href="#search_race_data" aria-controls="stop_race_data" role="tab" data-toggle="tab">Data</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="search_race_line_div">
+            <svg id="search_race_line"></svg>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="search_race_data">
+          </div>
+        </div>
+
+        <p class="graph-help-block">
+          Drag the cursor over the graph to see the racial/ethnic breakdown for
+          any given year.
+          Click the "Data" tab to review the actual raw counts from the
+          MD state government.
+        </p>
+      </div>
+    </div>
   </div>
-</div>
 {% endblock search-display %}
 
 {% block lsb-display %}
   <div class="row">
-    <div id="lhs_div" class="col-md-offset-2 col-md-8">
-      <h3>Likelihood of search by stop-cause</h3>
+    <div id="lhs_div" class="col-md-12">
+      <h3>Likelihood of Search by "Stop Cause"</h3>
 
+      <p class="help-block">
+        This chart displays the relative statistical likelihood of one
+        ethnic group being searched as compared to another group for a
+        given stop cause. Adjusting the drop down menu will display the relative
+        likelihood of search relative to another ethnic group on a year-by-year
+        basis.
+      </p>
+    </div>
+
+    <div class="col-md-10">
       <div role="tabpanel">
-
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
           <li role="presentation" class="active">
@@ -186,32 +208,32 @@
           <div role="tabpanel" class="tab-pane" id="lsb_data">
           </div>
         </div>
-
       </div>
 
-      <p class="help-block">
-        This chart displays the relative statistical likelihood of one
-        ethnic group being searched as compared to another group for a
-        given stop cause. Adjusting the drop down menu will display the relative
-        likelihood of search relative to another ethnic group on a year-by-year
-        basis. Click the colored circles above the graph to display the
+      <p class="graph-help-block">
+        Click the colored circles above the graph to display the
         comparisons between various ethnic groups.
-        <br><br>
         Click the "Data" tab to review the actual raw counts from the
-        MD Department of Justice.
+        MD state government.
       </p>
-
     </div>
   </div>
 {% endblock lsb-display %}
 
 {% block contraband-display %}
   <div class="row">
-    <div id="contraband_div" class="col-md-offset-2 col-md-8">
-      <h3>Contraband hit-rate</h3>
+    <div id="contraband_div" class="col-md-12">
+      <h3>Contraband "Hit-Rate"</h3>
 
+      <p class="help-block">
+        This chart displays the percentage of searches that uncovered contraband
+        for a given racial or ethnic group. Adjusting the drop down menu will
+        display the hit rate on a year-by-year basis.
+      </p>
+    </div>
+
+    <div class="col-md-10">
       <div role="tabpanel">
-
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
           <li role="presentation" class="active">
@@ -228,18 +250,12 @@
           <div role="tabpanel" class="tab-pane" id="chr_data">
           </div>
         </div>
-
       </div>
 
-      <p class="help-block">
-        This chart displays the percentage of searches that uncovered contraband
-        for a given racial or ethnic group. Adjusting the drop down menu will
-        display the hit rate on a year-by-year basis.
-        <br><br>
+      <p class="graph-help-block">
         Click the "Data" tab to review the actual raw counts from the
-        NC Department of Justice.
+        MD state government.
       </p>
-
     </div>
   </div>
 {% endblock contraband-display %}

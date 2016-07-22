@@ -8,60 +8,41 @@
 
 {% block content-outer %}
 
-<div class="state-banner small">
-  <div class="container">
-    <div class="row vertical-align">
-      <div class="col-sm-10">
-        <h1>{{ object }}{% if officer_id %}: officer {{officer_id}} {% endif %}</h1>
-      </div>
-      <div class="col-sm-2 hidden-xs">
-        {% block state-img %}{% endblock state-img %}
-      </div>
+<div class="state-banner agency-detail">
+  <div class="row vertical-align">
+    <div class="col-xs-12">
+      <a class="back" href="{% block agency-list-url %}{% endblock %}">◀ Back to "Find An Agency"</a>
+    </div>
+    <div class="col-sm-10 col-xs-12 title-container">
+      <h1>{{ object }}{% if officer_id %}: officer {{officer_id}} {% endif %}</h1>
+    </div>
+    <div class="col-sm-2 col-xs-12">
+      <a class="btn brand" href="{% block search-url %}{% endblock search-url %}">Find a Stop</a>
     </div>
   </div>
 </div>
 
+<nav class="graphs-nav" id="graphs-nav">
+  <ul class="nav">
+    {% block census-link %}{% endblock census-link %}
+    <li><a href="#stop-percentage">Stop Percentage</a></li>
+    <li><a href="#search-percentage-dept">Departmental Search Rate</a></li>
+  </ul>
+  {% block race-selector %}{% endblock race-selector %}
+</nav>
+
+<div class="affix-padder"></div>
+
 <div class="container">
   <div class="row">
-    <div class="col-md-9" role="main">
-      {% block census-display %}
-      {% endblock census-display %}
-
-      <hr>
-
-      {% block stop-display %}
-      {% endblock stop-display %}
-
-      <hr>
-
-      {% block search-rate-display %}
-      {% endblock search-rate-display %}
-
-      <hr>
-
+    <div class="col-md-12" role="main">
+      {% block census-display %}{% endblock census-display %}
+      {% block stop-display %}{% endblock stop-display %}
+      {% block search-rate-display %}{% endblock search-rate-display %}
       {% block search-display %}{% endblock search-display %}
-
       {% block lsb-display %}{% endblock lsb-display %}
-
-      <hr>
-
-      {% block contraband-display %}
-      {% endblock contraband-display %}
-
-      <hr>
-
+      {% block contraband-display %}{% endblock contraband-display %}
       {% block use-of-force-display %}{% endblock use-of-force-display %}
-
-    </div>
-    <div class="col-md-3" role="complementary">
-      <nav id="sidebar">
-        <h5>{{ object }}{% if officer_id %}: officer {{officer_id}} {% endif %}</h5>
-        <ul class="sidenav nav nav-pills nav-stacked">
-          <li><a href="#demographics">Census Demographics</a></li>
-          <li><a href="#stop-percentage">Stop Percentage</a></li>
-          <li><a href="#search-percentage-dept">Departmental Search Rate</a></li>
-        </ul>
-      </nav>
     </div>
   </div>
 </div>
@@ -78,29 +59,27 @@
   <script charset="utf-8" src="//cdnjs.cloudflare.com/ajax/libs/nvd3/1.1.15-beta/nv.d3.min.js"></script>
   <script charset="utf-8" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
   <script type="text/javascript">
-    $(document).ready(function(){
+    $(document).ready(function () {
       {% block graph-code %}
       {% endblock graph-code %}
 
-      $('body').scrollspy({ target: '#sidebar', offset: 60 });
+      var $body = $('body');
+
+      $body.scrollspy({ target: '#graphs-nav', offset: 50 });
       $('window').on('load', function () {
-        $('body').scrollspy('refresh')
+        $body.scrollspy('refresh');
       });
 
-      $('#sidebar').affix({
+      $('#graphs-nav').affix({
         offset: {
           top: function () {
-            var offsetTop      = $('#sidebar').offset().top
-            var sideBarMargin  = parseInt($('#sidebar').children(0).css('margin-top'), 10)
-            var navOuterHeight = $('.odp-nav').height()
-            return (this.top = offsetTop - navOuterHeight - sideBarMargin);
+            return $('.state-banner').outerHeight() - $('.odp-nav').innerHeight();
           },
           bottom: function () {
-            return (this.bottom = $('.footer').outerHeight(true))
+            return $('.footer').outerHeight(true);
           }
         }
       });
-
     });
   </script>
 {% endblock extra-js %}

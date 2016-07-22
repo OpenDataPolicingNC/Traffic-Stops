@@ -65,6 +65,19 @@ h1, h2, h3, h4, h5 {
   }
 }
 
+.btn.brand {
+  background-color: @brand-secondary;
+  color: white;
+  border-radius: 0;
+  font-size: 16px;
+  padding: 1rem 2rem;
+  text-shadow: none;
+
+  &:hover {
+    background-color: @brand-tertiary;
+  }
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 
@@ -95,6 +108,10 @@ body {
   min-height: 96px;
   background-color: #f5f5f5;
   z-index: 2;
+
+  @media (min-width: 640px) {
+    min-height: 48px;
+  }
 }
 
 #wrap > .container {
@@ -222,24 +239,53 @@ code {
   color: @brand-secondary;
   text-shadow: 0 1px 0 rgba(0, 0, 0, .5);
 
-  .container {
-    h1 {
-      color: white;
-      margin-top: 0;
-      margin-bottom: 0;
+  &.agency-detail {
+    padding: 60px 40px 50px 40px;
+  }
+
+  h1 {
+    color: white;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  @media (max-width: @screen-sm-min) {
+    padding-bottom: 30px;
+
+    p {
+      font-size: 18px;
     }
-    @media (max-width: @screen-sm-min) {
-      p {
-        font-size: 18px;
-      }
-    }
+  }
+
+  a.back {
+    color: white;
+    text-shadow: none;
+    font-size: 14px;
   }
 }
 
 // http://stackoverflow.com/questions/20547819/vertical-align-with-bootstrap-3
 .vertical-align {
-    display: flex;
-    align-items: center;
+    .flex-layout();
+    .align-items(center);
+    .flex-wrap(wrap);
+
+    @media (max-width: 768px) {
+      > * {
+        text-align: center;
+      }
+
+      .title-container {
+        margin-bottom: 20px;
+        padding: 0 30px;
+      }
+
+      h1 {
+        border-bottom: 1px solid white;
+        display: inline-block;
+        padding-bottom: 20px;
+      }
+    }
 }
 
 .state-banner.small {
@@ -328,6 +374,161 @@ body#state {
   }
 }
 
+/* Agency detail page
+========================================= */
+
+.headline {
+  padding-left: 3rem;
+  margin-top: 1rem;
+  border-bottom: 1px solid @gray;
+
+  > h2 {
+    margin-bottom: 20px;
+    font-size: 40px;
+  }
+}
+
+/***
+ * Sticky sub-navigation bar on agency detail pages.
+ * *Not* sticky on mobile view.
+ */
+nav.graphs-nav {
+  padding: 2rem 4rem;
+  background-color: white;
+  .flex-layout();
+  .flex-direction(row);
+  .flex-wrap(nowrap);
+  .justify-content(space-between);
+  .align-items(center);
+
+  > ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    font-size: 16px;
+
+    display: -webkit-inline-box;
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    .flex-direction(row);
+    .flex-wrap(nowrap);
+    .justify-content(flex-start);
+    .align-items(center);
+
+    > li {
+      a {
+        margin-right: 2rem;
+      }
+      &.active {
+        > a {
+          color: white;
+          background-color: @brand-primary;
+
+          &:hover {
+            background-color: @brand-tertiary;
+          }
+        }
+      }
+    }
+  }
+
+  &.affix {
+    z-index: 1;
+    width: 100%;
+    top: 50px;
+
+    /***
+     * When the stickiness is enabled, it will leave behind a gap. To fill
+     * that gap, an element with the same height as the nav is expanded to
+     * fill the space.
+     */
+    & + .affix-padder {
+      @media (min-width: 771px) {
+        height: 80px;
+        width: 100%;
+      }
+    }
+  }
+
+  .raceSelector {
+    display: inline-block;
+  }
+}
+
+@media (max-width: 770px) {
+  nav.graphs-nav {
+    .flex-layout();
+    .flex-wrap(wrap);
+    .flex-direction(row);
+    .justify-content(center);
+
+    position: static !important;
+  }
+}
+
+@media (max-width: 440px) {
+  nav.graphs-nav {
+    padding: 2rem 0;
+
+    > ul {
+      > li {
+        padding: 0 8px;
+
+        > a {
+          margin: 0;
+          padding: 10px 8px;
+        }
+      }
+    }
+  }
+}
+
+p.help-block {
+  font-size: 115%;
+  margin: 2rem 0 4rem 0;
+}
+
+p.graph-help-block {
+  color: @gray-light;
+  font-style: italic;
+  padding: 2rem 2rem;
+}
+
+h4.graph-label {
+  margin-top: 0;
+}
+
+@media (min-width: 992px) {
+  /***
+   * Smaller fonts on md-and-up
+   */
+   p.graph-help-block {
+     font-size: 95%;
+   }
+
+  /***
+   * Adding the divider border to the pie chart & adjusting whitespace
+   * accordingly; only relevant on md and up
+   */
+  .pie-chart-container {
+    border-right: 1px solid @gray-light;
+  }
+
+  .line-chart-container {
+    padding-left: 30px;
+  }
+}
+
+.selector-container {
+  width: 100%;
+  > select {
+    margin: 0 auto;
+    display: block;
+    font-size: 16px;
+  }
+}
+
 /* Dashboard data tables
 ========================================= */
 
@@ -337,8 +538,7 @@ body#state {
 
 .raceSelector {
   border: 2px solid rgb(108, 108, 108);
-  border-radius: 10px;
-  padding: 3px;
+  padding: 6px;
   background-color: lightslategrey;
   color: white;
   .radio {
