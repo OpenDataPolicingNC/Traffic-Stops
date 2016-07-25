@@ -74,6 +74,14 @@ class TestFieldNormalization(TestCase):
 
     def test_initial_year_cutoff(self):
         # Check cutoff of initial year(s)
+        #
+        # The dates tested will cover the full range of the year before the
+        # cutoff as well as the full range of the next two years (which are
+        # kept).
+        #
+        # The times on those days are at the day boundary in oder to find any
+        # TZ issues in the cutoff logic.
+
         y0 = MD_FIRST_YEAR_TO_KEEP - 1
         y1 = MD_FIRST_YEAR_TO_KEEP
         y2 = MD_FIRST_YEAR_TO_KEEP + 1
