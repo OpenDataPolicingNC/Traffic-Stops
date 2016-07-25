@@ -1,5 +1,5 @@
 from django.contrib import admin, messages
-from tsdata.models import Dataset, Import
+from tsdata.models import Dataset, Import, CensusProfile
 from tsdata.tasks import import_dataset
 
 
@@ -31,5 +31,14 @@ class ImportAdmin(admin.ModelAdmin):
     ordering = ('-date_started',)
 
 
+class CensusProfileAdmin(admin.ModelAdmin):
+    list_display = ('id', 'location', 'state', 'geography',
+                    'white', 'black', 'hispanic', 'total', 'source')
+    list_filter = ('state', 'geography', 'source')
+    search_fields = ('location', 'state', 'geography')
+    ordering = ('location',)
+
+
 admin.site.register(Dataset, DatasetAdmin)
 admin.site.register(Import, ImportAdmin)
+admin.site.register(CensusProfile, CensusProfileAdmin)
