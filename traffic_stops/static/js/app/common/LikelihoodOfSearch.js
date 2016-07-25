@@ -89,7 +89,12 @@ export const LikelihoodOfSearchBase = VisualBase.extend({
       .showValues(true)
       .tooltips(true)
       .transitionDuration(350)
-      .showControls(false);
+      .showControls(false)
+      .tooltipContent((key, y, e, graph) => `
+        <h3 class="stops donut-label">${ key }</h3>
+        <p>${ y }</p>
+        <p>${ e }</p>
+      `);
 
     this.chart.yAxis
         .axisLabel('Additional percentage or search by search-cause')

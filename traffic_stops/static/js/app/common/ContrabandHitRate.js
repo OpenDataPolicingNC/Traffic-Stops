@@ -76,6 +76,10 @@ export const ContrabandHitRateBarBase = VisualBase.extend({
       .showLegend(false)
       .showValues(true)
       .tooltips(true)
+      .tooltipContent((key, y, e, graph) => `
+        <h3 class="stops donut-label">${ y }</h3>
+        <p>${ e }</p>
+      `)
       .transitionDuration(350)
       .showControls(false);
 
