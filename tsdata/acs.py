@@ -31,7 +31,9 @@ RACE_VARIABLES = {
     'B03002_012E': 'hispanic',
     'B03002_002E': 'non_hispanic',
 }
-VARIABLES = ['NAME'] + list(RACE_VARIABLES.keys())  # NAME = geography/location
+# NAME = geography/location
+# GEOID = combination of country, state, county
+VARIABLES = ['NAME', 'GEOID'] + list(RACE_VARIABLES.keys())
 
 
 class ACS(object):
@@ -39,7 +41,6 @@ class ACS(object):
 
     source = "ACS 5-Year Data (2010-2014)"
     geography = None
-    unique_ids = None
     drop_columns = None
 
     def __init__(self, key, state_abbr):
@@ -57,11 +58,8 @@ class ACS(object):
         df['state'] = self.state_abbr
         df['source'] = self.source
         df['geography'] = self.geography
-        # add unique id
-        df['id'] = df.apply(lambda x: ''.join([getattr(x, col) for col in self.unique_ids]),  # noqa
-                            axis=1)
         # rename common columns
-        df.rename(columns={'NAME': 'location'}, inplace=True)
+        df.rename(columns={'NAME': 'location', 'GEOID': 'id'}, inplace=True)
         # replace census variable names with easier to read race labels
         df.rename(columns=RACE_VARIABLES, inplace=True)
         # convert race columns to numerics
@@ -79,7 +77,6 @@ class ACSStateCounties(ACS):
     ex: http://api.census.gov/data/2014/acs5?get=NAME&for=county:*&in=state:24
     code: https://github.com/sunlightlabs/census/blob/master/census/core.py#L181
     """
-    unique_ids = ('state', 'county')
     geography = 'county'
     drop_columns = ['county']
 
@@ -93,7 +90,6 @@ class ACSStatePlaces(ACS):
     ex: http://api.census.gov/data/2014/acs5?get=NAME&for=place:*&in=state:24
     code: https://github.com/sunlightlabs/census/blob/master/census/core.py#L215
     """
-    unique_ids = ('state', 'place')
     geography = 'place'
     drop_columns = ['place']
 
@@ -103,7 +99,7 @@ class ACSStatePlaces(ACS):
     def get(self):
         df = super(ACSStatePlaces, self).get()
         # ignore Census Designated Places (CDP)
-        return df[df.location.str.contains('CDP') is False]
+        return df[~df.location.str.contains('CDP')]
 
 
 def get_state_census_data(key):
