@@ -84,7 +84,7 @@ class ACSStateCounties(ACS):
     drop_columns = ['county']
 
     def call_api(self):
-        return self.api.acs.state_county(VARIABLES, self.fips, census.ALL)
+        return self.api.acs5.state_county(VARIABLES, self.fips, census.ALL)
 
 
 class ACSStatePlaces(ACS):
@@ -98,7 +98,7 @@ class ACSStatePlaces(ACS):
     drop_columns = ['place']
 
     def call_api(self):
-        return self.api.acs.state_place(VARIABLES, self.fips, census.ALL)
+        return self.api.acs5.state_place(VARIABLES, self.fips, census.ALL)
 
     def get(self):
         df = super(ACSStatePlaces, self).get()
