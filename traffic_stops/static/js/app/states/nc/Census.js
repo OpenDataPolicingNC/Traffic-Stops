@@ -18,11 +18,11 @@ var CensusHandler = DataHandlerBase.extend({
     if(data.length>0){
       data = d3.map(data[0]);
       this.set("data", data);
-    } else {
-      $('#census_row').remove();
-      $('#census-link-item').remove();
-      $('body').scrollspy('refresh');
+      $('#census_row').show();
+      $('#census-link-item').show();
     }
+
+    $('body').scrollspy('refresh');
   }
 });
 
