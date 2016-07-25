@@ -154,9 +154,11 @@ export const StopRatioDonutBase = VisualBase.extend({
     nv.addGraph(() => {
       d3.select(this.svg[0])
           .datum(data)
-        .transition().duration(1200)
           .attr('width', "100%")
           .attr('height', "100%")
+          .style({ width:  `${this.get('width')}px`
+                 , height: `${this.get('height')}px` })
+        .transition().duration(1200)
           .attr("preserveAspectRatio", "xMinYMin")
           .attr('viewBox', `0 0 ${this.get('width')} ${this.get('height')}`)
           .call(this.chart);
@@ -217,6 +219,8 @@ export const StopRatioTimeSeriesBase = VisualBase.extend({
           .datum(data)
           .attr('width', "100%")
           .attr('height', "100%")
+          .style({ width:  `${this.get('width')}px`
+                 , height: `${this.get('height')}px` })
           .attr('preserveAspectRatio', "xMinYMin")
           .attr('viewBox', `0 0 ${this.get('width')} ${this.get('height')}`)
           .call(this.chart);
