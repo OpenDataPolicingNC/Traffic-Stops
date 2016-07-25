@@ -21,5 +21,6 @@ django-cache-machine==0.9
 pandas==0.17.1
 matplotlib==1.5.0
 
-# census==v0.7 on pypi doesn't have 2014 ACS data, use latest from git:
--e git+https://github.com/sunlightlabs/census.git@790d073542a5582cbb9db713ca51e903a7d91b76#egg=census
+census==0.8
+  us==0.9.1
+    jellyfish==0.5.1
