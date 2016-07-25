@@ -79,7 +79,7 @@ class TestFieldNormalization(TestCase):
         # cutoff as well as the full range of the next two years (which are
         # kept).
         #
-        # The times on those days are at the day boundary in oder to find any
+        # The times on those days are at the day boundary in order to find any
         # TZ issues in the cutoff logic.
 
         y0 = MD_FIRST_YEAR_TO_KEEP - 1
