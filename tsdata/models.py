@@ -12,6 +12,11 @@ STATUS_CHOICES = (
     ('finished', 'Finished'),
 )
 
+GEOGRAPY_CHOICES = (
+    ('county', 'County'),
+    ('place', 'Place'),
+)
+
 
 class Dataset(models.Model):
     state = models.CharField(choices=STATE_CHOICES, max_length=2)
@@ -31,3 +36,24 @@ class Import(models.Model):
     date_started = models.DateTimeField(auto_now_add=True)
     date_finished = models.DateTimeField(null=True)
     successful = models.BooleanField(default=False)
+
+
+class CensusProfile(models.Model):
+    id = models.CharField("ID", primary_key=True, max_length=16)
+    location = models.CharField(max_length=255)
+    geography = models.CharField(max_length=16, choices=GEOGRAPY_CHOICES)
+    state = models.CharField(max_length=2)
+    source = models.CharField(max_length=255)
+    white = models.PositiveIntegerField(default=0)
+    black = models.PositiveIntegerField(default=0)
+    native_american = models.PositiveIntegerField(default=0)
+    asian = models.PositiveIntegerField(default=0)
+    native_hawaiian = models.PositiveIntegerField(default=0)
+    other = models.PositiveIntegerField(default=0)
+    two_or_more_races = models.PositiveIntegerField(default=0)
+    hispanic = models.PositiveIntegerField(default=0)
+    non_hispanic = models.PositiveIntegerField(default=0)
+    total = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return self.location
