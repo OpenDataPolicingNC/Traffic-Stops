@@ -29,6 +29,6 @@ before_script:
 
 script:
   - coverage run manage.py test
-  - coverage report -m --fail-under 62
+  - coverage report -m --fail-under 63
   - flake8 .
   - npm test
