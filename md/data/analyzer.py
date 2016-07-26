@@ -8,7 +8,9 @@ import logging
 import pandas as pd
 
 from tsdata.utils import download_and_unzip_data, get_datafile_path
-from md.data.importer import fix_AGENCY_column, fix_STOP_REASON, load_xls
+from md.data.importer import (
+    fix_AGENCY_column, fix_STOP_REASON, load_xls, process_time_of_stop
+)
 
 logger = logging.getLogger(__name__)
 
@@ -24,8 +26,8 @@ def stats_for_state_landing_page(stops, report):
     lines = ['', 'Dataset facts']
     lines.append(
         '  Time frame: {} - {}'.format(
-            stops.date[0],
-            stops.date[len(stops.date) - 1]
+            stops.date.iloc[0],
+            stops.date.iloc[-1]
         )
     )
     lines.append(
@@ -50,9 +52,12 @@ def stats_for_state_landing_page(stops, report):
 
 def analyze(stops, report):
     """
-    Note: This runs on unprocessed data -- data as loaded from the .xlsx
+    This runs on largely unprocessed data -- data as loaded from the .xlsx
+
+    Dropping of some data is handled by importer.process_time_of_stop(), since
+    the analysis should match the set of data intended for display.
     """
-    stops['date'] = pd.to_datetime(stops['STOPDATE'])
+    stops = process_time_of_stop(stops)
     stops['cleaned-STOP_REASON'] = stops['STOP_REASON'].apply(fix_STOP_REASON)
     fix_AGENCY_column(stops)
 
