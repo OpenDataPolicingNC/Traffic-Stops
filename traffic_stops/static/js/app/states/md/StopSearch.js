@@ -8,12 +8,6 @@ const StopSearchHandler = C.StopSearchHandlerBase.extend({
 
   types: [Stops.ethnicities],
 
-  _year_filter: function (yr) {
-    // 2012 data is incomplete; 2016 is spurious
-    // both throw the chart off!
-    return yr > 2012 && yr < 2016
-  },
-
   _pprint: (d) => d
 });
 
