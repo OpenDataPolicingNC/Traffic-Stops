@@ -20,6 +20,8 @@ logger = logging.getLogger(__name__)
 
 STOP_REASON_CSV = 'md/data/STOP_REASON-normalization.csv'
 PURPOSE_BY_STOP_REASON = dict()
+AGENCY_MAPPING_CSV = 'md/data/MD_agencies.csv'
+AGENCY_NAME_BY_CODE = dict()
 
 TIME_OF_STOP_re = re.compile(r'(\d?\d):(\d\d)( [AP]M)?$')
 DEFAULT_TIME_OF_STOP = '00:00'
@@ -53,6 +55,27 @@ MD_COLUMNS_TO_DROP = (
     'WHATSEARCHED', 'STOPOUTCOME', 'CRIME_CHARGED',
     'REGISTRATION_STATE', 'RESIDENCE_STATE', 'MD_COUNTY',
 )
+
+
+def load_MD_agency_mappings():
+    """
+    Read a CSV file that maps agency codes (as used in raw stop data) to
+    agency names and optional census GEOID values.
+
+    When the proper agency name hasn't been determine, it has the same value as
+    the agency code.
+    """
+    with open(AGENCY_MAPPING_CSV, 'r', encoding='utf-8') as csvfile:
+        reader = csv.reader(csvfile)
+        next(reader)  # skip headings
+        line_number = 1
+        for code, name, _ in reader:
+            line_number += 1
+            if code in AGENCY_NAME_BY_CODE:
+                raise ValueError('Line %d of %s has duplicated agency code "%s"' % (
+                    line_number, AGENCY_MAPPING_CSV, code,
+                ))
+            AGENCY_NAME_BY_CODE[code] = name
 
 
 def load_STOP_REASON_normalization_rules():
@@ -202,6 +225,14 @@ def fix_TIME_OF_STOP(s):
     return s
 
 
+def fix_AGENCY(s):
+    name = AGENCY_NAME_BY_CODE.get(s)
+    if not name:
+        logger.error('Agency code "%s" not in %s', s, AGENCY_MAPPING_CSV)
+        name = s
+    return name
+
+
 def compute_AGE(row):
     dob = row['DOB']
     stop_date = row['date']
@@ -257,6 +288,11 @@ def add_purpose_column(stops):
     stops['purpose'] = stops['STOP_REASON'].apply(purpose_from_STOP_REASON)
 
 
+def fix_AGENCY_column(stops):
+    load_MD_agency_mappings()
+    stops['AGENCY'] = stops['AGENCY'].apply(fix_AGENCY)
+
+
 def process_raw_data(stops):
     # Drop some columns
     stops.drop(list(MD_COLUMNS_TO_DROP), axis=1, inplace=True)
@@ -267,6 +303,7 @@ def process_raw_data(stops):
     stops['SEIZED'] = stops['SEIZED'].apply(fix_SEIZED)
     stops['ETHNICITY'] = stops['ETHNICITY'].apply(fix_ETHNICITY)
     stops['STOP_REASON'] = stops['STOP_REASON'].apply(fix_STOP_REASON)
+    fix_AGENCY_column(stops)
 
     # Add date, age, purpose, and index columns
     add_date_column(stops)

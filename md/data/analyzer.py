@@ -8,7 +8,7 @@ import logging
 import pandas as pd
 
 from tsdata.utils import download_and_unzip_data, get_datafile_path
-from md.data.importer import fix_STOP_REASON, load_xls
+from md.data.importer import fix_AGENCY_column, fix_STOP_REASON, load_xls
 
 logger = logging.getLogger(__name__)
 
@@ -54,6 +54,7 @@ def analyze(stops, report):
     """
     stops['date'] = pd.to_datetime(stops['STOPDATE'])
     stops['cleaned-STOP_REASON'] = stops['STOP_REASON'].apply(fix_STOP_REASON)
+    fix_AGENCY_column(stops)
 
     stats_for_state_landing_page(stops, report)
 
