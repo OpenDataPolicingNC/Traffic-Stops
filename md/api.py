@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import connections
 from django.db.models import Count, Q
 
@@ -28,9 +29,11 @@ class AgencyViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = serializers.AgencySerializer
 
     def query(self, results, group_by, filter_=None):
-        # date trunc on year
-        year = connections[Stop.objects.db].ops.date_trunc_sql('year', 'date')
-        qs = Stop.objects.extra(select={'year': year})
+        # date trunc on year, respecting MD time zone
+        year_sql, year_params = connections[Stop.objects.db].ops.datetime_trunc_sql(
+            'year', 'date', settings.MD_TIME_ZONE,
+        )
+        qs = Stop.objects.extra(select={'year': year_sql}, select_params=year_params)
         qs = qs.filter(agency=self.get_object())
         # filter down by officer if supplied
         officer = self.request.query_params.get('officer', None)
