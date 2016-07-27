@@ -4,8 +4,8 @@ from django.test import TestCase
 import pandas as pd
 
 from md.data.importer import (
-    add_age_column, add_date_column, add_purpose_column, fix_ETHNICITY,
-    fix_GENDER, fix_SEIZED, fix_STOP_REASON, fix_TIME_OF_STOP,
+    add_age_column, add_date_column, add_purpose_column, fix_AGENCY_column,
+    fix_ETHNICITY, fix_GENDER, fix_SEIZED, fix_STOP_REASON, fix_TIME_OF_STOP,
     MD_FIRST_YEAR_TO_KEEP, process_time_of_stop,
 )
 from md.models import UNKNOWN_PURPOSE
@@ -196,3 +196,11 @@ class TestFieldNormalization(TestCase):
             self.assertEqual(stops.purpose[i], expected_purpose, 'Expected purpose %d for "%s", got %d' % (
                 expected_purpose, raw_reason, stops.purpose[i]
             ))
+
+    def test_agency_names(self):
+        stops = pd.DataFrame({
+            'AGENCY': ['!@#$', 'BACOPD', 'CECIL'],
+            'expected_AGENCY': ['!@#$', 'Baltimore County Police Department', "Cecil County Sheriff's Office"]
+        })
+        fix_AGENCY_column(stops)
+        self.assertTrue(all(stops.AGENCY == stops.expected_AGENCY))
