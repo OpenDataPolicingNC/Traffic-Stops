@@ -2,7 +2,107 @@ from django import forms
 from selectable.forms import AutoCompleteSelectField
 
 from md.lookups import AgencyLookup
+from md.models import Stop
 
+
+def addNoneOpt(choices):
+    opts = list(choices)
+    opts.insert(0, (None, "---"))
+    return opts
+
+
+class SearchForm(forms.Form):
+    agency = forms.CharField(
+        label='Agency Name',
+        widget=AutoCompleteWidget(AgencyLookup),
+        help_text="ex: Baltimore Police Department")
+    officer = forms.CharField(
+        required=False,
+        help_text="ex: 227")
+    start_date = forms.DateField(
+        required=False,
+        help_text="ex: 8/13/2013")
+    end_date = forms.DateField(
+        required=False,
+        help_text="ex: 8/13/2014")
+    age = forms.IntegerField(
+        required=False,
+        min_value=0,
+        max_value=130)
+    gender = forms.ChoiceField(
+        required=False,
+        initial=None,
+        choices=addNoneOpt(stops.GENDER_CHOICES))
+    ethnicity = forms.ChoiceField(
+        required=False,
+        initial=None,
+        choices=addNoneOpt(stops.RACE_CHOICES))
+    purpose = forms.MultipleChoiceField(
+        required=False,
+        choices=stops.PURPOSE_CHOICES,
+        widget=forms.CheckboxSelectMultiple)
+    action = forms.MultipleChoiceField(
+        required=False,
+        choices=stops.ACTION_CHOICES,
+        widget=forms.CheckboxSelectMultiple)
+
+    def clean(self):
+        cleaned_data = super(SearchForm, self).clean()
+
+        start_date = cleaned_data.get('start_date')
+        end_date = cleaned_data.get('end_date')
+        if start_date is not None and end_date is not None:
+
+            if start_date > end_date:
+                err = "End date must be greater than or equal to start-date"
+                self.add_error('end_date', err)
+
+            dt = end_date - start_date
+            if dt.days > 366:  # allow for leap-year
+                err = "Date-range must be less than or equal to one-year"
+                self.add_error('end_date', err)
+
+        return cleaned_data
+
+    def clean_agency(self):
+        agency = self.cleaned_data['agency']
+        if agency:
+            try:
+                agency = stops.Agency.objects.get(name=agency)
+            except stops.Agency.DoesNotExist:
+                agency = None
+        return agency
+
+    def get_query(self):
+        query = Q()
+        agency = self.cleaned_data['agency']
+        if agency:
+            query &= Q(stop__agency=agency)
+        officer = self.cleaned_data['officer']
+        if officer:
+            query &= Q(stop__officer_id=officer)
+        start_date = self.cleaned_data['start_date']
+        if start_date:
+            query &= Q(stop__date__gte=start_date)
+        end_date = self.cleaned_data['end_date']
+        if end_date:
+            query &= Q(stop__date__lte=end_date + datetime.timedelta(days=1))
+        age = self.cleaned_data['age']
+        if age:
+            query &= Q(age=age) & Q(type="D")
+        gender = self.cleaned_data['gender']
+        if gender:
+            query &= Q(gender=gender) & Q(type="D")
+        ethnicity = self.cleaned_data['ethnicity']
+        if ethnicity:
+            query &= Q(ethnicity=ethnicity) & Q(type="D")
+        purpose = self.cleaned_data['purpose']
+        if purpose:
+            query &= Q(stop__purpose__in=purpose)
+        location = self.cleaned_data['location']
+        if location:
+            query &= Q(stop__stop_location__in=location)
+        return query
 
 class AgencySearchForm(forms.Form):
     agency = AutoCompleteSelectField(AgencyLookup, required=True)
