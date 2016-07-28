@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% load selectable_tags staticfiles %}
+
+{% block pre-content %}
+<div class="state-banner agency-list">
+  <div class="row vertical-align">
+    <div class="col-sm-10 col-xs-12 title-container">
+      <h1>
+        Find an Agency
+      </h1>
+    </div>
+    <div class="col-sm-2 col-xs-12">
+      <a class="btn brand" href="{% block stops-search-url %}{% endblock %}">Find a Stop</a>
+    </div>
+  </div>
+</div>
+
+<div class="affix-padder"></div>
+
+<div class="agency-list-search" id="agency-list-search">
+  <form class="container" role="form" id="agency_search" action='{% block home-url %}{% endblock home-url %}' method="get" accept-charset="utf-8">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <div class="form-group">
+        {% csrf_token %}
+          <div class="input-group">
+          {{ agency_form.agency }}
+          <span class="input-group-btn">
+            <button class="btn btn-primary" type="button">View</button>
+          </span>
+          </div><!-- /input-group -->
+        {% if agency_form.agency.errors %}
+          <div class="alert alert-warning alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <ul>
+            {% for error in agency_form.agency.errors %}
+              <li><strong>{{ error }}</strong></li>
+            {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock pre-content %}
+
+{% block content %}
+<div class="row">
+  <div class="col-xs-12">
+    <p class="agency-list-help-block">
+      {% block help-text %}
+      {% endblock %}
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  {% for letter, chunks in sorted_agencies %}
+    <h1 class="headline">{{ letter }}</h1>
+    <div class="row">
+      {% for chunk in chunks %}
+        <div class="col-md-4 col-sm-12">
+          {% for agency in chunk %}
+            <div class="agency-link-container">
+              <a href="{% block agency-link %}{% endblock agency-link %}">
+                {{ agency }}
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}
+
+{% block extra-css %}
+  {% include_ui_theme %}
+  {{ agency_form.media.css }}
+{% endblock %}
+
+{% block extra-js %}
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.js"></script>
+  {{ agency_form.media.js }}
+  <script type="text/javascript">
+    $(document).ready(function() {
+    var quick_search = $('#agency_search :input[name=agency_0]');
+    quick_search.bind('djselectableselect', function(event, ui) {
+      $(this).parents("form").submit();
+    });
+    });
+  </script>
+
+  <script type="text/javascript">
+    $(function ($) {
+      var $padder = $('.affix-padder');
+      var $agencyListSearch = $('#agency-list-search');
+      var BREAKPOINT = 770;
+
+      if ($(window).width() > BREAKPOINT) {
+        $agencyListSearch.affix({
+          offset: {
+            top: function () {
+              return $('.state-banner').outerHeight() - $('.odp-nav').innerHeight();
+            },
+            bottom: function () {
+              return $('.footer').outerHeight(true);
+            }
+          }
+        })
+        .on('affixed.bs.affix', function () {
+          $padder.height($agencyListSearch.outerHeight());
+        })
+        .on('affixed-top.bs.affix', function () {
+          $padder.height(0);
+        });
+      }
+    });
+  </script>
+{% endblock %}

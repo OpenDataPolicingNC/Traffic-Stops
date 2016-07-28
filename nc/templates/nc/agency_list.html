@@ -1,132 +1,21 @@
-{% extends "base.html" %}
+{% extends "agency_list.html" %}
 
-{% load selectable_tags staticfiles %}
+{% block stops-search-url %}{% url 'nc:stops-search' %}{% endblock %}
 
-{% block pre-content %}
-<div class="state-banner agency-list">
-  <div class="row vertical-align">
-    <div class="col-sm-10 col-xs-12 title-container">
-      <h1>
-        Find an Agency
-      </h1>
-    </div>
-    <div class="col-sm-2 col-xs-12">
-      <a class="btn brand" href="{% url 'nc:stops-search' %}">Find a Stop</a>
-    </div>
-  </div>
-</div>
+{% block home-url %}{% url "nc:home" %}{% endblock home-url %}
 
-<div class="affix-padder"></div>
+{% block help-text %}
+  Enter an agency name into the search field above to review data on the racial
+  and ethnic demographics of people stopped, searched, and subjected to force
+  in the course of traffic stops in a given jurisdiction. Data is available
+  for most North Carolina departments and officers serving populations greater
+  than 10,000. North Carolina law requires all such agencies to report their
+  data on a monthly basis to the NC Department of Justice; however, some
+  datasets are incomplete or remain unreported. Where data sets are incomplete
+  or missing from the website, it is because they have not been reported to
+  the state agency from which the site derives its records. Open Data Policing
+  does not have access to, nor does it publish, the names of officers, drivers,
+  or passengers involved in traffic stops.
+{% endblock help-text %}
 
-<div class="agency-list-search" id="agency-list-search">
-  <form class="container" role="form" id="agency_search" action='{% url "nc:home" %}' method="get" accept-charset="utf-8">
-    <div class="row">
-      <div class="col-md-8 col-md-offset-2">
-        <div class="form-group">
-        {% csrf_token %}
-          <div class="input-group">
-          {{ agency_form.agency }}
-          <span class="input-group-btn">
-            <button class="btn btn-primary" type="button">View</button>
-          </span>
-          </div><!-- /input-group -->
-        {% if agency_form.agency.errors %}
-          <div class="alert alert-warning alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <ul>
-            {% for error in agency_form.agency.errors %}
-              <li><strong>{{ error }}</strong></li>
-            {% endfor %}
-            </ul>
-          </div>
-        {% endif %}
-        </div>
-      </div>
-    </div>
-  </form>
-</div>
-{% endblock pre-content %}
-
-{% block content %}
-<div class="row">
-  <div class="col-xs-12">
-    <p class="agency-list-help-block">
-      Enter an agency name into the search field above to review data on the racial
-      and ethnic demographics of people stopped, searched, and subjected to force
-      in the course of traffic stops in a given jurisdiction. Data is available
-      for most North Carolina departments and officers serving populations greater
-      than 10,000. North Carolina law requires all such agencies to report their
-      data on a monthly basis to the NC Department of Justice; however, some
-      datasets are incomplete or remain unreported. Where data sets are incomplete
-      or missing from the website, it is because they have not been reported to
-      the state agency from which the site derives its records. Open Data Policing
-      does not have access to, nor does it publish, the names of officers, drivers,
-      or passengers involved in traffic stops.
-    </p>
-  </div>
-</div>
-
-<div class="row">
-  {% for letter, chunks in sorted_agencies %}
-    <h1 class="headline">{{ letter }}</h1>
-    <div class="row">
-      {% for chunk in chunks %}
-        <div class="col-md-4 col-sm-12">
-          {% for agency in chunk %}
-            <div class="agency-link-container">
-              <a href="{% url "nc:agency-detail" agency.pk %}">
-                {{ agency }}
-              </a>
-            </div>
-          {% endfor %}
-        </div>
-      {% endfor %}
-    </div>
-  {% endfor %}
-</div>
-{% endblock %}
-
-{% block extra-css %}
-  {% include_ui_theme %}
-  {{ agency_form.media.css }}
-{% endblock %}
-
-{% block extra-js %}
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.js"></script>
-  {{ agency_form.media.js }}
-  <script type="text/javascript">
-    $(document).ready(function() {
-    var quick_search = $('#agency_search :input[name=agency_0]');
-    quick_search.bind('djselectableselect', function(event, ui) {
-      $(this).parents("form").submit();
-    });
-    });
-  </script>
-
-  <script type="text/javascript">
-    $(function ($) {
-      var $padder = $('.affix-padder');
-      var $agencyListSearch = $('#agency-list-search');
-      var BREAKPOINT = 770;
-
-      if ($(window).width() > BREAKPOINT) {
-        $agencyListSearch.affix({
-          offset: {
-            top: function () {
-              return $('.state-banner').outerHeight() - $('.odp-nav').innerHeight();
-            },
-            bottom: function () {
-              return $('.footer').outerHeight(true);
-            }
-          }
-        })
-        .on('affixed.bs.affix', function () {
-          $padder.height($agencyListSearch.outerHeight());
-        })
-        .on('affixed-top.bs.affix', function () {
-          $padder.height(0);
-        });
-      }
-    });
-  </script>
-{% endblock %}
+{% block agency-link %}{% url "nc:agency-detail" agency.pk %}{% endblock agency-link %}
