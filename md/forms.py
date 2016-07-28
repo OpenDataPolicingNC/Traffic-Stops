@@ -1,8 +1,8 @@
 from django import forms
 from selectable.forms import AutoCompleteWidget, AutoCompleteSelectField
 
+from md import models as stops
 from md.lookups import AgencyLookup
-from md.models import Stop
 
 
 def addNoneOpt(choices):
@@ -41,10 +41,9 @@ class SearchForm(forms.Form):
         required=False,
         choices=stops.PURPOSE_CHOICES,
         widget=forms.CheckboxSelectMultiple)
-    action = forms.MultipleChoiceField(
+    location = forms.MultipleChoiceField(
         required=False,
-        choices=stops.ACTION_CHOICES,
-        widget=forms.CheckboxSelectMultiple)
+        help_text
 
     def clean(self):
         cleaned_data = super(SearchForm, self).clean()
