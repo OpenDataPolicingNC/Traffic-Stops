@@ -141,6 +141,10 @@ code {
   border-bottom: 0;
 }
 
+.navbar-fixed-top + * {
+  padding-top: 50px;
+}
+
 .navbar-default {
   .navbar-brand {
     font-weight: bold;
@@ -395,6 +399,24 @@ h1.headline {
 .agency-link-container {
   padding: 10px 0;
   font-size: 16px;
+}
+
+.agency-list-search {
+  background-color: #f8f8f8;
+
+  .form-group {
+    margin-top: 20px;
+  }
+
+  .input-group {
+    * {
+      font-size: 18px;
+    }
+
+    input {
+      height: 39px;
+    }
+  }
 }
 
 /* Agency detail page

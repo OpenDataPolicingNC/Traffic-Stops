@@ -1,5 +1,37 @@
 {% extends "base.html" %}
 
+{% load selectable_tags staticfiles %}
+
+{% block pre-content %}
+<div class="agency-list-search">
+    <form class="container" role="form" id="agency_search" action='{% url "nc:home" %}' method="get" accept-charset="utf-8">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="form-group">
+                {% csrf_token %}
+                  <div class="input-group">
+                    {{ agency_form.agency }}
+                    <span class="input-group-btn">
+                      <button class="btn btn-primary" type="button">View</button>
+                    </span>
+                  </div><!-- /input-group -->
+                {% if agency_form.agency.errors %}
+                    <div class="alert alert-warning alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <ul>
+                        {% for error in agency_form.agency.errors %}
+                            <li><strong>{{ error }}</strong></li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock pre-content %}
+
 {% block content %}
 <h2>Agencies</h2>
 <div class="row">
@@ -22,4 +54,22 @@
         {% endfor %}
     </ul>
 </div>
+{% endblock %}
+
+{% block extra-css %}
+    {% include_ui_theme %}
+    {{ agency_form.media.css }}
+{% endblock %}
+
+{% block extra-js %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.js"></script>
+    {{ agency_form.media.js }}
+    <script type="text/javascript">
+      $(document).ready(function() {
+        var quick_search = $('#agency_search :input[name=agency_0]');
+        quick_search.bind('djselectableselect', function(event, ui) {
+            $(this).parents("form").submit();
+        });
+      });
+    </script>
 {% endblock %}

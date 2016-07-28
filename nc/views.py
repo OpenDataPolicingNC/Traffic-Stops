@@ -53,6 +53,14 @@ class AgencyList(ListView):
     def get_context_data(self, **kwargs):
         context = super(AgencyList, self).get_context_data(**kwargs)
 
+        if self.request.method == 'GET' and self.request.GET:
+            form = forms.AgencySearchForm(request.GET)
+            if form.is_valid():
+                agency = form.cleaned_data['agency']
+                return redirect('nc:agency-detail', agency.pk)
+        else:
+            form = forms.AgencySearchForm()
+
         # Once we have the "letters present", we want to be able to iterate
         # over categorized, sorted lists of agencies. Therefore we create
         # a dict indexed by first letter.
@@ -70,7 +78,8 @@ class AgencyList(ListView):
 
         sorted_agencies = sorted(sorted_agencies.items())
 
-        return dict(context, **{"sorted_agencies": sorted_agencies, })
+        return dict(context, **{"sorted_agencies": sorted_agencies,
+                                "agency_form": form, })
 
 
 class AgencyDetail(DetailView):
