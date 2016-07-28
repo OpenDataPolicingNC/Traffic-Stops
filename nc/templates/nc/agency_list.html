@@ -4,8 +4,21 @@
 <h2>Agencies</h2>
 <div class="row">
     <ul>
-        {% for agency in object_list %}
-        <li><a href="{% url "nc:agency-detail" agency.pk %}">{{ agency }}</a></li>
+        {% for letter, chunks in sorted_agencies %}
+            <h1 class="headline">{{ letter }}</h1>
+            <div class="row">
+                {% for chunk in chunks %}
+                    <div class="col-md-4 col-sm-12">
+                        {% for agency in chunk %}
+                            <div class="agency-link-container">
+                                <a href="{% url "nc:agency-detail" agency.pk %}">
+                                    {{ agency }}
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
         {% endfor %}
     </ul>
 </div>

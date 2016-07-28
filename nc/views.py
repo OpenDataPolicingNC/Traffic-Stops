@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, Http404
 from django.views.generic import ListView, DetailView
 from .models import Stop, Agency, Person
 from . import forms
+import math
 
 
 def home(request):
@@ -37,8 +38,39 @@ def search(request):
     return render(request, 'nc/search.html', context)
 
 
+def get_chunks(xs, chunk_count=3):
+    """
+    Helper function to split a list into roughly equally sized chunks.
+    """
+    chunk_width = math.ceil(len(xs) / chunk_count)
+    ranges = range(0, len(xs), chunk_width)
+    return [xs[x:x + chunk_width] for x in ranges]
+
+
 class AgencyList(ListView):
     model = Agency
+
+    def get_context_data(self, **kwargs):
+        context = super(AgencyList, self).get_context_data(**kwargs)
+
+        # Once we have the "letters present", we want to be able to iterate
+        # over categorized, sorted lists of agencies. Therefore we create
+        # a dict indexed by first letter.
+        sorted_agencies = {}
+
+        for agency in context['agency_list']:
+            initial = agency.name[:1]
+            if initial not in sorted_agencies:
+                sorted_agencies[initial] = []
+            sorted_agencies[initial].append(agency)
+
+        for key in sorted_agencies:
+            sorted_agencies[key].sort(key=lambda x: x.name)
+            sorted_agencies[key] = get_chunks(sorted_agencies[key])
+
+        sorted_agencies = sorted(sorted_agencies.items())
+
+        return dict(context, **{"sorted_agencies": sorted_agencies, })
 
 
 class AgencyDetail(DetailView):

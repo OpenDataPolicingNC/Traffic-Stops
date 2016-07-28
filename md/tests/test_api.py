@@ -4,13 +4,13 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 import pytz
 from rest_framework import status
-from rest_framework.test import APITestCase
+from rest_framework.test import APITransactionTestCase
 
 from md.models import Agency, ETHNICITY_CHOICES, PURPOSE_CHOICES
 from md.tests import factories
 
 
-class AgencyTests(APITestCase):
+class AgencyTests(APITransactionTestCase):
 
     def test_list_agencies(self):
         """Test Agency list"""
