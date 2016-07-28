@@ -3,6 +3,19 @@
 {% load selectable_tags staticfiles %}
 
 {% block pre-content %}
+<div class="state-banner agency-list">
+    <div class="row vertical-align">
+        <div class="col-sm-10 col-xs-12 title-container">
+            <h1>
+                Find an Agency
+            </h1>
+        </div>
+        <div class="col-sm-2 col-xs-12">
+            <a class="btn brand" href="{% url 'nc:stops-search' %}">Find a Stop</a>
+        </div>
+    </div>
+</div>
+
 <div class="agency-list-search">
     <form class="container" role="form" id="agency_search" action='{% url "nc:home" %}' method="get" accept-charset="utf-8">
         <div class="row">
@@ -33,7 +46,6 @@
 {% endblock pre-content %}
 
 {% block content %}
-<h2>Agencies</h2>
 <div class="row">
     <ul>
         {% for letter, chunks in sorted_agencies %}
