@@ -43,7 +43,7 @@ class SearchForm(forms.Form):
         widget=forms.CheckboxSelectMultiple)
     location = forms.MultipleChoiceField(
         required=False,
-        help_text="Enter a location here"
+        help_text="Enter a location here")
 
     def clean(self):
         cleaned_data = super(SearchForm, self).clean()
