@@ -252,7 +252,7 @@ code {
   }
 
   &.agency-list {
-    padding: 90px 40px 60px 40px;
+    padding: 90px 40px 50px 40px;
   }
 
   h1 {
@@ -295,7 +295,7 @@ code {
 
       .title-container {
         margin-bottom: 20px;
-        padding: 0 30px;
+        padding: 0 30px 6px 30px;
         border-bottom: 1px solid white;
       }
 
@@ -408,8 +408,14 @@ h1.headline {
 .agency-list-search {
   background-color: #f8f8f8;
 
+  &.affix {
+    z-index: 1024;
+    width: 100%;
+    top: 50px;
+  }
+
   .form-group {
-    margin-top: 20px;
+    margin: 20px 0;
   }
 
   .input-group {
@@ -421,6 +427,13 @@ h1.headline {
       height: 39px;
     }
   }
+}
+
+.agency-list-help-block {
+  color: @gray-light;
+  font-size: 16px;
+  line-height: 1.5;
+  margin-top: 20px;
 }
 
 /* Agency detail page
