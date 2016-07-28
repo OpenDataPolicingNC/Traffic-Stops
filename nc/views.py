@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, Http404
 from django.views.generic import ListView, DetailView
 from .models import Stop, Agency, Person
 from . import forms
-import math
+from traffic_stops.utils import get_chunks
 
 
 def home(request):
@@ -36,15 +36,6 @@ def search(request):
         'people': people,
     }
     return render(request, 'nc/search.html', context)
-
-
-def get_chunks(xs, chunk_count=3):
-    """
-    Helper function to split a list into roughly equally sized chunks.
-    """
-    chunk_width = math.ceil(len(xs) / chunk_count)
-    ranges = range(0, len(xs), chunk_width)
-    return [xs[x:x + chunk_width] for x in ranges]
 
 
 class AgencyList(ListView):
