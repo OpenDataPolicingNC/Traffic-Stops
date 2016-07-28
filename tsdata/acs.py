@@ -131,7 +131,7 @@ def refresh_census_models(data):
             two_or_more_races=row['two_or_more_races'],
             hispanic=row['hispanic'],
             non_hispanic=row['non_hispanic'],
-            total=row['non_hispanic'],
+            total=row['total'],
         )
         profiles.append(profile)
     CensusProfile.objects.bulk_create(profiles)
