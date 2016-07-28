@@ -54,7 +54,7 @@ class AgencyList(ListView):
         context = super(AgencyList, self).get_context_data(**kwargs)
 
         if self.request.method == 'GET' and self.request.GET:
-            form = forms.AgencySearchForm(request.GET)
+            form = forms.AgencySearchForm(self.request.GET)
             if form.is_valid():
                 agency = form.cleaned_data['agency']
                 return redirect('nc:agency-detail', agency.pk)
