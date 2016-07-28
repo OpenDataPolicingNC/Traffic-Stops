@@ -36,7 +36,7 @@ class SearchForm(forms.Form):
     ethnicity = forms.ChoiceField(
         required=False,
         initial=None,
-        choices=addNoneOpt(stops.RACE_CHOICES))
+        choices=addNoneOpt(stops.ETHNICITY_CHOICES))
     purpose = forms.MultipleChoiceField(
         required=False,
         choices=stops.PURPOSE_CHOICES,
