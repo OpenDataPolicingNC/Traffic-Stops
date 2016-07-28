@@ -8,7 +8,7 @@
 
 {% block content-outer %}
 
-<div class="state-banner agency-detail{% if officer_id %} officer{% endif %}">
+<div class="state-banner affix-offset-top-pos agency-detail{% if officer_id %} officer{% endif %}">
   <div class="row vertical-align">
     <div class="col-xs-12">
       <a class="back" href="{% block agency-list-url %}{% endblock %}">◀ Back to "Find An Agency"</a>
@@ -29,7 +29,7 @@
   </div>
 </div>
 
-<nav class="graphs-nav" id="graphs-nav">
+<nav class="graphs-nav affix-element" id="graphs-nav">
   <ul class="nav">
     {% block census-link %}{% endblock census-link %}
     <li><a href="#stop-percentage">Traffic Stops</a></li>
@@ -72,33 +72,13 @@
 
       var $body = $('body');
       var $window = $(window);
-      var $padder = $('.affix-padder');
       var $graphsNav = $('#graphs-nav');
       var BREAKPOINT = 770;
 
       $body.scrollspy({ target: '#graphs-nav', offset: 50 });
-      $('window').on('load', function () {
+      $window.on('load', function () {
         $body.scrollspy('refresh');
       });
-
-      if ($window.width() > BREAKPOINT) {
-        $graphsNav.affix({
-          offset: {
-            top: function () {
-              return $('.state-banner').outerHeight() - $('.odp-nav').innerHeight();
-            },
-            bottom: function () {
-              return $('.footer').outerHeight(true);
-            }
-          }
-        })
-        .on('affixed.bs.affix', function () {
-          $padder.height($graphsNav.outerHeight());
-        })
-        .on('affixed-top.bs.affix', function () {
-          $padder.height(0);
-        });
-      }
 
       (function fixAnchorElements () {
         var $anchors = $('.headline > h2');

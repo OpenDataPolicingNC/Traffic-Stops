@@ -3,7 +3,7 @@
 {% load selectable_tags staticfiles %}
 
 {% block pre-content %}
-<div class="state-banner agency-list">
+<div class="state-banner affix-offset-top-pos agency-list">
   <div class="row vertical-align">
     <div class="col-sm-10 col-xs-12 title-container">
       <h1>
@@ -18,7 +18,7 @@
 
 <div class="affix-padder"></div>
 
-<div class="agency-list-search" id="agency-list-search">
+<div class="agency-list-search affix-element" id="agency-list-search">
   <form class="container" role="form" id="agency_search" action='{% block home-url %}{% endblock home-url %}' method="get" accept-charset="utf-8">
     <div class="row">
       <div class="col-md-8 col-md-offset-2">
@@ -91,33 +91,6 @@
     quick_search.bind('djselectableselect', function(event, ui) {
       $(this).parents("form").submit();
     });
-    });
-  </script>
-
-  <script type="text/javascript">
-    $(function ($) {
-      var $padder = $('.affix-padder');
-      var $agencyListSearch = $('#agency-list-search');
-      var BREAKPOINT = 770;
-
-      if ($(window).width() > BREAKPOINT) {
-        $agencyListSearch.affix({
-          offset: {
-            top: function () {
-              return $('.state-banner').outerHeight() - $('.odp-nav').innerHeight();
-            },
-            bottom: function () {
-              return $('.footer').outerHeight(true);
-            }
-          }
-        })
-        .on('affixed.bs.affix', function () {
-          $padder.height($agencyListSearch.outerHeight());
-        })
-        .on('affixed-top.bs.affix', function () {
-          $padder.height(0);
-        });
-      }
     });
   </script>
 {% endblock %}
