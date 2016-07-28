@@ -57,11 +57,8 @@
 
         <div class="tab-content">
           <div class="tab-pane active" id="agencies" role="tabpanel">
-            <p class='nc-agency-intro'>
-              Review agency-level data on the racial and ethnic demographics of people
-              stopped, searched, and subjected to force in the course of traffic stops
-              in a given jurisdiction.
-            </p>
+            {% block agency-intro %}
+            {% endblock agency-intro %}
 
             {% block search-form %}
               <h4>View Agency Dashboard</h4>
