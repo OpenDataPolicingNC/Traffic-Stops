@@ -63,17 +63,34 @@
 {% get_pages %}
 {% bootstrap_messages %}
 <div class="row">
-    <div class="col-md-3">
-        <form action="{% url 'md:stops-search' %}" method="get" class="form">
-            {% bootstrap_form form %}
-            {% buttons %}
-                <button type="submit" class="btn btn-primary">
-                    {% bootstrap_icon "star" %} Submit
-                </button>
-            {% endbuttons %}
+    <div class="col-md-12">
+        <form action="{% url 'md:stops-search' %}" method="get" class="form row">
+            <div class="col-md-6">
+                <h2>Basic Search</h2>
+                {% bootstrap_field form.agency %}
+                <div class="row">
+                    <div class="col-md-6">{% bootstrap_field form.start_date %}</div>
+                    <div class="col-md-6">{% bootstrap_field form.end_date %}</div>
+                </div>
+                {% bootstrap_field form.age %}
+                {% bootstrap_field form.ethnicity %}
+                {% bootstrap_field form.gender %}
+            </div>
+            <div class="col-md-6">
+                <h2>Advanced Search</h2>
+                {% bootstrap_field form.officer %}
+                {% bootstrap_field form.purpose %}
+            </div>
+            <div class="col-md-12">
+                {% buttons %}
+                    <button type="submit" class="btn btn-primary">
+                        Submit
+                    </button>
+                {% endbuttons %}
+            </div>
         </form>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-12">
         <h2>Stops ({{ pages.total_count|intcomma }} total)</h2>
         <table class="table">
             <tr>
@@ -95,6 +112,7 @@
             </tr>
             {% endfor %}
         </table>
+        {% show_pages %}
     </div>
 </div>
 {% endblock %}
