@@ -106,8 +106,10 @@ class TestFieldNormalization(TestCase):
         new_stops = process_time_of_stop(orig_stops)
         self.assertEqual(len(orig_stops), 6)
         self.assertEqual(len(new_stops), 4)
-        self.assertTrue(all(new_stops.STOPDATE == orig_stops.STOPDATE[2:]))
-        self.assertTrue(all(new_stops.TIME_OF_STOP == orig_stops.TIME_OF_STOP[2:]))
+        self.assertTrue(
+            all(new_stops.STOPDATE == orig_stops.STOPDATE[2:]))
+        self.assertTrue(
+            all(new_stops.TIME_OF_STOP == orig_stops.TIME_OF_STOP[2:]))
 
     def test_computed_date(self):
         stops = pd.DataFrame({
@@ -148,7 +150,8 @@ class TestFieldNormalization(TestCase):
 
     def test_purpose(self):
         data = (
-            # (STOP_REASON-value-from-raw-data, cleaned-STOP_REASON, corresponding-value-from-PURPOSE_CHOICES)
+            # (STOP_REASON-value-from-raw-data, cleaned-STOP_REASON,
+            # corresponding-value-from-PURPOSE_CHOICES)
             #
             # Most of the purposes are never assigned explicitly in the code, so
             # "constants" like UNKNOWN_PURPOSE don't exist for most.
@@ -193,14 +196,19 @@ class TestFieldNormalization(TestCase):
         for i, e in enumerate(data):
             raw_reason, cleaned_reason, expected_purpose = e
             self.assertEqual(stops.STOP_REASON[i], cleaned_reason)
-            self.assertEqual(stops.purpose[i], expected_purpose, 'Expected purpose %d for "%s", got %d' % (
-                expected_purpose, raw_reason, stops.purpose[i]
-            ))
+            self.assertEqual(
+                stops.purpose[i],
+                expected_purpose,
+                'Expected purpose %d for "%s", got %d' %
+                (expected_purpose, raw_reason, stops.purpose[i]))
 
     def test_agency_names(self):
         stops = pd.DataFrame({
             'AGENCY': ['!@#$', 'BACOPD', 'CECIL'],
-            'expected_AGENCY': ['!@#$', 'Baltimore County Police Department', "Cecil County Sheriff's Office"]
+            'expected_AGENCY': [
+                '!@#$',
+                'Baltimore County Police Department',
+                "Cecil County Sheriff's Office"]
         })
         fix_AGENCY_column(stops)
         self.assertTrue(all(stops.AGENCY == stops.expected_AGENCY))
