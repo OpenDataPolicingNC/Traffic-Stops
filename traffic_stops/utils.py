@@ -1,5 +1,6 @@
 import math
 
+
 def get_chunks(xs, chunk_count=3):
     """
     Helper function to split a list into roughly equally sized chunks.
