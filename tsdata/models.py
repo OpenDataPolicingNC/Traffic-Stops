@@ -57,3 +57,15 @@ class CensusProfile(models.Model):
 
     def __str__(self):
         return self.location
+
+    def get_census_dict(self):
+        return dict(
+            white=self.white,
+            black=self.black,
+            native_american=self.native_american,
+            asian=self.asian,
+            other=self.other + self.native_hawaiian,
+            hispanic=self.hispanic,
+            non_hispanic=self.non_hispanic,
+            total=self.total,
+        )
