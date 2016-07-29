@@ -12,6 +12,7 @@ from md.models import UNKNOWN_PURPOSE
 
 
 class TestFieldNormalization(TestCase):
+    # if db calls are added: multi_db = True
 
     def test_ethnicity(self):
         data = (

@@ -6,16 +6,13 @@ import pytz
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from nc.models import Agency, Stop, PURPOSE_CHOICES, RACE_CHOICES
+from nc.models import Agency, PURPOSE_CHOICES, RACE_CHOICES
 from nc.tests import factories
 from nc.api import GROUPS
 
 
 class AgencyTests(APITestCase):
-
-    def tearDown(self):
-        Stop.objects.all().delete()
-        Agency.objects.all().delete()
+    multi_db = True
 
     def test_list_agencies(self):
         """Test Agency list"""

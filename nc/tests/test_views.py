@@ -1,12 +1,10 @@
 from django.core.urlresolvers import reverse
 from django.test import TestCase
-from nc.models import Agency, Stop
+from nc.models import Agency
 
 
 class ViewTests(TestCase):
-    def tearDown(self):
-        Stop.objects.all().delete()
-        Agency.objects.all().delete()
+    multi_db = True
 
     def test_home(self):
         response = self.client.get(reverse('nc:home'))
