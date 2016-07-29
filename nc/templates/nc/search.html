@@ -1,20 +1,7 @@
-{% extends "base.html" %}
+{% extends "search.html" %}
 {% load selectable_tags bootstrap3 el_pagination_tags humanize %}
 
-{% block pre-content %}
-  <div class="state-banner affix-offset-top-pos find-a-stop">
-    <div class="row vertical-align">
-      <div class="col-sm-10 col-xs-12 title-container">
-        <h1>
-          Find a Traffic Stop
-        </h1>
-      </div>
-      <div class="col-sm-2 col-xs-12">
-        <a class="btn brand" href="{% block stops-search-url %}{% endblock %}">Find a Stop</a>
-      </div>
-    </div>
-  </div>
-{% endblock pre-content %}
+{% block stops-search-url %}{% url 'nc:stops-search' %}{% endblock %}
 
 {% block extra-js %}
     {% include_ui_theme %}
