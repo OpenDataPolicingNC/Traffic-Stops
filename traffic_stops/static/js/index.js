@@ -1,6 +1,7 @@
 require("babel-polyfill");
 window.jQuery = window.$ = require('jquery');
 window.d3 = require('d3');
+window._ = require('underscore');
 var nv = require('nvd3');
 require('bootstrap');
 

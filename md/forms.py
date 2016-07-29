@@ -82,16 +82,16 @@ class SearchForm(forms.Form):
         query = Q()
         agency = self.cleaned_data['agency']
         if agency:
-            query &= Q(stop__agency=agency)
+            query &= Q(agency=agency)
         officer = self.cleaned_data['officer']
         if officer:
-            query &= Q(stop__officer_id=officer)
+            query &= Q(officer_id=officer)
         start_date = self.cleaned_data['start_date']
         if start_date:
-            query &= Q(stop__date__gte=start_date)
+            query &= Q(date__gte=start_date)
         end_date = self.cleaned_data['end_date']
         if end_date:
-            query &= Q(stop__date__lte=end_date + datetime.timedelta(days=1))
+            query &= Q(date__lte=end_date + datetime.timedelta(days=1))
         age = self.cleaned_data['age']
         if age:
             query &= Q(age=age) & Q(type="D")
@@ -103,10 +103,10 @@ class SearchForm(forms.Form):
             query &= Q(ethnicity=ethnicity) & Q(type="D")
         purpose = self.cleaned_data['purpose']
         if purpose:
-            query &= Q(stop__purpose__in=purpose)
+            query &= Q(purpose__in=purpose)
         location = self.cleaned_data['location']
         if location:
-            query &= Q(stop__stop_location__in=location)
+            query &= Q(stop_location__in=location)
         return query
 
 
