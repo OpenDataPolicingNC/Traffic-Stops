@@ -19,7 +19,7 @@ export default Backbone.Model.extend({
   onResize: function () {
     d3.select(this.svg[0])
       .style({ width:  `${this.div.width()}px`
-             , height: `${this.div.width()}px` });
+             , height: `${ (this.get('height') / this.get('width')) * this.div.width() }px` });
   },
   loader_show: function(){
     this.loader_div = $('<div>')

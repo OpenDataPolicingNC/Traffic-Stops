@@ -157,7 +157,7 @@ export const StopRatioDonutBase = VisualBase.extend({
           .attr('width', "100%")
           .attr('height', "100%")
           .style({ width:  `${this.div.width()}px`
-                 , height: `${this.div.width()}px` })
+                 , height: `${ (this.get('height') / this.get('width')) * this.div.width() }px` })
         .transition().duration(1200)
           .attr("preserveAspectRatio", "xMinYMin")
           .attr('viewBox', `0 0 ${this.get('width')} ${this.get('height')}`)
@@ -211,12 +211,6 @@ export const StopRatioTimeSeriesBase = VisualBase.extend({
 
   drawStartup: function () {},
 
-  onResize: function () {
-    d3.select(this.svg[0])
-      .style({ width:  `${this.div.width()}px`
-             , height: `${this.get('height')}px` });
-  },
-
   drawChart: function(){
     var data = this._formatData();
 
@@ -226,7 +220,7 @@ export const StopRatioTimeSeriesBase = VisualBase.extend({
           .attr('width', "100%")
           .attr('height', "100%")
           .style({ width:  `${this.div.width()}px`
-                 , height: `${this.get('height')}px` })
+                 , height: `${ (this.get('height') / this.get('width')) * this.div.width() }px` })
           .attr('preserveAspectRatio', "xMinYMin")
           .attr('viewBox', `0 0 ${this.get('width')} ${this.get('height')}`)
           .call(this.chart);

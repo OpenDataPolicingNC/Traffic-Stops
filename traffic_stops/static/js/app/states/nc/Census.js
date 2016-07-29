@@ -56,7 +56,7 @@ var CensusRatioDonut = VisualBase.extend({
       d3.select(this.svg[0])
           .datum(data)
           .style({ width:  `${this.div.width()}px`
-                 , height: `${this.div.width()}px` })
+                 , height: `${ (this.get('height') / this.get('width')) * this.div.width() }px` })
         .transition().duration(1200)
           .attr('width', "100%")
           .attr('height', "100%")
