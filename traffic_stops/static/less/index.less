@@ -250,6 +250,11 @@ code {
     padding: 70px 40px 60px 40px;
   }
 
+  &.agency-list,
+  &.find-a-stop {
+    padding: 90px 40px 50px 40px;
+  }
+
   h1 {
     color: white;
     margin-top: 0;
@@ -383,6 +388,50 @@ body#state {
   }
   #elevator {
     font-size: 110%;
+  }
+}
+
+/* Find a Traffic Stop page
+========================================= */
+
+.fields-col {
+  &.left {
+    padding-right: 0;
+    > * {
+      padding-right: 45px;
+    }
+    > div {
+      border-right: 1px solid @gray-light;
+    }
+  }
+  &.right {
+    padding-left: 0;
+    > * {
+      padding-left: 45px;
+    }
+  }
+
+  > h3 {
+    text-align: center;
+    font-weight: lighter;
+    color: @gray-light;
+  }
+}
+
+.buttons-col {
+  padding: 30px 0;
+  .flex-layout();
+  .flex-direction(row);
+  .justify-content(center);
+  .align-items(center);
+
+  .form-group {
+    margin: 0;
+
+    button {
+      font-size: 18px;
+      padding: 8px 24px;
+    }
   }
 }
 

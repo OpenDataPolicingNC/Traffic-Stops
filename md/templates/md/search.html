@@ -1,6 +1,21 @@
 {% extends "base.html" %}
 {% load selectable_tags bootstrap3 el_pagination_tags humanize %}
 
+{% block pre-content %}
+  <div class="state-banner affix-offset-top-pos find-a-stop">
+    <div class="row vertical-align">
+      <div class="col-sm-10 col-xs-12 title-container">
+        <h1>
+          Find a Traffic Stop
+        </h1>
+      </div>
+      <div class="col-sm-2 col-xs-12">
+        <a class="btn brand" href="{% block stops-search-url %}{% endblock %}">Find a Stop</a>
+      </div>
+    </div>
+  </div>
+{% endblock pre-content %}
+
 {% block extra-js %}
     {% include_ui_theme %}
     {% include_jquery_libs %}
@@ -65,23 +80,27 @@
 <div class="row">
     <div class="col-md-12">
         <form action="{% url 'md:stops-search' %}" method="get" class="form row">
-            <div class="col-md-6">
-                <h2>Basic Search</h2>
-                {% bootstrap_field form.agency %}
-                <div class="row">
-                    <div class="col-md-6">{% bootstrap_field form.start_date %}</div>
-                    <div class="col-md-6">{% bootstrap_field form.end_date %}</div>
+            <div class="col-md-6 fields-col left">
+                <h3>Basic Search</h3>
+                <div>
+                    {% bootstrap_field form.agency %}
+                    <div class="row">
+                        <div class="col-md-6">{% bootstrap_field form.start_date %}</div>
+                        <div class="col-md-6">{% bootstrap_field form.end_date %}</div>
+                    </div>
+                    {% bootstrap_field form.age %}
+                    {% bootstrap_field form.ethnicity %}
+                    {% bootstrap_field form.gender %}
                 </div>
-                {% bootstrap_field form.age %}
-                {% bootstrap_field form.ethnicity %}
-                {% bootstrap_field form.gender %}
             </div>
-            <div class="col-md-6">
-                <h2>Advanced Search</h2>
-                {% bootstrap_field form.officer %}
-                {% bootstrap_field form.purpose %}
+            <div class="col-md-6 fields-col right">
+                <h3>Advanced Search</h3>
+                <div>
+                    {% bootstrap_field form.officer %}
+                    {% bootstrap_field form.purpose %}
+                </div>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-12 buttons-col">
                 {% buttons %}
                     <button type="submit" class="btn btn-primary">
                         Submit
