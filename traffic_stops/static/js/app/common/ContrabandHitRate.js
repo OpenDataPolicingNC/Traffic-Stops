@@ -115,12 +115,18 @@ export const ContrabandHitRateBarBase = VisualBase.extend({
     this.selector = selector;
   },
 
+  onResize: function () {
+    d3.select(this.svg[0])
+      .style({ width:  `${this.div.width()}px`
+             , height: `${this.get('height')}px` });
+  },
+
   drawChart: function(){
     d3.select(this.svg[0])
             .datum(this.dataset)
             .attr('width', "100%")
             .attr('height', "100%")
-            .style({ width:  `${this.get('width')}px`
+            .style({ width:  `${this.div.width()}px`
                    , height: `${this.get('height')}px` })
             .attr('preserveAspectRatio', "xMinYMin")
             .attr('viewBox', `0 0 ${this.get('width')} ${this.get('height')}`)
