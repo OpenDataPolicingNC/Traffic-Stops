@@ -11,13 +11,21 @@ class Home(base_views.Home):
 
 
 def search(request):
+    query = None
     if request.method == 'GET' and request.GET:
         form = forms.SearchForm(request.GET)
+        if form.is_valid():
+            query = form.get_query()
     else:
         form = forms.SearchForm()
 
+    if query:
+        stops = Stop.objects.filter(query)
+    else:
+        stops = Stop.objects.none()
     context = {
         'form': form,
+        'stops': stops,
     }
     return render(request, 'md/search.html', context)
 
