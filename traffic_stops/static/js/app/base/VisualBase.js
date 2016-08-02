@@ -9,10 +9,17 @@ export default Backbone.Model.extend({
     this.setDOM();
     this.loader_show();
     this.setDefaultChart();
+
+    $(window).on('resize', this.onResize.bind(this))
   },
   setDOM: function(){
     this.svg = $(this.get("selector"));
     this.div = $(this.svg).parent();
+  },
+  onResize: function () {
+    d3.select(this.svg[0])
+      .style({ width:  `${this.div.width()}px`
+             , height: `${ (this.get('height') / this.get('width')) * this.div.width() }px` });
   },
   loader_show: function(){
     this.loader_div = $('<div>')
