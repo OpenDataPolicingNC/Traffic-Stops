@@ -16,3 +16,4 @@ window.log = function f(){ log.history = log.history || []; log.history.push(arg
 
 require('./app/states/nc');
 require('./app/states/md');
+require('./affix');

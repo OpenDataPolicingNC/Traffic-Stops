@@ -5,12 +5,12 @@
 
 {% block extra-css %}
     {% include_ui_theme %}
-    {{ agency_form.media.css }}
+    {{ form.media.css }}
 {% endblock %}
 
 {% block extra-js %}
 <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.js"></script>
-{{ agency_form.media.js }}
+{{ form.media.js }}
 <script type="text/javascript">
   $(document).ready(function() {
     var quick_search = $('#agency_search :input[name=agency_0]');
@@ -57,11 +57,8 @@
 
         <div class="tab-content">
           <div class="tab-pane active" id="agencies" role="tabpanel">
-            <p class='nc-agency-intro'>
-              Review agency-level data on the racial and ethnic demographics of people
-              stopped, searched, and subjected to force in the course of traffic stops
-              in a given jurisdiction.
-            </p>
+            {% block agency-intro %}
+            {% endblock agency-intro %}
 
             {% block search-form %}
               <h4>View Agency Dashboard</h4>
@@ -69,16 +66,16 @@
                   <div class="form-group">
                   {% csrf_token %}
                   <div class="input-group">
-                    {{ agency_form.agency }}
+                    {{ form.agency }}
                     <span class="input-group-btn">
                       <button class="btn btn-primary" type="button">View</button>
                     </span>
                   </div><!-- /input-group -->
-                  {% if agency_form.agency.errors %}
+                  {% if form.agency.errors %}
                       <div class="alert alert-warning alert-dismissible">
                           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                           <ul>
-                          {% for error in agency_form.agency.errors %}
+                          {% for error in form.agency.errors %}
                               <li><strong>{{ error }}</strong></li>
                           {% endfor %}
                           </ul>
