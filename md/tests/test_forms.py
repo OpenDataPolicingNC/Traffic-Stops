@@ -1,12 +1,6 @@
-import datetime
-import factory
-import factory.fuzzy
-
 from django.test import TestCase
 
-from . import factories
-
-from .. import forms, models
+from .. import forms
 
 
 class TestSearchForm(TestCase):
@@ -47,7 +41,7 @@ class TestSearchForm(TestCase):
         #     x[0] for x in models.ETHNICITY_CHOICES)
         # purpose = factory.fuzzy.FuzzyChoice(
         #     x[0] for x in models.PURPOSE_CHOICES)
-     search_form = forms.SearchForm(data={
+        search_form = forms.SearchForm(data={
             'agency': 'Montgomery County Police Department',
             'officer': '1',
             'start_date': '1/1/2014',
@@ -56,6 +50,5 @@ class TestSearchForm(TestCase):
             'gender': 'F',
             'ethnicity': 'A',
             'purpose': [0]
-        })
+            })
         self.assertTrue(search_form.is_valid())
-
