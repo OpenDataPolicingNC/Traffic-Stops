@@ -27,3 +27,28 @@ class TestSearchForm(TestCase):
         self.assertFalse(search_form.is_valid())
         error_keys = search_form.errors.keys()
         self.assertTrue('end_date' in error_keys)
+
+    def test_form_generates_valid_query(self):
+        # agency = factory.SubFactory(factories.AgencyFactory)
+        # officer = factory.fuzzy.FuzzyInteger(0)
+        # start_date = factory.fuzzy.FuzzyDateTime(datetime.datetime(2013, 1, 1, 0, 0,
+        #                                          tzinfo=datetime.timezone.utc))
+        # end_date = factory.fuzzy.FuzzyDateTime(datetime.datetime(2013, 1, 1, 0, 0,
+        #                                        tzinfo=datetime.timezone.utc))
+        # age = factory.fuzzy.FuzzyInteger(0, 100)
+        # gender = factory.fuzzy.FuzzyChoice(x[0] for x in models.GENDER_CHOICES)
+        # ethnicity = factory.fuzzy.FuzzyChoice(
+        #     x[0] for x in models.ETHNICITY_CHOICES)
+        # purpose = factory.fuzzy.FuzzyChoice(
+        #     x[0] for x in models.PURPOSE_CHOICES)
+        search_form = forms.SearchForm(data={
+            'agency': 'Montgomery County Police Department',
+            'officer': '1',
+            'start_date': '1/1/2014',
+            'end_date': '1/31/2014',
+            'age': '20',
+            'gender': 'F',
+            'ethnicity': 'A',
+            'purpose': [0]
+            })
+        self.assertTrue(search_form.is_valid())
