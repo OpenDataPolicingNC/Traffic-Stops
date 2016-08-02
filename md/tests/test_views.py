@@ -1,6 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from md.models import Agency, Stop
+from md.tests import factories
 
 
 class ViewTests(TestCase):
@@ -11,7 +12,7 @@ class ViewTests(TestCase):
         self.assertEqual(200, response.status_code)
 
     def test_agency_detail(self):
-        agency = Agency.objects.create(name="Maryland State Police")
+        agency = factories.AgencyFactory(name="Maryland State Police")
         response = self.client.get(reverse('md:agency-detail', args=[agency.pk]))
         self.assertEqual(200, response.status_code)
 
@@ -24,21 +25,21 @@ class ViewTests(TestCase):
         Verify that agencies are delivered in an appropriately sorted and
         chunked form.
         """
-        Agency.objects.create(name="Abc")
-        Agency.objects.create(name="Def")
-        Agency.objects.create(name="Ghi")
-        Agency.objects.create(name="Abc_")
-        Agency.objects.create(name="Def_")
-        Agency.objects.create(name="Ghi_")
-        Agency.objects.create(name="Abc__")
-        Agency.objects.create(name="Def__")
-        Agency.objects.create(name="Ghi__")
-        Agency.objects.create(name="Abc___")
-        Agency.objects.create(name="Def___")
-        Agency.objects.create(name="Ghi___")
-        Agency.objects.create(name="Abc____")
-        Agency.objects.create(name="Def____")
-        Agency.objects.create(name="Ghi____")
+        factories.AgencyFactory(name="Abc")
+        factories.AgencyFactory(name="Def")
+        factories.AgencyFactory(name="Ghi")
+        factories.AgencyFactory(name="Abc_")
+        factories.AgencyFactory(name="Def_")
+        factories.AgencyFactory(name="Ghi_")
+        factories.AgencyFactory(name="Abc__")
+        factories.AgencyFactory(name="Def__")
+        factories.AgencyFactory(name="Ghi__")
+        factories.AgencyFactory(name="Abc___")
+        factories.AgencyFactory(name="Def___")
+        factories.AgencyFactory(name="Ghi___")
+        factories.AgencyFactory(name="Abc____")
+        factories.AgencyFactory(name="Def____")
+        factories.AgencyFactory(name="Ghi____")
 
         response = self.client.get(reverse('md:agency-list'))
         sorted_agencies = response.context['sorted_agencies']
