@@ -43,7 +43,7 @@ ETHNICITY_TO_CODE = {
 
 # Helpers for cleaning raw STOP_REASON:
 # used to remove blanks and paragraph
-STOP_REASON_cleanup_a_re = re.compile(r'^ *(\d\d?) *- *(\d+)\.?\d?\d?-? * A-Za-z]?\d*[A-Za-z]? *(\(.*\))? *$')  # noqa
+STOP_REASON_cleanup_a_re = re.compile(r'^ *(\d\d?) *- *(\d+)\.?\d?\d?-? *[A-Za-z]?\d*[A-Za-z]? *(\(.*\))? *$')  # noqa
 # used to remove extraneous characters from two-digit codes
 STOP_REASON_cleanup_b_re = re.compile(r'^ *(\d\d)\*?\-?`? *$')
 # used to remove extraneous characters from three-digit codes
