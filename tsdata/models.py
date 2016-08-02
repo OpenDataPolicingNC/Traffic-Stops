@@ -64,7 +64,7 @@ class CensusProfile(models.Model):
             black=self.black,
             native_american=self.native_american,
             asian=self.asian,
-            other=self.other + self.native_hawaiian,
+            other=self.other + self.native_hawaiian + self.two_or_more_races,
             hispanic=self.hispanic,
             non_hispanic=self.non_hispanic,
             total=self.total,
