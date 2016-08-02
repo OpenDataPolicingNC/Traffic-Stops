@@ -1,20 +1,22 @@
 from django.shortcuts import render, redirect, Http404
 from django.views.generic import ListView, DetailView, View, TemplateView
+from django.views.generic.edit import ProcessFormView, FormMixin
 from .models import Stop, Agency
 from . import forms
 from traffic_stops.utils import get_chunks
+from collections import defaultdict
 
 
-def home(request):
-    if request.method == 'GET' and request.GET:
-        form = forms.AgencySearchForm(request.GET)
-        if form.is_valid():
-            agency = form.cleaned_data['agency']
-            return redirect('md:agency-detail', agency.pk)
-    else:
-        form = forms.AgencySearchForm()
-    context = {'agency_form': form}
-    return render(request, 'md.html', context)
+class Home(FormMixin, ProcessFormView, TemplateView):
+    form_class = forms.AgencySearchForm
+    template_name = 'md.html'
+
+    def get(self, request, *args, **kwargs):
+        if request.GET:
+            form = self.get_form_class()(request.GET)
+            if form.is_valid():
+                return redirect('md:agency-detail', form.cleaned_data['agency'].pk)
+        return super(Home, self).get(request, **kwargs)
 
 
 def search(request):
@@ -29,11 +31,26 @@ def search(request):
     return render(request, 'md/search.html', context)
 
 
-class AgencyList(ListView):
+class AgencyList(FormMixin, ListView):
     model = Agency
+    form_class = forms.AgencySearchForm
+
+    def get(self, request, **kwargs):
+        if request.GET:
+            form = self.get_form_class()(request.GET)
+            if form.is_valid():
+                return redirect('nc:agency-detail', form.cleaned_data['agency'].pk)
+        return super(AgencyList, self).get(request, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(AgencyList, self).get_context_data(**kwargs)
+
+        # The following seems to be all ProcessFormView really gives us.
+        # It causes collisions with ListView's get method. Hence
+        # we just add it as a trivial context-modification snippet.
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        context['form'] = form
 
         if self.request.method == 'GET' and self.request.GET:
             form = forms.AgencySearchForm(request.GET)
@@ -46,12 +63,10 @@ class AgencyList(ListView):
         # Once we have the "letters present", we want to be able to iterate
         # over categorized, sorted lists of agencies. Therefore we create
         # a dict indexed by first letter.
-        sorted_agencies = {}
+        sorted_agencies = defaultdict(list)
 
         for agency in context['agency_list']:
             initial = agency.name[:1]
-            if initial not in sorted_agencies:
-                sorted_agencies[initial] = []
             sorted_agencies[initial].append(agency)
 
         for key in sorted_agencies:
@@ -60,8 +75,10 @@ class AgencyList(ListView):
 
         sorted_agencies = sorted(sorted_agencies.items())
 
-        return dict(context, **{"sorted_agencies": sorted_agencies,
-                                "agency_form": form, })
+        context['sorted_agencies'] = sorted_agencies
+        context['agency_form'] = form
+
+        return context
 
 
 class AgencyDetail(DetailView):
