@@ -55,6 +55,7 @@ class SearchForm(forms.Form):
 
     def clean(self):
         cleaned_data = super(SearchForm, self).clean()
+
         start_date = cleaned_data.get('start_date')
         end_date = cleaned_data.get('end_date')
         if start_date is not None and end_date is not None:
