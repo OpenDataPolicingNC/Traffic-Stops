@@ -26,7 +26,8 @@ export default Backbone.Model.extend({
   draw_table: function(){
     var div = $(this.get("selector")),
         matrix = this.get_tabular_data(),
-        tbl = $('<table>').attr("class", "table table-striped table-condensed dash-tables"),
+        resp = $('<div class="table-responsive">'),
+        tbl = $('<table class="table">').attr("class", "table table-striped table-condensed dash-tables"),
         tbody = $('<tbody>');
 
     matrix.forEach(function(row, i){
@@ -37,7 +38,8 @@ export default Backbone.Model.extend({
       });
       tbody.append(tr);
     });
+    resp.append(tbl);
     tbl.append(tbody);
-    div.prepend(tbl);
+    div.prepend(resp);
   }
 });

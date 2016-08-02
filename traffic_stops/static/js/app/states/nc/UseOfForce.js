@@ -108,6 +108,8 @@ var UseOfForceBarChart = VisualBase.extend({
           .datum(data)
           .attr('width', "100%")
           .attr('height', "100%")
+          .style({ width:  `${this.div.width()}px`
+                 , height: `${ (this.get('height') / this.get('width')) * this.div.width() }px` })
           .attr('preserveAspectRatio', "xMinYMin")
           .attr('viewBox', `0 0 ${this.get('width')} ${this.get('height')}`)
           .call(this.chart);

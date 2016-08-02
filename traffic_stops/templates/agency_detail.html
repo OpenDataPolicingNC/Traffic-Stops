@@ -33,7 +33,7 @@
   <ul class="nav">
     {% block census-link %}{% endblock census-link %}
     <li><a href="#stop-percentage">Traffic Stops</a></li>
-    <li><a href="#search-percentage-dept">Departmental Search Rate</a></li>
+    <li><a href="#search-percentage-dept">{% if officer_id %}Officer{% else %}Departmental{% endif %} Search Rate</a></li>
   </ul>
   {% block race-selector %}{% endblock race-selector %}
 </nav>
