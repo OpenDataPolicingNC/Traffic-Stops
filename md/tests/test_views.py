@@ -1,6 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.test import TestCase
-from md.models import Agency, Stop
+from md.models import Stop
 from md.tests import factories
 
 

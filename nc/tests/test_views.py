@@ -1,6 +1,5 @@
 from django.core.urlresolvers import reverse
 from django.test import TestCase
-from nc.models import Agency
 from nc.tests import factories
 
 
