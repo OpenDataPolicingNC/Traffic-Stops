@@ -93,6 +93,7 @@ def copy_from(destination):
     sql_file = os.path.join(os.path.dirname(__file__), 'copy.sql')
     cmd = ['psql',
            '-v', 'data_dir={}'.format(destination),
+           '-v', 'nc_time_zone={}'.format(settings.NC_TIME_ZONE),
            '-f', sql_file,
            settings.DATABASES['traffic_stops_nc']['NAME']]
     if settings.DATABASE_ETL_USER:

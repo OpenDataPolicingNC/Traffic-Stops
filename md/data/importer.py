@@ -364,6 +364,7 @@ def copy_from(csv_path):
     sql_file = os.path.join(os.path.dirname(__file__), 'copy.sql')
     cmd = ['psql',
            '-v', 'data_file={}'.format(csv_path),
+           '-v', 'md_time_zone={}'.format(settings.MD_TIME_ZONE),
            '-f', sql_file,
            settings.DATABASES['traffic_stops_md']['NAME']]
     if settings.DATABASE_ETL_USER:
