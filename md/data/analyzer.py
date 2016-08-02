@@ -42,7 +42,8 @@ def stats_for_state_landing_page(stops, report):
     lines.append('')
     lines.append('Top five agencies:')
     agency_values = stops.AGENCY.value_counts()
-    for agency_name, stop_count in zip(list(agency_values.axes[0][:5]), list(agency_values.values[:5])):
+    for agency_name, stop_count in zip(list(agency_values.axes[0][:5]),
+                                       list(agency_values.values[:5])):
         lines.append('  {:<30} {:,}'.format(agency_name, stop_count))
     lines.append('')
 
