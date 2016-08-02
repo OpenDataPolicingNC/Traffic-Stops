@@ -23,9 +23,9 @@ COPY md_stop (stop_id, stop_date_text, stop_time_text,
 
 -- populate md_agency lookup table
 
--- while there is a CSV with MD agencies, the raw data (md_stop) could
--- have additional agencies that aren't yet in the CSV, so build the agency
--- table from the agency values in md_stop
+-- while the MD agency CSV *should* have all MD agencies, the raw data
+-- (md_stop) could have additional agencies that aren't yet in the CSV,
+-- so build the agency table from the agency values in md_stop
 INSERT INTO md_agency (name, census_profile_id) (
     SELECT DISTINCT(agency_description), '' from md_stop ORDER BY agency_description
 );
