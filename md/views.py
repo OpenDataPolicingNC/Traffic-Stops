@@ -1,10 +1,6 @@
-from django.shortcuts import render, redirect
-from django.views.generic import ListView, View, TemplateView
-from django.views.generic.edit import ProcessFormView, FormMixin
+from django.shortcuts import render
 from .models import Stop, Agency
 from . import forms
-from traffic_stops.utils import get_chunks
-from collections import defaultdict
 from traffic_stops import base_views
 
 
