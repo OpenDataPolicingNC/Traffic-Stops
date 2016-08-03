@@ -4,6 +4,8 @@
 
 BEGIN;
 
+SET TIMEZONE=:'md_time_zone';
+
 -- get rid of all the original data (cascades throughout app)
 TRUNCATE "md_stop" RESTART IDENTITY CASCADE;
 TRUNCATE "md_agency" RESTART IDENTITY CASCADE;
