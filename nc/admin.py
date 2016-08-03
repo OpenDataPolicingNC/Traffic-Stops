@@ -3,7 +3,7 @@ from nc.models import Agency
 
 
 class AgencyAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('name', 'census_profile_id')
 
 
 admin.site.register(Agency, AgencyAdmin)

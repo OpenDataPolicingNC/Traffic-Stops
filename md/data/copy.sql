@@ -21,9 +21,13 @@ COPY md_stop (stop_id, stop_date_text, stop_time_text,
     CSV HEADER
     FORCE NOT NULL search_conducted, search_reason, seized, stop_reason, gender, ethnicity, stop_location, purpose;
 
--- -- populate md_agency lookup table
-INSERT INTO md_agency (name) (
-    SELECT DISTINCT(agency_description) from md_stop ORDER BY agency_description
+-- populate md_agency lookup table
+
+-- while the MD agency CSV *should* have all MD agencies, the raw data
+-- (md_stop) could have additional agencies that aren't yet in the CSV,
+-- so build the agency table from the agency values in md_stop
+INSERT INTO md_agency (name, census_profile_id) (
+    SELECT DISTINCT(agency_description), '' from md_stop ORDER BY agency_description
 );
 
 -- populate md_stop.agency_id foreign key
@@ -32,6 +36,21 @@ FROM
    md_agency
 WHERE
    md_stop.agency_description = md_agency.name;
+
+-- update md_agency with census GEOID values from the MD agency CSV
+CREATE TEMP TABLE agency_csv_table (code TEXT, name TEXT, geoid TEXT);
+
+COPY agency_csv_table FROM :'md_csv_table' WITH
+    DELIMITER ','
+    NULL AS ''
+    CSV HEADER
+    FORCE NOT NULL code, name;
+
+UPDATE md_agency SET census_profile_id = agency_csv_table.geoid
+    FROM agency_csv_table
+    WHERE md_agency.name = agency_csv_table.name AND agency_csv_table.geoid IS NOT NULL;
+
+DROP TABLE agency_csv_table;
 
 ANALYZE;
 
