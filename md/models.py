@@ -2,9 +2,7 @@ from django.db import models
 
 from caching.base import CachingManager, CachingMixin
 
-# Columns in CSV:
-# get applicable columns from md csv
-
+from tsdata.models import CensusProfile
 
 YN_CHOICES = (
     ("Y", "Yes"),
@@ -82,6 +80,8 @@ class Stop(CachingMixin, models.Model):
 
 class Agency(CachingMixin, models.Model):
     name = models.CharField(max_length=255)
+    # link to CensusProfile (no cross-database foreign key)
+    census_profile_id = models.CharField(max_length=16, blank=True, default='')
 
     objects = CachingManager()
 
@@ -90,3 +90,11 @@ class Agency(CachingMixin, models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def census_profile(self):
+        if self.census_profile_id:
+            profile = CensusProfile.objects.get(id=self.census_profile_id)
+            return profile.get_census_dict()
+        else:
+            return dict()

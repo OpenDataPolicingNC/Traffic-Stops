@@ -366,9 +366,14 @@ def run(url, destination=None, download=True):
 def copy_from(csv_path):
     """Execute copy.sql to COPY csv data files into PostgreSQL database"""
     sql_file = os.path.join(os.path.dirname(__file__), 'copy.sql')
+    md_csv_path = os.path.join(
+        os.path.dirname(__file__),
+        os.path.basename(AGENCY_MAPPING_CSV)
+    )
     cmd = ['psql',
            '-v', 'data_file={}'.format(csv_path),
            '-v', 'md_time_zone={}'.format(settings.MD_TIME_ZONE),
+           '-v', 'md_csv_table={}'.format(md_csv_path),
            '-f', sql_file,
            settings.DATABASES['traffic_stops_md']['NAME']]
     if settings.DATABASE_ETL_USER:
