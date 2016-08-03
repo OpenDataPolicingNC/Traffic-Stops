@@ -1,7 +1,6 @@
-from django.test import TestCase, RequestFactory
+from django.test import TestCase
 
 from .. import forms
-from .. import views
 
 
 class TestSearchForm(TestCase):
@@ -31,18 +30,6 @@ class TestSearchForm(TestCase):
         self.assertTrue('end_date' in error_keys)
 
     def test_form_generates_valid_query(self):
-        # agency = factory.SubFactory(factories.AgencyFactory)
-        # officer = factory.fuzzy.FuzzyInteger(0)
-        # start_date = factory.fuzzy.FuzzyDateTime(datetime.datetime(2013, 1, 1, 0, 0,
-        #                                          tzinfo=datetime.timezone.utc))
-        # end_date = factory.fuzzy.FuzzyDateTime(datetime.datetime(2013, 1, 1, 0, 0,
-        #                                        tzinfo=datetime.timezone.utc))
-        # age = factory.fuzzy.FuzzyInteger(0, 100)
-        # gender = factory.fuzzy.FuzzyChoice(x[0] for x in models.GENDER_CHOICES)
-        # ethnicity = factory.fuzzy.FuzzyChoice(
-        #     x[0] for x in models.ETHNICITY_CHOICES)
-        # purpose = factory.fuzzy.FuzzyChoice(
-        #     x[0] for x in models.PURPOSE_CHOICES)
         search_form = forms.SearchForm(data={
             'agency': 'Montgomery County Police Department',
             'officer': '1',
@@ -54,14 +41,3 @@ class TestSearchForm(TestCase):
             'purpose': [0]
             })
         self.assertTrue(search_form.is_valid())
-
-    def test_search_bad_purpose(self):
-        self.factory = RequestFactory()
-        request = self.factory.get('/md/search', data={
-            'purpose': '25'
-        })
-        response = views.search(request)
-        self.assertEqual()
-
-
-
