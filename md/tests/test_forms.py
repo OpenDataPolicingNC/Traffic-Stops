@@ -1,9 +1,11 @@
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
 
 from .. import forms
+from .. import views
 
 
 class TestSearchForm(TestCase):
+
     def test_agency_required(self):
         search_form = forms.SearchForm(data={})
         self.assertFalse(search_form.is_valid())
@@ -52,3 +54,14 @@ class TestSearchForm(TestCase):
             'purpose': [0]
             })
         self.assertTrue(search_form.is_valid())
+
+    def test_search_bad_purpose(self):
+        self.factory = RequestFactory()
+        request = self.factory.get('/md/search', data={
+            'purpose': '25'
+        })
+        response = views.search(request)
+        self.assertEqual()
+
+
+
