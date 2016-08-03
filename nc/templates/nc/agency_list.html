@@ -1,12 +1,21 @@
-{% extends "base.html" %}
+{% extends "agency_list.html" %}
 
-{% block content %}
-<h2>Agencies</h2>
-<div class="row">
-    <ul>
-        {% for agency in object_list %}
-        <li><a href="{% url "nc:agency-detail" agency.pk %}">{{ agency }}</a></li>
-        {% endfor %}
-    </ul>
-</div>
-{% endblock %}
+{% block stops-search-url %}{% url 'nc:stops-search' %}{% endblock %}
+
+{% block home-url %}{% url "nc:home" %}{% endblock home-url %}
+
+{% block help-text %}
+  Enter an agency name into the search field above to review data on the racial
+  and ethnic demographics of people stopped, searched, and subjected to force
+  in the course of traffic stops in a given jurisdiction. Data is available
+  for most North Carolina departments and officers serving populations greater
+  than 10,000. North Carolina law requires all such agencies to report their
+  data on a monthly basis to the NC Department of Justice; however, some
+  datasets are incomplete or remain unreported. Where data sets are incomplete
+  or missing from the website, it is because they have not been reported to
+  the state agency from which the site derives its records. Open Data Policing
+  does not have access to, nor does it publish, the names of officers, drivers,
+  or passengers involved in traffic stops.
+{% endblock help-text %}
+
+{% block agency-link %}{% url "nc:agency-detail" agency.pk %}{% endblock agency-link %}

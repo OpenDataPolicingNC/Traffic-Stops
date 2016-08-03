@@ -1,26 +1,22 @@
 from django.core.urlresolvers import reverse
 from django.test import TestCase
-from nc.tests import factories
+from md.tests import factories
 
 
 class ViewTests(TestCase):
     multi_db = True
 
     def test_home(self):
-        response = self.client.get(reverse('nc:home'))
-        self.assertEqual(200, response.status_code)
-
-    def test_search(self):
-        response = self.client.get(reverse('nc:stops-search'))
+        response = self.client.get(reverse('md:home'))
         self.assertEqual(200, response.status_code)
 
     def test_agency_detail(self):
-        agency = factories.AgencyFactory(name="Durham")
-        response = self.client.get(reverse('nc:agency-detail', args=[agency.pk]))
+        agency = factories.AgencyFactory(name="Maryland State Police")
+        response = self.client.get(reverse('md:agency-detail', args=[agency.pk]))
         self.assertEqual(200, response.status_code)
 
     def test_agency_list(self):
-        response = self.client.get(reverse('nc:agency-list'))
+        response = self.client.get(reverse('md:agency-list'))
         self.assertEqual(200, response.status_code)
 
     def test_agency_list_sorted_agencies(self):
@@ -44,7 +40,7 @@ class ViewTests(TestCase):
         factories.AgencyFactory(name="Def____")
         factories.AgencyFactory(name="Ghi____")
 
-        response = self.client.get(reverse('nc:agency-list'))
+        response = self.client.get(reverse('md:agency-list'))
         sorted_agencies = response.context['sorted_agencies']
 
         # Verify that there are three alphabetic categories

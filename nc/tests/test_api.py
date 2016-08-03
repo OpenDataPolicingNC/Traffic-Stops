@@ -12,6 +12,7 @@ from nc.api import GROUPS
 
 
 class AgencyTests(APITestCase):
+    multi_db = True
 
     def test_list_agencies(self):
         """Test Agency list"""

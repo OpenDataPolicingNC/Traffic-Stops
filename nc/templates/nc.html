@@ -15,22 +15,35 @@
   <img src="{% static "svg/noun_19625_cc-white.svg" %}" class="state">
 {% endblock state-header-graphic %}
 
+{% block agency-intro %}
+  <p class='agency-intro'>
+    Review agency-level data on the racial and ethnic demographics of people
+    stopped, searched, and subjected to force in the course of traffic stops
+    in a given jurisdiction.
+  </p>
+
+  <p class="agency-intro">
+    <a href="{% url "nc:agency-list" %}">Click here</a> to browse a list of
+    all agencies for which data is available.
+  </p>
+{% endblock agency-intro %}
+
 {% block search-form %}
   <h4>View Agency Dashboard</h4>
   <form role="form" id="agency_search" action='{% url "nc:home" %}' method="get" accept-charset="utf-8">
       <div class="form-group">
       {% csrf_token %}
         <div class="input-group">
-          {{ agency_form.agency }}
+          {{ form.agency }}
           <span class="input-group-btn">
             <button class="btn btn-primary" type="button">View</button>
           </span>
         </div><!-- /input-group -->
-      {% if agency_form.agency.errors %}
+      {% if form.agency.errors %}
           <div class="alert alert-warning alert-dismissible">
               <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
               <ul>
-              {% for error in agency_form.agency.errors %}
+              {% for error in form.agency.errors %}
                   <li><strong>{{ error }}</strong></li>
               {% endfor %}
               </ul>

@@ -141,6 +141,10 @@ code {
   border-bottom: 0;
 }
 
+.navbar-fixed-top + * {
+  padding-top: 50px;
+}
+
 .navbar-default {
   .navbar-brand {
     font-weight: bold;
@@ -247,6 +251,10 @@ code {
     padding: 70px 40px 60px 40px;
   }
 
+  &.agency-list {
+    padding: 90px 40px 50px 40px;
+  }
+
   h1 {
     color: white;
     margin-top: 0;
@@ -287,7 +295,7 @@ code {
 
       .title-container {
         margin-bottom: 20px;
-        padding: 0 30px;
+        padding: 0 30px 6px 30px;
         border-bottom: 1px solid white;
       }
 
@@ -341,7 +349,7 @@ code {
   }
 }
 
-p.nc-agency-intro {
+p.agency-intro {
   margin: 20px 0;
 }
 
@@ -383,6 +391,51 @@ body#state {
   }
 }
 
+/* Agency list page
+========================================= */
+
+h1.headline {
+  padding: 20px 30px 20px 50px;
+  font-size: 40px;
+  margin-left: -20px;
+}
+
+.agency-link-container {
+  padding: 10px 0;
+  font-size: 16px;
+}
+
+.agency-list-search {
+  background-color: #f8f8f8;
+
+  &.affix {
+    z-index: 1024;
+    width: 100%;
+    top: 50px;
+  }
+
+  .form-group {
+    margin: 20px 0;
+  }
+
+  .input-group {
+    * {
+      font-size: 18px;
+    }
+
+    input {
+      height: 39px;
+    }
+  }
+}
+
+.agency-list-help-block {
+  color: @gray-light;
+  font-size: 16px;
+  line-height: 1.5;
+  margin-top: 20px;
+}
+
 /* Agency detail page
 ========================================= */
 
@@ -418,9 +471,9 @@ h2.officer {
 /***
  * To accommodate the extra padding added to anchor elements without breaking
  * the accessibility of controls (see `fixAnchorElements in base
- * agency_detail.html), we hide overflow in rows.
+ * agency_detail.html), we hide overflow in agency detail containers.
  */
-.row {
+.container.agency-detail {
   overflow: hidden;
 }
 
