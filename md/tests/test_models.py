@@ -4,6 +4,7 @@ from . import factories
 
 
 class TestAgencyModel(TestCase):
+    multi_db = True
 
     def test_str(self):
         """Smoke test for string representation."""
@@ -12,6 +13,7 @@ class TestAgencyModel(TestCase):
 
 
 class TestStopModel(TestCase):
+    multi_db = True
 
     def test_str(self):
         """Smoke test for string representation."""

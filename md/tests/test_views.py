@@ -63,7 +63,6 @@ class ViewTests(TestCase):
 
 
 class TestSearchView(TestCase):
-
     def test_search_good_data(self):
         self.factory = RequestFactory()
         request = self.factory.get('/md/search', data={
