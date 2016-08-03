@@ -13,7 +13,7 @@ from django.conf import settings
 from md.models import PURPOSE_BY_INDEX, PURPOSE_CHOICES, UNKNOWN_PURPOSE
 from tsdata.sql import drop_constraints_and_indexes
 from tsdata.utils import (call, download_and_unzip_data, get_csv_path,
-     get_datafile_path, line_count)
+                          get_datafile_path, line_count)
 
 
 logger = logging.getLogger(__name__)
@@ -43,7 +43,7 @@ ETHNICITY_TO_CODE = {
 
 # Helpers for cleaning raw STOP_REASON:
 # used to remove blanks and paragraph
-STOP_REASON_cleanup_a_re = re.compile(r'^ *(\d\d?) *- *(\d+)\.?\d?\d?-? *[A-Za-z]?\d*[A-Za-z]? *(\(.*\))? *$')
+STOP_REASON_cleanup_a_re = re.compile(r'^ *(\d\d?) *- *(\d+)\.?\d?\d?-? *[A-Za-z]?\d*[A-Za-z]? *(\(.*\))? *$')  # noqa
 # used to remove extraneous characters from two-digit codes
 STOP_REASON_cleanup_b_re = re.compile(r'^ *(\d\d)\*?\-?`? *$')
 # used to remove extraneous characters from three-digit codes
@@ -126,7 +126,7 @@ def load_STOP_REASON_normalization_rules():
             #     but upper-case in the raw data.
             return m.group(1).upper()
         raise ValueError('Line %d of %s has bad cell value "%s"' % (
-                line_number, STOP_REASON_CSV, s
+            line_number, STOP_REASON_CSV, s
         ))
 
     with open(STOP_REASON_CSV, 'r', encoding='utf-8') as csvfile:
@@ -278,7 +278,11 @@ def load_xls(xls_path):
 
 def add_date_column(stops):
     blank = pd.DataFrame({'blank': ' '}, index=range(len(stops['STOPDATE'])))
-    stops['date'] = pd.to_datetime(stops['STOPDATE'].map(str) + blank['blank'].map(str) + stops['TIME_OF_STOP'].map(str))
+    stops['date'] = pd.to_datetime(
+        stops['STOPDATE'].map(str) +
+        blank['blank'].map(str) +
+        stops['TIME_OF_STOP'].map(str)
+    )
 
 
 def skip_initial_years(stops):
