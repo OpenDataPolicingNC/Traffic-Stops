@@ -1,9 +1,10 @@
 import datetime
 
-
 from django import forms
+
 from django.db.models import Q
 from selectable.forms import AutoCompleteWidget, AutoCompleteSelectField
+
 
 from md import models as stops
 from md.lookups import AgencyLookup

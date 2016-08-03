@@ -1,19 +1,14 @@
-from django.shortcuts import render, redirect, Http404
-from django.views.generic import ListView, DetailView
+from django.shortcuts import render
+
 from .models import Stop, Agency
 from . import forms
+from traffic_stops import base_views
 
 
-def home(request):
-    if request.method == 'GET' and request.GET:
-        form = forms.AgencySearchForm(request.GET)
-        if form.is_valid():
-            agency = form.cleaned_data['agency']
-            return redirect('md:agency-detail', agency.pk)
-    else:
-        form = forms.AgencySearchForm()
-    context = {'agency_form': form}
-    return render(request, 'md.html', context)
+class Home(base_views.Home):
+    form_class = forms.AgencySearchForm
+    template_name = 'md.html'
+    success_url = 'md:agency-detail'
 
 
 def search(request):
@@ -36,21 +31,12 @@ def search(request):
     return render(request, 'md/search.html', context)
 
 
-class AgencyList(ListView):
+class AgencyList(base_views.AgencyList):
     model = Agency
+    form_class = forms.AgencySearchForm
+    success_url = 'md:agency-detail'
 
 
-class AgencyDetail(DetailView):
+class AgencyDetail(base_views.AgencyDetail):
     model = Agency
-
-    def get_context_data(self, **kwargs):
-        context = super(AgencyDetail, self).get_context_data(**kwargs)
-        agency = context['object']
-        officer_id = self.request.GET.get('officer_id')
-
-        if officer_id:
-            if not Stop.objects.filter(agency=agency, officer_id=officer_id).exists():
-                raise Http404()
-            context['officer_id'] = officer_id
-
-        return context
+    stop_model = Stop

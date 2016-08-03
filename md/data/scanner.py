@@ -135,12 +135,15 @@ def scan(csv_fns, report=True):
                     if field_name in FIELD_REGEXES:
                         orig_col_val = col_val
                         col_val = STRAY_RE.sub('', col_val)
-                        assert not STRAY_RE.match(col_val),\
-                            '"%s" not totally cleaned up' % orig_col_val
+                        assert not STRAY_RE.match(col_val), '"%s" not totally cleaned up' % orig_col_val  # noqa
                         col_val = NA_RE.sub('N/A', col_val)
                         if not FIELD_REGEXES[field_name].match(col_val):
                             print('%s:%s Not valid for %s: "%s"' % (
-                                csv_fn, line_in_file, field_name, col_val))
+                                csv_fn,
+                                line_in_file,
+                                field_name,
+                                col_val
+                            ))
                             if report:
                                 for heading, value in zip(heading_row, row):
                                     print('    %-20s: %s' % (heading, value))

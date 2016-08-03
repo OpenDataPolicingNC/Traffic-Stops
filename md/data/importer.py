@@ -67,6 +67,7 @@ def load_MD_agency_mappings():
     When the proper agency name hasn't been determine, it has the same value as
     the agency code.
     """
+    AGENCY_NAME_BY_CODE.clear()
     with open(AGENCY_MAPPING_CSV, 'r', encoding='utf-8') as csvfile:
         reader = csv.reader(csvfile)
         next(reader)  # skip headings
@@ -281,7 +282,8 @@ def add_date_column(stops):
     stops['date'] = pd.to_datetime(
         stops['STOPDATE'].map(str) +
         blank['blank'].map(str) +
-        stops['TIME_OF_STOP'].map(str))
+        stops['TIME_OF_STOP'].map(str)
+    )
 
 
 def skip_initial_years(stops):
