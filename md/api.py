@@ -49,11 +49,11 @@ class AgencyViewSet(viewsets.ReadOnlyModelViewSet):
                 data['year'] = stop['year'].year
             if 'purpose' in group_by:
                 purpose = dict(PURPOSE_CHOICES).get(stop['purpose'],
-                                                stop['purpose'])
+                                                    stop['purpose'])
                 data['purpose'] = purpose
             if 'ethnicity' in group_by:
                 ethnicity = dict(ETHNICITY_CHOICES).get(stop['ethnicity'],
-                                                    stop['ethnicity'])
+                                                        stop['ethnicity'])
                 data[ethnicity] = stop['count']
             results.add(**data)
 

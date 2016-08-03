@@ -1,5 +1,5 @@
 from django import forms
-from selectable.forms import AutoCompleteWidget, AutoCompleteSelectField
+from selectable.forms import AutoCompleteSelectField
 
 from md.lookups import AgencyLookup
 

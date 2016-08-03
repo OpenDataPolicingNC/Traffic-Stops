@@ -6,12 +6,13 @@ import pandas as pd
 from md.data.importer import (
     add_age_column, add_date_column, add_purpose_column, fix_AGENCY_column,
     fix_ETHNICITY, fix_GENDER, fix_SEIZED, fix_STOP_REASON, fix_TIME_OF_STOP,
-    MD_FIRST_YEAR_TO_KEEP, process_time_of_stop,
+    MD_FIRST_YEAR_TO_KEEP, process_raw_data, process_time_of_stop,
 )
 from md.models import UNKNOWN_PURPOSE
 
 
 class TestFieldNormalization(TestCase):
+    # if db calls are added: multi_db = True
 
     def test_ethnicity(self):
         data = (
@@ -148,7 +149,8 @@ class TestFieldNormalization(TestCase):
 
     def test_purpose(self):
         data = (
-            # (STOP_REASON-value-from-raw-data, cleaned-STOP_REASON, corresponding-value-from-PURPOSE_CHOICES)
+            # (STOP_REASON-value-from-raw-data, cleaned-STOP_REASON,
+            #  corresponding-value-from-PURPOSE_CHOICES)
             #
             # Most of the purposes are never assigned explicitly in the code, so
             # "constants" like UNKNOWN_PURPOSE don't exist for most.
@@ -193,14 +195,56 @@ class TestFieldNormalization(TestCase):
         for i, e in enumerate(data):
             raw_reason, cleaned_reason, expected_purpose = e
             self.assertEqual(stops.STOP_REASON[i], cleaned_reason)
-            self.assertEqual(stops.purpose[i], expected_purpose, 'Expected purpose %d for "%s", got %d' % (
+            self.assertEqual(stops.purpose[i],
+                             expected_purpose,
+                             'Expected purpose %d for "%s", got %d' % (
                 expected_purpose, raw_reason, stops.purpose[i]
             ))
 
     def test_agency_names(self):
         stops = pd.DataFrame({
             'AGENCY': ['!@#$', 'BACOPD', 'CECIL'],
-            'expected_AGENCY': ['!@#$', 'Baltimore County Police Department', "Cecil County Sheriff's Office"]
+            'expected_AGENCY': [
+                '!@#$',
+                'Baltimore County Police Department',
+                "Cecil County Sheriff's Office"
+            ]
         })
         fix_AGENCY_column(stops)
         self.assertTrue(all(stops.AGENCY == stops.expected_AGENCY))
+
+    def test_overall_processing(self):
+        """
+        Check the high-level logic in process_raw_data()
+
+        Detailed cleanup/transformation of individual cells or columns is
+        tested in other methods.
+        """
+        stops = pd.DataFrame({
+            'STOPDATE': ['01/01/13', '04/05/13'],
+            'TIME_OF_STOP': ['13:45', '13:07'],
+            'LOCATION': ['some address', 'some other address'],
+            'STOP_REASON': ['21-202(h1)', '21-201(a1)'],
+            'SEARCH_CONDUCTED': ['N', 'Y'],
+            'SEIZED': ['', 'Contraband'],
+            'GENDER': ['M', 'F'],
+            'DOB': ['01/10/72', '06/26/79'],
+            'ETHNICITY': ['BLACK', 'ASIAN'],
+            'OFFICERID': ['12149', '2376'],
+            'AGENCY': ['MTA', 'HURLOCK'],
+            # columns which are dropped
+            'WHATSEARCHED': [1, 1],
+            'STOPOUTCOME': [1, 1],
+            'CRIME_CHARGED': [1, 1],
+            'REGISTRATION_STATE': [1, 1],
+            'RESIDENCE_STATE': [1, 1],
+            'MD_COUNTY': [1, 1]
+        })
+        stops = process_raw_data(stops)
+        self.assertEqual(stops.columns[0], 'index')
+        self.assertEqual(stops.index[0], 0)
+        self.assertEqual(len(stops.index), 2)
+        self.assertIn('date', stops.columns)
+        self.assertIn('computed_AGE', stops.columns)
+        self.assertIn('purpose', stops.columns)
+        self.assertNotIn('CRIME_CHARGED', stops.columns)
