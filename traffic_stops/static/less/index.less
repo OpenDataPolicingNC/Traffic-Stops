@@ -144,10 +144,6 @@ code {
   border-bottom: 0;
 }
 
-.navbar-fixed-top + * {
-  padding-top: 50px;
-}
-
 .navbar-default {
   .navbar-brand {
     font-weight: bold;
@@ -299,7 +295,7 @@ code {
 
       .title-container {
         margin-bottom: 20px;
-        padding: 0 30px 6px 30px;
+        padding: 0 30px;
         border-bottom: 1px solid white;
       }
 
@@ -353,7 +349,7 @@ code {
   }
 }
 
-p.agency-intro {
+p.nc-agency-intro {
   margin: 20px 0;
 }
 
@@ -395,40 +391,48 @@ body#state {
   }
 }
 
-/* Agency list page
+/* Find a Traffic Stop page
 ========================================= */
 
-h1.headline {
-  padding: 20px 30px 20px 50px;
-  font-size: 40px;
-  margin-left: -20px;
-}
-
-.agency-link-container {
-  padding: 10px 0;
-  font-size: 16px;
-}
-
-.agency-list-search {
-  background-color: #f8f8f8;
-
-  &.affix {
-    z-index: 1024;
-    width: 100%;
-    top: 50px;
+.fields-col {
+  @media (min-width: 992px) {
+    &.left {
+      padding-right: 0;
+      > * {
+        padding-right: 45px;
+      }
+      > div {
+        border-right: 1px solid @gray-light;
+      }
+    }
+    &.right {
+      padding-left: 0;
+      > * {
+        padding-left: 45px;
+      }
+    }
   }
+
+  > h3 {
+    text-align: center;
+    font-weight: lighter;
+    color: @gray-light;
+  }
+}
+
+.buttons-col {
+  padding: 30px 0;
+  .flex-layout();
+  .flex-direction(row);
+  .justify-content(center);
+  .align-items(center);
 
   .form-group {
-    margin: 20px 0;
-  }
+    margin: 0;
 
-  .input-group {
-    * {
+    button {
       font-size: 18px;
-    }
-
-    input {
-      height: 39px;
+      padding: 8px 24px;
     }
   }
 }
@@ -454,7 +458,7 @@ h1.headline {
       }
     }
   }
-  
+
   > h3 {
     text-align: center;
     font-weight: lighter;
@@ -521,9 +525,9 @@ h2.officer {
 /***
  * To accommodate the extra padding added to anchor elements without breaking
  * the accessibility of controls (see `fixAnchorElements in base
- * agency_detail.html), we hide overflow in agency detail containers.
+ * agency_detail.html), we hide overflow in rows.
  */
-.container.agency-detail {
+.row {
   overflow: hidden;
 }
 
@@ -687,6 +691,10 @@ h4.graph-label {
 
 /* Dashboard data tables
 ========================================= */
+
+.dash-tables {
+  table-layout: fixed;
+}
 
 .raceSelector {
   border: 2px solid rgb(108, 108, 108);

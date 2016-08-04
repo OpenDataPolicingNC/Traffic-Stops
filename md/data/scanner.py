@@ -39,7 +39,9 @@ FIELD_REGEXES = {
     'STOPDATE': re.compile(r'^\d\d/\d\d/\d\d$'),
     'TIME_OF_STOP': re.compile(r'(\d\d:\d\d|\d?\d:\d\d [AP]M|\d:\d\d|\d :\d\d|:)$'),
     'LOCATION': re.compile(r'^(|[A-Za-z0-9 -^_@&/\\~`.]+)$'),
-    'DURATION': re.compile(r'^(|\d\d?\d?|\d\+|\d?\.\d\d?|\d:\d\d|:\d\d|\d\d? ?M|\d H|\dHR|\+/-\d+|\d+\.|-\d+|< ?5|<10|<15|<30|\d\d? ?min|\d+MI|N/A|UNK)$'),  # noqa
+    'DURATION': re.compile(
+        r'^(|\d\d?\d?|\d\+|\d?\.\d\d?|\d:\d\d|:\d\d|\d\d? ?M|\d H|\dHR|\+/-\d+|\
+            d+\.|-\d+|< ?5|<10|<15|<30|\d\d? ?min|\d+MI|N/A|UNK)$'),
     # STOP_REASON: The expression doesn't do any meaningful validation.
     #
     # STOP_REASON examples:
@@ -57,20 +59,31 @@ FIELD_REGEXES = {
     #
     # Presumably "I" is Incident to Arrest?
     'SEARCH_REASON': re.compile(
-        r'^(|Incident to Arrest|I|Probable Cause|K-9|K-9 Scan|k9 alert|Drugs|Consensual|Other|Exigent Circumstances|odor of marijuana|VEH TOWED|TOWED VEH|VEH TOW|TOWED|ARREST/TOW|arrest|Other Vehicle Impound|impounded|VEH IMPOUNDED|VEH IMPOUND|IMPOUNDED INVENTORY|Other CONSENT AND TOW|Probable Cause/VEH TOWED|saw toy gun|N/A|NONE|no search)$',  # noqa
+        r'^(|Incident to Arrest|I|Probable Cause|K-9|K-9 Scan|k9 alert|Drugs|'
+        r'Consensual|Other|Exigent Circumstances|odor of marijuana|VEH TOWED|'
+        r'TOWED VEH|VEH TOW|TOWED|ARREST/TOW|arrest|Other Vehicle Impound|'
+        r'impounded|VEH IMPOUNDED|VEH IMPOUND|IMPOUNDED INVENTORY|'
+        r'Other CONSENT AND TOW|Probable Cause/VEH TOWED|saw toy gun|'
+        r'N/A|NONE|no search)$',
         flags=re.IGNORECASE
     ),
     'SEARCH_CONDUCTED': re.compile(r'^[NY]$'),
     'WHATSEARCHED': re.compile(
-        r'^(|Property|Both|B|Person|per|vehicle|vehicle inventory|SEARCH INCIDENTAL|contraband|CDS|none|no search|N/A)$',  # noqa
+        r'^(|Property|Both|B|Person|per|vehicle|vehicle inventory|'
+        r'SEARCH INCIDENTAL|contraband|CDS|none|no search|N/A)$',
         flags=re.IGNORECASE
     ),
     'SEIZED': re.compile(
-        r'^(|Contraband Only|Contraband|Contraband and Property|Both|Property Only|Property|paraphernalia|impound inventory|Nothing|No CDs in vehicle|none|non|N/A|no search)$',  # noqa
+        r'^(|Contraband Only|Contraband|Contraband and Property|'
+        r'Both|Property Only|Property|paraphernalia|impound inventory|Nothing|'
+        r'No CDs in vehicle|none|non|N/A|no search)$',
         flags=re.IGNORECASE
     ),
     'STOPOUTCOME': re.compile(
-        r'^(|Citation|Arrest|Citation/ARREST|RECOVERED EVIDENCE|CDS MARIJUANA|CDS ARREST|cds located|dui|Warning|Warnnig|Warning / Citation|SERO|SERO and Warning|SERO, Warning|SERO and Warning x2|nothing found|NOTHING LOCATED)$',  # noqa
+        r'^(|Citation|Arrest|Citation/ARREST|RECOVERED EVIDENCE|'
+        r'CDS MARIJUANA|CDS ARREST|cds located|dui|Warning|Warnnig|'
+        r'Warning / Citation|SERO|SERO and Warning|SERO, Warning|'
+        r'SERO and Warning x2|nothing found|NOTHING LOCATED)$',
         flags=re.IGNORECASE
     ),
     # CRIME_CHARGED: The expression doesn't do any meaningful validation.
