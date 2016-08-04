@@ -1,5 +1,7 @@
-{% extends "base.html" %}
+{% extends "search.html" %}
 {% load selectable_tags bootstrap3 el_pagination_tags humanize %}
+
+{% block stops-search-url %}{% url 'md:stops-search' %}{% endblock %}
 
 {% block extra-js %}
     {% include_ui_theme %}
@@ -65,23 +67,27 @@
 <div class="row">
     <div class="col-md-12">
         <form action="{% url 'md:stops-search' %}" method="get" class="form row">
-            <div class="col-md-6">
-                <h2>Basic Search</h2>
-                {% bootstrap_field form.agency %}
-                <div class="row">
-                    <div class="col-md-6">{% bootstrap_field form.start_date %}</div>
-                    <div class="col-md-6">{% bootstrap_field form.end_date %}</div>
+            <div class="col-md-6 fields-col left">
+                <h3>Basic Search</h3>
+                <div>
+                    {% bootstrap_field form.agency %}
+                    <div class="row">
+                        <div class="col-md-6">{% bootstrap_field form.start_date %}</div>
+                        <div class="col-md-6">{% bootstrap_field form.end_date %}</div>
+                    </div>
+                    {% bootstrap_field form.age %}
+                    {% bootstrap_field form.ethnicity %}
+                    {% bootstrap_field form.gender %}
                 </div>
-                {% bootstrap_field form.age %}
-                {% bootstrap_field form.ethnicity %}
-                {% bootstrap_field form.gender %}
             </div>
-            <div class="col-md-6">
-                <h2>Advanced Search</h2>
-                {% bootstrap_field form.officer %}
-                {% bootstrap_field form.purpose %}
+            <div class="col-md-6 fields-col right">
+                <h3>Advanced Search</h3>
+                <div>
+                    {% bootstrap_field form.officer %}
+                    {% bootstrap_field form.purpose %}
+                </div>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-12 buttons-col">
                 {% buttons %}
                     <button type="submit" class="btn btn-primary">
                         Submit
