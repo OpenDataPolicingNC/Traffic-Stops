@@ -1,6 +1,6 @@
 {% extends 'state.html' %}
 
-{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
 
 {% block state-name %}
   North Carolina
@@ -52,6 +52,34 @@
       </div>
   </form>
 {% endblock search-form %}
+
+{% block find-a-stop %}
+  <p class="agency-intro">
+    Search for North Carolina stops using the form fields below. Use
+    <a href='{% url 'nc:stops-search' %}'>Advanced Search</a>
+    for additional filtering criteria.
+  </p>
+  <form action="{% url 'nc:stops-search' %}" method="get" class="form row">
+    <div class="col-md-12">
+      {% bootstrap_field find_a_stop_form.agency %}
+      <div class="row">
+          <div class="col-md-6">{% bootstrap_field find_a_stop_form.start_date %}</div>
+          <div class="col-md-6">{% bootstrap_field find_a_stop_form.end_date %}</div>
+      </div>
+      <div class="row">
+          <div class="col-md-3">{% bootstrap_field find_a_stop_form.age %}</div>
+          <div class="col-md-3">{% bootstrap_field find_a_stop_form.gender %}</div>
+      </div>
+      <div class="row">
+          <div class="col-md-6">{% bootstrap_field find_a_stop_form.race %}</div>
+          <div class="col-md-6">{% bootstrap_field find_a_stop_form.ethnicity %}</div>
+      </div>
+      {% buttons %}
+          <button type="submit" class="btn btn-primary pull-right">Submit</button>
+      {% endbuttons %}
+    </div>
+  </form>
+{% endblock find-a-stop %}
 
 {% block agencies-table %}
   <table class='table table-condensed table-hover'>
