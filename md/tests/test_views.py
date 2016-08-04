@@ -1,7 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.test import TestCase, RequestFactory
 from md.tests import factories
-
 from .. import views
 
 
@@ -44,7 +43,6 @@ class ViewTests(TestCase):
 
         response = self.client.get(reverse('md:agency-list'))
         sorted_agencies = response.context['sorted_agencies']
-        import pdb; pdb.set_trace()
 
         # Verify that there are three alphabetic categories
         self.assertEqual(3, len(sorted_agencies))
@@ -63,6 +61,8 @@ class ViewTests(TestCase):
             self.assertEqual(2, len(chunks[1]))
             self.assertEqual(1, len(chunks[2]))
 
+
+class TestSearchView(TestCase):
     def test_search_good_data(self):
         self.factory = RequestFactory()
         request = self.factory.get('/md/search', data={

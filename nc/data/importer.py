@@ -91,8 +91,11 @@ def convert_to_csv(destination):
 def copy_from(destination):
     """Execute copy.sql to COPY csv data files into PostgreSQL database"""
     sql_file = os.path.join(os.path.dirname(__file__), 'copy.sql')
+    nc_csv_path = os.path.join(os.path.dirname(__file__), 'NC_agencies.csv')
     cmd = ['psql',
            '-v', 'data_dir={}'.format(destination),
+           '-v', 'nc_time_zone={}'.format(settings.NC_TIME_ZONE),
+           '-v', 'nc_csv_table={}'.format(nc_csv_path),
            '-f', sql_file,
            settings.DATABASES['traffic_stops_nc']['NAME']]
     if settings.DATABASE_ETL_USER:

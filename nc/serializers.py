@@ -5,4 +5,4 @@ from nc import models as stops
 class AgencySerializer(serializers.ModelSerializer):
     class Meta:
         model = stops.Agency
-        fields = ('id', 'name')
+        fields = ('id', 'name', 'census_profile',)

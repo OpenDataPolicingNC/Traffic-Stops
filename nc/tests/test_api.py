@@ -9,6 +9,7 @@ from rest_framework.test import APITestCase
 from nc.models import Agency, PURPOSE_CHOICES, RACE_CHOICES
 from nc.tests import factories
 from nc.api import GROUPS
+from tsdata.tests.factories import CensusProfileFactory
 
 
 class AgencyTests(APITestCase):
@@ -24,6 +25,23 @@ class AgencyTests(APITestCase):
         self.assertIn((agency.pk, agency.name), [
             (a.pk, a.name) for a in Agency.objects.all()
         ])
+
+    def test_agency_census_data(self):
+        """
+        Construct an agency with associated CensusProfile, check
+        for inclusion of reasonable data
+        """
+        census_profile = CensusProfileFactory()
+        agency = factories.AgencyFactory(census_profile_id=census_profile.id)
+        url = reverse('nc:agency-api-detail', args=[agency.pk])
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn('census_profile', response.data)
+        # CensusProfile tests check census data in more detail
+        for attr in ('hispanic', 'non_hispanic', 'total'):
+            self.assertEqual(
+                response.data['census_profile'][attr], getattr(census_profile, attr)
+            )
 
     def test_stops_api(self):
         """Test Agency stops API endpoint with no stops"""
