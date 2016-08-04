@@ -91,3 +91,12 @@ class ViewTests(TestCase):
         response = views.search(request)
         text = 'Stops (0 total)'
         self.assertContains(response, text, status_code=200)
+
+    def test_homepage_find_a_stop(self):
+        "Test Find a Stop form is present on MD homepage"
+        response = self.client.get(reverse('md:home'))
+        # make sure form is in context
+        self.assertTrue('find_a_stop_form' in response.context)
+        form = response.context['find_a_stop_form']
+        # make sure required agency field label is present
+        self.assertContains(response, form['agency'].label)
