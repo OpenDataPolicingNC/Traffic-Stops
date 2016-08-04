@@ -113,8 +113,8 @@
                 <td>{{ stop.get_gender_display }}</td>
                 <td>{{ stop.get_ethnicity_display }}</td>
                 <td>{{ stop.age }}</td>
-                <td><a href='{% url "nc:agency-detail" stop.agency_id %}'>{{ stop.agency_description|truncatewords:3 }}</a></td>
-                <td><a href='{% url "nc:agency-detail" stop.agency_id %}?officer_id={{ stop.officer_id|urlencode }}'>{{ stop.officer_id }}</a></td>
+                <td><a href='{% url "md:agency-detail" stop.agency_id %}'>{{ stop.agency_description|truncatewords:3 }}</a></td>
+                <td><a href='{% url "md:agency-detail" stop.agency_id %}?officer_id={{ stop.officer_id|urlencode }}'>{{ stop.officer_id }}</a></td>
             </tr>
             {% endfor %}
         </table>
