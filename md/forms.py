@@ -1,5 +1,8 @@
+import datetime
+
 from django import forms
-from selectable.forms import AutoCompleteSelectField
+from django.db.models import Q
+from selectable.forms import AutoCompleteWidget, AutoCompleteSelectField
 
 from md import models as stops
 from md.lookups import AgencyLookup
@@ -62,6 +65,9 @@ class SearchForm(forms.Form):
 
         return cleaned_data
 
+    # would be more user friendly to tell the user there is no such agency if they
+    # enter an invalid agency rather than let them do it and show no stops
+    # not clear why it allows free form input in the first place
     def clean_agency(self):
         agency = self.cleaned_data['agency']
         if agency:
@@ -102,11 +108,11 @@ class SearchForm(forms.Form):
             query &= Q(stop__stop_location__in=location)
         return query
 
+
 class AgencySearchForm(forms.Form):
     agency = AutoCompleteSelectField(AgencyLookup, required=True)
     agency.widget.attrs['placeholder'] = "Search for police or sheriff's department..."
     agency.widget.attrs['class'] = 'form-control'
     agency.error_messages = {
         "required": """Please select an agency; agency options are available
-                       after typing a few characters in the agency name."""
-    }
+                       after typing a few characters in the agency name."""}
