@@ -10,6 +10,11 @@ class Home(base_views.Home):
     template_name = 'md.html'
     success_url = 'md:agency-detail'
 
+    def get_context_data(self, **kwargs):
+        context = super(Home, self).get_context_data(**kwargs)
+        context['find_a_stop_form'] = forms.SearchForm()
+        return context
+
 
 def search(request):
     query = None
