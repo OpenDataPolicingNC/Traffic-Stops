@@ -138,8 +138,8 @@ export const CensusTableBase = TableBase.extend({
     TableBase.prototype.update.apply(this, arguments);
 
     if (this.data === undefined) {
-      return;
-    }  // temporary for dummy census data
+      return; // for optional data
+    }
 
     // add extra-styling to separate data-types
     $(this.get("selector"))
