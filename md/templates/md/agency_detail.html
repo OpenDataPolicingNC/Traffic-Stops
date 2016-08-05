@@ -1,5 +1,9 @@
 {% extends "agency_detail.html" %}
 
+{% block census-link %}
+  <li id="census-link-item" class="optional"><a href="#demographics">Census Demographics</a></li>
+{% endblock census-link %}
+
 {% block census-display %}
   <!-- census data -->
   <div id="census_row" class="row optional">
