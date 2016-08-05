@@ -366,7 +366,7 @@
 {% comment %}<script>{% endcomment %}
 
 var showEthnicity = {{request.session.showEthnicity|lower|default:"false"}},
-    census_handler = new NC.CensusHandler({url: "{% url 'nc:agency-api-detail' object.pk %}", agency: "{{object}}"});
+    census_handler = new NC.CensusHandler({url: "{% url 'nc:agency-api-detail' object.pk %}"});
 {% if officer_id %}
   // Retrieve data from API using data-handlers
   var stop_handler = new NC.StopsHandler({url: "{% url 'nc:agency-api-stops' object.pk %}?officer={{officer_id|urlencode}}"}),

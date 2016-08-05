@@ -6,34 +6,8 @@ import $ from 'jquery';
 
 export const CensusHandlerBase = DataHandlerBase.extend({
   clean_data: function () {
-    // temporary for dummy census data
-    let agency = this.get('agency');
     let raw_data = this.get('raw_data');
-    let data;
-
-    if (raw_data instanceof Array) {
-      /***
-       * If raw_data is an array, then we have probably grabbed a list
-       * of agencies with associated census data, which is what
-       * census.temporary.json gives us. In that case, we need to filter down
-       * the list by the provided agency name to find our agency; this will
-       * give us the appropriate data.
-       */
-      data = raw_data.filter((d) => d.agency === agency)[0];
-    } else if (typeof raw_data.census_profile === 'object') {
-      /***
-       * If raw_data is *not* an array, then it is probably the serialization
-       * of a single agency, and it will probably have a census_profile attribute
-       * containing the data we're interested in.
-       */
-      data = raw_data.census_profile;
-    } else {
-      /***
-       * Otherwise, we're in some unknown situation, and we might as well
-       * throw an error to signal to the developer that something is up.
-       */
-      throw 'Census data not recognized'
-    }
+    let data = raw_data.census_profile;
 
     if (d3.keys(data).length > 0) {
       let data_map = d3.map(data);

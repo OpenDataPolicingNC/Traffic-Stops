@@ -304,7 +304,7 @@
 {% block graph-code %}
 {% comment %}<script>{% endcomment %}
 
-census_handler = new MD.CensusHandler({url: "{% url 'md:agency-api-detail' object.pk %}", agency: "{{object}}"});
+census_handler = new MD.CensusHandler({url: "{% url 'md:agency-api-detail' object.pk %}"});
 
 {% if officer_id %}
   var stop_handler = new MD.StopsHandler({url: "{% url 'md:agency-api-stops' object.pk %}?officer={{officer_id|urlencode}}"});
