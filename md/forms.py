@@ -5,8 +5,8 @@ from django import forms
 from django.db.models import Q
 from selectable.forms import AutoCompleteWidget, AutoCompleteSelectField
 
-from md import models as stops
-from md.lookups import AgencyLookup
+from .models import Agency, ETHNICITY_CHOICES, GENDER_CHOICES, PURPOSE_CHOICES
+from .lookups import AgencyLookup
 
 
 def addNoneOpt(choices):
@@ -36,14 +36,14 @@ class SearchForm(forms.Form):
     gender = forms.ChoiceField(
         required=False,
         initial=None,
-        choices=addNoneOpt(stops.GENDER_CHOICES))
+        choices=addNoneOpt(GENDER_CHOICES))
     ethnicity = forms.ChoiceField(
         required=False,
         initial=None,
-        choices=addNoneOpt(stops.ETHNICITY_CHOICES))
+        choices=addNoneOpt(ETHNICITY_CHOICES))
     purpose = forms.MultipleChoiceField(
         required=False,
-        choices=stops.PURPOSE_CHOICES,
+        choices=PURPOSE_CHOICES,
         widget=forms.CheckboxSelectMultiple)
     location = forms.MultipleChoiceField(
         required=False,
@@ -73,8 +73,8 @@ class SearchForm(forms.Form):
         agency = self.cleaned_data['agency']
         if agency:
             try:
-                agency = stops.Agency.objects.get(name=agency)
-            except stops.Agency.DoesNotExist:
+                agency = Agency.objects.get(name=agency)
+            except Agency.DoesNotExist:
                 agency = None
         return agency
 
@@ -104,9 +104,6 @@ class SearchForm(forms.Form):
         purpose = self.cleaned_data['purpose']
         if purpose:
             query &= Q(purpose__in=purpose)
-        location = self.cleaned_data['location']
-        if location:
-            query &= Q(stop_location__in=location)
         return query
 
 
