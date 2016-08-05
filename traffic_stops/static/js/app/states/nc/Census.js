@@ -3,6 +3,10 @@ import * as C from '../../common/Census.js';
 
 const CensusHandler = C.CensusHandlerBase;
 
+function process_key (key) {
+  return key.replace('-', '_')
+}
+
 const CensusRatioDonut = C.CensusRatioDonutBase.extend({
   Stops: Stops,
 
@@ -14,7 +18,7 @@ const CensusRatioDonut = C.CensusRatioDonutBase.extend({
     return Stops.pprint.get(type);
   },
 
-  _process_key: (key) => key,
+  _process_key: process_key,
 
   triggerRaceToggle: function (e, v) {
     this.set('showEthnicity', v);
@@ -27,7 +31,7 @@ var CensusTable = C.CensusTableBase.extend({
     return Stops.pprint.values();
   },
 
-  _process_key: (key) => key,
+  _process_key: process_key,
 
   types: [Stops.races, Stops.ethnicities]
 });
