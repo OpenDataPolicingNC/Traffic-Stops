@@ -4,6 +4,26 @@ import d3 from 'd3';
 export default {
   start_year: 2013,     // start-year for reporting requirement
   end_year: new Date().getUTCFullYear(),       // end-date for latest dataset
+  races: [
+    'white',
+    'black',
+    'native_american',
+    'asian',
+    'other'
+  ],
+  census_ethnicities: [
+    'hispanic',
+    'non_hispanic'
+  ],
+  pprint: d3.map({
+    'white': 'White',
+    'black': 'Black',
+    'native_american': 'Native American',
+    'asian': 'Asian',
+    'other': 'Other',
+    'hispanic': 'Hispanic',
+    'non-hispanic': 'Non-hispanic'
+  }),
   ethnicities: [
     'White',
     'Black',

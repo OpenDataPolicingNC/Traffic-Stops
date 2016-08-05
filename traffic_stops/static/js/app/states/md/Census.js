@@ -3,23 +3,27 @@ import * as C from '../../common/Census.js';
 
 const CensusHandler = C.CensusHandlerBase;
 
+function process_key (key) {
+  return key
+    .replace('Unknown', 'other')
+    .toLowerCase()
+    .replace(/\s/, '_');
+}
+
 const CensusRatioDonut = C.CensusRatioDonutBase.extend({
   Stops: Stops,
 
   _items: function () {
-    return (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races;
+    return Stops.ethnicities;
   },
 
   _pprint: function (type) {
-    return Stops.pprint.get(type);
+    return type;
   },
 
-  _process_key: (key) => key,
+  _process_key: process_key,
 
-  triggerRaceToggle: function (e, v) {
-    this.set('showEthnicity', v);
-    this.drawChart();
-  }
+  triggerRaceToggle: () => null
 });
 
 var CensusTable = C.CensusTableBase.extend({
@@ -29,7 +33,7 @@ var CensusTable = C.CensusTableBase.extend({
 
   _process_key: (key) => key,
 
-  types: [Stops.races, Stops.ethnicities]
+  types: [Stops.races, Stops.census_ethnicities]
 });
 
 export default {

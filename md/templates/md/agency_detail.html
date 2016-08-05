@@ -1,6 +1,49 @@
 {% extends "agency_detail.html" %}
 
-{% block census-display %}{% endblock census-display %}
+{% block census-display %}
+  <!-- census data -->
+  <div id="census_row" class="row optional">
+    <div class="col-md-12 headline">
+      <h2 id='demographics'>2010 census data</h2>
+    </div>
+
+
+    <div class="col-md-12">
+      <h3>Driving Population (percentage by race/ethnicity)</h3>
+
+      <p class="help-block">
+        This graph reflects the racial composition of the jurisdiction at the
+        time of the last census (2010). It is included for comparative purposes.
+        The actual driving population within a given jurisdiction may vary
+        significantly from census figures.
+      </p>
+    </div>
+
+    <div class="col-md-4">
+      <div class="pie-chart-container">
+        <svg id="census_pie"></svg>
+      </div>
+
+      <p class="graph-help-block">
+        Toggle on or off racial/ethnic groups.
+      </p>
+    </div>
+
+    <div class="col-md-8">
+      <h3>Tabular view of 2010 census data</h3>
+      <br><br>
+      <div id="census_data"></div>
+
+      <!-- <p class="help-block">
+        This data table reflects the jurisdiction's racial and ethnic
+        composition at the time of the last census (2010). It is included for
+        comparative purposes. The actual driving population within a given
+        jurisdiction may vary significantly from census figures.
+      </p> -->
+
+    </div>
+  </div>
+{% endblock census-display %}
 
 {% block agency-list-url %}{% url 'md:agency-list' %}{% endblock agency-list-url %}
 
@@ -265,6 +308,8 @@
 {% block graph-code %}
 {% comment %}<script>{% endcomment %}
 
+census_handler = new MD.CensusHandler({url: "{% url 'md:agency-api-detail' object.pk %}", agency: "{{object}}"});
+
 {% if officer_id %}
   var stop_handler = new MD.StopsHandler({url: "{% url 'md:agency-api-stops' object.pk %}?officer={{officer_id|urlencode}}"});
   var search_handler = new MD.SearchHandler({url: "{% url 'md:agency-api-searches' object.pk %}?officer={{officer_id|urlencode}}"});
@@ -278,6 +323,9 @@
 {% endif %}
 
 var stop_search_handler = new MD.StopSearchHandler({handlers: [stop_handler, search_handler]});
+
+new MD.CensusRatioDonut({handler: census_handler, selector: "#census_pie"});
+new MD.CensusTable({handler: census_handler, selector: "#census_data"});
 
 new MD.StopRatioDonut({handler: stop_handler, selector: "#stop_race_pie"});
 new MD.StopRatioTimeSeries({handler: stop_handler, selector: "#stop_race_line"});

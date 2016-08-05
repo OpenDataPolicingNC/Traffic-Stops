@@ -8,11 +8,36 @@ export const CensusHandlerBase = DataHandlerBase.extend({
   clean_data: function () {
     // temporary for dummy census data
     let agency = this.get('agency');
-    let data = this.get("raw_data").filter((d) => d.agency === agency);
+    let raw_data = this.get('raw_data');
+    let data;
 
-    if (data.length > 0) {
-      data = d3.map(data[0]);
-      this.set("data", data);
+    if (raw_data instanceof Array) {
+      /***
+       * If raw_data is an array, then we have probably grabbed a list
+       * of agencies with associated census data, which is what
+       * census.temporary.json gives us. In that case, we need to filter down
+       * the list by the provided agency name to find our agency; this will
+       * give us the appropriate data.
+       */
+      data = raw_data.filter((d) => d.agency === agency)[0];
+    } else if (typeof raw_data.census_profile === 'object') {
+      /***
+       * If raw_data is *not* an array, then it is probably the serialization
+       * of a single agency, and it will probably have a census_profile attribute
+       * containing the data we're interested in.
+       */
+      data = raw_data.census_profile;
+    } else {
+      /***
+       * Otherwise, we're in some unknown situation, and we might as well
+       * throw an error to signal to the developer that something is up.
+       */
+      throw 'Census data not recognized'
+    }
+
+    if (d3.keys(data).length > 0) {
+      let data_map = d3.map(data);
+      this.set("data", data_map);
       $('#census_row').show();
       $('#census-link-item').show();
     }
@@ -31,6 +56,7 @@ export const CensusRatioDonutBase = VisualBase.extend({
   Stops: { }, // abstract property, requires override
   _items: function () { throw "abstract method: requires override"; },
   _pprint: function () { throw "abstract method: requires override"; },
+  _process_key: function () { throw "abstract method: requires override"; },
   triggerRaceToggle: function () { throw "abstract method: requires override"; },
 
   setDefaultChart: function () {
@@ -75,10 +101,10 @@ export const CensusRatioDonutBase = VisualBase.extend({
     let items = this._items();
 
     // build data specifically for this pie chart
-    items.forEach((race, i) => {
+    items.forEach((item, i) => {
       data.push({
-        "key": this._pprint(race),
-        "value": raw.get(race),
+        "key": this._pprint(item),
+        "value": raw.get(this._process_key(item)),
         "color": this.Stops.colors[i]
       });
     });
@@ -90,6 +116,7 @@ export const CensusRatioDonutBase = VisualBase.extend({
 export const CensusTableBase = TableBase.extend({
   types: [],
   _get_header_rows: function () { throw "abstract method: requires override"; },
+  _process_key: function () { throw "abstract method: requires override"; },
 
   get_tabular_data: function () {
     let rows = [];
@@ -106,7 +133,7 @@ export const CensusTableBase = TableBase.extend({
     }
 
     this.types.forEach((type) => {
-      let type_counts = type.map((e) => data.get(e) || 0);
+      let type_counts = type.map((e) => data.get(this._process_key(e)) || 0);
       let sum = d3.sum(type_counts);
       let type_percents = type_counts.map((d) => fmt(d/sum));
 
@@ -144,7 +171,7 @@ export const CensusTableBase = TableBase.extend({
     $(this.get("selector"))
           .find('tr th:nth-child(1),td:nth-child(1)')
           .css("border-right", "1px solid #dddddd");
-          
+
     $(this.get("selector"))
           .find('tr th:nth-child(6),td:nth-child(6)')
           .css("border-right", "1px solid #dddddd");

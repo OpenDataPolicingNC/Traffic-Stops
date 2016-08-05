@@ -3,6 +3,7 @@ import StopSearch from './StopSearch.js';
 import Search from './Search.js';
 import LikelihoodOfSearch from './LikelihoodOfSearch.js';
 import ContrabandHitRate from './ContrabandHitRate.js';
+import Census from './Census.js';
 
 if (typeof window.MD === 'undefined') window.MD = {};
 
@@ -11,5 +12,6 @@ Object.assign(window.MD,
   StopSearch,
   Search,
   LikelihoodOfSearch,
-  ContrabandHitRate
+  ContrabandHitRate,
+  Census
 )
