@@ -79,8 +79,10 @@ class TestSearchView(TestCase):
             'purpose': [25]
         })
         response = views.search(request)
-        text = 'Select a valid choice. 25 is not one of the available choices'
-        self.assertContains(response, text, status_code=200)
+        text = ['Select a valid choice. 25 is not one of the available choices',
+                'error']
+        for text in text:
+            self.assertContains(response, text, status_code=200)
 
     def test_search_bad_gender_error(self):
         factory = RequestFactory()
@@ -89,8 +91,9 @@ class TestSearchView(TestCase):
             'gender': 'hippopotamus'
         })
         response = views.search(request)
-        text = 'Stops (0 total)'
-        self.assertContains(response, text, status_code=200)
+        text = ['Stops (0 total)', 'error']
+        for text in text:
+            self.assertContains(response, text, status_code=200)
 
     def test_homepage_find_a_stop(self):
         "Test Find a Stop form is present on MD homepage"
