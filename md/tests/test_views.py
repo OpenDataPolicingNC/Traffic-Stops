@@ -64,8 +64,8 @@ class ViewTests(TestCase):
 
 class TestSearchView(TestCase):
     def test_search_good_data(self):
-        self.factory = RequestFactory()
-        request = self.factory.get('/md/search', data={
+        factory = RequestFactory()
+        request = factory.get(reverse('md:stops-search'), data={
             'agency': 'Montgomery County Police Department',
         })
         response = views.search(request)
@@ -73,8 +73,8 @@ class TestSearchView(TestCase):
         self.assertNotContains(response, text, status_code=200)
 
     def test_search_bad_purpose_error(self):
-        self.factory = RequestFactory()
-        request = self.factory.get('/md/search', data={
+        factory = RequestFactory()
+        request = factory.get(reverse('md:stops-search'), data={
             'agency': 'Montgomery County Police Department',
             'purpose': [25]
         })
@@ -83,8 +83,8 @@ class TestSearchView(TestCase):
         self.assertContains(response, text, status_code=200)
 
     def test_search_bad_gender_error(self):
-        self.factory = RequestFactory()
-        request = self.factory.get('/md/search', data={
+        factory = RequestFactory()
+        request = factory.get(reverse('md:stops-search'), data={
             'agency': 'Montgomery County Police Department',
             'gender': 'hippopotamus'
         })

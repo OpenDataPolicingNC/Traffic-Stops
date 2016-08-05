@@ -19,7 +19,7 @@ class SearchForm(forms.Form):
     agency = forms.CharField(
         label='Agency Name',
         widget=AutoCompleteWidget(AgencyLookup),
-        help_text="ex: Baltimore Police Department")
+        help_text="ex: Montgomery County Police Department")
     officer = forms.CharField(
         required=False,
         help_text="ex: 227")
@@ -45,9 +45,6 @@ class SearchForm(forms.Form):
         required=False,
         choices=PURPOSE_CHOICES,
         widget=forms.CheckboxSelectMultiple)
-    location = forms.MultipleChoiceField(
-        required=False,
-        help_text="Enter a location here")
 
     def clean(self):
         cleaned_data = super(SearchForm, self).clean()
