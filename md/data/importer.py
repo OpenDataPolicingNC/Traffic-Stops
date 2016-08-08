@@ -320,9 +320,9 @@ def fix_AGENCY_column(stops):
     stops['AGENCY'] = stops['AGENCY'].apply(fix_AGENCY)
 
 
-def process_raw_data(stops):
+def process_raw_data(stops, to_drop=MD_COLUMNS_TO_DROP):
     # Drop some columns
-    stops.drop(list(MD_COLUMNS_TO_DROP), axis=1, inplace=True)
+    stops.drop(list(to_drop), axis=1, inplace=True)
 
     # Date manipulation first, to cut out some of the rows before other
     # cleanup occurs

@@ -9,8 +9,9 @@ YN_CHOICES = (
     ("N", "No")
 )
 
-# Only some purposes are referred to specifically in the code.
-# Constants aren't provided for the others.
+# The numeric values for the various purposes are the column numbers in
+# STOP_REASON_CSV.  Only some purpose values are referred to specifically in
+# the code.  Constants aren't provided for the others.
 INVESTIGATION_PURPOSE = 7
 FAILURE_TO_REMAIN_PURPOSE = 10
 UNKNOWN_PURPOSE = 11
