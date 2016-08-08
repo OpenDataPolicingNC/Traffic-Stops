@@ -10,7 +10,10 @@ import pandas as pd
 from django.db import connections
 from django.conf import settings
 
-from md.models import PURPOSE_BY_INDEX, PURPOSE_CHOICES, UNKNOWN_PURPOSE
+from md.models import (
+    FAILURE_TO_REMAIN_PURPOSE, INVESTIGATION_PURPOSE, PURPOSE_BY_INDEX,
+    PURPOSE_CHOICES, UNKNOWN_PURPOSE
+)
 from tsdata.sql import drop_constraints_and_indexes
 from tsdata.utils import (call, download_and_unzip_data, get_csv_path,
                           get_datafile_path, line_count)
@@ -305,6 +308,13 @@ def add_purpose_column(stops):
     stops['purpose'] = stops['STOP_REASON'].apply(purpose_from_STOP_REASON)
 
 
+def drop_stops_by_purpose(stops):
+    rows_to_drop = stops[
+        (stops.purpose == INVESTIGATION_PURPOSE) | (stops.purpose == FAILURE_TO_REMAIN_PURPOSE)
+    ].index
+    return stops.drop(rows_to_drop)
+
+
 def fix_AGENCY_column(stops):
     load_MD_agency_mappings()
     stops['AGENCY'] = stops['AGENCY'].apply(fix_AGENCY)
@@ -328,6 +338,7 @@ def process_raw_data(stops):
     # Add age, purpose, and index columns
     add_age_column(stops)
     add_purpose_column(stops)
+    stops = drop_stops_by_purpose(stops)
     stops['index'] = range(1, len(stops) + 1)  # adds column at end
 
     # move the index column to the front

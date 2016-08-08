@@ -9,6 +9,10 @@ YN_CHOICES = (
     ("N", "No")
 )
 
+# Only some purposes are referred to specifically in the code.
+# Constants aren't provided for the others.
+INVESTIGATION_PURPOSE = 7
+FAILURE_TO_REMAIN_PURPOSE = 10
 UNKNOWN_PURPOSE = 11
 PURPOSE_CHOICES = (
     # Strings must match purpose_order in app/states/md/defaults.js
@@ -19,10 +23,10 @@ PURPOSE_CHOICES = (
     (4, 'Safe Movement Violation'),
     (5, 'Vehicle Equipment Violation'),
     (6, 'Vehicle Regulatory Violation'),
-    (7, 'Investigation'),
+    (INVESTIGATION_PURPOSE, 'Investigation'),
     (8, 'Non-motor Vehicle Violations'),
     (9, 'Other Motor Vehicle Violation'),
-    (10, 'Failure to remain at scene of accident'),
+    (FAILURE_TO_REMAIN_PURPOSE, 'Failure to remain at scene of accident'),
     (UNKNOWN_PURPOSE, 'Other/Unknown'),
 )
 

@@ -4,11 +4,14 @@ from django.test import TestCase
 import pandas as pd
 
 from md.data.importer import (
-    add_age_column, add_date_column, add_purpose_column, fix_AGENCY_column,
-    fix_ETHNICITY, fix_GENDER, fix_SEIZED, fix_STOP_REASON, fix_TIME_OF_STOP,
-    MD_FIRST_YEAR_TO_KEEP, process_raw_data, process_time_of_stop,
+    add_age_column, add_date_column, add_purpose_column, drop_stops_by_purpose,
+    fix_AGENCY_column, fix_ETHNICITY, fix_GENDER, fix_SEIZED, fix_STOP_REASON,
+    fix_TIME_OF_STOP, MD_FIRST_YEAR_TO_KEEP, process_raw_data,
+    process_time_of_stop,
 )
-from md.models import UNKNOWN_PURPOSE
+from md.models import (
+    FAILURE_TO_REMAIN_PURPOSE, INVESTIGATION_PURPOSE, UNKNOWN_PURPOSE
+)
 
 
 class TestFieldNormalization(TestCase):
@@ -184,7 +187,11 @@ class TestFieldNormalization(TestCase):
             ('21-201-a(1)', '21-201', 4),
             ('9-220', '9-220', UNKNOWN_PURPOSE),
             ('06-B1B', '06-B1B', UNKNOWN_PURPOSE),
+            # all remaining stops will be dropped due to purpose
+            ('21-904', '21-904', INVESTIGATION_PURPOSE),
+            ('20-102', '20-102', FAILURE_TO_REMAIN_PURPOSE),
         )
+        num_dropped_stops = 2  # the last 2 have purposes that aren't counted
         stops = pd.DataFrame({
             'STOP_REASON': [
                 x for x, _, _ in data
@@ -200,6 +207,11 @@ class TestFieldNormalization(TestCase):
                              'Expected purpose %d for "%s", got %d' % (
                 expected_purpose, raw_reason, stops.purpose[i]
             ))
+        stops = drop_stops_by_purpose(stops)
+        expected_kept_stop_reasons = [datum[1] for datum in data][:-num_dropped_stops]
+        expected_kept_purposes = [datum[2] for datum in data][:-num_dropped_stops]
+        self.assertTrue(all(stops.STOP_REASON == expected_kept_stop_reasons))
+        self.assertTrue(all(stops.purpose == expected_kept_purposes))
 
     def test_agency_names(self):
         stops = pd.DataFrame({

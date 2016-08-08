@@ -23,6 +23,12 @@ reasons (codes) to the various purposes.  The codes are simplified in the spread
 reflecting that subsections, paragraphs, etc. aren't relevant to the mapping, so
 the raw stop codes are similarly simplified before looking them up.
 
+After transforming to a stop purpose, stop data for these purposes is removed from
+the dataset:
+
+- "Investigation"
+- "Failure to remain at scene of accident"
+
 Here are typical examples of how the raw data values from MD are simplified
 before matching with values in the spreadsheet:
 
