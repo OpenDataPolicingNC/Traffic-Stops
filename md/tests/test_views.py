@@ -96,7 +96,7 @@ class TestSearchView(TestCase):
             self.assertContains(response, text, status_code=200)
 
     def test_homepage_find_a_stop(self):
-        "Test Find a Stop form is present on MD homepage"
+        """Test Find a Stop form is present on MD homepage"""
         response = self.client.get(reverse('md:home'))
         # make sure form is in context
         self.assertTrue('find_a_stop_form' in response.context)
