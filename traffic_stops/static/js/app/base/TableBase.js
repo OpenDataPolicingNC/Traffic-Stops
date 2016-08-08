@@ -9,7 +9,9 @@ export default Backbone.Model.extend({
     this.listenTo(this.get("handler"), "dataRequestFailed", this.showError);
   },
   update: function(data){
-    if(data===undefined) return;  // temporary for dummy census data
+    if (data === undefined) {
+      return; // for optional data
+    }
     this.data = data;
     this.draw_table();
   },

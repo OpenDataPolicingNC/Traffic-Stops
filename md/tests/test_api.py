@@ -14,17 +14,6 @@ from tsdata.tests.factories import CensusProfileFactory
 class AgencyTests(APITestCase):
     multi_db = True
 
-    def test_list_agencies(self):
-        """Test Agency list"""
-        agency = factories.AgencyFactory()
-        url = reverse('md:agency-api-list')
-        response = self.client.get(url, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        # Other Agencies may have been left around from other tests
-        self.assertIn((agency.pk, agency.name), [
-            (a.pk, a.name) for a in Agency.objects.all()
-        ])
-
     def test_agency_census_data(self):
         """
         Construct an agency with associated CensusProfile, check
@@ -41,6 +30,17 @@ class AgencyTests(APITestCase):
             self.assertEqual(
                 response.data['census_profile'][attr], getattr(census_profile, attr)
             )
+
+    def test_list_agencies(self):
+        """Test Agency list"""
+        agency = factories.AgencyFactory()
+        url = reverse('md:agency-api-list')
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # Other Agencies may have been left around from other tests
+        self.assertIn((agency.pk, agency.name), [
+            (a.pk, a.name) for a in Agency.objects.all()
+        ])
 
     def test_stops_api(self):
         """Test Agency stops API endpoint with no stops"""

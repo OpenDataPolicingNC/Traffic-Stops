@@ -4,6 +4,8 @@
 
 BEGIN;
 
+SET TIMEZONE=:'nc_time_zone';
+
 -- get rid of all the original data (cascades throughout app)
 TRUNCATE "nc_stop" RESTART IDENTITY CASCADE;
 TRUNCATE "nc_person" RESTART IDENTITY CASCADE;

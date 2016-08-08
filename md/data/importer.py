@@ -383,6 +383,7 @@ def copy_from(csv_path):
     )
     cmd = ['psql',
            '-v', 'data_file={}'.format(csv_path),
+           '-v', 'md_time_zone={}'.format(settings.MD_TIME_ZONE),
            '-v', 'md_csv_table={}'.format(md_csv_path),
            '-f', sql_file,
            settings.DATABASES['traffic_stops_md']['NAME']]

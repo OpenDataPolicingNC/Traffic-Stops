@@ -48,7 +48,7 @@ class AgencyList(FormMixin, ListView):
             sorted_agencies[initial].append(agency)
 
         for key in sorted_agencies:
-            sorted_agencies[key].sort(key=lambda x: x.name)
+            sorted_agencies[key].sort(key=lambda x: x.name.lower())
             sorted_agencies[key] = get_chunks(sorted_agencies[key])
 
         sorted_agencies = sorted(sorted_agencies.items())

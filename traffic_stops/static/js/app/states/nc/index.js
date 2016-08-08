@@ -1,4 +1,5 @@
-import Stops from './Stops.js';
+import Stops from './defaults.js';
+import StopsGraphs from './Stops.js';
 import Search from './Search.js';
 import Census from './Census.js';
 import StopSearch from './StopSearch.js';
@@ -14,7 +15,8 @@ if (typeof window.NC === 'undefined') {
 Object.assign(
   window.NC,
 
-  Stops,
+  {Stops},
+  StopsGraphs,
   Search,
   Census,
   StopSearch,

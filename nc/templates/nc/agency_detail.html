@@ -47,14 +47,6 @@
       <h3>Tabular view of 2010 census data</h3>
       <br><br>
       <div id="census_data"></div>
-
-      <!-- <p class="help-block">
-        This data table reflects the jurisdiction's racial and ethnic
-        composition at the time of the last census (2010). It is included for
-        comparative purposes. The actual driving population within a given
-        jurisdiction may vary significantly from census figures.
-      </p> -->
-
     </div>
   </div>
 {% endblock census-display %}
@@ -374,7 +366,7 @@
 {% comment %}<script>{% endcomment %}
 
 var showEthnicity = {{request.session.showEthnicity|lower|default:"false"}},
-    census_handler = new NC.CensusHandler({url: "{% static 'js/census.temporary.json' %}", agency: "{{object}}"});
+    census_handler = new NC.CensusHandler({url: "{% url 'nc:agency-api-detail' object.pk %}"});
 {% if officer_id %}
   // Retrieve data from API using data-handlers
   var stop_handler = new NC.StopsHandler({url: "{% url 'nc:agency-api-stops' object.pk %}?officer={{officer_id|urlencode}}"}),

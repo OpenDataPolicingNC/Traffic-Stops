@@ -1,6 +1,7 @@
 from django.core.urlresolvers import reverse
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
 from md.tests import factories
+from .. import views
 
 
 class ViewTests(TestCase):
@@ -59,3 +60,46 @@ class ViewTests(TestCase):
             self.assertEqual(2, len(chunks[0]))
             self.assertEqual(2, len(chunks[1]))
             self.assertEqual(1, len(chunks[2]))
+
+
+class TestSearchView(TestCase):
+    def test_search_good_data(self):
+        factory = RequestFactory()
+        request = factory.get(reverse('md:stops-search'), data={
+            'agency': 'Montgomery County Police Department',
+        })
+        response = views.search(request)
+        text = 'error'
+        self.assertNotContains(response, text, status_code=200)
+
+    def test_search_bad_purpose_error(self):
+        factory = RequestFactory()
+        request = factory.get(reverse('md:stops-search'), data={
+            'agency': 'Montgomery County Police Department',
+            'purpose': [25]
+        })
+        response = views.search(request)
+        text = ['Select a valid choice. 25 is not one of the available choices',
+                'error']
+        for text in text:
+            self.assertContains(response, text, status_code=200)
+
+    def test_search_bad_gender_error(self):
+        factory = RequestFactory()
+        request = factory.get(reverse('md:stops-search'), data={
+            'agency': 'Montgomery County Police Department',
+            'gender': 'hippopotamus'
+        })
+        response = views.search(request)
+        text = ['Stops (0 total)', 'error']
+        for text in text:
+            self.assertContains(response, text, status_code=200)
+
+    def test_homepage_find_a_stop(self):
+        """Test Find a Stop form is present on MD homepage"""
+        response = self.client.get(reverse('md:home'))
+        # make sure form is in context
+        self.assertTrue('find_a_stop_form' in response.context)
+        form = response.context['find_a_stop_form']
+        # make sure required agency field label is present
+        self.assertContains(response, form['agency'].label)
