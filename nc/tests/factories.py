@@ -34,7 +34,8 @@ class StopFactory(factory.django.DjangoModelFactory):
 
     stop_id = factory.Sequence(lambda x: x)
     agency = factory.SubFactory(AgencyFactory)
-    date = factory.fuzzy.FuzzyDate(datetime.date(2008, 1, 1))
+    date = factory.fuzzy.FuzzyDateTime(datetime.datetime(
+        2008, 1, 1, 0, 0, tzinfo=datetime.timezone.utc))
     purpose = factory.fuzzy.FuzzyChoice(x[0] for x in models.PURPOSE_CHOICES)
     action = factory.fuzzy.FuzzyChoice(x[0] for x in models.ACTION_CHOICES)
     officer_id = factory.fuzzy.FuzzyInteger(0)

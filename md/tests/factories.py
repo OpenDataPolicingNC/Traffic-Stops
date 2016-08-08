@@ -20,7 +20,8 @@ class StopFactory(factory.django.DjangoModelFactory):
         model = models.Stop
 
     stop_id = factory.Sequence(lambda x: x)
-    date = factory.fuzzy.FuzzyDate(datetime.date(2008, 1, 1))
+    date = factory.fuzzy.FuzzyDateTime(datetime.datetime(2013, 1, 1, 0, 0,
+                                                         tzinfo=datetime.timezone.utc))
     purpose = factory.fuzzy.FuzzyChoice(x[0] for x in models.PURPOSE_CHOICES)
     search_conducted = factory.fuzzy.FuzzyChoice(x[0] for x in models.YN_CHOICES)
     seized = factory.fuzzy.FuzzyChoice(x[0] for x in models.YN_CHOICES)

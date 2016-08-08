@@ -63,3 +63,12 @@ class ViewTests(TestCase):
             self.assertEqual(2, len(chunks[0]))
             self.assertEqual(2, len(chunks[1]))
             self.assertEqual(1, len(chunks[2]))
+
+    def test_homepage_find_a_stop(self):
+        """Test Find a Stop form is present on NC homepage"""
+        response = self.client.get(reverse('md:home'))
+        # make sure form is in context
+        self.assertTrue('find_a_stop_form' in response.context)
+        form = response.context['find_a_stop_form']
+        # make sure required agency field label is present
+        self.assertContains(response, form['agency'].label)

@@ -7,7 +7,7 @@ MODERNIZR_VERSION = 2.8.3
 JQUERY_VERSION = 1.11.2
 BOOTSTRAP_VERSION = 3.3.1
 
-default: lint test
+default: lint-py test
 
 test:
 	# Run all tests and report coverage
