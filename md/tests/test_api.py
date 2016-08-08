@@ -10,6 +10,7 @@ from md.models import Agency, ETHNICITY_CHOICES, PURPOSE_CHOICES
 from md.tests import factories
 from tsdata.tests.factories import CensusProfileFactory
 
+
 class AgencyTests(APITestCase):
     multi_db = True
 
