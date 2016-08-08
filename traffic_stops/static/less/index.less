@@ -293,6 +293,10 @@ code {
         text-align: center;
       }
 
+      a.pull-right {
+        float: none !important;
+      }
+
       .title-container {
         margin-bottom: 20px;
         padding: 0 30px;
@@ -438,6 +442,30 @@ body#state {
       padding: 8px 24px;
     }
   }
+}
+
+.agency-list-search {
+  background-color: #f8f8f8;
+
+  &.affix {
+    z-index: 1024;
+    width: 100%;
+    top: 50px;
+  }
+
+  .form-group {
+    margin: 20px 0;
+  }
+
+  .input-group {
+    * {
+      font-size: 18px;
+    }
+
+    input {
+      height: 39px;
+    }
+}
 }
 
 /* Find a Traffic Stop page
