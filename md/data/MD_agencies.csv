@@ -1,11 +1,11 @@
 Agency Code,Agency Name,GEOID
 AACCPSP,AACCPSP,
-AACOPD,Anne Arundel County Police Department,
+AACOPD,Anne Arundel County Police Department,05000US24003
 AACOSHERIFF,Anne Arundel County Sheriff's Office,
 ABERDEEN,Aberdeen Police Department,16000US2400125
 ALLEGANY,Allegany County Sheriff's Office,
 ANNAPOLIS,Annapolis Police Department,16000US2401600
-BACOPD,Baltimore County Police Department,
+BACOPD,Baltimore County Police Department,05000US24005
 BALTIMORE,BALTIMORE,
 BALTIMORESCHOOL,Baltimore City Schools Police,
 BALTOENVIR,Baltimore City Environmental Police,
@@ -65,7 +65,7 @@ HAMPSTEAD,Hampstead Police Department,16000US2436500
 HANCOCK,Hancock Police Department,16000US2436600
 HARFORD,Harford County Sheriff's Office,
 HAVREDEGRACE,Havre De Grace Police Department,16000US2437600
-HOCPD,Howard County Police Department,
+HOCPD,Howard County Police Department,05000US24027
 HURLOCK,Hurlock Police Department,16000US2441125
 HYATTSVILLE,Hyattsville City Police Department,16000US2441250
 KENT,Kent County Sheriff's Office,
@@ -75,7 +75,7 @@ LAUREL,Laurel Police Department,16000US2445900
 MANCHESTER,Manchester Police Department,16000US2449950
 MCPARK,Maryland-National Capital Park Police,
 MDTA,Maryland Transportation Authority Police,
-MONTGOMERY,Montgomery County Police Department,
+MONTGOMERY,Montgomery County Police Department,05000US24031
 MONTSHERIFF,Montgomery County Sheriff's Office,
 MORNINGSIDE,Morningside Police Department,16000US2453625
 MSP,Maryland State Police,
@@ -89,7 +89,7 @@ OCEANCITY,Ocean City Police Department,16000US2458225
 OCEANPINES,Ocean Pines Police Department,
 OXFORD,Oxford Police Department,16000US2459450
 PERRYVILLE,Perryville Police Department,16000US2461150
-PGCOPD,Prince George's County Police Department,
+PGCOPD,Prince George's County Police Department,05000US24033
 PGCOSHERIFF,Prince George's County Sheriff's Office,
 PGPARK,PGPARK,
 POCOMOKE,Pokomoke City Police Department,16000US2462475
