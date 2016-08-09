@@ -32,3 +32,4 @@ script:
   - coverage report -m --fail-under 63
   - flake8 .
   - npm test
+  - python manage.py makemigrations --dry-run | grep 'No changes detected' || (echo 'There are changes which require migrations.' && exit 1)
