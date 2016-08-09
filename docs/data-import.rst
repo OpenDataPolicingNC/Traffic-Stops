@@ -35,16 +35,16 @@ That can be loaded with the ``pg_restore`` command shown above.
 Raw NC Data (slower)
 ____________________
 
-Command-line
-++++++++++++
-
-Make sure our NC database is in the right state before importing.
-This is not required each time data is imported.
+The state-specific database must exist and current migrations need to have been
+applied before importing.  If in doubt:
 
 .. code-block:: bash
 
     dropdb traffic_stops_nc && createdb -E UTF-8 traffic_stops_nc
     python manage.py migrate --database=traffic_stops_nc --noinput
+
+Command-line
+++++++++++++
 
 Run the import command:
 
@@ -66,14 +66,18 @@ Now you should be able to view data with ``runserver``:
 Admin
 +++++
 
-If the state database doesn't exist or migrations haven't been applied to it,
-fix that first.
-
 Access /admin/tsdata/dataset/ and create a "dataset" describing the data to be
-imported.  The normal MD URL is stored in ``md.data.__init__.py``; the normal
-NC URL is stored in ``nc.management.commands.import_nc.py``.  Newer datasets
-may be available at https://s3-us-west-2.amazonaws.com/openpolicingdata/.  Be
-sure to specify a destination directory.
+imported.  Setting the fields:
+
+- Select the desired state
+- Provide a unique name for the dataset
+- The date received should reflect when the raw data was received
+- Set the URL to one of the available datasets at
+  https://s3-us-west-2.amazonaws.com/openpolicingdata/ .  The normal URLs
+  are stored in the source code (in ``md.data.__init__.py`` for MD and in
+  ``nc.management.commands.import_nc.py`` for NC).
+- Specify a destination directory where the dataset will be downloaded and
+  extracted.
 
 Once the "dataset" has been created, select the new dataset in list view and
 apply the "Import selected dataset" action.
