@@ -104,7 +104,7 @@
                 <th>Gender</th>
                 <th>Ethnicity</th>
                 <th>Age</th>
-                <th>Agency</th>
+                <th>Stop Location</th>
                 <th>Officer ID</th>
             </tr>
             {% for stop in stops %}
@@ -113,7 +113,7 @@
                 <td>{{ stop.get_gender_display }}</td>
                 <td>{{ stop.get_ethnicity_display }}</td>
                 <td>{{ stop.age }}</td>
-                <td><a href='{% url "md:agency-detail" stop.agency_id %}'>{{ stop.agency_description|truncatewords:3 }}</a></td>
+                <td>{{ stop.stop_location }}</td>
                 <td><a href='{% url "md:agency-detail" stop.agency_id %}?officer_id={{ stop.officer_id|urlencode }}'>{{ stop.officer_id }}</a></td>
             </tr>
             {% endfor %}
