@@ -8,9 +8,7 @@ import logging
 import pandas as pd
 
 from tsdata.utils import download_and_unzip_data, get_datafile_path
-from md.data.importer import (
-    fix_AGENCY_column, fix_STOP_REASON, load_xls, process_time_of_stop
-)
+from md.data.importer import load_xls, process_raw_data
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +16,7 @@ COLUMNS_TO_ANALYZE = (
     'DURATION', 'STOP_REASON', 'SEARCH_CONDUCTED', 'SEARCH_REASON',
     'WHATSEARCHED', 'SEIZED', 'STOPOUTCOME', 'CRIME_CHARGED',
     'REGISTRATION_STATE', 'GENDER', 'RESIDENCE_STATE', 'MD_COUNTY',
-    'ETHNICITY', 'AGENCY', 'cleaned-STOP_REASON',
+    'ETHNICITY', 'AGENCY',
 )
 
 
@@ -53,15 +51,10 @@ def stats_for_state_landing_page(stops, report):
 
 def analyze(stops, report):
     """
-    This runs on largely unprocessed data -- data as loaded from the .xlsx
-
-    Dropping of some data is handled by importer.process_time_of_stop(), since
-    the analysis should match the set of data intended for display.
+    The form of the data analyzed is equivalent to what is stored in the
+    CSV by the import command, except that some columns not used by the
+    website haven't been thrown away.
     """
-    stops = process_time_of_stop(stops)
-    stops['cleaned-STOP_REASON'] = stops['STOP_REASON'].apply(fix_STOP_REASON)
-    fix_AGENCY_column(stops)
-
     stats_for_state_landing_page(stops, report)
 
     years = stops['date'].map(lambda x: x.year)
@@ -86,4 +79,5 @@ def run(url, report, destination=None, download=True):
     destination = download_and_unzip_data(url, destination)
     xls_path = get_datafile_path(url, destination)
     stops = load_xls(xls_path)
+    stops = process_raw_data(stops, to_drop=())
     analyze(stops, report)
