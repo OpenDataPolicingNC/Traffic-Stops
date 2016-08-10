@@ -6,8 +6,8 @@ from nc import prime_cache
 class Command(BaseCommand):
     """Prime cache on production server"""
 
+    def add_arguments(self, parser):
+        parser.add_argument('url', default="http://0.0.0.0:8000/")
+
     def handle(self, *args, **options):
-        url = None
-        if len(args) == 1:
-            url = args[0]
-        prime_cache.run(url)
+        prime_cache.run(options['url'])
