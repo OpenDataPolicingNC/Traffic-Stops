@@ -60,12 +60,14 @@ Create the Postgres database and run the initial syncdb/migrate::
     (opendatapolicing)$ createdb -E UTF-8 traffic_stops_nc
     (opendatapolicing)$ createdb -E UTF-8 traffic_stops_md
     (opendatapolicing)$ python manage.py migrate
+    (opendatapolicing)$ python manage.py migrate --database traffic_stops_nc
+    (opendatapolicing)$ python manage.py migrate --database traffic_stops_md
 
 
 Development
 -----------
 
-You should be able to run the development server via the configured `dev` script::
+You should be able to run the development server via the configured ``dev`` script::
 
     (opendatapolicing)$ npm run dev
 
@@ -75,3 +77,11 @@ Or, on a custom port and address::
 
 Any changes made to Python, Javascript or Less files will be detected and rebuilt transparently as
 long as the development server is running.
+
+When running migrations
+-----------------------
+
+This is a multi-database project.  Whenever you have unapplied migrations,
+either added locally or via an update from the source repository, the
+migrations need to be applied to all databases, as shown in the
+``manage.py migrate`` commands above under "Create the Postgres database...".
