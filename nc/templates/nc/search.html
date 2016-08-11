@@ -1,7 +1,7 @@
 {% extends "search.html" %}
 {% load selectable_tags bootstrap3 el_pagination_tags humanize %}
 
-{% block stops-search-url %}{% url 'nc:stops-search' %}{% endblock %}
+{% block agency-search-url %}{% url 'nc:stops-search' %}{% endblock %}
 
 {% block extra-js %}
     {% include_ui_theme %}
