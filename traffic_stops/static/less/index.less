@@ -80,6 +80,14 @@ h1, h2, h3, h4, h5 {
 
 table {
   word-wrap: break-word;
+
+  /***
+   * Not sure why this is necessary, but responsive tables were breaking
+   * without explicitly telling tables that it's OK to be more than 100% width.
+   */
+  &.table {
+    width: auto;
+  }
 }
 
 /* Sticky footer styles
