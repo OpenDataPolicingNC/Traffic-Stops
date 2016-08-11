@@ -1,7 +1,7 @@
 {% extends "search.html" %}
 {% load selectable_tags bootstrap3 el_pagination_tags humanize %}
 
-{% block agency-search-url %}{% url 'md:stops-search' %}{% endblock %}
+{% block agency-list-url %}{% url "md:agency-list" %}{% endblock %}
 
 {% block extra-js %}
     {% include_ui_theme %}
