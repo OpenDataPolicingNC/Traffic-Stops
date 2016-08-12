@@ -78,20 +78,22 @@ h1, h2, h3, h4, h5 {
   }
 }
 
-table {
-  word-wrap: break-word;
+.table-responsive {
+  table {
+    word-wrap: break-word;
 
-  /***
-   * Not sure why this is necessary, but responsive tables were breaking
-   * without explicitly telling tables that it's OK to be more than 100% width.
-   *
-   * It's also necessary to tell it that it needs to be *at least* 100% width,
-   * lest it not take up the available space in its container and leave behind
-   * a residue container styling.
-   */
-  &.table {
-    width: auto;
-    min-width: 100%;
+    /***
+     * Not sure why this is necessary, but responsive tables were breaking
+     * without explicitly telling tables that it's OK to be more than 100% width.
+     *
+     * It's also necessary to tell it that it needs to be *at least* 100% width,
+     * lest it not take up the available space in its container and leave behind
+     * a residue container styling.
+     */
+    &.table {
+      width: auto;
+      min-width: 100%;
+    }
   }
 }
 
