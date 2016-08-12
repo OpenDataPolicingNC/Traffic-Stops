@@ -82,6 +82,32 @@ table {
   word-wrap: break-word;
 }
 
+/***
+ * Element to show and hide collapsable content.
+ */
+.collapser {
+  cursor: pointer;
+  text-align: center;
+  font-size: 16px;
+
+  &[aria-expanded="false"] {
+    & > .collapsed {
+      display: inline-block;
+    }
+    & > .shown {
+      display: none;
+    }
+  }
+  &[aria-expanded="true"] {
+    & > .collapsed {
+      display: none;
+    }
+    & > .shown {
+      display: inline-block;
+    }
+  }
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 
