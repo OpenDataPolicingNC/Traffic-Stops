@@ -61,6 +61,7 @@
 
 <div class="row">
   {% for letter, chunks in sorted_agencies %}
+  <div class="col-md-12">
     <h1 class="headline">{{ letter }}</h1>
     <div class="row">
       {% for chunk in chunks %}
@@ -75,6 +76,7 @@
         </div>
       {% endfor %}
     </div>
+  </div>
   {% endfor %}
 </div>
 {% endblock %}
