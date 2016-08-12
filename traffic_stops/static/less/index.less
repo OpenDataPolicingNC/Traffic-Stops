@@ -327,9 +327,10 @@ code {
 .vertical-align {
     .flex-layout();
     .align-items(center);
-    .flex-wrap(wrap);
+    .flex-wrap(nowrap);
 
     @media (max-width: 768px) {
+      .flex-wrap(wrap);
       > * {
         text-align: center;
       }
