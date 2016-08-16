@@ -107,28 +107,30 @@
     </div>
     <div class="col-md-12">
         <h2>Stops ({{ pages.total_count|intcomma }} total)</h2>
-        <table class="table">
-            <tr>
-                <th>Date</th>
-                <th>Gender</th>
-                <th>Race</th>
-                <th>Ethnicity</th>
-                <th>Age</th>
-                <th>Agency</th>
-                <th>Officer ID</th>
-            </tr>
-            {% for person in people %}
-            <tr title='{{ person.stop.stop_id }}'>
-                <td>{{ person.stop.date|date:"n/j/Y P" }}</td>
-                <td>{{ person.get_gender_display }}</td>
-                <td>{{ person.get_race_display }}</td>
-                <td>{{ person.get_ethnicity_display }}</td>
-                <td>{{ person.age }}</td>
-                <td><a href='{% url "nc:agency-detail" person.stop.agency_id %}'>{{ person.stop.agency_description|truncatewords:3 }}</a></td>
-                <td><a href='{% url "nc:agency-detail" person.stop.agency_id %}?officer_id={{ person.stop.officer_id|urlencode }}'>{{ person.stop.officer_id }}</a></td>
-            </tr>
-            {% endfor %}
-        </table>
+        <div class="table-responsive">
+            <table class="table">
+                <tr>
+                    <th>Date</th>
+                    <th>Gender</th>
+                    <th>Race</th>
+                    <th>Ethnicity</th>
+                    <th>Age</th>
+                    <th>Agency</th>
+                    <th>Officer ID</th>
+                </tr>
+                {% for person in people %}
+                <tr title='{{ person.stop.stop_id }}'>
+                    <td>{{ person.stop.date|date:"n/j/Y P" }}</td>
+                    <td>{{ person.get_gender_display }}</td>
+                    <td>{{ person.get_race_display }}</td>
+                    <td>{{ person.get_ethnicity_display }}</td>
+                    <td>{{ person.age }}</td>
+                    <td><a href='{% url "nc:agency-detail" person.stop.agency_id %}'>{{ person.stop.agency_description|truncatewords:3 }}</a></td>
+                    <td><a href='{% url "nc:agency-detail" person.stop.agency_id %}?officer_id={{ person.stop.officer_id|urlencode }}'>{{ person.stop.officer_id }}</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
         {% show_pages %}
     </div>
 </div>

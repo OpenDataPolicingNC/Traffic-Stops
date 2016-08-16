@@ -103,26 +103,28 @@
     </div>
     <div class="col-md-12">
         <h2>Stops ({{ pages.total_count|intcomma }} total)</h2>
-        <table class="table">
-            <tr>
-                <th>Date</th>
-                <th>Gender</th>
-                <th>Ethnicity</th>
-                <th>Age</th>
-                <th>Stop Location</th>
-                <th>Officer ID</th>
-            </tr>
-            {% for stop in stops %}
-            <tr title='{{ person.stop.stop_id }}'>
-                <td>{{ stop.date|date:"n/j/Y P" }}</td>
-                <td>{{ stop.get_gender_display }}</td>
-                <td>{{ stop.get_ethnicity_display }}</td>
-                <td>{{ stop.age }}</td>
-                <td>{{ stop.stop_location }}</td>
-                <td><a href='{% url "md:agency-detail" stop.agency_id %}?officer_id={{ stop.officer_id|urlencode }}'>{{ stop.officer_id }}</a></td>
-            </tr>
-            {% endfor %}
-        </table>
+        <div class="table-responsive">
+            <table class="table">
+                <tr>
+                    <th>Date</th>
+                    <th>Gender</th>
+                    <th>Ethnicity</th>
+                    <th>Age</th>
+                    <th>Stop Location</th>
+                    <th>Officer ID</th>
+                </tr>
+                {% for stop in stops %}
+                <tr title='{{ person.stop.stop_id }}'>
+                    <td>{{ stop.date|date:"n/j/Y P" }}</td>
+                    <td>{{ stop.get_gender_display }}</td>
+                    <td>{{ stop.get_ethnicity_display }}</td>
+                    <td>{{ stop.age }}</td>
+                    <td>{{ stop.stop_location }}</td>
+                    <td><a href='{% url "md:agency-detail" stop.agency_id %}?officer_id={{ stop.officer_id|urlencode }}'>{{ stop.officer_id }}</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
         {% show_pages %}
     </div>
 </div>
