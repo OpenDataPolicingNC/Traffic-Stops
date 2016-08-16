@@ -30,6 +30,18 @@ PURPOSE_CHOICES = (
     (FAILURE_TO_REMAIN_PURPOSE, 'Failure to remain at scene of accident'),
     (UNKNOWN_PURPOSE, 'Other/Unknown'),
 )
+ENABLED_PURPOSES = (
+    (0, 'Seat Belt Violation'),
+    (1, 'Speed Limit Violation'),
+    (2, 'Stop Light/Sign Violation'),
+    (3, 'Driving While Impaired'),
+    (4, 'Safe Movement Violation'),
+    (5, 'Vehicle Equipment Violation'),
+    (6, 'Vehicle Regulatory Violation'),
+    (8, 'Non-motor Vehicle Violations'),
+    (9, 'Other Motor Vehicle Violation'),
+    (UNKNOWN_PURPOSE, 'Other/Unknown'),
+)
 
 PURPOSE_BY_INDEX = [
     x for _, x in PURPOSE_CHOICES

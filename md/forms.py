@@ -5,7 +5,7 @@ from django import forms
 from django.db.models import Q
 from selectable.forms import AutoCompleteWidget, AutoCompleteSelectField
 
-from .models import Agency, ETHNICITY_CHOICES, GENDER_CHOICES, PURPOSE_CHOICES
+from .models import Agency, ETHNICITY_CHOICES, GENDER_CHOICES, ENABLED_PURPOSES
 from .lookups import AgencyLookup
 
 
@@ -43,7 +43,7 @@ class SearchForm(forms.Form):
         choices=addNoneOpt(ETHNICITY_CHOICES))
     purpose = forms.MultipleChoiceField(
         required=False,
-        choices=PURPOSE_CHOICES,
+        choices=ENABLED_PURPOSES,
         widget=forms.CheckboxSelectMultiple)
 
     def clean(self):
