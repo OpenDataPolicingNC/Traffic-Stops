@@ -329,6 +329,11 @@ code {
     .align-items(center);
     .flex-wrap(wrap);
 
+    .col-md-4 {
+      // addressing a bizarre Safari bug
+      .flex-basis(33.2329%);
+    }
+
     @media (max-width: 768px) {
       > * {
         text-align: center;
