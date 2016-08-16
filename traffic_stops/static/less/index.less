@@ -589,9 +589,22 @@ h2.officer {
   margin-top: 1rem;
   border-bottom: 1px solid @gray;
 
+  .anchor-offset {
+    position: absolute;
+    top: -50px;
+  }
+
+  @media (min-width: 768px) {
+    .anchor-offset {
+      position: absolute;
+      top: -158px;
+    }
+  }
+
   > h2 {
     margin-bottom: 20px;
     font-size: 40px;
+    position: relative;
   }
 }
 
@@ -602,15 +615,6 @@ h2.officer {
 .optional,
 .nav li.optional {
   display: none;
-}
-
-/***
- * To accommodate the extra padding added to anchor elements without breaking
- * the accessibility of controls (see `fixAnchorElements in base
- * agency_detail.html), we hide overflow in rows.
- */
-.row {
-  overflow: hidden;
 }
 
 /***
