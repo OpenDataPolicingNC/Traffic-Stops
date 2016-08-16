@@ -13,7 +13,7 @@ ENDPOINTS = ('stops', 'stops_by_reason', 'use_of_force', 'searches', 'contraband
 
 def run(root, host='opendatapolicingnc.com'):
     headers = {'Host': host}
-    api = urllib.parse.urljoin(root, reverse('agency-api-list'))
+    api = urllib.parse.urljoin(root, reverse('nc:agency-api-list'))
     # get agencies
     r = requests.get(api, headers=headers)
     agencies = r.json()
@@ -26,7 +26,7 @@ def run(root, host='opendatapolicingnc.com'):
             req(uri, headers=headers)
         # prime first search page
         payload = {'agency': agency['name']}
-        search_uri = urllib.parse.urljoin(root, reverse('stops-search'))
+        search_uri = urllib.parse.urljoin(root, reverse('nc:stops-search'))
         req(search_uri, headers, payload)
 
 

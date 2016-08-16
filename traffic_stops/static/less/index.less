@@ -78,8 +78,49 @@ h1, h2, h3, h4, h5 {
   }
 }
 
-table {
-  word-wrap: break-word;
+.table-responsive {
+  table {
+    word-wrap: break-word;
+
+    /***
+     * Not sure why this is necessary, but responsive tables were breaking
+     * without explicitly telling tables that it's OK to be more than 100% width.
+     *
+     * It's also necessary to tell it that it needs to be *at least* 100% width,
+     * lest it not take up the available space in its container and leave behind
+     * a residue container styling.
+     */
+    &.table {
+      width: auto;
+      min-width: 100%;
+    }
+  }
+}
+
+/***
+ * Element to show and hide collapsable content.
+ */
+.collapser {
+  cursor: pointer;
+  text-align: center;
+  font-size: 16px;
+
+  &[aria-expanded="false"] {
+    & > .collapsed {
+      display: inline-block;
+    }
+    & > .shown {
+      display: none;
+    }
+  }
+  &[aria-expanded="true"] {
+    & > .collapsed {
+      display: none;
+    }
+    & > .shown {
+      display: inline-block;
+    }
+  }
 }
 
 /* Sticky footer styles
@@ -346,6 +387,9 @@ code {
       color: @brand-secondary;
     }
   }
+
+  h3 {color: white}
+
   @media (max-width: @screen-sm-min) {
     blockquote {
       font-size: 18px;
@@ -575,6 +619,16 @@ nav.graphs-nav {
   .justify-content(space-between);
   .align-items(center);
 
+  @media (max-width: 768px) {
+    .container {
+      text-align: center;
+    }
+
+    ul {
+      text-align: left;
+    }
+  }
+
   .container {
     margin: 0 auto;
     padding: 0;
@@ -646,6 +700,11 @@ nav.graphs-nav {
 
   .raceSelector {
     display: inline-block;
+    float: right;
+
+    @media (max-width: 768px) {
+      float: none;
+    }
   }
 }
 

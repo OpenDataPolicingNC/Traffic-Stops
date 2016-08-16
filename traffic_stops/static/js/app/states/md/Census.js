@@ -14,11 +14,11 @@ const CensusRatioDonut = C.CensusRatioDonutBase.extend({
   Stops: Stops,
 
   _items: function () {
-    return Stops.ethnicities;
+    return Stops.races;
   },
 
   _pprint: function (type) {
-    return type;
+    return Stops.pprint.get(type);
   },
 
   _process_key: process_key,
