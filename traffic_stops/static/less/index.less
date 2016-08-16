@@ -303,10 +303,12 @@ code {
   }
 
   @media (max-width: @screen-sm-min) {
+    padding-top: 60px;
     padding-bottom: 30px;
 
     &.agency-detail {
-      padding-top: 60px;
+      padding-top: 80px;
+      padding-bottom: 50px;
     }
 
     p {
@@ -325,9 +327,14 @@ code {
 
 // http://stackoverflow.com/questions/20547819/vertical-align-with-bootstrap-3
 .vertical-align {
-    .flex-layout();
-    .align-items(center);
-    .flex-wrap(wrap);
+  #state & .title-container {
+    /***
+     * In practice, the only place where nontrivial vertical alignment
+     * takes place is on the state homepage. Hence we can use a page-specific
+     * special margin rule and get the same effect.
+     */
+    margin-top: 20px;
+  }
 
     @media (max-width: 768px) {
       > * {
@@ -339,6 +346,7 @@ code {
       }
 
       .title-container {
+        margin-top: 0;
         margin-bottom: 20px;
         padding: 0 30px;
         border-bottom: 1px solid white;
