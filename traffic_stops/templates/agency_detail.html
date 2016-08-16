@@ -76,30 +76,11 @@
 
       var $body = $('body');
       var $window = $(window);
-      var $graphsNav = $('#graphs-nav');
-      var BREAKPOINT = 770;
 
       $body.scrollspy({ target: '#graphs-nav', offset: 50 });
       $window.on('load', function () {
         $body.scrollspy('refresh');
       });
-
-      (function fixAnchorElements () {
-        var $anchors = $('.headline > h2');
-        var offset =
-          $('.navbar').height()
-          + ($window.width() > BREAKPOINT ? $graphsNav.outerHeight() : 0)
-          + 12;
-
-        $anchors
-          .each(function () {
-            $(this).css({
-              'padding-top': offset + 'px'
-            , 'margin-top': (-offset) + 'px'
-            })
-          })
-        ;
-      })();
     });
   </script>
 {% endblock extra-js %}
