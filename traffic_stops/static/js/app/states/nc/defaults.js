@@ -23,11 +23,11 @@ export default {
     'non-hispanic': 'Non-hispanic'
   }),
   colors: [
-    "#1a9641",
-    "#0571b0",
-    "#a6d96a",
-    "#66ADDD",
-    "#F2AC29",
+    "#1C9647", // dark green
+    "#3F5EAB", // dark blue
+    "#A7D16B", // light green
+    "#66ACDD", // light blue
+    "#DC8F27", // orange
   ],
   baseline_color: "black",
   single_color: "#5C0808",
