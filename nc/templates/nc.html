@@ -23,7 +23,7 @@
   </p>
 
   <p class="agency-intro">
-    <a href="{% url "nc:agency-list" %}">Click here</a> to browse a list of
+    <a style="font-weight: bold; text-decoration: underline" href="{% url "nc:agency-list" %}">Click here</a> to browse a list of
     all agencies for which data is available.
   </p>
 {% endblock agency-intro %}
@@ -56,7 +56,7 @@
 {% block find-a-stop %}
   <p class="agency-intro">
     Search for North Carolina stops using the form fields below. Use
-    <a href='{% url 'nc:stops-search' %}'>Advanced Search</a>
+    <a style="font-weight: bold; text-decoration: underline" href='{% url 'nc:stops-search' %}'>Advanced Search</a>
     for additional filtering criteria.
   </p>
   <form action="{% url 'nc:stops-search' %}" method="get" class="form row">
