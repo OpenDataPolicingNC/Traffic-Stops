@@ -5,6 +5,7 @@ import Search from './Search.js';
 import LikelihoodOfSearch from './LikelihoodOfSearch.js';
 import ContrabandHitRate from './ContrabandHitRate.js';
 import Census from './Census.js';
+import StopByReasonAndRace from './StopByReasonAndRace.js';
 
 if (typeof window.MD === 'undefined') window.MD = {};
 
@@ -15,5 +16,6 @@ Object.assign(window.MD,
   Search,
   LikelihoodOfSearch,
   ContrabandHitRate,
-  Census
+  Census,
+  StopByReasonAndRace
 )
