@@ -25,7 +25,19 @@ export const SRRTimeSeriesBase = VisualBase.extend({
         .tickFormat(d3.format('%'));
   },
 
-  drawStartup: function () {},
+  drawStartup: function () {
+    var $selector = $('<select>');
+    var purposes = d3.set(_.pluck(this.data.raw.stops, 'purpose'));
+    var $opts = purposes.values().map((p) => $(`<option value="${p}">${p}</option>`));
+
+    $selector
+      .append($opts)
+      .val('Seat Belt Violation');
+
+    $('<div class="selector-container">')
+      .html($selector)
+      .appendTo(this.div);
+  },
 
   drawChart: function () {
     var data = this._formatData();

@@ -123,7 +123,7 @@ export const StopRatioDonutBase = VisualBase.extend({
       ));
   },
 
-  drawStartup: function(){
+  drawStartup: function () {
 
     // get year options for pulldown menu
     var selector = $('<select>'),
