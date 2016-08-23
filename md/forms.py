@@ -21,6 +21,7 @@ class SearchForm(forms.Form):
         widget=AutoCompleteWidget(AgencyLookup),
         help_text="ex: Montgomery County Police Department")
     officer = forms.CharField(
+        label='Officer ID',
         required=False,
         help_text="ex: 227")
     start_date = forms.DateField(
