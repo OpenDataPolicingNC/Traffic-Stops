@@ -71,23 +71,49 @@ export const SRRTimeSeriesBase = VisualBase.extend({
       });
   },
 
+  /***
+   * Pure function to return array of years present in dataset.
+   */
   _years: _.memoize(function () {
     var years_all = d3.set(_.pluck(this.data.raw.stops, 'year')).values();
     var years = _.without(years_all, 'Total');
     return years;
   }),
 
+  /***
+   * Pure function to return the dataset sorted by "type" and stop purpose.
+   */
   _getByPurpose: _.memoize(function (purpose) {
     var types = this._items();
     var years = this._years();
     var raw_data, data;
 
+    /***
+     * "All" is not a purpose found in the data, so we compute it on the fly
+     * using the helper method _purposeAll.
+     */
     if (purpose === 'All') {
       raw_data = this._purposeAll();
     } else {
       raw_data = this.data.raw.stops;
     }
 
+    /***
+     * Resulting data shape:
+
+      [
+        {
+          key: "name of race/ethnicity",
+          values: [
+            {
+              x: 2016,
+              y: 123
+            }
+          ],
+          color: '#ffffff'
+        }
+      ]
+     */
     var data = types.map((type, i) => ({
       key: this._pprint(type)
     , values: years.map((year) => ({
@@ -103,6 +129,13 @@ export const SRRTimeSeriesBase = VisualBase.extend({
     return this._checkThreshold(data);
   }),
 
+  /***
+   * Helper function to identify data that should not be displayed on
+   * initial graph draw because its count is too low.
+   *
+   * In this implementation, suppresses data whose max value is less than 10%
+   * of the overall max value.
+   */
   _checkThreshold: function (data_) {
     var data = _.clone(data_);
     var values = _.flatten(data.map((type) => (type.values.map((value) => value.y))));
@@ -118,6 +151,11 @@ export const SRRTimeSeriesBase = VisualBase.extend({
     return data;
   },
 
+  /***
+   * Pure function to create a virtual "All" purpose data object for each year.
+   * Iterates through each year returned by _years and sums up the counts for
+   * each race/ethnicity.
+   */
   _purposeAll: _.memoize(function () {
     var data = [];
     var years = this._years();
