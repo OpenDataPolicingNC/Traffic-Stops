@@ -25,7 +25,7 @@ export const SRRTimeSeriesBase = VisualBase.extend({
 
     this.chart.yAxis
         .axisLabel('Number of stops by race')
-        .tickFormat(d3.format('.0d'));
+        .tickFormat(d3.format(',.0d'));
   },
 
   drawStartup: function () {
@@ -133,8 +133,9 @@ export const SRRTimeSeriesBase = VisualBase.extend({
    * Helper function to identify data that should not be displayed on
    * initial graph draw because its count is too low.
    *
-   * In this implementation, suppresses data whose max value is less than 10%
-   * of the overall max value.
+   * In this implementation, suppresses data whose max value is less than 25%
+   * of the overall max value. This seems high, but when it's lower, a lot of
+   * uninterestingly low values get included.
    */
   _checkThreshold: function (data_) {
     var data = _.clone(data_);
@@ -143,7 +144,7 @@ export const SRRTimeSeriesBase = VisualBase.extend({
 
     data.forEach((datum) => {
       var local_max = d3.max(datum.values.map((v) => v.y));
-      if ((local_max / overall_max) < 0.1) {
+      if ((local_max / overall_max) < 0.25) {
         datum.disabled = true;
       }
     });
