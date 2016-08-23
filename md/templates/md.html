@@ -23,7 +23,7 @@
   </p>
 
   <p class="agency-intro">
-    <a style="font-weight: bold; text-decoration: underline" href="{% url "md:agency-list" %}">Click here</a> to browse a list of
+    <a href="{% url "md:agency-list" %}">Click here</a> to browse a list of
     all agencies for which data is available.
   </p>
 {% endblock agency-intro %}
@@ -56,7 +56,7 @@
 {% block find-a-stop %}
   <p class="agency-intro">
     Search for Maryland stops using the form fields below. Use
-    <a style="font-weight: bold; text-decoration: underline" href='{% url 'md:stops-search' %}'>Advanced Search</a>
+    <a href='{% url 'md:stops-search' %}'>Advanced Search</a>
     for additional filtering criteria.
   </p>
   <form action="{% url 'md:stops-search' %}" method="get" class="form row">
