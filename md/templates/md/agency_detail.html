@@ -110,6 +110,49 @@
   </div>
 {% endblock stop-display %}
 
+{% block stop-count-display %}
+  <div class="row">
+    <div class="col-md-12">
+    <h3>{% if officer_id %}Officer{% else %}Departmental{% endif %} Stop Count</h3>
+
+    <p class="help-block">
+      This graph displays the count of traffic stops by stop purpose by ethnic groups.
+      Adjusting the drop down menu will display the individual stop counts relative to
+      ethnic groups on a year-by-year basis.
+    </p>
+  </div>
+
+    <div class="col-md-10">
+      <div role="tabpanel">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active">
+            <a href="#srr_line_div" role="tab" data-toggle="tab">Chart</a></li>
+          <li role="presentation">
+            <a href="#srr_data" role="tab" data-toggle="tab">Data</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="srr_line_div">
+            <svg id="srr_line"></svg>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="srr_data">
+          </div>
+        </div>
+      </div>
+
+      <p class="graph-help-block">
+        Drag the cursor over the graph to see the racial/ethnic breakdown for
+        any given year.
+
+        Click the "Data" tab to review the actual stop counts from the
+        MD state government.
+      </p>
+    </div>
+  </div>
+{% endblock stop-count-display %}
+
 {% block search-rate-display %}
   <div class="row">
     <div class="col-md-12 headline">
@@ -339,6 +382,8 @@ new MD.LikelihoodSearchTable({handler: lhs_handler, selector: "#lsb_data"});
 
 new MD.ContrabandHitRateBar({handler: chr_handler, selector: "#chr"});
 new MD.ContrabandTable({handler: chr_handler, selector: "#chr_data"});
+
+new MD.SRRTimeSeries({handler: lhs_handler, selector: '#srr_line'});
 
 {% comment %}</script>{% endcomment %}
 {% endblock graph-code %}
