@@ -194,4 +194,45 @@ export const SRRTimeSeriesBase = VisualBase.extend({
   })
 });
 
-export const SRRTableBase = TableBase.extend({});
+export const SRRTableBase = TableBase.extend({
+  Stops: { }, // abstract property, requires override
+  types: [],
+  _get_header_rows: function () { throw "abstract method: requires override"; },
+
+  get_tabular_data: function () {
+    // create row with initial header row
+    let rows = [
+      ["Year", "Stop-reason", ...this._get_header_rows()]
+    ];
+
+    let purposes = this.Stops.purpose_order.keys();
+    let stops = this.data.raw.stops;
+    console.log(purposes, stops)
+
+    function create_cell (stop_counts={}, race) {
+      let stop_count = stop_counts[race] || 0;
+
+      return stop_count.toLocaleString();
+    }
+
+    // create data rows
+    this.data.years.forEach((yr) => {
+        let stops_by_yr = stops.filter((d) => d.year == yr);
+
+        purposes.forEach((purp) => {
+          let row = [yr, purp];
+          let stop_counts = _.find(stops_by_yr, (d) =>  d.purpose == purp);
+
+          this.types.forEach((type) => {
+            type.forEach((race) => {
+              row.push(create_cell(stop_counts, race));
+            })
+          })
+
+          rows.push(row);
+        });
+    });
+
+    return rows;
+  }
+});
