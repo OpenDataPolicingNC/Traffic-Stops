@@ -220,37 +220,35 @@ export const LikelihoodSearchTableBase = TableBase.extend({
   _get_header_rows: function () { throw "abstract method: requires override"; },
 
   get_tabular_data: function () {
-    var header, row, rows = [];
+    // create row with initial header row
+    let rows = [
+      ["Year", "Stop-reason"].concat(this._get_header_rows())
+    ];
 
-    // create header
-    header = ["Year", "Stop-reason"];
-    header.push.apply(header, this._get_header_rows());
-    rows.push(header);
+    let purposes = this.Stops.purpose_order.keys();
+    let stops = this.data.raw.stops;
+    let searches = this.data.raw.searches;
 
-    var stop, search, stop_purp, search_purp, v1, v2,
-        purposes = this.Stops.purpose_order.keys(),
-        stops = this.data.raw.stops,
-        searches = this.data.raw.searches,
-        get_row = (stops, searches, term) => {
-          var stop = (stops !== undefined) ? stops[term] : 0,
-              search = (searches !== undefined) ? searches[term] : 0;
-          return `${search}/${stop}`;
-        };
+    function create_cell (stop_counts={}, search_counts={}, race) {
+      let stop_count = stop_counts[race] || 0;
+      let search_count = search_counts[race] || 0;
+
+      return `${search_count}/${stop_count}`;
+    }
 
     // create data rows
     this.data.years.forEach((yr) => {
-        stop = stops.filter((d) => d.year == yr);
-        search = searches.filter((d) => d.year == yr);
+        let stops_by_yr = stops.filter((d) => d.year == yr);
+        let searches_by_yr = searches.filter((d) => d.year == yr);
+
         purposes.forEach((purp) => {
-          row = [yr, purp];
-          stop_purp = (stop.length > 0) ? stop.filter((d) =>  d.purpose == purp) : undefined;
-          search_purp = (search.length > 0) ? search.filter((d) => d.purpose == purp) : undefined;
-          stop_purp = (stop_purp && stop_purp.length === 1) ? stop_purp[0] : undefined;
-          search_purp = (search_purp && search_purp.length === 1) ? search_purp[0] : undefined;
+          let row = [yr, purp];
+          let stop_counts = _.find(stops_by_yr, (d) =>  d.purpose == purp);
+          let search_counts = _.find(searches_by_yr, (d) => d.purpose == purp);
 
           this.types.forEach((type) => {
-            type.forEach((r) => {
-              row.push(get_row(stop_purp, search_purp, r));
+            type.forEach((race) => {
+              row.push(create_cell(stop_counts, search_counts, race));
             })
           })
 
