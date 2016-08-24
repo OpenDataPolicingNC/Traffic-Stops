@@ -222,7 +222,7 @@ export const LikelihoodSearchTableBase = TableBase.extend({
   get_tabular_data: function () {
     // create row with initial header row
     let rows = [
-      ["Year", "Stop-reason"].concat(this._get_header_rows())
+      ["Year", "Stop-reason", ...this._get_header_rows()]
     ];
 
     let purposes = this.Stops.purpose_order.keys();
