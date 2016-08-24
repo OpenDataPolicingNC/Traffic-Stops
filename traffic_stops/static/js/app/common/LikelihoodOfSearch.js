@@ -233,7 +233,7 @@ export const LikelihoodSearchTableBase = TableBase.extend({
       let stop_count = stop_counts[race] || 0;
       let search_count = search_counts[race] || 0;
 
-      return `${search_count}/${stop_count}`;
+      return `${search_count.toLocaleString()}/${stop_count.toLocaleString()}`;
     }
 
     // create data rows
