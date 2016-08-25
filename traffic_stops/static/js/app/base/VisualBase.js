@@ -4,8 +4,9 @@ import $ from 'jquery';
 export default Backbone.Model.extend({
   constructor: function(){
     Backbone.Model.apply(this, arguments);
-    this.listenTo(this.get("handler"), "dataLoaded", this.update);
-    this.listenTo(this.get("handler"), "dataRequestFailed", this.showError);
+    this.get('handler').get_data()
+      .then(this.update.bind(this))
+      .catch(this.showError.bind(this));
     this.setDOM();
     this.loader_show();
     this.setDefaultChart();
