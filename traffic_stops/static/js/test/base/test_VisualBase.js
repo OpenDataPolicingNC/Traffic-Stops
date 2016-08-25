@@ -6,7 +6,9 @@ import $ from 'jquery'
 
 describe('base', () => {
   describe('VisualBase', () => {
-    let handler = new Backbone.Model()
+    let handler = {
+      get_data: () => new Promise((resolve, reject) => resolve(true))
+    }
 
     /***
      * Just to have a clear idea what all the methods are ...
@@ -25,6 +27,84 @@ describe('base', () => {
       drawChart: () => null,
       setDefaultChart: () => null,
       triggerRaceToggle: () => null
+    })
+
+    describe('constructor', () => {
+      it('binds this.update to its handler\'s get_data Promise resolution', (done) => {
+        let accept = true
+        let handler = {
+          get_data: () => new Promise((resolve, reject) => resolve(accept))
+        }
+        let VisualBase_ = VisualBase.extend({
+          update: (data) => {
+            assert.equal(data, accept)
+            done()
+          },
+
+          setDOM: () => true,
+          loader_show: () => true,
+          setDefaultChart: () => true,
+          showError: () => true
+        })
+
+        new VisualBase_({handler})
+      })
+
+      it('binds this.showError to its handler\'s get_data Promise rejection', (done) => {
+        let accept = true
+        let handler = {
+          get_data: () => new Promise((resolve, reject) => reject(accept))
+        }
+        let VisualBase_ = VisualBase.extend({
+          showError: (error) => {
+            assert.equal(error, accept)
+            done()
+          },
+
+          setDOM: () => true,
+          loader_show: () => true,
+          setDefaultChart: () => true,
+          update: () => true
+        })
+
+        new VisualBase_({handler})
+      })
+
+      it('invokes setDOM', (done) => {
+        let VisualBase_ = VisualBase.extend({
+          setDOM: () => done(),
+          loader_show: () => null,
+          setDefaultChart: () => null,
+          update: () => null,
+          showError: () => null
+        })
+
+        new VisualBase_({ handler })
+      })
+
+      it('invokes loader_show', (done) => {
+        let VisualBase_ = VisualBase.extend({
+          setDOM: () => null,
+          loader_show: () => done(),
+          setDefaultChart: () => null,
+          update: () => null,
+          showError: () => null
+        })
+
+        new VisualBase_({ handler })
+      })
+
+      it('invokes setDefaultChart', (done) => {
+        let VisualBase_ = VisualBase.extend({
+          setDOM: () => null,
+          loader_show: () => null,
+          setDefaultChart: () => done(),
+          update: () => null,
+          showError: () => null
+        })
+
+        new VisualBase_({ handler })
+      })
     })
 
     describe('setDOM', () => {
