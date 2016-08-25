@@ -17,7 +17,9 @@ practices by North Carolina law enforcement agencies. This project is lead by
 the `Southern Coalition for Social Justice`_, a Durham-based civil rights
 organization.
 
-Please see the `documentation`_ for more information.
+Please see the `documentation`_ for more information. Note that the link is to
+the dev version of Read the Docs. When deploying to production, all links should
+be switched to the latest version of Read the Docs.
 
-.. _documentation: http://nc-traffic-stops.readthedocs.org/en/latest/
+.. _documentation: http://nc-traffic-stops.readthedocs.org/en/dev/
 .. _Southern Coalition for Social Justice: http://www.scsj.org/
