@@ -18,6 +18,18 @@ export const SRRTimeSeries = C.SRRTimeSeriesBase.extend({
   }
 });
 
+const SRRTable = C.SRRTableBase.extend({
+  types: [Stops.ethnicities],
+
+  Stops: Stops,
+
+  _get_header_rows: function () {
+    return Stops.ethnicities
+  }
+});
+
+
 export default {
-  SRRTimeSeries
+  SRRTimeSeries,
+  SRRTable
 };
