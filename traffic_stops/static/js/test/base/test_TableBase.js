@@ -8,6 +8,42 @@ describe('base', () => {
   describe('TableBase', () => {
     let handler = new Backbone.Model()
 
+    describe('constructor', () => {
+      it('binds this.update to its handler\'s get_data Promise resolution', (done) => {
+        let accept = true
+        let handler = {
+          get_data: () => new Promise((resolve, reject) => resolve(accept))
+        }
+        let TableBase_ = TableBase.extend({
+          update: (data) => {
+            assert.equal(data, accept)
+            done()
+          },
+
+          showError: () => true
+        })
+
+        new TableBase_({handler})
+      })
+
+      it('binds this.showError to its handler\'s get_data Promise rejection', (done) => {
+        let accept = true
+        let handler = {
+          get_data: () => new Promise((resolve, reject) => reject(accept))
+        }
+        let TableBase_ = TableBase.extend({
+          showError: (error) => {
+            assert.equal(error, accept)
+            done()
+          },
+
+          update: () => true
+        })
+
+        new TableBase_({handler})
+      })
+    })
+
     describe('update', () => {
       it('calls draw_table', (done) => {
         let TableBase_ = TableBase.extend({
