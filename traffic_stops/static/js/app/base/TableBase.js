@@ -33,6 +33,8 @@ export default Backbone.Model.extend({
         tbl = $('<table class="table">').attr("class", "table table-striped table-condensed dash-tables"),
         tbody = $('<tbody>');
 
+    div.find('table').remove();
+
     matrix.forEach(function(row, i){
       var tr = $('<tr>');
       row.forEach(function(d){

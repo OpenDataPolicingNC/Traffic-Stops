@@ -199,15 +199,67 @@ export const SRRTableBase = TableBase.extend({
   types: [],
   _get_header_rows: function () { throw "abstract method: requires override"; },
 
+  draw_table: function () {
+    TableBase.prototype.draw_table.apply(this, arguments);
+    this.add_select();
+  },
+
+  _purposes: _.memoize(function () {
+    return d3.set(_.pluck(this.data.raw.stops, 'purpose'));
+  }),
+
+  add_select: function () {
+    let div = $(this.get("selector"));
+
+    // select input  only needs to be added once
+    if (div.find('select').length) { return true; }
+
+    let $selector = $('<select id="srr-table-select">');
+    let purposes = this._purposes();
+    let $opts = [$('<option value="All">All</option>')].concat(
+      purposes
+        .values()
+        .sort()
+        .map((p) => $(`<option value="${p}">${p}</option>`))
+    )
+
+    let update = () => {
+      let $window = $(window);
+      let initial_scrollpoint = $selector.offset().top - $window.scrollTop();
+
+      let val = $selector.val() || 'All';
+      this.set('filter', val);
+      this.draw_table();
+      /***
+       * to prevent disorienting experience of scroll position no longer
+       * corresponding to location of selector on the screen.
+       */
+      $(window).scrollTop($selector.offset().top - initial_scrollpoint);
+    }
+
+    $selector
+      .append($opts)
+      .val('All')
+      .on('change', update);
+
+    $('<div class="selector-container">')
+      .html($selector)
+      .appendTo(div);
+  },
+
   get_tabular_data: function () {
+    let purpose_filter = (purpose) =>
+      !this.get('filter')
+      || this.get('filter') === 'All'
+      || purpose === this.get('filter');
+
     // create row with initial header row
     let rows = [
       ["Year", "Stop-reason", ...this._get_header_rows()]
     ];
 
-    let purposes = this.Stops.purpose_order.keys();
+    let purposes = this.Stops.purpose_order.keys().filter(purpose_filter);
     let stops = this.data.raw.stops;
-    console.log(purposes, stops)
 
     function create_cell (stop_counts={}, race) {
       let stop_count = stop_counts[race] || 0;
@@ -217,20 +269,20 @@ export const SRRTableBase = TableBase.extend({
 
     // create data rows
     this.data.years.forEach((yr) => {
-        let stops_by_yr = stops.filter((d) => d.year == yr);
+      let stops_by_yr = stops.filter((d) => d.year == yr);
 
-        purposes.forEach((purp) => {
-          let row = [yr, purp];
-          let stop_counts = _.find(stops_by_yr, (d) =>  d.purpose == purp);
+      purposes.forEach((purp) => {
+        let row = [yr, purp];
+        let stop_counts = _.find(stops_by_yr, (d) =>  d.purpose == purp);
 
-          this.types.forEach((type) => {
-            type.forEach((race) => {
-              row.push(create_cell(stop_counts, race));
-            })
+        this.types.forEach((type) => {
+          type.forEach((race) => {
+            row.push(create_cell(stop_counts, race));
           })
+        })
 
-          rows.push(row);
-        });
+        rows.push(row);
+      });
     });
 
     return rows;
