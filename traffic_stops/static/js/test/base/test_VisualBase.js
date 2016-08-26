@@ -6,7 +6,9 @@ import $ from 'jquery'
 
 describe('base', () => {
   describe('VisualBase', () => {
-    let handler = new Backbone.Model()
+    let handler = {
+      get_data: () => new Promise((resolve, reject) => resolve(true))
+    }
 
     /***
      * Just to have a clear idea what all the methods are ...
@@ -28,34 +30,44 @@ describe('base', () => {
     })
 
     describe('constructor', () => {
-      it('attaches this.update as a dataLoaded listener to its model', (done) => {
+      it('binds this.update to its handler\'s get_data Promise resolution', (done) => {
+        let accept = true
+        let handler = {
+          get_data: () => new Promise((resolve, reject) => resolve(accept))
+        }
         let VisualBase_ = VisualBase.extend({
-          setDOM: () => null,
-          loader_show: () => null,
-          setDefaultChart: () => null,
-          showError: () => null,
+          update: (data) => {
+            assert.equal(data, accept)
+            done()
+          },
 
-          update: () => done()
+          setDOM: () => true,
+          loader_show: () => true,
+          setDefaultChart: () => true,
+          showError: () => true
         })
 
-        let vb = new VisualBase_({ handler })
-
-        handler.trigger('dataLoaded')
+        new VisualBase_({handler})
       })
 
-      it('attaches this.showError as a dataRequestFailed listener to its model', (done) => {
+      it('binds this.showError to its handler\'s get_data Promise rejection', (done) => {
+        let accept = true
+        let handler = {
+          get_data: () => new Promise((resolve, reject) => reject(accept))
+        }
         let VisualBase_ = VisualBase.extend({
-          setDOM: () => null,
-          loader_show: () => null,
-          setDefaultChart: () => null,
-          update: () => null,
+          showError: (error) => {
+            assert.equal(error, accept)
+            done()
+          },
 
-          showError: () => done()
+          setDOM: () => true,
+          loader_show: () => true,
+          setDefaultChart: () => true,
+          update: () => true
         })
 
-        let vb = new VisualBase_({ handler })
-
-        handler.trigger('dataRequestFailed')
+        new VisualBase_({handler})
       })
 
       it('invokes setDOM', (done) => {

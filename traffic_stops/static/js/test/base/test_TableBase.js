@@ -9,20 +9,38 @@ describe('base', () => {
     let handler = new Backbone.Model()
 
     describe('constructor', () => {
-      it('attaches this.update as a dataLoaded listener to its model', (done) => {
+      it('binds this.update to its handler\'s get_data Promise resolution', (done) => {
+        let accept = true
+        let handler = {
+          get_data: () => new Promise((resolve, reject) => resolve(accept))
+        }
         let TableBase_ = TableBase.extend({
-          update: () => done()
+          update: (data) => {
+            assert.equal(data, accept)
+            done()
+          },
+
+          showError: () => true
         })
-        let tb = new TableBase_({ handler })
-        handler.trigger('dataLoaded')
+
+        new TableBase_({handler})
       })
 
-      it('attaches this.showError as a dataRequestFailed listener to it smodel', (done) => {
+      it('binds this.showError to its handler\'s get_data Promise rejection', (done) => {
+        let accept = true
+        let handler = {
+          get_data: () => new Promise((resolve, reject) => reject(accept))
+        }
         let TableBase_ = TableBase.extend({
-          showError: () => done()
+          showError: (error) => {
+            assert.equal(error, accept)
+            done()
+          },
+
+          update: () => true
         })
-        let tb = new TableBase_({ handler })
-        handler.trigger('dataRequestFailed')
+
+        new TableBase_({handler})
       })
     })
 

@@ -5,8 +5,9 @@ import Backbone from 'backbone';
 export default Backbone.Model.extend({
   constructor: function(){
     Backbone.Model.apply(this, arguments);
-    this.listenTo(this.get("handler"), "dataLoaded", this.update);
-    this.listenTo(this.get("handler"), "dataRequestFailed", this.showError);
+    this.get('handler').get_data()
+      .then(this.update.bind(this))
+      .catch(this.showError.bind(this));
   },
   update: function(data){
     if (data === undefined) {
