@@ -47,13 +47,11 @@ export default {
     'Safe Movement Violation': 1,
     'Vehicle Equipment Violation': 2,
     'Other Motor Vehicle Violation': 3,
-    'Investigation': 4,
-    'Stop Light/Sign Violation': 5,
-    'Speed Limit Violation': 6,
-    'Vehicle Regulatory Violation': 7,
-    'Seat Belt Violation': 8,
-    'Non-motor Vehicle Violations': 9,
-    'Failure to remain at scene of accident': 10,
-    'Other/Unknown': 11  // todo: use a list and indexOf instead of map
+    'Stop Light/Sign Violation': 4,
+    'Speed Limit Violation': 5,
+    'Vehicle Regulatory Violation': 6,
+    'Seat Belt Violation': 7,
+    'Non-motor Vehicle Violations': 8,
+    'Other/Unknown': 9  // todo: use a list and indexOf instead of map
   }),
 };
