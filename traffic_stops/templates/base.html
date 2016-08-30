@@ -11,7 +11,7 @@
     {% block extra-meta %}{% endblock %}
     <link href='//fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
     {% block extra-css %}{% endblock %}
-    <link rel="stylesheet" type="text/css" media="all" href="{% static 'css/bundle.css' %}">
+    <link rel="stylesheet" type="text/css" media="all" href="{% static 'css/bundle.css' %}?rev={{ REVISION }}">
     <script src="{% static 'libs/modernizr.js' %}"></script>
 </head>
 <body id="{% block body_id %}{% endblock body_id %}" class="{% block body_class %}{% endblock body_class %}" {% block body_extra %}{% endblock %}>
@@ -60,7 +60,7 @@
       ga('create', 'UA-63028976-1', 'auto');
       ga('send', 'pageview');
     </script>
-    <script src="{% static 'js/bundle.js' %}"></script>
+    <script src="{% static 'js/bundle.js' %}?rev={{ REVISION }}"></script>
     {% block extra-js %}{% endblock extra-js %}
 </body>
 </html>
