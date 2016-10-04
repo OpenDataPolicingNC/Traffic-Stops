@@ -1,5 +1,5 @@
 The traffic stop data received from the state of Illinois was post-processed
-as described below to facilitate display on the web interface.
+and interpreted as described below.
 
 "agencyname" column
 -------------------
@@ -12,24 +12,22 @@ mixed case.
 "Race" column
 -------------
 
-The input data uses the code "O" for "other".  This code is imported as "U"
-and the web interface refers to it as "unknown".
+The input data uses the code "O" for "other".  The web interface refers to
+the "O" race as "unknown".
 
 "Search" column
 ---------------
 
 Many entries have no value for this column instead of a "Y" or "N".  Those
-with no value are imported as "U" and the web interface refers to it as
-"unknown".
+stops with no value for this column will not be included in the search rate
+in the web interface.
 
 "Contraband" column
 -------------------
 
 Many entries have no value for this column instead of a "Y" or "N".  Those
-with no value are imported as "U" and the web interface refers to it as
-"unknown".
-
-This field is referred to as "seized" in the web interface.
+stops with no value for this column will not be included in the contraband
+"hit rate" in the web interface.
 
 Census data
 -----------
@@ -38,4 +36,4 @@ A spreadsheet is used to map agencies to census locations.  The initial
 mapping was created by removing "Police" or "Police Department" from the
 end of agency names and then attempting to match the remainder of the
 agency name to a city, town, or village in the census data.  Many agencies
-match a census location.
+were matched to a census location.
