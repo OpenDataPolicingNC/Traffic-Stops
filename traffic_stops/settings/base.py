@@ -19,6 +19,14 @@ DATABASES = {
         'HOST': '',
         'PORT': '',
     },
+    'traffic_stops_il': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'traffic_stops_il',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
+    },
     'traffic_stops_nc': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'traffic_stops_nc',
@@ -48,6 +56,7 @@ DATABASE_ETL_USER = ''
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
 TIME_ZONE = 'America/New_York'
+IL_TIME_ZONE = 'America/New_York'
 MD_TIME_ZONE = 'America/New_York'
 NC_TIME_ZONE = 'America/New_York'
 
@@ -164,6 +173,7 @@ INSTALLED_APPS = (
     'tsdata',
     'nc',
     'md',
+    'il',
 )
 
 # A sample logging configuration. The only tangible logging

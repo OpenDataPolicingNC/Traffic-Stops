@@ -13,7 +13,7 @@ class Command(BaseCommand):
     """
     Import or download Census data
 
-    - Import saved JSON from S3 (deafult behavior and requires no API key):
+    - Import saved JSON from S3 (default behavior and requires no API key):
         python manage.py import_census
     - Download and output saved JSON from S3 (requires no API key):
         python manage.py import_census --output --indent=4
