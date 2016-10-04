@@ -3,7 +3,7 @@ import logging
 import pandas as pd
 
 from tsdata.utils import download_and_unzip_data, get_datafile_path
-from il.data.importer import load_csv, process_raw_data
+from il.data.importer import load_csv
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +42,7 @@ def stats_for_state_landing_page(stops, report):
     lines.append('Top five agencies:')
     agency_values = stops.agencycode.value_counts()
     for agency_id, stop_count in zip(list(agency_values.axes[0][:5]),
-                                       list(agency_values.values[:5])):
+                                     list(agency_values.values[:5])):
         lines.append('  {:6} {:<30} {:,}'.format(
             agency_id, get_agency_name(agency_id), stop_count
         ))
