@@ -74,8 +74,7 @@ imported.  Setting the fields:
 - The date received should reflect when the raw data was received
 - Set the URL to one of the available datasets at
   https://s3-us-west-2.amazonaws.com/openpolicingdata/ .  The normal URLs
-  are stored in the source code (in ``md.data.__init__.py`` for most states and
-in ``nc.management.commands.import_nc.py`` for NC).
+  are stored in the source code (in ``<state_app>.data.__init__.py``).
 - Specify a destination directory where the dataset will be downloaded and
   extracted.
 

@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from nc.data import importer
+from nc.data import DEFAULT_URL, importer
 
 
 class Command(BaseCommand):
@@ -8,8 +8,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('--dest', default=None)
-        url = "https://s3-us-west-2.amazonaws.com/openpolicingdata/TS_2016_04_13T13.38.34.887.zip"  # noqa
-        parser.add_argument('--url', default=url)
+        parser.add_argument('--url', default=DEFAULT_URL)
 
     def handle(self, *args, **options):
         importer.run(options['url'], options['dest'])
