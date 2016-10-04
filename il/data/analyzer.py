@@ -14,11 +14,19 @@ COLUMNS_TO_ANALYZE = (
 
 
 def stats_for_state_landing_page(stops, report):
+
+    def get_agency_name(n):
+        """
+        horribly slow?
+        """
+        return stops.agencyname[stops.agencycode[stops.agencycode == n].index].values[0].title()
+
     lines = ['', 'Dataset facts']
+    unique_years = stops.year.unique()
     lines.append(
         '  Time frame: {} - {}'.format(
-            stops.year.iloc[0],
-            stops.year.iloc[-1]
+            min(unique_years),
+            max(unique_years),
         )
     )
     lines.append(
@@ -33,9 +41,11 @@ def stats_for_state_landing_page(stops, report):
     lines.append('')
     lines.append('Top five agencies:')
     agency_values = stops.agencycode.value_counts()
-    for agency_name, stop_count in zip(list(agency_values.axes[0][:5]),
+    for agency_id, stop_count in zip(list(agency_values.axes[0][:5]),
                                        list(agency_values.values[:5])):
-        lines.append('  {:<30} {:,}'.format(agency_name, stop_count))
+        lines.append('  {:6} {:<30} {:,}'.format(
+            agency_id, get_agency_name(agency_id), stop_count
+        ))
     lines.append('')
 
     for line in lines:
@@ -72,5 +82,4 @@ def run(url, report, destination=None, download=True):
     destination = download_and_unzip_data(url, destination)
     csv_path = get_datafile_path(url, destination)
     stops = load_csv(csv_path)
-    stops = process_raw_data(stops, to_drop=())
     analyze(stops, report)
