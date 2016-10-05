@@ -11,7 +11,7 @@ urlpatterns = [  # noqa
     url(r'^$', views.Home.as_view(), name='home'),
     url(r'^agency/$', views.AgencyList.as_view(), name='agency-list'),
     #  FIXME: add actual agency detail view and URL
-    url(r'^agency/(?P<pk>\d+)/$', views.Home.as_view(),
+    url(r'^agency/(?P<pk>\d+)/$', views.AgencyDetail.as_view(),
         name='agency-detail'),
     url(r'^api/', include(router.urls)),
 ]
