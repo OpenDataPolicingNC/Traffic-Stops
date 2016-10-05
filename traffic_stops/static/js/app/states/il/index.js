@@ -1,5 +1,6 @@
 import Stops from './defaults.js';
 import StopsGraphs from './Stops.js';
+import Search from './Search.js';
 
 if (typeof window.IL === 'undefined') window.IL = {};
 
@@ -7,7 +8,7 @@ Object.assign(window.IL,
   {Stops},
   StopsGraphs,
   // StopSearch,
-  // Search,
+  Search,
   // LikelihoodOfSearch,
   // ContrabandHitRate,
   // Census,

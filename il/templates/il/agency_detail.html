@@ -350,7 +350,7 @@
 // census_handler = new MD.CensusHandler({url: "{% url 'il:agency-api-detail' object.pk %}"});
 
   var stop_handler = new IL.StopsHandler({url: "{% url 'il:agency-api-stops' object.pk %}"});
-  // var search_handler = new MD.SearchHandler({url: "{% url 'il:agency-api-searches' object.pk %}"});
+  var search_handler = new IL.SearchHandler({url: "{% url 'il:agency-api-searches' object.pk %}"});
   // var lhs_handler = new MD.LikelihoodSearchHandler({url: "{% url 'il:agency-api-stops-by-reason' object.pk %}"});
   // var chr_handler = new MD.ContrabandHitRateHandler({url: "{% url 'il:agency-api-contraband-hit-rate' object.pk %}"});
 
@@ -365,11 +365,11 @@ new IL.StopsTable({handler: stop_handler, selector: "#stop_race_data"});
 
 // new MD.StopSearchTimeSeries({handler: stop_search_handler, selector: "#stop_search_line"});
 // new MD.StopSearchTable({handler: stop_search_handler, selector: "#stop_search_data"});
-//
-// new MD.SearchRatioDonut({handler: search_handler, selector: "#search_race_pie"});
-// new MD.SearchRatioTimeSeries({handler: search_handler, selector: "#search_race_line"});
-// new MD.SearchTable({handler: search_handler, selector: "#search_race_data"});
-//
+
+new IL.SearchRatioDonut({handler: search_handler, selector: "#search_race_pie"});
+new IL.SearchRatioTimeSeries({handler: search_handler, selector: "#search_race_line"});
+new IL.SearchTable({handler: search_handler, selector: "#search_race_data"});
+
 // new MD.LikelihoodOfSearch({handler: lhs_handler, selector: "#lsb"});
 // new MD.LikelihoodSearchTable({handler: lhs_handler, selector: "#lsb_data"});
 //
