@@ -3,6 +3,7 @@ from . import forms
 
 from traffic_stops import base_views
 
+
 class Home(base_views.Home):
     form_class = forms.AgencySearchForm
     template_name = 'il.html'
@@ -12,6 +13,7 @@ class Home(base_views.Home):
         context = super(Home, self).get_context_data(**kwargs)
         # context['find_a_stop_form'] = forms.SearchForm()
         return context
+
 
 class AgencyList(base_views.AgencyList):
     model = Agency
