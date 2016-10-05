@@ -14,6 +14,7 @@ PURPOSE_CHOICES = (
     (1, 'Moving Violation'),
     (2, 'Equipment'),
     (3, 'Registration'),
+    (UNKNOWN_PURPOSE, 'Unknown')
 )
 
 GENDER_CHOICES = (
