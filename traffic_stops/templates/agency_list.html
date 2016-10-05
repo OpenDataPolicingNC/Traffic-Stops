@@ -11,9 +11,11 @@
           Find an Agency
         </h1>
       </div>
-      <div class="col-sm-2 col-xs-12">
-        <a class="btn brand pull-right" href="{% block stops-search-url %}{% endblock %}">Find a Stop</a>
-      </div>
+      {% block find-a-stop-button %}
+        <div class="col-sm-2 col-xs-12">
+          <a class="btn brand pull-right" href="{% block stops-search-url %}{% endblock %}">Find a Stop</a>
+        </div>
+      {% endblock find-a-stop-button %}
     </div>
   </div>
 </div>
