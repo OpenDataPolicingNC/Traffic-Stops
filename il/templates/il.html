@@ -38,7 +38,7 @@
 
 {% block search-form %}
   <h4>View Agency Dashboard</h4>
-  <form role="form" id="agency_search" action='#FIXME' method="get" accept-charset="utf-8">
+  <form role="form" id="agency_search" action='{% url "il:home" %}' method="get" accept-charset="utf-8">
       <div class="form-group">
       {% csrf_token %}
       <div class="input-group">
@@ -67,6 +67,26 @@
       <th>City</th>
       <th class="text-right">Stops</th>
     </tr>
+    <tr>
+      <td><a href="{% url "il:agency-detail" "446" %}">Illinois State Police</a></td>
+      <td class="text-right">4,034,823</td>
+    </tr>
+    <tr>
+      <td><a href="{% url "il:agency-detail" "168" %}">Chicago Police</a></td>
+      <td class="text-right">1,614,504</td>
+    </tr>
+    <tr>
+      <td><a href="{% url "il:agency-detail" "43" %}">Aurora Police</a></td>
+      <td class="text-right">300,266</td>
+    </tr>
+    <tr>
+      <td><a href="{% url "il:agency-detail" "431" %}">Hoffman Estates Police</a></td>
+      <td class="text-right">227,004</td>
+    </tr>
+    <tr>
+      <td><a href="{% url "il:agency-detail" "895" %}">Springfield Police</a></td>
+      <td class="text-right">215,116</td>
+    </tr>
   </table>
 {% endblock agencies-table %}
 
@@ -74,7 +94,7 @@
   <p>
       Open Data Policing aggregates, visualizes, and publishes public
       records related to all known traffic stops to have occurred in Illinois
-      since January 1, 2005 through December 31, 2014. Data is available for most
+      from 2005 through 2014. Data is available for most
       Illinois departments.
   </p>
   <p>
@@ -93,19 +113,19 @@
   <table class='table table-condensed table-hover'>
     <tr>
       <th>Timeframe</th>
-      <td>Jan 1 2005 - Dec 31, 2014</td>
+      <td>2005 - 2014</td>
     </tr>
     <tr>
       <th>Stops</th>
-      <td>2,223,298</td>
+      <td>23,273,288</td>
     </tr>
     <tr>
       <th>Searches</th>
-      <td>65,997</td>
+      <td>1,314,143</td>
     </tr>
     <tr>
       <th>Agencies</th>
-      <td>127</td>
+      <td>1,062</td>
     </tr>
   </table>
 {% endblock dataset-facts %}

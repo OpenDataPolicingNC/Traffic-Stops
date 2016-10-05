@@ -5,7 +5,7 @@ from traffic_stops import base_views
 class Home(base_views.Home):
     form_class = forms.AgencySearchForm
     template_name = 'il.html'
-    # success_url = 'il:agency-detail'
+    success_url = 'il:agency-detail'
 
     def get_context_data(self, **kwargs):
         context = super(Home, self).get_context_data(**kwargs)
