@@ -4,7 +4,7 @@ from il.data import DEFAULT_URL, importer
 
 
 class Command(BaseCommand):
-    """Helper command to kickoff MD data import"""
+    """Helper command to kickoff IL data import"""
 
     def add_arguments(self, parser):
         parser.add_argument('--dest', default=None)
