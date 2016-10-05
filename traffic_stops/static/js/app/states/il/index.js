@@ -4,6 +4,7 @@ import StopSearch from './StopSearch.js';
 import Search from './Search.js';
 import LikelihoodOfSearch from './LikelihoodOfSearch.js';
 import ContrabandHitRate from './ContrabandHitRate.js';
+import Census from './Census.js';
 import StopByReasonAndRace from './StopByReasonAndRace.js';
 
 if (typeof window.IL === 'undefined') window.IL = {};
@@ -15,6 +16,6 @@ Object.assign(window.IL,
   Search,
   LikelihoodOfSearch,
   ContrabandHitRate,
-  // Census,
+  Census,
   StopByReasonAndRace
 )

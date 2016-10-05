@@ -41,9 +41,9 @@
   </div>
 {% endblock census-display %}
 
-{% block agency-list-url %}{% url 'md:agency-list' %}{% endblock agency-list-url %}
+{% block agency-list-url %}{% url 'il:agency-list' %}{% endblock agency-list-url %}
 
-{% block search-url %}{% url 'md:stops-search' %}{% endblock search-url %}
+{% block search-url %}{% endblock search-url %}
 
 {% block stop-display %}
   <div class="row">
@@ -347,17 +347,17 @@
 {% block graph-code %}
 {% comment %}<script>{% endcomment %}
 
-// census_handler = new MD.CensusHandler({url: "{% url 'il:agency-api-detail' object.pk %}"});
+var census_handler = new IL.CensusHandler({url: "{% url 'il:agency-api-detail' object.pk %}"});
 
-  var stop_handler = new IL.StopsHandler({url: "{% url 'il:agency-api-stops' object.pk %}"});
-  var search_handler = new IL.SearchHandler({url: "{% url 'il:agency-api-searches' object.pk %}"});
-  var lhs_handler = new IL.LikelihoodSearchHandler({url: "{% url 'il:agency-api-stops-by-reason' object.pk %}"});
-  var chr_handler = new IL.ContrabandHitRateHandler({url: "{% url 'il:agency-api-contraband-hit-rate' object.pk %}"});
+var stop_handler = new IL.StopsHandler({url: "{% url 'il:agency-api-stops' object.pk %}"});
+var search_handler = new IL.SearchHandler({url: "{% url 'il:agency-api-searches' object.pk %}"});
+var lhs_handler = new IL.LikelihoodSearchHandler({url: "{% url 'il:agency-api-stops-by-reason' object.pk %}"});
+var chr_handler = new IL.ContrabandHitRateHandler({url: "{% url 'il:agency-api-contraband-hit-rate' object.pk %}"});
 
 var stop_search_handler = new IL.StopSearchHandler({handlers: [stop_handler, search_handler]});
 
-// new MD.CensusRatioDonut({handler: census_handler, selector: "#census_pie"});
-// new MD.CensusTable({handler: census_handler, selector: "#census_data"});
+new IL.CensusRatioDonut({handler: census_handler, selector: "#census_pie"});
+new IL.CensusTable({handler: census_handler, selector: "#census_data"});
 
 new IL.StopRatioDonut({handler: stop_handler, selector: "#stop_race_pie"});
 new IL.StopRatioTimeSeries({handler: stop_handler, selector: "#stop_race_line"});
