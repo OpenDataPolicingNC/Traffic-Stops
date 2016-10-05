@@ -36,6 +36,7 @@ terraform.tfstate*
 *.tar.zip
 mddata/
 ncdata/
+ildata/
 .idea/
 coverage/
 npm-debug.log
