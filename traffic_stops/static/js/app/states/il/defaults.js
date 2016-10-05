@@ -39,15 +39,8 @@ export default {
   baseline_color: "black",
   single_color: "#5C0808",
   purpose_order: d3.map({ // strings must match PURPOSE_CHOICES
-    'Driving While Impaired': 0,
-    'Safe Movement Violation': 1,
-    'Vehicle Equipment Violation': 2,
-    'Other Motor Vehicle Violation': 3,
-    'Stop Light/Sign Violation': 4,
-    'Speed Limit Violation': 5,
-    'Vehicle Regulatory Violation': 6,
-    'Seat Belt Violation': 7,
-    'Non-motor Vehicle Violations': 8,
-    'Other/Unknown': 9  // todo: use a list and indexOf instead of map
+    'Equipment': 0,
+    'Moving Violation': 1,
+    'Registration': 2,
   }),
 };
