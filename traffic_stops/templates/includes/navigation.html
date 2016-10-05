@@ -15,23 +15,28 @@
       <ul class="nav navbar-nav">
         {% if request.state %}
         <li class="dropdown state-nav {% if navbar_inverse %}navbar-inverse{% endif %}">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% if request.state == "nc" %}North Carolina{% else %}Maryland{% endif %} <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% if request.state == "nc" %}North Carolina{% elif request.state == "md" %}Maryland{% elif request.state == "il" %}Illinois{% endif %} <span class="caret"></span></a>
           <ul class="dropdown-menu">
             {% if request.state == "md" %}
               <li><a href='{% url "md:agency-list" %}'>Agencies</a></li>
               <li><a href='{% url "md:stops-search" %}'>Find a stop</a></li>
-            {% else %}
+            {% elif request.state == "nc" %}
               <li><a href='{% url "nc:agency-list" %}'>Agencies</a></li>
               <li><a href='{% url "nc:stops-search" %}'>Find a stop</a></li>
+            {% elif request.state == "il" %}
+              <li><a href='{% url "il:agency-list" %}'>Agencies</a></li>
             {% endif %}
             <li role="separator" class="divider"></li>
             <li class="dropdown-header">Switch States:</li>
             <li>
-              {% if request.state == "md" %}
-                <a href="{% url "nc:home" %}">North Carolina</a>
+              {% if request.state != "il" %}
+                <a href="{% url "il:home" %}">Illinois</a>
               {% endif %}
-              {% if request.state == "nc" %}
+              {% if request.state != "md" %}
                 <a href="{% url "md:home" %}">Maryland</a>
+              {% endif %}
+              {% if request.state != "nc" %}
+                <a href="{% url "nc:home" %}">North Carolina</a>
               {% endif %}
             </li>
           </ul>
