@@ -13,7 +13,7 @@ test:
 	# Run all tests and report coverage
 	# Requires coverage
 	coverage run manage.py test
-	coverage report -m --fail-under 63
+	coverage report -m --fail-under 70
 
 lint-py:
 	# Check for Python formatting issues
