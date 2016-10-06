@@ -55,6 +55,8 @@ ANALYZE;
 
 ALTER TABLE "public"."il_stop" ADD CONSTRAINT "il_stop_pkey" PRIMARY KEY (stop_id);
 ALTER TABLE "public"."il_agency" ADD CONSTRAINT "il_agency_pkey" PRIMARY KEY (id);
+ALTER TABLE "public"."django_migrations" ADD CONSTRAINT "django_migrations_pkey" PRIMARY KEY (id);
+ALTER TABLE "public"."il_stop" ADD CONSTRAINT "il_stop_year_13b4a60c0ac76bed_check" CHECK ((year >= 0));
 ALTER TABLE "public"."il_stop" ADD CONSTRAINT "il_stop_purpose_check" CHECK ((purpose >= 0));
 ALTER TABLE "public"."il_stop" ADD CONSTRAINT "il_stop_agency_id_7609bd7ab1150409_fk_il_agency_id" FOREIGN KEY (agency_id) REFERENCES il_agency(id) DEFERRABLE INITIALLY DEFERRED;
 CREATE INDEX il_stop_169fc544 ON il_stop USING btree (agency_id);

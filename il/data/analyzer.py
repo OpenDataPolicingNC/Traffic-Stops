@@ -15,11 +15,16 @@ COLUMNS_TO_ANALYZE = (
 
 def stats_for_state_landing_page(stops, report):
 
-    def get_agency_name(n):
+    def get_agency_name(agency_id):
         """
-        horribly slow?
+        This finds the agency name used on the first occurrence of the specified
+        agency code in the data, and returns the title-case form of it.
+
+        There should be a much more efficient way to handle this with pandas, so
+        don't copy this code.
         """
-        return stops.agencyname[stops.agencycode[stops.agencycode == n].index].values[0].title()
+        name = stops.agencyname[stops.agencycode[stops.agencycode == agency_id].index].values[0]
+        return name.title()
 
     lines = ['', 'Dataset facts']
     unique_years = stops.year.unique()
