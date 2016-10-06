@@ -59,9 +59,11 @@ Create the Postgres database and run the initial syncdb/migrate::
     (opendatapolicing)$ createdb -E UTF-8 traffic_stops
     (opendatapolicing)$ createdb -E UTF-8 traffic_stops_nc
     (opendatapolicing)$ createdb -E UTF-8 traffic_stops_md
+    (opendatapolicing)$ createdb -E UTF-8 traffic_stops_il
     (opendatapolicing)$ python manage.py migrate
     (opendatapolicing)$ python manage.py migrate --database traffic_stops_nc
     (opendatapolicing)$ python manage.py migrate --database traffic_stops_md
+    (opendatapolicing)$ python manage.py migrate --database traffic_stops_il
 
 
 Development

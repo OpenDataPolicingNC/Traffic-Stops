@@ -66,7 +66,7 @@ def load_MD_agency_mappings():
     Read a CSV file that maps agency codes (as used in raw stop data) to
     agency names and optional census GEOID values.
 
-    When the proper agency name hasn't been determine, it has the same value as
+    When the proper agency name hasn't been determined, it has the same value as
     the agency code.
     """
     AGENCY_NAME_BY_CODE.clear()

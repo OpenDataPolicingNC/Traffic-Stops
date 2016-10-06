@@ -4,6 +4,7 @@ from django.db import models
 STATE_CHOICES = (
     ('nc', 'North Carolina'),
     ('md', 'Maryland'),
+    ('il', 'Illinois'),
 )
 
 STATUS_CHOICES = (
@@ -36,6 +37,9 @@ class Import(models.Model):
     date_started = models.DateTimeField(auto_now_add=True)
     date_finished = models.DateTimeField(null=True)
     successful = models.BooleanField(default=False)
+
+    def __str__(self):
+        return 'Import of {}'.format(self.dataset)
 
 
 class CensusProfile(models.Model):

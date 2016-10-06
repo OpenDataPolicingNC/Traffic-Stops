@@ -1,10 +1,10 @@
 from django.core.management.base import BaseCommand
 
-from nc.data import DEFAULT_URL, importer
+from il.data import DEFAULT_URL, importer
 
 
 class Command(BaseCommand):
-    """Helper command to kickoff NC data import"""
+    """Helper command to kickoff IL data import"""
 
     def add_arguments(self, parser):
         parser.add_argument('--dest', default=None)
