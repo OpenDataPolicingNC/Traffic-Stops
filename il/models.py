@@ -45,7 +45,7 @@ SEIZED_CHOICES = (
 
 class Stop(CachingMixin, models.Model):
     stop_id = models.IntegerField(primary_key=True, default=1)
-    year = models.SmallIntegerField()
+    year = models.PositiveSmallIntegerField()
     purpose = models.PositiveSmallIntegerField(choices=PURPOSE_CHOICES, default=UNKNOWN_PURPOSE)
     search_conducted = models.CharField(max_length=1, choices=SEARCH_CONDUCTED_CHOICES)
     seized = models.CharField(max_length=1, choices=SEIZED_CHOICES)
