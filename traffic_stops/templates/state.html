@@ -46,14 +46,16 @@
   <div class="container">
     <div class="row">
       <div class="col-md-5 col-sm-6" id="explore-data" data-toggle="tabslet">
-        <ul class="nav nav-tabs" data-role="tablist">
-          <li role="presentation" class="active">
-            <a href="#agencies" aria-controls="agencies" role="tab" data-toggle="tab"><h4 class="active">Agencies</h4></a>
-          </li>
-          <li role="presentation">
-            <a href="#find-a-stop" aria-controls="find-a-stop" role="tab" data-toggle="tab"><h4>Find a Stop</h4></a>
-          </li>
-        </ul>
+        {% block state-tabs %}
+          <ul class="nav nav-tabs" data-role="tablist">
+            <li role="presentation" class="active">
+              <a href="#agencies" aria-controls="agencies" role="tab" data-toggle="tab"><h4 class="active">Agencies</h4></a>
+            </li>
+            <li role="presentation">
+              <a href="#find-a-stop" aria-controls="find-a-stop" role="tab" data-toggle="tab"><h4>Find a Stop</h4></a>
+            </li>
+          </ul>
+        {% endblock state-tabs %}
 
         <div class="tab-content">
           <div class="tab-pane active" id="agencies" role="tabpanel">

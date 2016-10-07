@@ -10,20 +10,26 @@
     <div class="container">
       <div class="row">
         <h1 class='title'>Open Data Policing</h1>
-        <p class='tagline'>Search all known North Carolina and Maryland traffic stops</p>
+        <p class='tagline'>Search all known North Carolina, Maryland, and Illinois traffic stops</p>
       </div>
       <div class="row">
-        <div class="col-sm-5 col-sm-offset-1 col-md-4 col-md-offset-2">
+        <div class="col-sm-4">
           <!-- <h2>North Carolina</h2> -->
           <img src="{% static "svg/noun_19625_cc-white.svg" %}" class="state nc">
           <p class='stop-count'>20+ million stops</p>
           <a href="{% url 'nc:home' %}" class="btn btn-default nc">Search NC</a>
         </div>
-        <div class="col-sm-5 col-md-4">
+        <div class="col-sm-4">
           <!-- <h2>Maryland</h2> -->
           <img src="{% static "svg/noun_19618_cc-white.svg" %}" class="state md">
           <p class='stop-count'>2+ million stops</p>
-          <a href="{% url 'md:home' %}" class="btn btn-default">Search MD</a>
+          <a href="{% url 'md:home' %}" class="btn btn-default md">Search MD</a>
+        </div>
+        <div class="col-sm-4">
+          <!-- <h2>Illinois</h2> -->
+          <img src="{% static "svg/noun_648290_cc.svg" %}" class="state il">
+          <p class='stop-count'>23+ million stops</p>
+          <a href="{% url 'il:home' %}" class="btn btn-default">Search IL</a>
         </div>
       </div>
     </div>
@@ -94,10 +100,10 @@
             Century Policing to make stop, search, and use-of-force
             “data...publicly available to ensure transparency.”  The site currently
             aggregates, visualizes, and publishes public records related to all
-            known traffic stops to have occurred in North Carolina since 2002
-            and Maryland since 2013.  Data is collected in both states pursuant
+            known traffic stops to have occurred in North Carolina since 2002, in
+            Maryland since 2013, and in Illinois since 2005.  Data is collected in all states pursuant
             to mandatory data collection statutes and reported monthly to the NC
-            State Bureau of Investigation and Maryland State Police.
+            State Bureau of Investigation, Maryland State Police, and Illinois State Police.
             The platform does not alter or manipulate raw data.  Where data sets
             are incomplete or missing, it is because they have not been reported
             to the state agency from which the site derives its records.
