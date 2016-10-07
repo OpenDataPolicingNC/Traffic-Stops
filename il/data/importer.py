@@ -56,7 +56,8 @@ def load_csv(csv_path):
 
 
 def lookup_agency(s):
-    name = AGENCY_NAME_BY_CODE.get(str(s))
+    s = str(s)  # The agencycode Series has these encoded as int64
+    name = AGENCY_NAME_BY_CODE.get(s)
     if not name:
         logger.error('Agency code "%s" not in %s', s, AGENCY_MAPPING_CSV)
         name = s
@@ -68,27 +69,27 @@ def add_agency_column(stops):
     stops['agency'] = stops['agencycode'].apply(lookup_agency)
 
 
+def fixup_contraband(s):
+    return 'U' if s == '' else s
+
+
 def fixup_race(s):
     return 'U' if s == 'O' else s
 
 
-def contraband_to_seized(s):
+def fixup_search(s):
     return 'U' if s == '' else s
 
 
-def search_to_search(s):
-    return 'U' if s == '' else s
-
-
-def stop_purpose_to_purpose(s):
+def fixup_stop_purpose(s):
     return STOP_PURPOSE_TO_CODE.get(s, UNKNOWN_PURPOSE)
 
 
 def process_raw_data(stops):
     stops['Race'] = stops['Race'].apply(fixup_race)
-    stops['Search'] = stops['Search'].apply(search_to_search)
-    stops['Contraband'] = stops['Contraband'].apply(contraband_to_seized)
-    stops['purpose'] = stops['StopPurpose'].apply(stop_purpose_to_purpose)
+    stops['Search'] = stops['Search'].apply(fixup_search)
+    stops['Contraband'] = stops['Contraband'].apply(fixup_contraband)
+    stops['purpose'] = stops['StopPurpose'].apply(fixup_stop_purpose)
     add_agency_column(stops)
     stops['index'] = range(1, len(stops) + 1)  # adds column at end
 
