@@ -35,6 +35,8 @@ export default {
     "#3F5EAB", // dark blue
     "#A7D16B", // light green
     "#66ACDD", // light blue
+    "#7A76B7", // purple
+    "#DC8F27", // orange
   ],
   baseline_color: "black",
   single_color: "#5C0808",
