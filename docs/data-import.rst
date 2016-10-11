@@ -1,8 +1,13 @@
 Data Import
 ===========
 
-Data for all states are imported in the same manner.  Substitute the state
+Stop data is imported in the same manner for all states.  Substitute the state
 abbreviation (e.g., "md") as appropriate in the NC instructions below.
+
+Census data for all states is imported all at once, in the same manner for all
+environments, using the ``import_census`` management command.  This must be
+performed as part of developer and server setup as well as when additional states
+are added.
 
 Local/Development Environment
 -----------------------------
