@@ -51,7 +51,7 @@ export const SRRTimeSeriesBase = VisualBase.extend({
 
     $('<div class="selector-container">')
       .html($selector)
-      .appendTo(this.div);
+      .prependTo(this.div);
 
     update();
   },
