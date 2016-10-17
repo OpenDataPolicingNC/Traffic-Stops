@@ -1,3 +1,4 @@
+import glob
 import logging
 import os
 
@@ -54,18 +55,14 @@ def create_schema(format_path, schema_path):
 
 def convert_to_csv(destination):
     """Convert each NC *.txt data file to CSV"""
-    files = filter(lambda x: x.endswith('format.txt'),
-                   os.listdir(destination))
-    for file_name in files:
-        name, _ = file_name.split('_')
-        format_path = os.path.join(destination, file_name)
-        data_path = os.path.join(destination, name + '.txt')
-        schema_path = os.path.join(destination, name + '_schema.csv')
-        csv_path = os.path.join(destination, name + '.csv')
+    files = glob.iglob(os.path.join(destination, '*.txt'))
+    for data_path in files:
+        if data_path.endswith('QUERY_README.txt'):  # list of years in the query
+            continue
+        csv_path = data_path.replace('.txt', '.csv')
         if os.path.exists(csv_path):
             logger.info('{} already exists, skipping csv conversion'.format(csv_path))
             continue
-        create_schema(format_path, schema_path)
         logger.info("Converting {} > {}".format(data_path, csv_path))
         if hasattr(settings, 'WEBSERVER_ROOT'):
             base = os.path.join(settings.WEBSERVER_ROOT, 'env/bin/')
@@ -73,12 +70,15 @@ def convert_to_csv(destination):
             base = ''
         # Convert to CSV using ISO-8859-1 encoding
         # TODO: This may be incorrect https://en.wikipedia.org/wiki/Windows-1252
-        call(["{}in2csv -e iso-8859-1 -f fixed -s {} {} > {}".format(base,
-                                                                     schema_path,
-                                                                     data_path,
-                                                                     csv_path)],
-             shell=True)
-        call([r"sed -i 's/\x0//g' {}".format(csv_path)], shell=True)
+        in2csv = "{}in2csv -t -e iso-8859-1 --format csv -H {} > {}".format(
+            base,
+            data_path,
+            csv_path
+        )
+        logger.debug('Running "%s"', in2csv)
+        call([in2csv], shell=True)
+        # XXX is this still needed?  probably not!
+        # XXX call([r"sed -i 's/\x0//g' {}".format(csv_path)], shell=True)
         data_count = line_count(data_path)
         csv_count = line_count(csv_path)
         if data_count == (csv_count - 1):
