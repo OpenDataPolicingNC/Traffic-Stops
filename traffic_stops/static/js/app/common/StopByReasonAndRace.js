@@ -16,6 +16,7 @@ export const SRRTimeSeriesBase = VisualBase.extend({
                   .showLegend(true)
                   .showYAxis(true)
                   .showXAxis(true)
+                  .forceY(0)
                   .width(this.get("width"))
                   .height(this.get("height"));
 
@@ -50,7 +51,7 @@ export const SRRTimeSeriesBase = VisualBase.extend({
 
     $('<div class="selector-container">')
       .html($selector)
-      .appendTo(this.div);
+      .prependTo(this.div);
 
     update();
   },

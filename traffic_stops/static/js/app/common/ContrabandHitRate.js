@@ -108,9 +108,9 @@ export const ContrabandHitRateBarBase = VisualBase.extend({
       .on('change', getData)
       .trigger('change');
 
-    $('<div>')
+    $('<div class="selector-container">')
       .html(selector)
-      .appendTo(this.div);
+      .prependTo(this.div);
 
     this.selector = selector;
   },
