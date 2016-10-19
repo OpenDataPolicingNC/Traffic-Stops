@@ -55,9 +55,12 @@
 
 {% block find-a-stop %}
   <p class="agency-intro">
-    Search for Maryland stops using the form fields below. Use
-    <a href='{% url 'md:stops-search' %}'>Advanced Search</a>
-    for additional filtering criteria.
+    Use this feature to identify the stop and search patterns of individual 
+    police officers.  Search for Maryland traffic stops using the form fields
+    below. Use <a href='{% url 'md:stops-search' %}'>Advanced Search</a>
+    for additional filtering criteria.  When you
+    have found the stop you are looking for, click the Officer ID hyperlink
+    to review the data associated with the officer involved.
   </p>
   <form action="{% url 'md:stops-search' %}" method="get" class="form row">
     <div class="col-md-12">
