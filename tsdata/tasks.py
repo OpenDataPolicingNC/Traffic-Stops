@@ -1,6 +1,7 @@
 from celery.utils.log import get_task_logger
-from nc.data.importer import run as nc_run
+from il.data.importer import run as il_run
 from md.data.importer import run as md_run
+from nc.data.importer import run as nc_run
 from traffic_stops.celery import app
 from tsdata.models import Dataset, Import
 from django.utils import timezone
@@ -9,8 +10,9 @@ from django.utils import timezone
 logger = get_task_logger(__name__)
 
 RUN_MAP = {
-    'nc': nc_run,
+    'il': il_run,
     'md': md_run,
+    'nc': nc_run,
 }
 
 

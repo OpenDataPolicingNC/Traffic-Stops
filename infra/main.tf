@@ -8,7 +8,7 @@ provider "aws" {
 # Our default security group to access
 # the instances over SSH, HTTP, and HTTPS
 resource "aws_security_group" "default" {
-  name = "odp-web"
+  name = "odp-web-${var.environment}"
   description = "SSH, HTTP, and HTTPS"
 
   # SSH access from anywhere

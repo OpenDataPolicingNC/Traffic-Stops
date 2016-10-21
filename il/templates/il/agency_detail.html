@@ -1,0 +1,385 @@
+{% extends "agency_detail.html" %}
+
+{% block census-link %}
+  <li id="census-link-item" class="optional"><a href="#demographics">Census Demographics</a></li>
+{% endblock census-link %}
+
+{% block find-a-stop-button %}{% endblock find-a-stop-button %}
+
+{% block census-display %}
+  <!-- census data -->
+  <div id="census_row" class="row optional">
+    <div class="col-md-12 headline">
+      <h2>ACS Census Data (2010 - 2014)<a class="anchor-offset" id="demographics"></a></h2>
+    </div>
+
+
+    <div class="col-md-12">
+      <h3>Local Population (percentage by race)</h3>
+
+      <p class="help-block">
+        This graph reflects the racial composition of the jurisdiction at the
+        time of the last census (2010 - 2014). It is included for comparative purposes.
+        The actual local population estimate within a given jurisdiction may vary
+        significantly from census figures.
+      </p>
+    </div>
+
+    <div class="col-md-4">
+      <div class="pie-chart-container">
+        <svg id="census_pie"></svg>
+      </div>
+
+      <p class="graph-help-block">
+        Toggle on or off racial/ethnic groups.
+      </p>
+    </div>
+
+    <div class="col-md-8">
+      <h3>Tabular view of census data</h3>
+      <br><br>
+      <div id="census_data"></div>
+    </div>
+  </div>
+{% endblock census-display %}
+
+{% block agency-list-url %}{% url 'il:agency-list' %}{% endblock agency-list-url %}
+
+{% block search-url %}{% endblock search-url %}
+
+{% block stop-display %}
+  <div class="row">
+    <div class="col-md-12 headline">
+      <h2>Traffic Stops<a class="anchor-offset" id="stop-percentage"></a></h2>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <h3>Traffic Stops (percentage by race)</h3>
+
+      <p class="help-block">
+        These graphs reflect the ethnic composition of drivers stopped by law
+        enforcement officers in the jurisdiction since the department began
+        reporting its data to the state.
+      </p>
+    </div>
+
+    <div class="col-md-4">
+      <div class="pie-chart-container">
+        <svg id="stop_race_pie"></svg>
+      </div>
+
+      <p class="graph-help-block">
+        Adjusting the drop down menu will display the racial breakdown of stops
+        on a year-by-year basis.  Some percentages may be based on low levels of
+        observation.  Click on the “Data” tab to review the raw stop data.
+      </p>
+    </div>
+
+    <div id="stop_div" class="col-md-8 line-chart-container">
+      <h4 class="graph-label">
+        Longitudinal view of annual traffic stops
+      </h4>
+
+      <div role="tabpanel">
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active">
+            <a href="#stop_race_line_div" aria-controls="stop_race_line_div" role="tab" data-toggle="tab">Chart</a></li>
+          <li role="presentation">
+            <a href="#stop_race_data" aria-controls="stop_race_data" role="tab" data-toggle="tab">Data</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="stop_race_line_div">
+            <svg id="stop_race_line"></svg>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="stop_race_data">
+          </div>
+        </div>
+
+      </div>
+
+      <p class="graph-help-block">
+        Drag the cursor over the graph to see the racial breakdown for any
+        given year. Some percentages may be based on low levels of observation.
+        Click the “Data” tab to review the raw stop data.
+      </p>
+
+    </div>
+  </div>
+{% endblock stop-display %}
+
+{% block stop-count-display %}
+  <div class="row">
+    <div class="col-md-12">
+    <h3>Departmental Stop Count</h3>
+
+    <p class="help-block">
+      This graph displays the number of traffic stops broken down by stop
+      purpose and ethnicity. Adjusting the drop down menu will display the
+      individual stop counts relative to ethnic groups on a year-by-year basis.
+    </p>
+  </div>
+
+    <div class="col-md-10">
+      <div role="tabpanel">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active">
+            <a href="#srr_line_div" role="tab" data-toggle="tab">Chart</a></li>
+          <li role="presentation">
+            <a href="#srr_data" role="tab" data-toggle="tab">Data</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="srr_line_div">
+            <svg id="srr_line"></svg>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="srr_data">
+          </div>
+        </div>
+      </div>
+
+      <p class="graph-help-block">
+        Drag the cursor over the graph to see the racial breakdown for any
+        given year. Some percentages may be based on low levels of observation.
+        Click the “Data” tab to review the raw stop data.
+      </p>
+    </div>
+  </div>
+{% endblock stop-count-display %}
+
+{% block search-rate-display %}
+  <div class="row">
+    <div class="col-md-12 headline">
+      <h2>Departmental Search Rate<a class="anchor-offset" id="search-percentage-dept"></a></h2>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+    <h3>Average Departmental Search Rate For Vehicle Stops</h3>
+
+    <p class="help-block">
+      This graph is a longitudinal representation of the average departmental
+      search rate for vehicle stops since the department began reporting its
+      data to the state.  The black line represents the
+      overall search rate for all motorists.
+    </p>
+  </div>
+
+    <div class="col-md-10">
+      <div role="tabpanel">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active">
+            <a href="#stop_search_line_div" role="tab" data-toggle="tab">Chart</a></li>
+          <li role="presentation">
+            <a href="#stop_search_data" role="tab" data-toggle="tab">Data</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="stop_search_line_div">
+            <svg id="stop_search_line"></svg>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="stop_search_data">
+          </div>
+        </div>
+      </div>
+
+      <p class="graph-help-block">
+        Drag the cursor over the graph to see the racial breakdown for any
+        given year. Some percentages may be based on low levels of observation.
+        Click the “Data” tab to review the raw stop data.
+      </p>
+    </div>
+  </div>
+{% endblock search-rate-display %}
+
+{% block search-display %}
+  <div class="row">
+    <div class="col-md-12">
+      <h3>Search Data by Ethnicity</h3>
+
+      <p class="help-block">
+        These graphs reflect the ethnic composition of drivers searched by law
+        enforcement officers in the jurisdiction since the department began
+        reporting its data to the state.
+      </p>
+    </div>
+
+    <div class="col-md-4">
+      <div class="pie-chart-container">
+        <svg id="search_race_pie"></svg>
+      </div>
+
+      <p class="graph-help-block">
+        Adjusting the drop down menu will display the racial breakdown of
+        searches on a year-by-year basis.  Some percentages may be based on low
+        levels of observation.  Click on the “Data” tab to review the raw
+        search data.
+      </p>
+    </div>
+
+    <div id="search_div" class="col-md-8 line-chart-container">
+      <h4 class="graph-label">Longitudinal view of annual percent of search by race</h4>
+
+      <div role="tabpanel">
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active">
+            <a href="#search_race_line_div" aria-controls="search_race_line_div" role="tab" data-toggle="tab">Chart</a></li>
+          <li role="presentation">
+            <a href="#search_race_data" aria-controls="stop_race_data" role="tab" data-toggle="tab">Data</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="search_race_line_div">
+            <svg id="search_race_line"></svg>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="search_race_data">
+          </div>
+        </div>
+
+        <p class="graph-help-block">
+          Drag the cursor over the graph to see the racial breakdown for any
+          given year. Some percentages may be based on low levels of observation.
+          Click the “Data” tab to review the raw search data.
+        </p>
+      </div>
+    </div>
+  </div>
+{% endblock search-display %}
+
+{% block lsb-display %}
+  <div class="row">
+    <div id="lhs_div" class="col-md-12">
+      <h3>Likelihood of Search by "Stop Cause"</h3>
+
+      <p class="help-block">
+        This graph displays the likelihood of one ethnic group being searched
+        as compared to another group for a given stop cause. Adjusting the drop
+        down menu will display the likelihood of search relative to another
+        racial or ethnic group on a year-by-year basis.
+      </p>
+    </div>
+
+    <div class="col-md-10">
+      <div role="tabpanel">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active">
+            <a href="#lsb_div" aria-controls="lsb_div" role="tab" data-toggle="tab">Chart</a></li>
+          <li role="presentation">
+            <a href="#lsb_data" aria-controls="lsb_data" role="tab" data-toggle="tab">Data</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="lsb_div">
+            <svg id="lsb"></svg>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="lsb_data">
+          </div>
+        </div>
+      </div>
+
+      <p class="graph-help-block">
+        Click the colored circles above the graph to display the comparisons
+        between various ethnic groups.  Some ratios may be based on low levels
+        of observation.  Click the “Data” tab to review the actual stop and
+        search numbers.
+      </p>
+    </div>
+  </div>
+{% endblock lsb-display %}
+
+{% block contraband-display %}
+  <div class="row">
+    <div id="contraband_div" class="col-md-12">
+      <h3>Contraband "Hit-Rate"</h3>
+
+      <p class="help-block">
+        This graph displays the percentage of searches that uncovered contraband
+        for a given racial or ethnic group. Adjusting the drop down menu will
+        display the hit rate on a year-by-year basis.
+      </p>
+    </div>
+
+    <div class="col-md-10">
+      <div role="tabpanel">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active">
+            <a href="#chr_div" aria-controls="chr_div" role="tab" data-toggle="tab">Chart</a></li>
+          <li role="presentation">
+            <a href="#chr_data" aria-controls="chr_data" role="tab" data-toggle="tab">Data</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="chr_div">
+            <svg id="chr"></svg>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="chr_data">
+          </div>
+        </div>
+      </div>
+
+      <p class="graph-help-block">
+        Some percentages may be based on low levels of observation.
+        Click the “Data” tab to review the actual contraband seizure and
+        search numbers.
+      </p>
+    </div>
+  </div>
+{% endblock contraband-display %}
+
+{% block use-of-force-display %}{% endblock use-of-force-display %}
+
+{% block graph-code %}
+{% comment %}<script>{% endcomment %}
+
+var census_handler = new IL.CensusHandler({url: "{% url 'il:agency-api-detail' object.pk %}"});
+
+var stop_handler = new IL.StopsHandler({url: "{% url 'il:agency-api-stops' object.pk %}"});
+var search_handler = new IL.SearchHandler({url: "{% url 'il:agency-api-searches' object.pk %}"});
+var lhs_handler = new IL.LikelihoodSearchHandler({url: "{% url 'il:agency-api-stops-by-reason' object.pk %}"});
+var chr_handler = new IL.ContrabandHitRateHandler({url: "{% url 'il:agency-api-contraband-hit-rate' object.pk %}"});
+
+var stop_search_handler = new IL.StopSearchHandler({handlers: [stop_handler, search_handler]});
+
+new IL.CensusRatioDonut({handler: census_handler, selector: "#census_pie"});
+new IL.CensusTable({handler: census_handler, selector: "#census_data"});
+
+new IL.StopRatioDonut({handler: stop_handler, selector: "#stop_race_pie"});
+new IL.StopRatioTimeSeries({handler: stop_handler, selector: "#stop_race_line"});
+new IL.StopsTable({handler: stop_handler, selector: "#stop_race_data"});
+
+new IL.StopSearchTimeSeries({handler: stop_search_handler, selector: "#stop_search_line"});
+new IL.StopSearchTable({handler: stop_search_handler, selector: "#stop_search_data"});
+
+new IL.SearchRatioDonut({handler: search_handler, selector: "#search_race_pie"});
+new IL.SearchRatioTimeSeries({handler: search_handler, selector: "#search_race_line"});
+new IL.SearchTable({handler: search_handler, selector: "#search_race_data"});
+
+new IL.LikelihoodOfSearch({handler: lhs_handler, selector: "#lsb"});
+new IL.LikelihoodSearchTable({handler: lhs_handler, selector: "#lsb_data"});
+
+new IL.ContrabandHitRateBar({handler: chr_handler, selector: "#chr"});
+new IL.ContrabandTable({handler: chr_handler, selector: "#chr_data"});
+
+new IL.SRRTimeSeries({handler: lhs_handler, selector: '#srr_line'});
+new IL.SRRTable({handler: lhs_handler, selector: '#srr_data'});
+
+
+{% comment %}</script>{% endcomment %}
+{% endblock graph-code %}

@@ -1,12 +1,12 @@
 import re
 
 
-STATES = ('nc', 'md')
+STATES = ('nc', 'md', 'il')
 pattern = re.compile(r"^/(\w{2})/")
 
 
 class StateMiddleware(object):
-    """Set request.state to 'nc' or 'md' based on request.path"""
+    """Set request.state based on request.path"""
     def process_request(self, request):
         request.state = None
         match = pattern.match(request.path)

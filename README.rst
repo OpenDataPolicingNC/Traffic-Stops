@@ -20,4 +20,4 @@ organization.
 Please see the `documentation`_ for more information.
 
 .. _documentation: http://nc-traffic-stops.readthedocs.org/en/latest/
-.. _Southern Coalition for Social Justice: http://www.scsj.org/
+.. _Southern Coalition for Social Justice: https://www.scsj.org/

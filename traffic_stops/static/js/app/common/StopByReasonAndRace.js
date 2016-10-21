@@ -16,6 +16,7 @@ export const SRRTimeSeriesBase = VisualBase.extend({
                   .showLegend(true)
                   .showYAxis(true)
                   .showXAxis(true)
+                  .forceY(0)
                   .width(this.get("width"))
                   .height(this.get("height"));
 
@@ -50,7 +51,7 @@ export const SRRTimeSeriesBase = VisualBase.extend({
 
     $('<div class="selector-container">')
       .html($selector)
-      .appendTo(this.div);
+      .prependTo(this.div);
 
     update();
   },
@@ -133,9 +134,8 @@ export const SRRTimeSeriesBase = VisualBase.extend({
    * Helper function to identify data that should not be displayed on
    * initial graph draw because its count is too low.
    *
-   * In this implementation, suppresses data whose max value is less than 25%
-   * of the overall max value. This seems high, but when it's lower, a lot of
-   * uninterestingly low values get included.
+   * This implementation suppresses data whose max value is less than 5%
+   * of the overall max value.
    */
   _checkThreshold: function (data_) {
     var data = _.clone(data_);
@@ -144,7 +144,7 @@ export const SRRTimeSeriesBase = VisualBase.extend({
 
     data.forEach((datum) => {
       var local_max = d3.max(datum.values.map((v) => v.y));
-      if ((local_max / overall_max) < 0.25) {
+      if ((local_max / overall_max) < 0.05) {
         datum.disabled = true;
       }
     });

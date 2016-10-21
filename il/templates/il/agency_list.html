@@ -1,0 +1,20 @@
+{% extends "agency_list.html" %}
+
+{% block find-a-stop-button %}{% endblock find-a-stop-button %}
+
+{% block home-url %}{% url "il:home" %}{% endblock home-url %}
+
+{% block help-text %}
+  Enter an agency name into the search field above to review data on the
+  ethnic demographics of people stopped, searched, and subjected to force
+  in the course of traffic stops in a given jurisdiction.
+  Illinois law requires all such agencies to report their
+  data on a monthly basis to the Illinois state government; however, some
+  datasets are incomplete or remain unreported. Where data sets are incomplete
+  or missing from the website, it is because they have not been reported to
+  the state agency from which the site derives its records. Open Data Policing
+  does not have access to, nor does it publish, the names of officers, drivers,
+  or passengers involved in traffic stops.
+{% endblock help-text %}
+
+{% block agency-link %}{% url "il:agency-detail" agency.pk %}{% endblock agency-link %}

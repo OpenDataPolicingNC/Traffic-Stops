@@ -53,10 +53,12 @@ def get_datafile_path(url, destination):
 def get_csv_path(url, destination):
     """
     Get full path of the CSV form of the datafile in the downloaded zip.
+    This is the processed CSV, which would be different than the raw
+    data.
     Assumptions: See assumptions of get_datafile_path()
     """
     datafile_path = get_datafile_path(url, destination)
-    return os.path.splitext(datafile_path)[0] + '.csv'
+    return os.path.splitext(datafile_path)[0] + '-processed.csv'
 
 
 def download_and_unzip_data(url, destination, prefix='state-'):
@@ -79,6 +81,8 @@ def download_and_unzip_data(url, destination, prefix='state-'):
     zip_filename = get_zipfile_path(url, destination)
     logger.debug("Downloading data to {}".format(zip_filename))
     response = requests.get(url, stream=True)
+    # XXX check status code here; e.g., if permissions haven't been granted
+    # for a file being downloaded from S3 a 403 will be returned
     content_length = int(response.headers.get('content-length'))
     start = time.clock()
     downloaded = 0

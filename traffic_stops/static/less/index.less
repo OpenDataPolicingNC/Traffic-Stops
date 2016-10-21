@@ -254,6 +254,7 @@ code {
   img.state {
     height: 16ex;
     margin-bottom: 10px;
+    max-width: 100%;
   }
   p.stop-count {
     color: @brand-secondary;
@@ -272,7 +273,7 @@ code {
     }
   }
   @media (max-width: @screen-sm-min) {
-    .btn.nc {
+    .btn.nc, .btn.md {
       margin-bottom: 40px;
     }
   }
@@ -343,6 +344,12 @@ code {
     display: inline-block;
     padding: 10px 0;
   }
+
+  .state-header-graphic-col {
+    &.il {
+      text-align: center;
+    }
+  }
 }
 
 // http://stackoverflow.com/questions/20547819/vertical-align-with-bootstrap-3
@@ -403,8 +410,9 @@ code {
 .state-featurette {
   padding-top: 40px;
   padding-bottom: 40px;
-  background-image: url("/static/img/press-conf-blue-80-cropped.jpg");
-  background-position: center top;
+  background-image: url("/static/img/cars-at-day.jpg");
+  background-position: center;
+  background-size: cover;
   color: white;
   text-shadow: 0 1px 0 rgba(0, 0, 0, .5);
 
@@ -812,6 +820,7 @@ h4.graph-label {
 }
 
 .selector-container {
+  margin-top: 15px;
   width: 100%;
   > select {
     margin: 0 auto;
