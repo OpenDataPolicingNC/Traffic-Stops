@@ -36,7 +36,7 @@ def staging():
 @task
 def production():
     env.environment = 'production'
-    env.master = 'ec2-54-208-65-43.compute-1.amazonaws.com'
+    env.master = 'ec2-52-206-92-217.compute-1.amazonaws.com'
     initialize_env()
 
 
