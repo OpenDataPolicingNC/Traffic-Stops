@@ -60,3 +60,8 @@ resource "aws_instance" "app" {
         Name = "${var.instance_name}-${var.environment}"
     }
 }
+
+resource "aws_eip_association" "eip_assoc" {
+  instance_id = "${aws_instance.app.id}"
+  allocation_id = "${var.eip_id}"
+}

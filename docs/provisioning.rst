@@ -423,6 +423,15 @@ Salt:
 Production
 __________
 
+Terraform:
+
+.. code-block:: bash
+
+    make production  # see plan
+    make production-apply
+
+Salt:
+
 .. code-block:: bash
 
     ssh-keygen -f "$HOME/.ssh/known_hosts" -R dev.opendatapolicingnc.com
