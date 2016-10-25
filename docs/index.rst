@@ -14,7 +14,7 @@ assisting with analyzing US census data.
 
 This is the developer documentation.
 
-.. _Southern Coalition for Social Justice: https://www.scsj.org/
+.. _Southern Coalition for Social Justice: http://www.scsj.org/
 .. _Caktus Group: http://www.caktusgroup.com/
 
 
