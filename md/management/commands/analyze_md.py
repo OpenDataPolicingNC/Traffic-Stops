@@ -1,5 +1,3 @@
-import datetime
-
 from django.core.management.base import BaseCommand
 
 from md.data import analyzer, DEFAULT_URL
@@ -14,7 +12,6 @@ class Command(BaseCommand):
         parser.add_argument('--report')
 
     def handle(self, *args, **options):
-        start_time = datetime.datetime.now()
         if options['report']:
             print('Writing report to %s...' % options['report'], file=self.stdout)
             with open(options['report'], 'w') as report:
@@ -22,5 +19,3 @@ class Command(BaseCommand):
         else:
             report = self.stdout
             analyzer.run(options['url'], report, options['dest'])
-        stop_time = datetime.datetime.now()
-        print('Elapsed time: %s' % (stop_time - start_time))
