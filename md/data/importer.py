@@ -269,6 +269,7 @@ def load_xls(xls_path):
     stops = pd.DataFrame()
     columns = None
     for sheet_num in range(len(xl.sheet_names)):
+        logger.info('Reading sheet "{}"'.format(xl.sheet_names[sheet_num]))
         sheet = xl.parse(sheet_num, keep_default_na=False, na_values=[])
         if sheet_num == 0:
             columns = sheet.columns
