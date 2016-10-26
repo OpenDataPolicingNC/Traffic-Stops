@@ -1,8 +1,13 @@
 Data Import
 ===========
 
-Data for all states are imported in the same manner.  Substitute the state
+Stop data is imported in the same manner for all states.  Substitute the state
 abbreviation (e.g., "md") as appropriate in the NC instructions below.
+
+Census data for all states is imported all at once, in the same manner for all
+environments, using the ``import_census`` management command.  This must be
+performed as part of developer and server setup as well as when census support is
+added for additional states.
 
 Local/Development Environment
 -----------------------------
@@ -138,3 +143,24 @@ ______________
     zip traffic_stops_nc_production.tar.zip traffic_stops_nc_production.tar
     # then on local laptop, run:
     scp opendatapolicingnc.com:traffic_stops_nc_production.tar.zip .
+
+Updating landing page stats
+---------------------------
+
+Currently, various statistics on the state landing page are hard-coded
+in the Django templates for that state, including the number of stops,
+the range of dates, and the top five agencies.
+
+When first importing a new set of data from a state, the landing page
+stats must be edited to reflect the new data.  This process involves the
+following steps:
+
+1. Calculate the statistics using the new dataset.
+2. Update the Django template for the state to include the current
+   statistics.
+3. Verify that the agency ids haven't changed; i.e., verify that the links
+   for the top five agencies still take you to the proper agency.
+
+Most states have a management command to calculate the landing page
+stats -- ``analyze_<state_app>``.  For North Carolina, the statistics
+are currently calculated with queries in the shell.
