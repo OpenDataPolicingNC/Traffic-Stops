@@ -19,6 +19,9 @@ If you need Python 3.4 installed, you can use this PPA::
     sudo apt-get update
     sudo apt-get install python3.4-dev
 
+(If you build Python 3.4 yourself on Ubuntu, ensure that the `libbz2-dev`
+package is installed first.)
+
 The tool that we use to deploy code is called `Fabric
 <http://docs.fabfile.org/>`_, which is not yet Python3 compatible. So,
 we need to install that globally in our Python2 environment::
