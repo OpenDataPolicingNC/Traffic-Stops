@@ -8,7 +8,7 @@ letsencrypt: true
 
 repo:
   url: https://github.com/OpenDataPolicingNC/Traffic-Stops.git
-  branch: dev
+  branch: ODPM-169-new-prod-machine-swap-space
 
 postgresql_config: # from pgtune
   work_mem: 88MB
