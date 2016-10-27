@@ -423,21 +423,30 @@ Salt:
 Production
 __________
 
+Terraform:
+
 .. code-block:: bash
 
-    ssh-keygen -f "$HOME/.ssh/known_hosts" -R dev.opendatapolicingnc.com
-    ssh-keygen -f "$HOME/.ssh/known_hosts" -R 54.208.65.43
+    make production  # see plan
+    make production-apply
+
+Salt:
+
+.. code-block:: bash
+
+    ssh-keygen -f "$HOME/.ssh/known_hosts" -R opendatapolicing.com
+    ssh-keygen -f "$HOME/.ssh/known_hosts" -R 52.206.92.217
     fab -u ubuntu -i ~/.ssh/traffic-stops.pem production setup_master
     rm production*.asc
-    fab production encrypt:DB_PASSWORD=`make generate-secret`
-    fab production encrypt:SECRET_KEY=`make generate-secret length=64`
-    fab production encrypt:BROKER_PASSWORD=`make generate-secret`
+    fab production encrypt:DB_PASSWORD=`pwgen --secure -1 32`
+    fab production encrypt:SECRET_KEY=`pwgen --secure -1 64`
+    fab production encrypt:BROKER_PASSWORD=`pwgen --secure -1 32`
     fab production encrypt:production-ssl.cert && cat production-ssl.cert.asc
     fab production encrypt:production-ssl.key && cat production-ssl.key.asc
     fab production encrypt:admin=<fill-me-in>
+    fab production encrypt:LOG_DESTINATION='<fill-me-in>'
     fab production encrypt:NEW_RELIC_LICENSE_KEY='<fill-me-in>'
     # copy each generated encrypted key to conf/pillar/<env>.sls
-    fab production setup_minion:web,balancer,db-master,cache,queue,worker -H 54.208.65.43 -u ubuntu -i ~/.ssh/traffic-stops.pem
-    fab production sync
-    fab production deploy -H dev.opendatapolicingnc.com -u ubuntu -i ~/.ssh/traffic-stops.pem
+    fab production setup_minion:web,balancer,db-master,cache,queue,worker,salt-master -H opendatapolicing.com -u ubuntu -i ~/.ssh/traffic-stops.pem
+    fab production deploy -H opendatapolicing.com -u ubuntu -i ~/.ssh/traffic-stops.pem
     fab production deploy
