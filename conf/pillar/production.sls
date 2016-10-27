@@ -4,6 +4,8 @@ environment: production
 
 domain: opendatapolicing.com
 
+letsencrypt: true
+
 repo:
   url: https://github.com/OpenDataPolicingNC/Traffic-Stops.git
   branch: dev

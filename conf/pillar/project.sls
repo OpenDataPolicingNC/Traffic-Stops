@@ -11,6 +11,8 @@ python_headers: [libxft-dev]
 
 margarita_version: 1.7.0
 
+admin_email: ccopeland@codeforamerica.org
+
 instances:
   - nc
   - md
