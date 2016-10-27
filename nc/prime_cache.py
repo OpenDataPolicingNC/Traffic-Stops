@@ -11,8 +11,10 @@ logger = logging.getLogger(__name__)
 ENDPOINTS = ('stops', 'stops_by_reason', 'use_of_force', 'searches', 'contraband_hit_rate')
 
 
-def run(root, host='opendatapolicingnc.com'):
-    headers = {'Host': host}
+def run(root, host=None):
+    headers = dict()
+    if host is not None:
+        headers['Host'] = host
     api = urllib.parse.urljoin(root, reverse('nc:agency-api-list'))
     # get agencies
     r = requests.get(api, headers=headers)
