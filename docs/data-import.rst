@@ -130,6 +130,9 @@ requests on the server box which bypass nginx::
     sudo su - traffic_stops
     /var/www/traffic_stops/manage.sh  prime_cache --host opendatapolicing.com http://127.0.0.1:8000/
 
+(Use the appropriate ``--host`` argument based on the canonical name for the
+server.)
+
 NC queries should be primed in this manner because some of them take longer than
 the nginx timeout to perform the first time, resulting in users encountering
 error pages instead of agency results.
