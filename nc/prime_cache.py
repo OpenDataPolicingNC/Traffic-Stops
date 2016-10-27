@@ -35,11 +35,12 @@ def run(root, host=None):
 def req(uri, headers, payload=None):
     try:
         response = requests.get(uri, headers=headers, params=payload)
+        if response.status_code != 200:
+            logger.warning("Status not OK: {} ({})".format(
+                           uri, response.status_code))
     except requests.ConnectionError as err:
-        logger.error(err)
-    if response.status_code != 200:
-        logger.warning("Status not OK: {} ({})".format(
-                       uri, response.status_code))
+        logger.error('Cannot load %s: %s', uri, err)
+        response = None
     return response
 
 
