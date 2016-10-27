@@ -105,6 +105,20 @@ When finished, revoke SUPERUSER privileges:
 
     sudo -u postgres psql -c 'ALTER USER traffic_stops_staging WITH NOSUPERUSER;'
 
+When importing IL data on a server, paging space is required due to the memory
+requirements.  Currently the staging and production servers do not have a "swap"
+file or device permanently assigned, nor do they have a device on which paging
+space can be routinely used without incurring I/O charges.  Thus a swap file is
+activated prior to an import of IL data and then deactivated afterwards, as follows::
+
+    sudo fallocate -l 3G /swapfile
+    sudo chmod 600 /swapfile
+    sudo mkswap /swapfile
+    sudo swapon /swapfile
+    <<perform the IL data import using the appropriate mechanism>>
+    sudo swapoff /swapfile
+    sudo rm /swapfile
+
 After importing new state data into the database used by a running server,
 cached queries will continue to be used until they expire.  To flush the
 cache, connect to ``memcached`` using ``telnet`` or some other suitable
