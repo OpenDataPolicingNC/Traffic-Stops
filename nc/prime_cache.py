@@ -34,9 +34,7 @@ def run(root, host=None):
 
 def req(uri, headers, payload=None):
     try:
-        # requests doc says there's no timeout by default, but the log showed
-        # timeouts every 120 seconds when accessing an expensive agency.
-        response = requests.get(uri, headers=headers, params=payload, timeout=300)
+        response = requests.get(uri, headers=headers, params=payload)
         if response.status_code != 200:
             logger.warning("Status not OK: {} ({})".format(
                            uri, response.status_code))
