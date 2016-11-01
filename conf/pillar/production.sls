@@ -8,7 +8,7 @@ letsencrypt: true
 
 repo:
   url: https://github.com/OpenDataPolicingNC/Traffic-Stops.git
-  branch: dev
+  branch: master
 
 postgresql_config: # from pgtune
   work_mem: 88MB
