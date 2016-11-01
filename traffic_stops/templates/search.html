@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block pre-content %}
+  <div class="state-banner affix-offset-top-pos find-a-stop">
+    <div class="container">
+      <div class="row vertical-align">
+        <div class="col-sm-10 col-xs-12 title-container">
+          <h1>
+            Find a Traffic Stop
+          </h1>
+        </div>
+        <div class="col-sm-2 col-xs-12">
+          <a class="btn brand pull-right" href="{% block agency-list-url %}{% endblock %}">Find an Agency</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock pre-content %}
+
+{% block content %}
+  {% comment %}
+    Unfortunately, because of the use of different categories (people vs stops)
+    for which both pagination and item-by-item form layout need to be specified,
+    we hit diminishing returns with attempts to refactor the templates further.
+  {% endcomment %}
+{% endblock content %}

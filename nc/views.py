@@ -1,35 +1,18 @@
-from django.shortcuts import render, redirect, Http404
-from django.views.generic import ListView, DetailView, View, TemplateView
-from django.http import HttpResponse, HttpResponseNotAllowed
-from nc.models import Stop, Agency, Person
-from nc import forms
+from django.shortcuts import render
+from .models import Stop, Agency, Person
+from . import forms
+from traffic_stops import base_views
 
 
-def home(request):
-    if request.method == 'POST':
-        form = forms.AgencySearchForm(request.POST)
-        if form.is_valid():
-            agency = form.cleaned_data['agency']
-            return redirect('agency-detail', agency.pk)
-    else:
-        form = forms.AgencySearchForm()
-    context = {'agency_form': form}
-    return render(request, 'home.html', context)
+class Home(base_views.Home):
+    form_class = forms.AgencySearchForm
+    template_name = 'nc.html'
+    success_url = 'nc:agency-detail'
 
-
-class About(TemplateView):
-    template_name = "about.html"
-
-
-class UpdateSession(View):
-
-    http_method_names = (u'post', )
-
-    def post(self, request, *args, **kwargs):
-        if not request.is_ajax():
-            return HttpResponseNotAllowed(['POST'])
-        request.session['showEthnicity'] = request.POST.get("showEthnicity", "true") == "true"
-        return HttpResponse(True)
+    def get_context_data(self, **kwargs):
+        context = super(Home, self).get_context_data(**kwargs)
+        context['find_a_stop_form'] = forms.SearchForm()
+        return context
 
 
 def search(request):
@@ -53,21 +36,12 @@ def search(request):
     return render(request, 'nc/search.html', context)
 
 
-class AgencyList(ListView):
+class AgencyList(base_views.AgencyList):
     model = Agency
+    form_class = forms.AgencySearchForm
+    success_url = 'nc:agency-detail'
 
 
-class AgencyDetail(DetailView):
+class AgencyDetail(base_views.AgencyDetail):
     model = Agency
-
-    def get_context_data(self, **kwargs):
-        context = super(AgencyDetail, self).get_context_data(**kwargs)
-        agency = context['object']
-        officer_id = self.request.GET.get('officer_id')
-
-        if officer_id:
-            if not Stop.objects.filter(agency=agency, officer_id=officer_id).exists():
-                raise Http404()
-            context['officer_id'] = officer_id
-
-        return context
+    stop_model = Stop

@@ -1,0 +1,8 @@
+environment = "production"
+instance_type = "m4.large"
+instance_name = "odp"
+aws_region = "us-east-1"
+ami_id = "ami-c9580bde"
+key_name = "traffic-stops"
+ebs_size = "60"
+eip_id = "eipalloc-e9a695d4"

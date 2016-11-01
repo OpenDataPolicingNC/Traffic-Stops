@@ -6,8 +6,10 @@ from nc import prime_cache
 class Command(BaseCommand):
     """Prime cache on production server"""
 
+    def add_arguments(self, parser):
+        parser.add_argument('url', nargs='?', default="http://0.0.0.0:8000/")
+        parser.add_argument('--host', dest='host', default=None,
+                            help='Override "Host" request header')
+
     def handle(self, *args, **options):
-        url = None
-        if len(args) == 1:
-            url = args[0]
-        prime_cache.run(url)
+        prime_cache.run(options['url'], host=options['host'])

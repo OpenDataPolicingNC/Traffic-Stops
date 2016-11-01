@@ -1,0 +1,151 @@
+{% extends 'state.html' %}
+
+{% load staticfiles bootstrap3 %}
+
+{% block state-name %}
+  Maryland
+{% endblock state-name %}
+
+{% block state-subtitle %}
+  Browse all known traffic stops to have occurred in Maryland since
+  January 1, 2013
+{% endblock state-subtitle %}
+
+{% block state-header-graphic %}
+  <img src="{% static "svg/noun_19618_cc-white.svg" %}" class="state md">
+{% endblock state-header-graphic %}
+
+{% block agency-intro %}
+  <p class='agency-intro'>
+    Review agency-level data on the racial and ethnic demographics of people
+    stopped and searched in the course of traffic stops
+    in a given jurisdiction.
+  </p>
+
+  <p class="agency-intro">
+    <a href="{% url "md:agency-list" %}">Click here</a> to browse a list of
+    all agencies for which data is available.
+  </p>
+{% endblock agency-intro %}
+
+{% block search-form %}
+  <h4>View Agency Dashboard</h4>
+  <form role="form" id="agency_search" action='{% url "md:home" %}' method="get" accept-charset="utf-8">
+      <div class="form-group">
+      {% csrf_token %}
+      <div class="input-group">
+        {{ form.agency }}
+        <span class="input-group-btn">
+          <button class="btn btn-primary" type="button">View</button>
+        </span>
+      </div><!-- /input-group -->
+      {% if form.agency.errors %}
+          <div class="alert alert-warning alert-dismissible">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <ul>
+              {% for error in form.agency.errors %}
+                  <li><strong>{{ error }}</strong></li>
+              {% endfor %}
+              </ul>
+          </div>
+      {% endif %}
+      </div>
+  </form>
+{% endblock search-form %}
+
+{% block find-a-stop %}
+  <p class="agency-intro">
+    Use this feature to identify the stop and search patterns of individual
+    police officers.  Search for Maryland traffic stops using the form fields
+    below. Use <a href='{% url 'md:stops-search' %}'>Advanced Search</a>
+    for additional filtering criteria.  When you
+    have found the stop you are looking for, click the Officer ID hyperlink
+    to review the data associated with the officer involved.
+  </p>
+  <form action="{% url 'md:stops-search' %}" method="get" class="form row">
+    <div class="col-md-12">
+      {% bootstrap_field find_a_stop_form.agency %}
+      <div class="row">
+          <div class="col-md-6">{% bootstrap_field find_a_stop_form.start_date %}</div>
+          <div class="col-md-6">{% bootstrap_field find_a_stop_form.end_date %}</div>
+      </div>
+      <div class="row">
+          <div class="col-md-3">{% bootstrap_field find_a_stop_form.age %}</div>
+          <div class="col-md-3">{% bootstrap_field find_a_stop_form.gender %}</div>
+          <div class="col-md-6">{% bootstrap_field find_a_stop_form.ethnicity %}</div>
+      </div>
+      {% buttons %}
+          <button type="submit" class="btn btn-primary pull-right">Submit</button>
+      {% endbuttons %}
+    </div>
+  </form>
+{% endblock find-a-stop %}
+
+{% block agencies-table %}
+  <table class='table table-condensed table-hover'>
+    <tr>
+      <th>City</th>
+      <th class="text-right">Stops</th>
+    </tr>
+    <tr>
+      <td><a href="{% url "md:agency-detail" "77" %}">Maryland State Police</a></td>
+      <td class="text-right">809,284</td>
+    </tr>
+    <tr>
+      <td><a href="{% url "md:agency-detail" "80" %}">Montgomery County Police Department</a></td>
+      <td class="text-right">291,713</td>
+    </tr>
+    <tr>
+      <td><a href="{% url "md:agency-detail" "10" %}">Baltimore County Police Department</a></td>
+      <td class="text-right">268,218</td>
+    </tr>
+    <tr>
+      <td><a href="{% url "md:agency-detail" "79" %}">Maryland Transportation Authority Police</a></td>
+      <td class="text-right">227,694</td>
+    </tr>
+    <tr>
+      <td><a href="{% url "md:agency-detail" "5" %}">Anne Arundel County Police Department</a></td>
+      <td class="text-right">156,573</td>
+    </tr>
+  </table>
+{% endblock agencies-table %}
+
+{% block about-text %}
+  <p>
+      Open Data Policing aggregates, visualizes, and publishes public
+      records related to all known traffic stops to have occurred in Maryland
+      since January 1, 2013. Data is available for most
+      Maryland departments and officers.
+  </p>
+  <p>
+      Maryland law requires all such agencies to report their data
+      on a monthly basis to the MD state government; however, some
+      datasets are incomplete or remain unreported.  Where data sets are
+      incomplete or missing from the website it is because they have not
+      been reported to the state agency from which the site derives its
+      records. Open Data Policing does not have access to, nor does it
+      publish, the names of officers, drivers, or passengers involved in
+      traffic stops.
+  </p>
+{% endblock about-text %}
+
+{% block dataset-facts %}
+  <table class='table table-condensed table-hover'>
+    <tr>
+      <th>Timeframe</th>
+      <td>Jan 1 2013 - October 2, 2016</td>
+    </tr>
+    <tr>
+      <th>Stops</th>
+      <td>2,819,384</td>
+    </tr>
+    <tr>
+      <th>Searches</th>
+      <td>83,820</td>
+    </tr>
+    <tr>
+      <th>Agencies</th>
+      <td>127</td>
+    </tr>
+  </table>
+{% endblock dataset-facts %}

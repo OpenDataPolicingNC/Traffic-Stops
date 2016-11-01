@@ -6,19 +6,31 @@ os.environ.setdefault('BROKER_HOST', '127.0.0.1:5672')
 
 ENVIRONMENT = os.environ['ENVIRONMENT']
 
+SECRET_KEY = os.environ['SECRET_KEY']
+
 DEBUG = False
-TEMPLATE_DEBUG = DEBUG
 
 DATABASES['default']['NAME'] = 'traffic_stops_%s' % ENVIRONMENT.lower()
 DATABASES['default']['USER'] = 'traffic_stops_%s' % ENVIRONMENT.lower()
 DATABASES['default']['HOST'] = os.environ.get('DB_HOST', '')
 DATABASES['default']['PORT'] = os.environ.get('DB_PORT', '')
 DATABASES['default']['PASSWORD'] = os.environ.get('DB_PASSWORD', '')
+DATABASES['traffic_stops_il']['NAME'] = 'traffic_stops_il_%s' % ENVIRONMENT.lower()
+DATABASES['traffic_stops_il']['USER'] = 'traffic_stops_%s' % ENVIRONMENT.lower()
+DATABASES['traffic_stops_il']['HOST'] = os.environ.get('DB_HOST', '')
+DATABASES['traffic_stops_il']['PORT'] = os.environ.get('DB_PORT', '')
+DATABASES['traffic_stops_il']['PASSWORD'] = os.environ.get('DB_PASSWORD', '')
+DATABASES['traffic_stops_md']['NAME'] = 'traffic_stops_md_%s' % ENVIRONMENT.lower()
+DATABASES['traffic_stops_md']['USER'] = 'traffic_stops_%s' % ENVIRONMENT.lower()
+DATABASES['traffic_stops_md']['HOST'] = os.environ.get('DB_HOST', '')
+DATABASES['traffic_stops_md']['PORT'] = os.environ.get('DB_PORT', '')
+DATABASES['traffic_stops_md']['PASSWORD'] = os.environ.get('DB_PASSWORD', '')
 DATABASES['traffic_stops_nc']['NAME'] = 'traffic_stops_nc_%s' % ENVIRONMENT.lower()
 DATABASES['traffic_stops_nc']['USER'] = 'traffic_stops_%s' % ENVIRONMENT.lower()
 DATABASES['traffic_stops_nc']['HOST'] = os.environ.get('DB_HOST', '')
 DATABASES['traffic_stops_nc']['PORT'] = os.environ.get('DB_PORT', '')
 DATABASES['traffic_stops_nc']['PASSWORD'] = os.environ.get('DB_PASSWORD', '')
+DATABASE_ETL_USER = 'etl'
 
 WEBSERVER_ROOT = '/var/www/traffic_stops/'
 
@@ -50,17 +62,17 @@ DEFAULT_FROM_EMAIL = 'no-reply@opendatapolicingnc.com'
 
 EMAIL_SUBJECT_PREFIX = '[Traffic_Stops %s] ' % ENVIRONMENT.title()
 
-COMPRESS_ENABLED = True
+CSRF_COOKIE_SECURE = True
 
 SESSION_COOKIE_SECURE = True
 
 SESSION_COOKIE_HTTPONLY = True
 
-ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split(';')
+ALLOWED_HOSTS = [os.environ['DOMAIN']]
 
 # Uncomment if using celery worker configuration
 CELERY_SEND_TASK_ERROR_EMAILS = True
-BROKER_URL = 'amqp://traffic_stops_staging:%(BROKER_PASSWORD)s@%(BROKER_HOST)s/traffic_stops_staging' % os.environ  # noqa
+BROKER_URL = 'amqp://traffic_stops_%(ENVIRONMENT)s:%(BROKER_PASSWORD)s@%(BROKER_HOST)s/traffic_stops_%(ENVIRONMENT)s' % os.environ  # noqa
 
 LOGGING['handlers']['file']['filename'] = '/var/www/traffic_stops/log/traffic_stops.log'
 

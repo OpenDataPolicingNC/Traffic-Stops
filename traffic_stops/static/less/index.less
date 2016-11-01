@@ -1,0 +1,871 @@
+/* Table of Contents
+ * -- Includes
+ * -- Variables
+ * -- Sitewide
+ * -- Individual pages
+ */
+
+/* Includes
+==================== */
+
+@import "node_modules/bootstrap/less/bootstrap";
+@import (reference) "node_modules/@caktus/flexless/flex.less";
+
+/* Variables
+==================== */
+
+// http://paletton.com/palette.php?uid=13z0u0kllllaFw0g0qFqFg0w0aF
+@brand-primary:    #133453;
+@brand-secondary:  #728DA5;
+@brand-tertiary:   #4A6B8A;
+@brand-quaternary: #041F37;
+@link-color:       @brand-tertiary;
+@link-hover-color: darken(@link-color, 30%);
+@border-radius-base: 2px;
+
+@navbar-default-link-color: @brand-primary;
+@navbar-default-link-hover-color: @brand-quaternary;
+@navbar-inverse-bg: @brand-primary;
+@navbar-inverse-border: @brand-primary;
+@navbar-inverse-link-color: white;
+
+/* Sitewide
+==================== */
+
+.odp-nav.navbar-inverse .navbar-nav > .active > a,
+.odp-nav.navbar-inverse .navbar-nav > .active > a:hover,
+.odp-nav.navbar-inverse .navbar-nav > li > a:hover{
+  background-color: @brand-secondary;
+}
+
+h1, h2, h3, h4, h5 {
+  color: @brand-primary;
+}
+
+.nav-tabs {
+  margin-top: 1rem;
+
+  > li {
+    > a {
+      > h2 {
+        margin: 0;
+      }
+
+      &:hover {
+        background-color: #e3e3e3;
+      }
+    }
+
+    &.active {
+      > a {
+        background-color: transparent !important;
+        border-bottom-color: #efefef !important;
+      }
+    }
+  }
+}
+
+.btn.brand {
+  background-color: @brand-secondary;
+  color: white;
+  border-radius: 0;
+  font-size: 16px;
+  padding: 1rem 2rem;
+  text-shadow: none;
+
+  &:hover {
+    background-color: @brand-tertiary;
+  }
+}
+
+.table-responsive {
+  table {
+    word-wrap: break-word;
+
+    /***
+     * Not sure why this is necessary, but responsive tables were breaking
+     * without explicitly telling tables that it's OK to be more than 100% width.
+     *
+     * It's also necessary to tell it that it needs to be *at least* 100% width,
+     * lest it not take up the available space in its container and leave behind
+     * a residue container styling.
+     */
+    &.table {
+      width: auto;
+      min-width: 100%;
+    }
+  }
+}
+
+/***
+ * Element to show and hide collapsable content.
+ */
+.collapser {
+  cursor: pointer;
+  text-align: center;
+  font-size: 16px;
+
+  &[aria-expanded="false"] {
+    & > .collapsed {
+      display: inline-block;
+    }
+    & > .shown {
+      display: none;
+    }
+  }
+  &[aria-expanded="true"] {
+    & > .collapsed {
+      display: none;
+    }
+    & > .shown {
+      display: inline-block;
+    }
+  }
+}
+
+.pagination {
+  a.endless_page_link,
+  span.endless_page_current,
+  span.endless_separator {
+    display: inline-block;
+    float: left;
+    position: relative;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: @brand-tertiary;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ccc;
+  }
+
+  span.endless_separator {
+    color: darkgrey;
+  }
+}
+
+.justify {
+  text-align: justify;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+
+html,
+body {
+  height: 100%;
+  /* The html and body elements cannot have any padding or margin. */
+  font-family: 'Droid Sans', sans-serif;
+}
+
+body {
+  position: relative;
+}
+
+/* Wrapper for page content to push down footer */
+#wrap {
+  background-color: #efefef;
+  min-height: 100%;
+  height: auto;
+  /* Negative indent footer by its height */
+  margin: 0 auto -60px;
+  /* Pad bottom by footer height */
+  padding: 0 0 60px;
+}
+
+/* Set the fixed height of the footer here */
+#footer {
+  background-color: #f5f5f5;
+  z-index: 2;
+
+  @media (min-width: 640px) {
+    min-height: 48px;
+  }
+}
+
+#wrap > .container {
+  padding: 15px 15px 0;
+}
+#wrap > .odp-nav + .container {
+  padding-top: 65px;
+}
+.container .credit {
+  margin: 20px 0;
+}
+
+#footer > .container {
+  padding-left: 15px;
+  padding-right: 15px;
+  p {
+    text-align: center;
+  }
+}
+
+code {
+  font-size: 80%;
+}
+
+.navbar-fixed-top {
+  border-bottom: 0;
+}
+
+.navbar-default {
+  .navbar-brand {
+    font-weight: bold;
+  }
+}
+
+.odp-nav .navbar-nav > .active > a,
+.odp-nav .navbar-nav > .active > a:hover,
+.odp-nav .navbar-nav > li > a:hover {
+  background-color: @gray-lighter;
+}
+
+.odp-nav .state-nav {
+  a .name {
+    text-align: center;
+  }
+}
+
+.odp-nav .navbar-nav > li.state-nav > a {
+  background-color: @gray-lighter;
+
+  &:hover {
+
+  }
+}
+
+/* Homepage
+==================== */
+
+.state-picker {
+  padding-top: 70px;
+  padding-bottom: 40px;
+  text-align: center;
+  background-color: @brand-primary;
+  color: white;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .5);
+
+  h1 {
+    color: white;
+  }
+  p.tagline {
+    font-size: 20px;
+    margin-bottom: 50px;
+    color: @brand-secondary;
+  }
+
+  img.state {
+    height: 16ex;
+    margin-bottom: 10px;
+    max-width: 100%;
+  }
+  p.stop-count {
+    color: @brand-secondary;
+  }
+  .btn {
+    margin-top: 10px;
+    background-color: transparent;
+    color: white;
+    border-color: @brand-tertiary;
+    padding: 12px 20px;
+    border-width: 2px;
+    font-size: 16px;
+
+    &:hover {
+      background-color: @brand-tertiary;
+    }
+  }
+  @media (max-width: @screen-sm-min) {
+    .btn.nc, .btn.md {
+      margin-bottom: 40px;
+    }
+  }
+  @media (min-width: @screen-sm-min) {
+    h1.title{
+      font-size: 60px;
+    }
+  }
+}
+
+.about-footer {
+  padding-bottom: 10px;
+  .links a {
+    font-size: 16px;
+  }
+}
+
+/* State homepage
+========================================= */
+
+.half-rule {
+  width: 100px;
+  margin: 20px auto;
+}
+
+.state-banner {
+  padding-top: 70px;
+  padding-bottom: 20px;
+  font-size: 24px;
+  text-align: left;
+  background-color: @brand-primary;
+  color: @brand-secondary;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .5);
+
+  &.agency-detail {
+    padding: 70px 40px 60px 40px;
+  }
+
+  &.agency-list,
+  &.find-a-stop {
+    padding: 90px 40px 50px 40px;
+  }
+
+  h1 {
+    color: white;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  @media (max-width: @screen-sm-min) {
+    padding-top: 60px;
+    padding-bottom: 30px;
+
+    &.agency-detail {
+      padding-top: 80px;
+      padding-bottom: 50px;
+    }
+
+    p {
+      font-size: 18px;
+    }
+  }
+
+  a.back {
+    color: white;
+    text-shadow: none;
+    font-size: 14px;
+    display: inline-block;
+    padding: 10px 0;
+  }
+
+  .state-header-graphic-col {
+    &.il {
+      text-align: center;
+    }
+  }
+}
+
+// http://stackoverflow.com/questions/20547819/vertical-align-with-bootstrap-3
+.vertical-align {
+  #state & .title-container {
+    /***
+     * In practice, the only place where nontrivial vertical alignment
+     * takes place is on the state homepage. Hence we can use a page-specific
+     * special margin rule and get the same effect.
+     */
+    margin-top: 20px;
+  }
+
+    @media (max-width: 768px) {
+      > * {
+        text-align: center;
+      }
+
+      a.pull-right {
+        float: none !important;
+      }
+
+      .title-container {
+        margin-top: 0;
+        margin-bottom: 20px;
+        padding: 0 30px;
+        border-bottom: 1px solid white;
+      }
+
+      h1 {
+        display: inline-block;
+      }
+    }
+}
+
+.state-banner.small {
+  @media (max-width: @screen-md-min) {
+    h1 {
+      font-size: 28px;
+    }
+  }
+}
+
+#sidebar {
+  border-left: 2px solid @gray-light;
+  padding-left: 15px;
+
+  h5 {
+    font-weight: bold;
+    font-size: 16px;
+  }
+}
+
+#sidebar.affix {
+  top: 80px;
+}
+
+.state-featurette {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-image: url("/static/img/cars-at-day.jpg");
+  background-position: center;
+  background-size: cover;
+  color: white;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .5);
+
+  blockquote {
+    border-left: 0;
+    font-size: 22px;
+    footer {
+      color: @brand-secondary;
+    }
+  }
+
+  h3 {color: white}
+
+  @media (max-width: @screen-sm-min) {
+    blockquote {
+      font-size: 18px;
+    }
+  }
+}
+
+p.nc-agency-intro {
+  margin: 20px 0;
+}
+
+.agency-dashboard-block {
+  margin-bottom: 30px;
+}
+
+body#state {
+  #map {
+    position: fixed;
+    width: 100%;
+    min-height: 100%;
+    margin-top: -60px;
+    z-index: 0;
+    opacity: 0.2;
+  }
+  .ui-autocomplete {
+    font-family: 'Droid Sans', sans-serif;
+  }
+  .homeInset {
+    margin-left: 30px;
+  }
+  #quick-search {
+    position: fixed;
+    margin-top: 80px;
+    width: 100%;
+    z-index: 1;
+    #agency_search {
+      #id_agency_0 {
+        font-size: 20px;
+        height: 60px;
+        font-family: 'Droid Sans', sans-serif;
+        margin-bottom: 5px;
+      }
+    }
+  }
+  #elevator {
+    font-size: 110%;
+  }
+  .tab-pane p:first-of-type {
+    margin-top: 12px;
+  }
+}
+
+p.agency-intro a {
+  font-weight: bold;
+  text-decoration: underline;
+}
+/* Find a Traffic Stop page
+========================================= */
+
+.fields-col {
+  @media (min-width: 992px) {
+    &.left {
+      padding-right: 0;
+      > * {
+        padding-right: 45px;
+      }
+      > div {
+        border-right: 1px solid @gray-light;
+      }
+    }
+    &.right {
+      padding-left: 0;
+      > * {
+        padding-left: 45px;
+      }
+    }
+  }
+
+  > h3 {
+    text-align: center;
+    font-weight: lighter;
+    color: @gray-light;
+  }
+}
+
+.buttons-col {
+  padding: 30px 0;
+  .flex-layout();
+  .flex-direction(row);
+  .justify-content(center);
+  .align-items(center);
+
+  .form-group {
+    margin: 0;
+
+    button {
+      font-size: 18px;
+      padding: 8px 24px;
+    }
+  }
+}
+
+.agency-list-search {
+  background-color: #f8f8f8;
+
+  &.affix {
+    z-index: 1024;
+    width: 100%;
+    top: 50px;
+  }
+
+  .form-group {
+    margin: 20px 0;
+  }
+
+  .input-group {
+    * {
+      font-size: 18px;
+    }
+
+    input {
+      height: 39px;
+    }
+}
+}
+
+/* Find a Traffic Stop page
+========================================= */
+
+.fields-col {
+  @media (min-width: 992px) {
+    &.left {
+      padding-right: 0;
+      > * {
+        padding-right: 45px;
+      }
+      > div {
+        border-right: 1px solid @gray-light;
+      }
+    }
+    &.right {
+      padding-left: 0;
+      > * {
+        padding-left: 45px;
+      }
+    }
+  }
+
+  > h3 {
+    text-align: center;
+    font-weight: lighter;
+    color: @gray-light;
+  }
+}
+
+.buttons-col {
+  padding: 30px 0;
+  .flex-layout();
+  .flex-direction(row);
+  .justify-content(center);
+  .align-items(center);
+
+  .form-group {
+    margin: 0;
+
+    button {
+      font-size: 18px;
+      padding: 8px 24px;
+    }
+  }
+}
+
+.agency-list-help-block {
+  color: @gray-light;
+  font-size: 16px;
+  line-height: 1.5;
+  margin-top: 20px;
+}
+
+/* Agency detail page
+========================================= */
+
+.state-banner.officer {
+  padding-bottom: 20px;
+}
+
+h2.officer {
+  margin-top: 5px;
+  color: white;
+}
+
+.headline {
+  padding-left: 3rem;
+  margin-top: 1rem;
+  border-bottom: 1px solid @gray;
+
+  .anchor-offset {
+    position: absolute;
+    top: -50px;
+  }
+
+  @media (min-width: 768px) {
+    .anchor-offset {
+      position: absolute;
+      top: -158px;
+    }
+  }
+
+  > h2 {
+    margin-bottom: 20px;
+    font-size: 40px;
+    position: relative;
+  }
+}
+
+/***
+ * For census data and other rows that may or may not be needed, depending
+ * on the results coming from the API.
+ */
+.optional,
+.nav li.optional {
+  display: none;
+}
+
+/***
+ * Sticky sub-navigation bar on agency detail pages.
+ * *Not* sticky on mobile view.
+ */
+nav.graphs-nav {
+  padding: 2rem 4rem;
+  background-color: white;
+  .flex-layout();
+  .flex-direction(row);
+  .flex-wrap(nowrap);
+  .justify-content(space-between);
+  .align-items(center);
+
+  @media (max-width: 768px) {
+    .container {
+      text-align: center;
+    }
+
+    ul {
+      text-align: left;
+    }
+  }
+
+  .container {
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    font-size: 18px;
+
+    display: -webkit-inline-box;
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    .flex-direction(row);
+    .flex-wrap(nowrap);
+    .justify-content(flex-start);
+    .align-items(center);
+
+    > li {
+      &.active {
+        a {
+          color: @brand-primary;
+          margin: 0 1rem;
+
+          &:first-child {
+            margin-left: 0;
+          }
+
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+        > a {
+          color: white;
+          background-color: @brand-primary;
+
+          &:hover {
+            background-color: @brand-tertiary;
+          }
+        }
+      }
+    }
+  }
+
+  &.affix {
+    z-index: 1;
+    width: 100%;
+    top: 50px;
+
+    /***
+     * When the stickiness is enabled, it will leave behind a gap. To fill
+     * that gap, an element with the same height as the nav is expanded to
+     * fill the space.
+     */
+    & + .affix-padder {
+      @media (min-width: 771px) {
+        height: 80px;
+        width: 100%;
+      }
+
+      @media (max-width: 770px) {
+        height: 0!important;
+        width: 0!important;
+      }
+    }
+  }
+
+  .raceSelector {
+    display: inline-block;
+    float: right;
+
+    @media (max-width: 768px) {
+      float: none;
+    }
+  }
+}
+
+@media (max-width: 770px) {
+  nav.graphs-nav {
+    .flex-layout();
+    .flex-wrap(wrap);
+    .flex-direction(row);
+    .justify-content(center);
+
+    position: static !important;
+  }
+}
+
+@media (max-width: 440px) {
+  nav.graphs-nav {
+    padding: 2rem 0;
+
+    > ul {
+      > li {
+        padding: 0 8px;
+
+        > a {
+          margin: 0;
+          padding: 10px 8px;
+        }
+      }
+    }
+  }
+}
+
+p.help-block {
+  font-size: 115%;
+  margin: 2rem 0 4rem 0;
+}
+
+p.graph-help-block {
+  color: @gray-light;
+  font-style: italic;
+  padding: 2rem 2rem;
+}
+
+h4.graph-label {
+  margin-top: 0;
+}
+
+@media (min-width: 992px) {
+  /***
+   * Smaller fonts on md-and-up
+   */
+   p.graph-help-block {
+     font-size: 95%;
+   }
+
+  /***
+   * Adding the divider border to the pie chart & adjusting whitespace
+   * accordingly; only relevant on md and up
+   */
+  .pie-chart-container {
+    @media (min-width: 992px) {
+      border-right: 1px solid @gray-light;
+    }
+
+  }
+
+  .line-chart-container {
+    padding-left: 30px;
+  }
+}
+
+.selector-container {
+  margin-top: 15px;
+  width: 100%;
+  > select {
+    margin: 0 auto;
+    display: block;
+    font-size: 16px;
+  }
+}
+
+/* Dashboard data tables
+========================================= */
+
+.dash-tables {
+  table-layout: fixed;
+}
+
+.raceSelector {
+  border: 2px solid rgb(108, 108, 108);
+  padding: 6px;
+  background-color: lightslategrey;
+  color: white;
+  .radio {
+    margin: 0px;
+  }
+}
+
+/* NVD3 style-overrides
+========================================= */
+
+.nvd3.nv-pie .nv-label text{
+  fill: white !important;
+  font-weight: bold;
+}
+
+.nvd3 .nv-axis line {
+  stroke: #d1d1d1;
+}
+
+.nvd3 .nv-groups path.nv-line {
+  stroke-width: 5px;
+}
+
+h3.donut-label {
+  font-size: 16px;
+}

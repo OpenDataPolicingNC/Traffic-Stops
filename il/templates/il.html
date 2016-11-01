@@ -1,0 +1,127 @@
+{% extends 'state.html' %}
+
+{% load staticfiles bootstrap3 %}
+
+{% block state-name %}
+  Illinois
+{% endblock state-name %}
+
+{% block state-subtitle %}
+  Browse all known traffic stops to have occurred in Illinois from 2005 to 2014
+{% endblock state-subtitle %}
+
+{% block state-header-graphic %}
+  <img src="{% static "svg/noun_648290_cc.svg" %}" class="state il">
+{% endblock state-header-graphic %}
+
+{% block state-tabs %}
+  {% comment %}
+    We are not doing a proper search page in this initial draft of Illinois.
+    Thus we do not want actual tabs to take up this space, as the second tab
+    does not have any useful content.
+  {% endcomment %}
+  <h2>Agencies</h2>
+{% endblock state-tabs %}
+
+{% block agency-intro %}
+  <p class='agency-intro'>
+    Review agency-level data on the racial and ethnic demographics of people
+    stopped and searched in the course of traffic stops in a given jurisdiction.
+  </p>
+
+  <p class="agency-intro">
+    <a href="{% url 'il:agency-list' %}">Click here</a> to browse a list of
+    all agencies for which data is available.
+  </p>
+{% endblock agency-intro %}
+
+{% block search-form %}
+  <h4>View Agency Dashboard</h4>
+  <form role="form" id="agency_search" action='{% url "il:home" %}' method="get" accept-charset="utf-8">
+      <div class="form-group">
+      {% csrf_token %}
+      <div class="input-group">
+        {{ form.agency }}
+        <span class="input-group-btn">
+          <button class="btn btn-primary" type="button">View</button>
+        </span>
+      </div><!-- /input-group -->
+      {% if form.agency.errors %}
+          <div class="alert alert-warning alert-dismissible">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <ul>
+              {% for error in form.agency.errors %}
+                  <li><strong>{{ error }}</strong></li>
+              {% endfor %}
+              </ul>
+          </div>
+      {% endif %}
+      </div>
+  </form>
+{% endblock search-form %}
+
+{% block agencies-table %}
+  <table class='table table-condensed table-hover'>
+    <tr>
+      <th>City</th>
+      <th class="text-right">Stops</th>
+    </tr>
+    <tr>
+      <td><a href="{% url "il:agency-detail" "446" %}">Illinois State Police</a></td>
+      <td class="text-right">4,034,823</td>
+    </tr>
+    <tr>
+      <td><a href="{% url "il:agency-detail" "168" %}">Chicago Police</a></td>
+      <td class="text-right">1,614,504</td>
+    </tr>
+    <tr>
+      <td><a href="{% url "il:agency-detail" "43" %}">Aurora Police</a></td>
+      <td class="text-right">300,266</td>
+    </tr>
+    <tr>
+      <td><a href="{% url "il:agency-detail" "431" %}">Hoffman Estates Police</a></td>
+      <td class="text-right">227,004</td>
+    </tr>
+    <tr>
+      <td><a href="{% url "il:agency-detail" "895" %}">Springfield Police</a></td>
+      <td class="text-right">215,116</td>
+    </tr>
+  </table>
+{% endblock agencies-table %}
+
+{% block about-text %}
+  <p>
+      Open Data Policing aggregates, visualizes, and publishes public records
+      related to all known traffic stops to have occurred in Illinois since
+      2005. Data is available for most Illinois departments.
+  </p>
+  <p>
+      Illinois law requires agencies to report their data on a monthly basis
+      to the IL state government; however, some datasets are incomplete or
+      remain unreported. Where data sets are incomplete or missing from the
+      website, it is because they have not been reported to the state. Open
+      Data Policing does not have access to, nor does it publish, the names
+      of officers, drivers, or passengers involved in traffic stops.
+  </p>
+{% endblock about-text %}
+
+{% block dataset-facts %}
+  <table class='table table-condensed table-hover'>
+    <tr>
+      <th>Timeframe</th>
+      <td>2005 - 2014</td>
+    </tr>
+    <tr>
+      <th>Stops</th>
+      <td>23,273,288</td>
+    </tr>
+    <tr>
+      <th>Searches</th>
+      <td>1,314,143</td>
+    </tr>
+    <tr>
+      <th>Agencies</th>
+      <td>1,062</td>
+    </tr>
+  </table>
+{% endblock dataset-facts %}

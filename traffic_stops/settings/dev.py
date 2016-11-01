@@ -3,10 +3,10 @@ import sys
 from traffic_stops.settings.base import *  # noqa
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 INSTALLED_APPS += (
     'debug_toolbar',
+    'django_extensions',
 )
 
 INTERNAL_IPS = ('127.0.0.1', )
@@ -18,8 +18,6 @@ SOUTH_TESTS_MIGRATE = True
 CELERY_ALWAYS_EAGER = True
 CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
 
-COMPRESS_ENABLED = False
-
 CACHES = {
     'default': {
         'BACKEND': 'caching.backends.locmem.LocMemCache',
@@ -28,9 +26,10 @@ CACHES = {
 
 # Special test settings
 if 'test' in sys.argv:
-    COMPRESS_PRECOMPILERS = ()
-
     PASSWORD_HASHERS = (
         'django.contrib.auth.hashers.SHA1PasswordHasher',
         'django.contrib.auth.hashers.MD5PasswordHasher',
     )
+    CACHES['cache_machine'] = {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }

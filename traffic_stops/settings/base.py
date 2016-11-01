@@ -5,7 +5,6 @@ BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 PROJECT_ROOT = os.path.abspath(os.path.join(BASE_DIR, os.pardir))
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -20,6 +19,14 @@ DATABASES = {
         'HOST': '',
         'PORT': '',
     },
+    'traffic_stops_il': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'traffic_stops_il',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
+    },
     'traffic_stops_nc': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'traffic_stops_nc',
@@ -27,10 +34,19 @@ DATABASES = {
         'PASSWORD': '',
         'HOST': '',
         'PORT': '',
-    }
+    },
+    'traffic_stops_md': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'traffic_stops_md',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
+    },
 }
 
 DATABASE_ROUTERS = ['traffic_stops.routers.StateDatasetRouter']
+DATABASE_ETL_USER = ''
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -40,6 +56,9 @@ DATABASE_ROUTERS = ['traffic_stops.routers.StateDatasetRouter']
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
 TIME_ZONE = 'America/New_York'
+IL_TIME_ZONE = 'America/Chicago'
+MD_TIME_ZONE = 'America/New_York'
+NC_TIME_ZONE = 'America/New_York'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -78,6 +97,7 @@ STATIC_URL = '/static/'
 # Additional locations of static files
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
+    os.path.join(PROJECT_ROOT, 'node_modules/bootstrap'),
 )
 
 # List of finder classes that know how to find static files in
@@ -85,41 +105,50 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'compressor.finders.CompressorFinder',
 )
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = os.environ.get('SECRET_KEY', '0qakm1)=inee683)p)0#lt2o#=@*dy5uw4_nm-1z5gqpy8idbk')
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.core.context_processors.static',
-    'django.core.context_processors.tz',
-    'django.core.context_processors.request',
-    'django.contrib.messages.context_processors.messages',
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.tz',
+                'django.template.context_processors.request',
+                'django.contrib.messages.context_processors.messages',
+                'dealer.contrib.django.context_processor',
+            ],
+        },
+    },
+]
 
 MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'traffic_stops.middleware.StateMiddleware',
 )
 
 ROOT_URLCONF = 'traffic_stops.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'traffic_stops.wsgi.application'
-
-TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'templates'),
-)
 
 FIXTURE_DIRS = (
     os.path.join(BASE_DIR, 'fixtures'),
@@ -129,21 +158,22 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.sites',  # required by django-allauth
+    # 'django.contrib.sites',  # required by django-allauth
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.humanize',
     'django.contrib.sitemaps',
     # External apps
-    'compressor',
     'selectable',
     'bootstrap3',
-    'endless_pagination',
+    'el_pagination',
     'rest_framework',
-    'robots',
     # Custom apps
-    'nc'
+    'tsdata',
+    'nc',
+    'md',
+    'il',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -151,6 +181,11 @@ INSTALLED_APPS = (
 # the site admins on every HTTP 500 error when DEBUG=False.
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
+SYSLOG_PATH = None
+for path in ("/dev/log", "/var/run/syslog"):
+    if os.path.exists(path):
+        SYSLOG_PATH = path
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -162,6 +197,9 @@ LOGGING = {
     'formatters': {
         'basic': {
             'format': '%(asctime)s %(name)-20s %(levelname)-8s %(message)s',
+        },
+        'papertrail': {
+            'format': 'django %(asctime)s %(name)s %(levelname)s: %(message)s',
         },
     },
     'handlers': {
@@ -183,30 +221,83 @@ LOGGING = {
             'maxBytes': 10 * 1024 * 1024,  # 10 MB
             'backupCount': 10,
         },
+        'syslog': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.SysLogHandler',
+            'address': SYSLOG_PATH,
+            'facility': 'local6',
+            'filters': ['require_debug_false'],
+            'formatter': 'papertrail',
+        },
+    },
+    'root': {
+        'handlers': ['file', 'syslog'],
+        'level': 'INFO',
     },
     'loggers': {
         'django.request': {
-            'handlers': ['file', 'mail_admins'],
+            'handlers': ['file', 'mail_admins', 'syslog'],
             'level': 'ERROR',
             'propagate': True,
         },
-        'nc': {
-            'handlers': ['file'],
+        'django.security': {
+            'handlers': ['mail_admins', 'syslog'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'traffic_stops': {
+            'handlers': ['file', 'syslog'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'tsdata': {
+            'handlers': ['file', 'syslog'],
             'level': 'DEBUG',
+            'propagate': False,
+        },
+        'nc': {
+            'handlers': ['file', 'syslog'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'md': {
+            'handlers': ['file', 'syslog'],
+            'level': 'DEBUG',
+            'propagate': False,
         },
     }
 }
 
-SITE_ID = 1
+# If using Celery, tell it to obey our logging configuration.
+CELERYD_HIJACK_ROOT_LOGGER = False
+
+# https://docs.djangoproject.com/en/1.9/topics/auth/passwords/#password-validation
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
+
+# Make things more secure by default. Run "python manage.py check --deploy"
+# for even more suggestions that you might want to add to the settings, depending
+# on how the site uses SSL.
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+CSRF_COOKIE_HTTPONLY = True
+X_FRAME_OPTIONS = 'DENY'
 
 # Application settings
-COMPRESS_PRECOMPILERS = (
-    ('text/less', 'lessc {infile} {outfile}'),
-)
-
 LOGIN_URL = 'account_login'
 LOGIN_REDIRECT_URL = 'home'
-ENDLESS_PAGINATION_PER_PAGE = 30
 SELECTABLE_MAX_LIMIT = 30
 
 REST_FRAMEWORK_EXTENSIONS = {
@@ -214,3 +305,5 @@ REST_FRAMEWORK_EXTENSIONS = {
 }
 
 CACHE_COUNT_TIMEOUT = 60 * 60 * 24 * 60  # 60 days
+
+CENSUS_API_KEY = ''

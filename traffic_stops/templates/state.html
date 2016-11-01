@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% load selectable_tags staticfiles %}
+
+{% block body_id %}state{% endblock %}
+
+{% block extra-css %}
+    {% include_ui_theme %}
+    {{ form.media.css }}
+{% endblock %}
+
+{% block extra-js %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.js"></script>
+{{ form.media.js }}
+<script type="text/javascript">
+  $(document).ready(function() {
+    var quick_search = $('#agency_search :input[name=agency_0]');
+    quick_search.bind('djselectableselect', function(event, ui) {
+        $(this).parents("form").submit();
+    });
+  });
+</script>
+
+{% endblock %}
+
+{% block content-outer %}
+
+<div class="state-banner">
+  <div class="container">
+    <div class="row vertical-align">
+      <div class="col-md-8 col-sm-6">
+        <h1 class="title-container">{% block state-name %}{% endblock state-name %}</h1>
+        <p>
+          {% block state-subtitle %}
+          {% endblock state-subtitle %}
+        </p>
+      </div>
+      <div class="col-md-4 col-sm-6 hidden-xs state-header-graphic-col il">
+        {% block state-header-graphic %}
+        {% endblock state-header-graphic %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="agency-dashboard-block">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-5 col-sm-6" id="explore-data" data-toggle="tabslet">
+        {% block state-tabs %}
+          <ul class="nav nav-tabs" data-role="tablist">
+            <li role="presentation" class="active">
+              <a href="#agencies" aria-controls="agencies" role="tab" data-toggle="tab"><h4 class="active">Agencies</h4></a>
+            </li>
+            <li role="presentation">
+              <a href="#find-a-stop" aria-controls="find-a-stop" role="tab" data-toggle="tab"><h4>Find a Stop</h4></a>
+            </li>
+          </ul>
+        {% endblock state-tabs %}
+
+        <div class="tab-content">
+          <div class="tab-pane active" id="agencies" role="tabpanel">
+            {% block agency-intro %}
+            {% endblock agency-intro %}
+
+            {% block search-form %}
+              <h4>View Agency Dashboard</h4>
+              <form role="form" id="agency_search" action='{% url "nc-home" %}' method="get" accept-charset="utf-8">
+                  <div class="form-group">
+                  {% csrf_token %}
+                  <div class="input-group">
+                    {{ form.agency }}
+                    <span class="input-group-btn">
+                      <button class="btn btn-primary" type="button">View</button>
+                    </span>
+                  </div><!-- /input-group -->
+                  {% if form.agency.errors %}
+                      <div class="alert alert-warning alert-dismissible">
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                          <ul>
+                          {% for error in form.agency.errors %}
+                              <li><strong>{{ error }}</strong></li>
+                          {% endfor %}
+                          </ul>
+                      </div>
+                  {% endif %}
+                  </div>
+              </form>
+            {% endblock search-form %}
+
+            <h4>Largest Agencies</h4>
+            {% block agencies-table %}
+            {% endblock agencies-table %}
+          </div>
+          <div class="tab-pane" id="find-a-stop" role="tabpanel">
+            {% block find-a-stop %}
+            {% endblock find-a-stop %}
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-7">
+        <h2>About</h2>
+        {% block about-text %}
+        {% endblock about-text %}
+        <h4>Dataset Facts</h4>
+        {% block dataset-facts %}
+        {% endblock dataset-facts %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

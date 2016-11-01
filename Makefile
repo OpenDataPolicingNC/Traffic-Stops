@@ -7,13 +7,13 @@ MODERNIZR_VERSION = 2.8.3
 JQUERY_VERSION = 1.11.2
 BOOTSTRAP_VERSION = 3.3.1
 
-default: lint test
+default: lint-py test
 
 test:
 	# Run all tests and report coverage
 	# Requires coverage
 	coverage run manage.py test
-	coverage report -m --fail-under 80
+	coverage report -m --fail-under 70
 
 lint-py:
 	# Check for Python formatting issues
@@ -55,10 +55,16 @@ LIBS += $(STATIC_LIBS_DIR)/bootstrap
 
 update-static-libs: $(LIBS)
 
+# OS := $(shell uname)
+# ifeq ($(OS), Darwin)
+# 	@cat /dev/urandom | LC_CTYPE=C tr -dc 'a-zA-Z0-9' | fold -w $(length) | head -n 1 | tr -d '\n'; echo
+# else
+# 	@strings /dev/urandom | grep -o '[[:alnum:]]' | head -n $(length) | tr -d '\n'; echo
+# endif
 # Generate a random string of desired length
 generate-secret: length = 32
 generate-secret:
-	@strings /dev/urandom | grep -o '[[:alnum:]]' | head -n $(length) | tr -d '\n'; echo
+	@cat /dev/urandom | LC_CTYPE=C tr -dc 'a-zA-Z0-9' | fold -w $(length) | head -n 1 | tr -d '\n'; echo
 
 conf/%.pub.ssh:
 	# Generate SSH deploy key for a given environment

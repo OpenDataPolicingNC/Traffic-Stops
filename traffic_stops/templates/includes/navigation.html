@@ -1,4 +1,6 @@
-<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+{% load staticfiles %}
+
+<div class="navbar navbar-default navbar-fixed-top affix-offset-top-neg odp-nav {% if navbar_inverse %}navbar-inverse{% endif %}" role="navigation">
   <div id="content" class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -7,15 +9,42 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href='{% url "home" %}'>Open Data Policing NC</a>
+      <a class="navbar-brand" href='{% url "home" %}'>Open Data Policing</a>
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li><a href="{% url "about" %}">About</a></li>
+        {% if request.state %}
+        <li class="dropdown state-nav {% if navbar_inverse %}navbar-inverse{% endif %}">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% if request.state == "nc" %}North Carolina{% elif request.state == "md" %}Maryland{% elif request.state == "il" %}Illinois{% endif %} <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            {% if request.state == "md" %}
+              <li><a href='{% url "md:agency-list" %}'>Agencies</a></li>
+              <li><a href='{% url "md:stops-search" %}'>Find a stop</a></li>
+            {% elif request.state == "nc" %}
+              <li><a href='{% url "nc:agency-list" %}'>Agencies</a></li>
+              <li><a href='{% url "nc:stops-search" %}'>Find a stop</a></li>
+            {% elif request.state == "il" %}
+              <li><a href='{% url "il:agency-list" %}'>Agencies</a></li>
+            {% endif %}
+            <li role="separator" class="divider"></li>
+            <li class="dropdown-header">Switch States:</li>
+            <li>
+              {% if request.state != "il" %}
+                <a href="{% url "il:home" %}">Illinois</a>
+              {% endif %}
+              {% if request.state != "md" %}
+                <a href="{% url "md:home" %}">Maryland</a>
+              {% endif %}
+              {% if request.state != "nc" %}
+                <a href="{% url "nc:home" %}">North Carolina</a>
+              {% endif %}
+            </li>
+          </ul>
+        </li>
+        {% endif %}
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href='{% url "agency-list" %}'>Agencies</a></li>
-        <li><a href='{% url "stops-search" %}'>Find a stop</a></li>
+        <li><a href="{% url "about" %}">About</a></li>
         {% if user.is_authenticated %}
             {% if user.is_staff %}
               <li><a href="{% url "admin:index" %}">Admin</a></li>
