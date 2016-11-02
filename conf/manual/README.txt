@@ -1,13 +1,15 @@
 For production only:
 
-traffic_stops-opendatapolicingnc.com handles the legacy domain names
-[www.]opendatapolicingnc.com by redirecting to opendatapolicing.com,
-via the nginx .conf file traffic_stops-opendatapolicingnc.com.
+traffic_stops-non-canonical-sites.conf handles the legacy domain names
+[www.]opendatapolicingnc.com, as well as the alternate domain name
+www.opendatapolicing.com, by redirecting to opendatapolicing.com.
 
-The .conf must be manually placed in /etc/nginx/sites-enabled, and
-the related SSL key and certificate file must be manually placed in
-/var/www/traffic_stops/ssl.
+The SSL endpoints for these hosts depend on the base Let's Encrypt
+certificate, which must support these names in addition to the
+canonical domain opendatapolicing.com.
+
+The .conf must be manually placed in /etc/nginx/sites-enabled.
 
 This manual configuration should be replaced with changes to the
-provisioning to maintain a LetsEncrypt-generated certificate for these
-legacy domains.
+provisioning to generate the necessary nginx configuration in an
+automated manner.
