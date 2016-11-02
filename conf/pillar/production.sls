@@ -4,6 +4,12 @@ environment: production
 
 domain: opendatapolicing.com
 
+letsencrypt_domains:
+  - opendatapolicing.com
+  - www.opendatapolicing.com
+  - opendatapolicingnc.com
+  - www.opendatapolicingnc.com
+
 letsencrypt: true
 
 repo:
