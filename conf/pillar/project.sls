@@ -9,7 +9,7 @@ postgres_extensions: [postgis]
 
 python_headers: [libxft-dev]
 
-margarita_version: 1.7.5
+margarita_version: 1.7.6
 
 admin_email: ccopeland@codeforamerica.org
 
