@@ -8,8 +8,8 @@ import djclick as click
 @click.command()
 def command():
     nc_data_site = 'sbi1.jus.state.nc.us'
-    nc_data_user = os.environ('NC_FTP_USER')
-    nc_data_password = os.environ('NC_FTP_PASSWORD')
+    nc_data_user = os.environ.get('NC_FTP_USER')
+    nc_data_password = os.environ.get('NC_FTP_PASSWORD')
     nc_data_file = 'STOPS_Extract.zip'
     nc_data_directory = '/TSTOPextract'
 
