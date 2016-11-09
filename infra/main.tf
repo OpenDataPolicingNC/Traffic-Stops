@@ -8,7 +8,7 @@ provider "aws" {
 # Our default security group to access
 # the instances over SSH, HTTP, and HTTPS
 resource "aws_security_group" "default" {
-  name = "odp-web"
+  name = "odp-web-${var.environment}"
   description = "SSH, HTTP, and HTTPS"
 
   # SSH access from anywhere
@@ -59,4 +59,9 @@ resource "aws_instance" "app" {
         created_by = "${lookup(var.tags,"created_by")}"
         Name = "${var.instance_name}-${var.environment}"
     }
+}
+
+resource "aws_eip_association" "eip_assoc" {
+  instance_id = "${aws_instance.app.id}"
+  allocation_id = "${var.eip_id}"
 }

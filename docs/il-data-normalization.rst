@@ -29,6 +29,9 @@ Many entries have no value for this column instead of a "Y" or "N".  Those
 stops with no value for this column will not be included in the contraband
 "hit rate" in the web interface.
 
+The question is perhaps not applicable to stops with no search, but the
+number of "Y" and "N" for contraband do not add up to the number of searches.
+
 Census data
 -----------
 

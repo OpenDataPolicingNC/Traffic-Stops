@@ -9,7 +9,12 @@ postgres_extensions: [postgis]
 
 python_headers: [libxft-dev]
 
-margarita_version: 1.7.0
+margarita_version: 1.7.6
+
+admin_email: ccopeland@codeforamerica.org
+
+# Celery tasks run very infrequently and use a lot of memory.
+celery_worker_arguments: "--loglevel=INFO --maxtasksperchild 1"
 
 instances:
   - nc

@@ -36,7 +36,7 @@ def staging():
 @task
 def production():
     env.environment = 'production'
-    env.master = 'ec2-54-208-65-43.compute-1.amazonaws.com'
+    env.master = 'ec2-52-206-92-217.compute-1.amazonaws.com'
     initialize_env()
 
 
@@ -157,7 +157,7 @@ def sync():
         salt_root = CONF_ROOT if CONF_ROOT.endswith('/') else CONF_ROOT + '/'
         project.rsync_project(
             local_dir=salt_root, remote_dir='/tmp/salt', delete=True)
-        sudo('rm -rf /srv/salt /srv/pillar')
+        sudo('rm -rf /srv/salt /srv/pillar /srv/manual')
         sudo('mv /tmp/salt/* /srv/')
         sudo('rm -rf /tmp/salt/')
         execute(margarita)

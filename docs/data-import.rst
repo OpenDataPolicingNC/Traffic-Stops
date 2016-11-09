@@ -1,8 +1,13 @@
 Data Import
 ===========
 
-Data for all states are imported in the same manner.  Substitute the state
+Stop data is imported in the same manner for all states.  Substitute the state
 abbreviation (e.g., "md") as appropriate in the NC instructions below.
+
+Census data for all states is imported all at once, in the same manner for all
+environments, using the ``import_census`` management command.  This must be
+performed as part of developer and server setup as well as when census support is
+added for additional states.
 
 Local/Development Environment
 -----------------------------
@@ -100,10 +105,37 @@ When finished, revoke SUPERUSER privileges:
 
     sudo -u postgres psql -c 'ALTER USER traffic_stops_staging WITH NOSUPERUSER;'
 
+When importing IL data on a server, paging space is required due to the memory
+requirements.  Currently the staging and production servers do not have a "swap"
+file or device permanently assigned, nor do they have a device on which paging
+space can be routinely used without incurring I/O charges.  Thus a swap file is
+activated prior to an import of IL data and then deactivated afterwards, as follows::
+
+    sudo fallocate -l 3G /swapfile
+    sudo chmod 600 /swapfile
+    sudo mkswap /swapfile
+    sudo swapon /swapfile
+    <<perform the IL data import using the appropriate mechanism>>
+    sudo swapoff /swapfile
+    sudo rm /swapfile
+
 After importing new state data into the database used by a running server,
 cached queries will continue to be used until they expire.  To flush the
 cache, connect to ``memcached`` using ``telnet`` or some other suitable
 client and send the ``flush_all`` command.
+
+After importing NC data on staging or production, prime the query cache via
+requests on the server box which bypass nginx::
+
+    sudo su - traffic_stops
+    /var/www/traffic_stops/manage.sh  prime_cache --host opendatapolicing.com http://127.0.0.1:8000/
+
+(Use the appropriate ``--host`` argument based on the canonical name for the
+server.)
+
+NC queries should be primed in this manner because some of them take longer than
+the nginx timeout to perform the first time, resulting in users encountering
+error pages instead of agency results.
 
 Raw NC Data
 ___________
@@ -138,3 +170,24 @@ ______________
     zip traffic_stops_nc_production.tar.zip traffic_stops_nc_production.tar
     # then on local laptop, run:
     scp opendatapolicingnc.com:traffic_stops_nc_production.tar.zip .
+
+Updating landing page stats
+---------------------------
+
+Currently, various statistics on the state landing page are hard-coded
+in the Django templates for that state, including the number of stops,
+the range of dates, and the top five agencies.
+
+When first importing a new set of data from a state, the landing page
+stats must be edited to reflect the new data.  This process involves the
+following steps:
+
+1. Calculate the statistics using the new dataset.
+2. Update the Django template for the state to include the current
+   statistics.
+3. Verify that the agency ids haven't changed; i.e., verify that the links
+   for the top five agencies still take you to the proper agency.
+
+Most states have a management command to calculate the landing page
+stats -- ``analyze_<state_app>``.  For North Carolina, the statistics
+are currently calculated with queries in the shell.

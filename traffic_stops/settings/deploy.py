@@ -72,7 +72,7 @@ ALLOWED_HOSTS = [os.environ['DOMAIN']]
 
 # Uncomment if using celery worker configuration
 CELERY_SEND_TASK_ERROR_EMAILS = True
-BROKER_URL = 'amqp://traffic_stops_staging:%(BROKER_PASSWORD)s@%(BROKER_HOST)s/traffic_stops_staging' % os.environ  # noqa
+BROKER_URL = 'amqp://traffic_stops_%(ENVIRONMENT)s:%(BROKER_PASSWORD)s@%(BROKER_HOST)s/traffic_stops_%(ENVIRONMENT)s' % os.environ  # noqa
 
 LOGGING['handlers']['file']['filename'] = '/var/www/traffic_stops/log/traffic_stops.log'
 

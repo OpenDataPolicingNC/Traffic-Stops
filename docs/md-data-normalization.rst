@@ -1,7 +1,11 @@
 The traffic stop data received from the state of Maryland has been post-processed
-to address minor variations in the input data as well as to group values into a
-smaller set of categories for display in the web interface.  The post-processing
-is described below for columns where such processing is performed.
+in two general ways:
+
+- Add 2016 YTD Excel worksheet as-is to pre-2016 Excel workbook.  See the
+  README in the dataset for more information.
+- Address minor variations in the input data as well as group values into a
+  smaller set of categories for display in the web interface.  These changes
+  are described below for columns where such processing is performed.
 
 TIME_OF_STOP
 ------------

@@ -55,9 +55,12 @@
 
 {% block find-a-stop %}
   <p class="agency-intro">
-    Search for North Carolina stops using the form fields below. Use
-    <a href='{% url 'nc:stops-search' %}'>Advanced Search</a>
-    for additional filtering criteria.
+    Use this feature to identify the stop and search patterns of individual
+    police officers.  Search for North Carolina traffic stops using the form fields
+    below. Use <a href='{% url 'nc:stops-search' %}'>Advanced Search</a>
+    for additional filtering criteria.  When you
+    have found the stop you are looking for, click the Officer ID hyperlink
+    to review the data associated with the officer involved.
   </p>
   <form action="{% url 'nc:stops-search' %}" method="get" class="form row">
     <div class="col-md-12">

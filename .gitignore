@@ -31,7 +31,7 @@ node_modules
 */static/js/bundle.js
 */static/css
 secrets.tfvars
-terraform.tfstate*
+*.tfstate*
 *.tar
 *.tar.zip
 mddata/

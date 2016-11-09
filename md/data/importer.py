@@ -265,17 +265,17 @@ def compute_AGE(row):
 
 def load_xls(xls_path):
     logger.info('Loading {} into pandas'.format(xls_path))
-    num_sheets = 3
-    df_dict = pd.read_excel(
-        xls_path, sheetname=list(range(num_sheets)),
-        keep_default_na=False, na_values=[]
-    )
-    for i in range(1, num_sheets):
-        df_dict[i].columns = df_dict[0].columns
-    stops = pd.concat(
-        [df_dict[k] for k in sorted(df_dict.keys())],
-        ignore_index=True
-    )
+    xl = pd.ExcelFile(xls_path)
+    stops = pd.DataFrame()
+    columns = None
+    for sheet_num in range(len(xl.sheet_names)):
+        logger.info('Reading sheet "{}"'.format(xl.sheet_names[sheet_num]))
+        sheet = xl.parse(sheet_num, keep_default_na=False, na_values=[])
+        if sheet_num == 0:
+            columns = sheet.columns
+        else:
+            sheet.columns = columns
+        stops = stops.append(sheet, ignore_index=True)
     return stops
 
 

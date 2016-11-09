@@ -4,6 +4,8 @@ environment: staging
 
 domain: dev.opendatapolicingnc.com
 
+letsencrypt: true
+
 repo:
   url: https://github.com/OpenDataPolicingNC/Traffic-Stops.git
   branch: dev
