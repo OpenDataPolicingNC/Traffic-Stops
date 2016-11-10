@@ -68,17 +68,17 @@ def convert_to_csv(destination):
             base = os.path.join(settings.WEBSERVER_ROOT, 'env/bin/')
         else:
             base = ''
+        intermediate_path = data_path.replace('.txt', '.txt2')
+        call([r"sed 's/\x0//g' <{} >{}".format(data_path, intermediate_path)], shell=True)
         # Convert to CSV using ISO-8859-1 encoding
         # TODO: This may be incorrect https://en.wikipedia.org/wiki/Windows-1252
-        in2csv = "{}in2csv -t -e iso-8859-1 --format csv -H {} > {}".format(
+        in2csv = "{}in2csv -t -e iso-8859-1 --format csv -H {} --no-inference > {}".format(
             base,
-            data_path,
+            intermediate_path,
             csv_path
         )
         logger.debug('Running "%s"', in2csv)
         call([in2csv], shell=True)
-        # XXX is this still needed?  probably not!
-        # XXX call([r"sed -i 's/\x0//g' {}".format(csv_path)], shell=True)
         data_count = line_count(data_path)
         csv_count = line_count(csv_path)
         if data_count == (csv_count - 1):
