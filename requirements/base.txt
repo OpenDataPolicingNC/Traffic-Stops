@@ -28,4 +28,4 @@ census==0.8
 
 django-click==1.2.0
   click==6.6
-  # six==1.10.0
+  # six
