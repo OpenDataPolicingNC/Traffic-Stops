@@ -10,8 +10,9 @@ def compute_dataset_facts(Agency, Stop, state_tz_name, Search=None):
         Stop._meta.get_field('date')
         first_stop = Stop.objects.all().order_by('date').first()
         last_stop = Stop.objects.all().order_by('-date').first()
-        first_stop_time = first_stop.date.astimezone(state_tz)
-        last_stop_time = last_stop.date.astimezone(state_tz)
+        time_fmt = '%b %d, %Y'
+        first_stop_time = first_stop.date.astimezone(state_tz).strftime(time_fmt)
+        last_stop_time = last_stop.date.astimezone(state_tz).strftime(time_fmt)
     except FieldDoesNotExist:
         first_stop = Stop.objects.all().order_by('year').first()
         last_stop = Stop.objects.all().order_by('-year').first()
@@ -28,10 +29,12 @@ def compute_dataset_facts(Agency, Stop, state_tz_name, Search=None):
         'Stops: {:,}'.format(Stop.objects.count()),
         'Searches: {:,}'.format(search_count),
         'Agencies: {:,}'.format(Agency.objects.count()),
+        '',
+        'Top 5:',
     ]
 
     top_agencies = Agency.objects.annotate(num_stops=Count('stops')).order_by('-num_stops')[:5]
     for agency in top_agencies:
-        facts.append('{} {} {:,}'.format(agency.id, agency.name, agency.num_stops))
+        facts.append('Id {}: {} {:,}'.format(agency.id, agency.name, agency.num_stops))
 
     return facts
