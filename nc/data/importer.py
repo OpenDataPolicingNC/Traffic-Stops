@@ -1,6 +1,8 @@
+import csv
 import glob
 import logging
 import os
+import sys
 
 from django.conf import settings
 from django.db import connections
@@ -25,32 +27,43 @@ def run(url, destination=None, download=True):
     logger.info("NC Data Import Complete")
 
 
-def create_schema(format_path, schema_path):
-    """
-    Create in2csv-compatible schema file.
-
-    Use MSSQL format files [1] (included in the data dump) to build
-    schema files [2] for use with the in2csv command.
-
-    [1] Non-XML Format Files (SQL Server)
-        https://msdn.microsoft.com/en-us/library/ms191479.aspx#Structure
-    [2] https://csvkit.readthedocs.org/en/0.9.1/scripts/in2csv.html#description
-    """
-    mapping = {'length': (36, 44),
-               'name': (59, 86)}
-    schema = ['column,start,length']
-    with open(format_path, 'r') as f:
-        version = f.readline().strip()  # noqa
-        num_columns = int(f.readline())  # noqa
-        start = 0
-        for line in f:
-            name = line[mapping['name'][0]:mapping['name'][1]].strip()
-            length = int(line[mapping['length'][0]:mapping['length'][1]].strip())
-            schema.append("%s,%s,%s" % (name, start, length))
-            start += length
-    with open(schema_path, 'w') as f:
-        for line in schema:
-            f.write("%s\n" % line)
+def to_standard_csv(input_path, output_path):
+    csv.register_dialect(
+        'nc_data_in',
+        delimiter='\t',
+        doublequote=False,
+        escapechar=None,
+        lineterminator='\r\n',
+        quotechar='"',
+        quoting=csv.QUOTE_MINIMAL,
+        skipinitialspace=False,
+    )
+    csv.register_dialect(
+        'nc_data_out',
+        delimiter=',',
+        doublequote=False,
+        escapechar=None,
+        lineterminator='\n',
+        quotechar='"',
+        quoting=csv.QUOTE_MINIMAL,
+        skipinitialspace=False,
+    )
+    with open(input_path, 'rt') as input:
+        with open(output_path, 'wt') as output:
+            reader = csv.reader(input, dialect='nc_data_in')
+            writer = csv.writer(output, dialect='nc_data_out')
+            headings_written = False
+            num_columns = sys.maxsize  # keep all of first row, however many
+            for row in reader:
+                columns = [column.strip() for i, column in enumerate(row) if i < num_columns]
+                if not headings_written:
+                    # Some records in Stops.csv have extra columns; drop any
+                    # columns beyond those in the first record.
+                    num_columns = len(columns)
+                    headings = ['column%d' % (i + 1) for i in range(len(columns))]
+                    writer.writerow(headings)
+                    headings_written = True
+                writer.writerow(columns)
 
 
 def convert_to_csv(destination):
@@ -64,21 +77,10 @@ def convert_to_csv(destination):
             logger.info('{} already exists, skipping csv conversion'.format(csv_path))
             continue
         logger.info("Converting {} > {}".format(data_path, csv_path))
-        if hasattr(settings, 'WEBSERVER_ROOT'):
-            base = os.path.join(settings.WEBSERVER_ROOT, 'env/bin/')
-        else:
-            base = ''
-        intermediate_path = data_path.replace('.txt', '.txt2')
-        call([r"sed 's/\x0//g' <{} >{}".format(data_path, intermediate_path)], shell=True)
-        # Convert to CSV using ISO-8859-1 encoding
-        # TODO: This may be incorrect https://en.wikipedia.org/wiki/Windows-1252
-        in2csv = "{}in2csv -t -e iso-8859-1 --format csv -H {} --no-inference > {}".format(
-            base,
-            intermediate_path,
-            csv_path
-        )
-        logger.debug('Running "%s"', in2csv)
-        call([in2csv], shell=True)
+        # Edit source data .txt file in-place to remove NUL bytes
+        # (only seen in Stop.txt)
+        call([r"sed -i 's/\x0//g' {}".format(data_path)], shell=True)
+        to_standard_csv(data_path, csv_path)
         data_count = line_count(data_path)
         csv_count = line_count(csv_path)
         if data_count == (csv_count - 1):

@@ -15,7 +15,6 @@ django-extensions==1.6.1
 djangorestframework==3.3.2
 drf-extensions==0.2.8
 requests==2.9.1
-csvkit==0.9.1
 django-cache-machine==0.9
 dealer==2.0.5
 
@@ -28,4 +27,4 @@ census==0.8
 
 django-click==1.2.0
   click==6.6
-  # six==1.10.0
+  # six
