@@ -185,9 +185,22 @@ following steps:
 1. Calculate the statistics using the new dataset.
 2. Update the Django template for the state to include the current
    statistics.
-3. Verify that the agency ids haven't changed; i.e., verify that the links
-   for the top five agencies still take you to the proper agency.
+3. Pay attention to whether or not agency ids or the top five agencies
+   have changed; if they have, the top five agencies as shown in the
+   landing page will require more editing.
 
-Most states have a management command to calculate the landing page
-stats -- ``analyze_<state_app>``.  For North Carolina, the statistics
-are currently calculated with queries in the shell.
+The landing page stats are computed with the ``<state_app>_dataset_facts``
+management commands.  Example::
+
+    $ ./manage.py nc_dataset_facts
+    Timeframe: Jan 01, 2000 - Apr 12, 2016
+    Stops: 20,622,253
+    Searches: 632,719
+    Agencies: 314
+
+    Top 5:
+    Id 193: NC State Highway Patrol 9,608,578
+    Id 51: Charlotte-Mecklenburg Police Department 1,600,836
+    Id 224: Raleigh Police Department 863,653
+    Id 104: Greensboro Police Department 555,453
+    Id 88: Fayetteville Police Department 503,013
