@@ -63,7 +63,6 @@ def get_csv_path(url, destination):
 
 def download_and_unzip_data(url, destination, prefix='state-'):
     """Download and unzip data into destination directory"""
-    download = True
     # make sure destination exists or create a temporary directory
     if not destination:
         destination = tempfile.mkdtemp(prefix=prefix)
@@ -72,35 +71,38 @@ def download_and_unzip_data(url, destination, prefix='state-'):
         if not os.path.exists(destination):
             os.makedirs(destination)
             logger.info("Created {}".format(destination))
-        else:
-            download = False
-    # don't re-download data if directory already exists with data files
-    if not download:
-        logger.debug("{} exists, skipping download".format(destination))
-        return destination
     zip_filename = get_zipfile_path(url, destination)
-    logger.debug("Downloading data to {}".format(zip_filename))
-    response = requests.get(url, stream=True)
-    # XXX check status code here; e.g., if permissions haven't been granted
-    # for a file being downloaded from S3 a 403 will be returned
-    content_length = int(response.headers.get('content-length'))
-    start = time.clock()
-    downloaded = 0
-    with open(zip_filename, 'wb') as f:
-        for chunk in response.iter_content(chunk_size=1024):
-            if chunk:
-                downloaded += len(chunk)
-                now = time.clock()
-                if (now - start) >= 5:
-                    logger.debug('{0:.2g}% downloaded'.format(downloaded/content_length*100))
-                    start = now
-                f.write(chunk)
-                f.flush()
-    logger.debug('100% downloaded')
-    archive = zipfile.ZipFile(zip_filename)
-    logger.debug("Extracting archive into {}".format(destination))
-    archive.extractall(path=destination)
-    logger.debug("Extraction complete".format(destination))
+    # don't re-download data if raw data file already exists
+    if os.path.exists(zip_filename):
+        logger.debug("{} exists, skipping download".format(zip_filename))
+    else:
+        logger.debug("Downloading data to {}".format(zip_filename))
+        response = requests.get(url, stream=True)
+        # XXX check status code here; e.g., if permissions haven't been granted
+        # for a file being downloaded from S3 a 403 will be returned
+        content_length = int(response.headers.get('content-length'))
+        start = time.clock()
+        downloaded = 0
+        with open(zip_filename, 'wb') as f:
+            for chunk in response.iter_content(chunk_size=1024):
+                if chunk:
+                    downloaded += len(chunk)
+                    now = time.clock()
+                    if (now - start) >= 5:
+                        logger.debug('{0:.2g}% downloaded'.format(downloaded/content_length*100))
+                        start = now
+                    f.write(chunk)
+                    f.flush()
+        logger.debug('100% downloaded')
+
+    first_file_in_zip = get_datafile_path(url, destination)
+    if os.path.exists(first_file_in_zip):
+        logger.debug("{} exists, skipping extract".format(first_file_in_zip))
+    else:
+        archive = zipfile.ZipFile(zip_filename)
+        logger.debug("Extracting archive into {}".format(destination))
+        archive.extractall(path=destination)
+        logger.debug("Extraction complete".format(destination))
     return destination
 
 
