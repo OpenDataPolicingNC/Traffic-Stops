@@ -5,9 +5,9 @@ Below you will find basic setup and deployment instructions for the NC Traffic
 Stops project. To begin you should have the following applications installed on
 your local development system:
 
-- Python 3.4
+- Python 3.4 or 3.5
 - NodeJS >= 4.2
-- `pip >= 1.5 <http://www.pip-installer.org/>`_
+- `pip >= 9.0.1 <http://www.pip-installer.org/>`_
 - `virtualenv >= 1.10 <http://www.virtualenv.org/>`_
 - `virtualenvwrapper >= 3.0 <http://pypi.python.org/pypi/virtualenvwrapper>`_
 - Postgres >= 9.3
@@ -41,6 +41,7 @@ necessary requirements::
 
     $ which python3.4  # make sure you have Python 3.4 installed
     $ mkvirtualenv --python=`which python3.4` opendatapolicing
+    (opendatapolicing)$ pip install -U pip
     (opendatapolicing)$ pip install -r requirements/dev.txt
     (opendatapolicing)$ npm install
 
@@ -63,11 +64,7 @@ Create the Postgres database and run the initial syncdb/migrate::
     (opendatapolicing)$ createdb -E UTF-8 traffic_stops_nc
     (opendatapolicing)$ createdb -E UTF-8 traffic_stops_md
     (opendatapolicing)$ createdb -E UTF-8 traffic_stops_il
-    (opendatapolicing)$ python manage.py migrate
-    (opendatapolicing)$ python manage.py migrate --database traffic_stops_nc
-    (opendatapolicing)$ python manage.py migrate --database traffic_stops_md
-    (opendatapolicing)$ python manage.py migrate --database traffic_stops_il
-
+    (opendatapolicing)$ ./migrate_all_dbs.sh
 
 Development
 -----------
@@ -88,5 +85,5 @@ When running migrations
 
 This is a multi-database project.  Whenever you have unapplied migrations,
 either added locally or via an update from the source repository, the
-migrations need to be applied to all databases, as shown in the
-``manage.py migrate`` commands above under "Create the Postgres database...".
+migrations need to be applied to all databases by running the
+``./migrate_all_dbs.sh`` command.

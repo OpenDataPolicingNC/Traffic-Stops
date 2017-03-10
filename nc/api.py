@@ -45,6 +45,7 @@ GROUP_DEFAULTS = {'asian': 0,
 class QueryKeyConstructor(DefaultObjectKeyConstructor):
     params_query = bits.QueryParamsKeyBit(['officer'])
 
+
 query_cache_key_func = QueryKeyConstructor()
 
 
