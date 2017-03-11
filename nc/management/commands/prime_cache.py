@@ -7,7 +7,7 @@ class Command(BaseCommand):
     """Prime cache on production server"""
 
     def add_arguments(self, parser):
-        parser.add_argument('url', nargs='?', default="http://0.0.0.0:8000/")
+        parser.add_argument('url', nargs='?', default="http://127.0.0.1:8000/")
         parser.add_argument('--host', dest='host', default=None,
                             help='Override "Host" request header')
 
