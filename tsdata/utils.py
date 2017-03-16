@@ -172,5 +172,5 @@ def flush_memcached():
             logger.warning('Not flushing memcached; could not find expected configuration')
     else:
         # this must be a development environment
-        logger.info('Not flushing memcached, CACHES and CACHE_HOST not set')
+        logger.info('Not flushing memcached, CACHES not set')
     return False

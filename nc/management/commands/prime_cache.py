@@ -4,7 +4,7 @@ from nc import prime_cache
 
 
 class Command(BaseCommand):
-    """Prime cache on local server"""
+    """Prime cache on production server"""
 
     def add_arguments(self, parser):
         parser.add_argument(

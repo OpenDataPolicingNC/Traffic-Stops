@@ -164,7 +164,7 @@ NC landing page stats are updated automatically after import.  This
 section applies only to other states.  (The NC command in the example
 below will work and can be used during development, but for NC it is
 not necessary to run the command and update the Django template using
-the output.)
+the output when you get a new set of data from the state.)
 
 Currently, various statistics on the state landing page are hard-coded
 in the Django templates for that state, including the number of stops,
