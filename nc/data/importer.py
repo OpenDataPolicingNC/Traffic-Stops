@@ -39,7 +39,7 @@ def run(url, destination=None, zip_path=None, min_stop_id=None,
       save time for developers by reducing the amount of data to import
     """
     if not url and not destination:
-        raise ValueError('destination must be provided when download is False')
+        raise ValueError('destination must be provided when no URL is provided')
 
     if (min_stop_id is None) != (max_stop_id is None):
         raise ValueError('provide neither or both of min_stop_id and max_stop_id')
