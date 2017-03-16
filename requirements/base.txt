@@ -32,3 +32,4 @@ django-click==1.2.0
   # six
 
 django-memoize==2.1.0
+python3-memcached==1.51
