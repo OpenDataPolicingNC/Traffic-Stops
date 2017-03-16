@@ -1,8 +1,8 @@
 import djclick as click
 
-from nc.data.download_from_nc import download_latest
+from nc.data.download_from_nc import nc_download_and_unzip_data
 
 
 @click.command()
 def command():
-    download_latest()
+    nc_download_and_unzip_data('./newncdata')
