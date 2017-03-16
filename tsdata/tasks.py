@@ -31,8 +31,7 @@ def import_dataset(dataset_id):
         if email
     ]
     try:
-        state_import(dataset.url, destination=dataset.destination,
-                     min_stop_id=1, max_stop_id=500000)
+        state_import(dataset.url, destination=dataset.destination)
     except:
         run.date_finished = timezone.now()
         run.save()

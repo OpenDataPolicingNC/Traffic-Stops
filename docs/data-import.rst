@@ -123,11 +123,6 @@ activated prior to an import of IL data and then deactivated afterwards, as foll
     sudo swapoff /swapfile
     sudo rm /swapfile
 
-After importing new state data into the database used by a running server,
-cached queries will continue to be used until they expire.  To flush the
-cache, connect to ``memcached`` using ``telnet`` or some other suitable
-client and send the ``flush_all`` command.
-
 Raw NC Data
 ___________
 
