@@ -1,6 +1,6 @@
 {% extends 'state.html' %}
 
-{% load staticfiles bootstrap3 %}
+{% load staticfiles bootstrap3 humanize %}
 
 {% block state-name %}
   North Carolina
@@ -8,7 +8,7 @@
 
 {% block state-subtitle %}
   Browse all known traffic stops to have occurred in North Carolina since
-  January 1, 2002
+  {{ nc.start_date|date:"F j, Y" }}
 {% endblock state-subtitle %}
 
 {% block state-header-graphic %}
@@ -90,26 +90,12 @@
       <th>City</th>
       <th class="text-right">Stops</th>
     </tr>
-    <tr>
-      <td><a href="{% url "nc:agency-detail" "194" %}">NC State Highway Patrol</a></td>
-      <td class="text-right">9,897,649</td>
-    </tr>
-    <tr>
-      <td><a href="{% url "nc:agency-detail" "52" %}">Charlotte-Mecklenburg Police Department</a></td>
-      <td class="text-right">1,643,218</td>
-    </tr>
-    <tr>
-      <td><a href="{% url "nc:agency-detail" "225" %}">Raleigh Police Department</a></td>
-      <td class="text-right">891,394</td>
-    </tr>
-    <tr>
-      <td><a href="{% url "nc:agency-detail" "105" %}">Greensboro Police Department</a></td>
-      <td class="text-right">565,846</td>
-    </tr>
-    <tr>
-      <td><a href="{% url "nc:agency-detail" "89" %}">Fayetteville Police Department</a></td>
-      <td class="text-right">544,338</td>
-    </tr>
+    {% for agency in nc.topagencyfacts_set.all %}
+      <tr>
+        <td><a href="{% url "nc:agency-detail" agency.agency_id %}">{{ agency.name }}</a></td>
+        <td class="text-right">{{ agency.stops|intcomma }}</td>
+      </tr>
+    {% endfor %}
   </table>
 {% endblock agencies-table %}
 
@@ -117,9 +103,9 @@
   <p>
       Open Data Policing aggregates, visualizes, and publishes public
       records related to all known traffic stops to have occurred in North
-      Carolina since January 1, 2002. Data is available for most
-      North Carolina departments and officers serving populations greater
-      than 10,000.
+      Carolina since {{ nc.start_date }}. Data is available
+      for most North Carolina departments and officers serving populations
+      greater than 10,000.
   </p>
   <p>
       North Carolina law requires all such agencies to report their data
@@ -137,19 +123,19 @@
   <table class='table table-condensed table-hover'>
     <tr>
       <th>Timeframe</th>
-      <td>Jan 1 2002 - Nov 13, 2016</td>
+      <td>{{ nc.start_date }} - {{ nc.end_date }}</td>
     </tr>
     <tr>
       <th>Stops</th>
-      <td>21,377,751</td>
+      <td>{{ nc.total_stops|intcomma }}</td>
     </tr>
     <tr>
       <th>Searches</th>
-      <td>651,476</td>
+      <td>{{ nc.total_searches|intcomma }}</td>
     </tr>
     <tr>
       <th>Agencies</th>
-      <td>315</td>
+      <td>{{ nc.total_agencies|intcomma }}</td>
     </tr>
   </table>
 {% endblock dataset-facts %}

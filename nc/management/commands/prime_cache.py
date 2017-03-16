@@ -4,12 +4,15 @@ from nc import prime_cache
 
 
 class Command(BaseCommand):
-    """Prime cache on production server"""
+    """Prime cache on local server"""
 
     def add_arguments(self, parser):
-        parser.add_argument('url', nargs='?', default="http://127.0.0.1:8000/")
-        parser.add_argument('--host', dest='host', default=None,
-                            help='Override "Host" request header')
+        parser.add_argument(
+            '--cutoff-duration-secs',
+            dest='cutoff', default=None,
+            help='Stop priming cache for agencies once it takes less than this'
+        )
 
     def handle(self, *args, **options):
-        prime_cache.run(options['url'], host=options['host'])
+        cutoff = float(options['cutoff']) if options['cutoff'] else None
+        prime_cache.run(cutoff_duration_secs=cutoff)

@@ -5,9 +5,9 @@ Below you will find basic setup and deployment instructions for the NC Traffic
 Stops project. To begin you should have the following applications installed on
 your local development system:
 
-- Python 3.4 or 3.5
+- Python 3.4
 - NodeJS >= 4.2
-- `pip >= 9.0.1 <http://www.pip-installer.org/>`_
+- `pip >= 8 or so <http://www.pip-installer.org/>`_
 - `virtualenv >= 1.10 <http://www.virtualenv.org/>`_
 - `virtualenvwrapper >= 3.0 <http://pypi.python.org/pypi/virtualenvwrapper>`_
 - Postgres >= 9.3
@@ -28,6 +28,9 @@ we need to install that globally in our Python2 environment::
 
     sudo pip install fabric==1.10.0
 
+For a working ``fab encrypt`` you'll need more modules in a Python 2
+environment.  Create a new virtualenv for that and use ``requirements/fab.txt``.
+
 The deployment uses SSH with agent forwarding so you'll need to enable agent
 forwarding if it is not already by adding ``ForwardAgent yes`` to your SSH
 config.
@@ -44,6 +47,9 @@ necessary requirements::
     (opendatapolicing)$ pip install -U pip
     (opendatapolicing)$ pip install -r requirements/dev.txt
     (opendatapolicing)$ npm install
+
+If ``npm install`` fails, make sure you're using ``npm`` from a reasonable version
+of NodeJS, as documented at the top of this document.
 
 Next, we'll set up our local environment variables. We use `django-dotenv
 <https://github.com/jpadilla/django-dotenv>`_ to help with this. It reads environment variables

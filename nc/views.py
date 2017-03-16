@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .models import Stop, Agency, Person
 from . import forms
 from traffic_stops import base_views
+from tsdata.dataset_facts import get_dataset_facts_context
 
 
 class Home(base_views.Home):
@@ -12,6 +13,7 @@ class Home(base_views.Home):
     def get_context_data(self, **kwargs):
         context = super(Home, self).get_context_data(**kwargs)
         context['find_a_stop_form'] = forms.SearchForm()
+        context.update(get_dataset_facts_context())
         return context
 
 

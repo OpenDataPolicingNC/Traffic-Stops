@@ -8,6 +8,9 @@ import zipfile
 
 from collections import OrderedDict
 
+from django.conf import settings
+import memcache
+
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +40,7 @@ def get_zipfile_path(url, destination):
     return os.path.join(destination, url.split('/')[-1])
 
 
-def get_datafile_path(url, destination):
+def get_datafile_path(url, destination, zip_path=None):
     """
     Get full path of the datafile within the downloaded zip.
     Assumptions:
@@ -45,8 +48,12 @@ def get_datafile_path(url, destination):
     2. the first file in the zip is the datafile
     Datafile may not have been extracted yet.
     """
-    zip_filename = get_zipfile_path(url, destination)
-    archive = zipfile.ZipFile(zip_filename)
+    if bool(url) == bool(zip_path):
+        raise ValueError('Exactly one of url and zip_path parameters must be provided!')
+
+    if not zip_path:
+        zip_path = get_zipfile_path(url, destination)
+    archive = zipfile.ZipFile(zip_path)
     return os.path.join(destination, archive.infolist()[0].filename)
 
 
@@ -59,6 +66,26 @@ def get_csv_path(url, destination):
     """
     datafile_path = get_datafile_path(url, destination)
     return os.path.splitext(datafile_path)[0] + '-processed.csv'
+
+
+def unzip_data(destination, url=None, zip_path=None):
+    if not destination:
+        raise ValueError('The destination parameter is required!')
+
+    if bool(url) == bool(zip_path):
+        raise ValueError('Exactly one of url and zip_path parameters must be provided!')
+
+    if not zip_path:
+        zip_path = get_zipfile_path(url, destination)
+
+    first_file_in_zip = get_datafile_path(None, destination, zip_path=zip_path)
+    if os.path.exists(first_file_in_zip):
+        logger.debug("{} exists, skipping extract".format(first_file_in_zip))
+    else:
+        archive = zipfile.ZipFile(zip_path)
+        logger.debug("Extracting archive into {}".format(destination))
+        archive.extractall(path=destination)
+        logger.debug("Extraction complete".format(destination))
 
 
 def download_and_unzip_data(url, destination, prefix='state-'):
@@ -95,14 +122,7 @@ def download_and_unzip_data(url, destination, prefix='state-'):
                     f.flush()
         logger.debug('100% downloaded')
 
-    first_file_in_zip = get_datafile_path(url, destination)
-    if os.path.exists(first_file_in_zip):
-        logger.debug("{} exists, skipping extract".format(first_file_in_zip))
-    else:
-        archive = zipfile.ZipFile(zip_filename)
-        logger.debug("Extracting archive into {}".format(destination))
-        archive.extractall(path=destination)
-        logger.debug("Extraction complete".format(destination))
+    unzip_data(destination, url=url)
     return destination
 
 
@@ -135,3 +155,22 @@ class GroupedData(object):
             row.update(data)
             response.append(row)
         return response
+
+
+def flush_memcached():
+    if hasattr(settings, 'CACHES'):
+        caches = getattr(settings, 'CACHES')
+        if ('default' in caches and
+                'BACKEND' in caches['default'] and
+                'LOCATION' in caches['default'] and
+                'MemcachedCache' in caches['default']['BACKEND']):
+            logger.info('Flushing memcached')
+            mc = memcache.Client([caches['default']['LOCATION']])
+            mc.flush_all()
+            return True
+        else:
+            logger.warning('Not flushing memcached; could not find expected configuration')
+    else:
+        # this must be a development environment
+        logger.info('Not flushing memcached, CACHES and CACHE_HOST not set')
+    return False

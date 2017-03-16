@@ -7,7 +7,10 @@ from tsdata.dataset_facts import compute_dataset_facts
 
 @click.command()
 def command():
-    facts = compute_dataset_facts(Agency, Stop, settings.NC_TIME_ZONE, Search=Search)
+    facts = compute_dataset_facts(
+        Agency, Stop, settings.NC_KEY, Search=Search,
+        override_start_date='Jan 01, 2002'
+    )
     for fact in facts:
         click.echo(fact)
     click.echo('')

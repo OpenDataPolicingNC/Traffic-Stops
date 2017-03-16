@@ -21,6 +21,7 @@ dealer==2.0.5
 pandas==0.17.1
   python-dateutil==2.2
 matplotlib==1.5.0
+xlrd==1.0.0
 
 census==0.8
   us==0.9.1
@@ -29,3 +30,5 @@ census==0.8
 django-click==1.2.0
   click==6.7
   # six
+
+django-memoize==2.1.0

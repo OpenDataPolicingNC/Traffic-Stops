@@ -2,7 +2,7 @@
 set -ex
 
 # MIN_COVERAGE should match the value in .travis.yml
-MIN_COVERAGE=70
+MIN_COVERAGE=74
 
 if test "$1" = "--nokeepdb"; then
     DBARG=""
