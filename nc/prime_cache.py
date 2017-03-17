@@ -72,7 +72,10 @@ def run(cutoff_duration_secs=None):
 
 def req(uri, payload=None):
     c = Client()
-    host = settings.ALLOWED_HOSTS[0] if settings.ALLOWED_HOSTS else '127.0.0.1'
+    if settings.ALLOWED_HOSTS and settings.ALLOWED_HOSTS[0] != '*':
+        host = settings.ALLOWED_HOSTS[0]
+    else:
+        host = '127.0.0.1'
     response = c.get(uri, data=payload, HTTP_HOST=host)
     if response.status_code != 200:
         logger.warning("Status not OK: {} ({})".format(
