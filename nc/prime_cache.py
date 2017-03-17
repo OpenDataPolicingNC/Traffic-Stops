@@ -1,6 +1,7 @@
 import logging
 import time
 
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db.models import Count
 from django.test.client import Client
@@ -9,9 +10,10 @@ from nc.models import Agency
 
 logger = logging.getLogger(__name__)
 ENDPOINTS = ('stops', 'stops_by_reason', 'use_of_force', 'searches', 'contraband_hit_rate')
+DEFAULT_CUTOFF_SECS = 4
 
 
-def run(cutoff_duration_secs=4):
+def run(cutoff_duration_secs=None):
     """
     Prime query cache for "big" NC agencies.
 
@@ -33,6 +35,8 @@ def run(cutoff_duration_secs=4):
     :param cutoff_duration_secs: Once priming the cache for an agency takes
     less than this, stop.
     """
+    if cutoff_duration_secs is None:
+        cutoff_duration_secs = DEFAULT_CUTOFF_SECS
     logger.info('NC prime_cache starting')
     agencies = [
         (a.id, a.name, a.num_stops)
@@ -68,7 +72,8 @@ def run(cutoff_duration_secs=4):
 
 def req(uri, payload=None):
     c = Client()
-    response = c.get(uri, data=payload, HTTP_HOST='127.0.0.1')
+    host = settings.ALLOWED_HOSTS[0] if settings.ALLOWED_HOSTS else '127.0.0.1'
+    response = c.get(uri, data=payload, HTTP_HOST=host)
     if response.status_code != 200:
         logger.warning("Status not OK: {} ({})".format(
                        uri, response.status_code))
