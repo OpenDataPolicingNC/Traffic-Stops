@@ -28,6 +28,11 @@ def avoid_newrelic_bug():
     By disabling the browser_monitoring setting checked for just before the
     AttributeError, this New Relic gets out of the way before the problem.
 
+    In production, this normally runs in a Celery task that exits when the
+    import is finished due to the Celery "--maxtasksperchild 1" parameter.
+    Even if more tasks ran in the same process, they too won't be handling
+    browser requests so the setting change won't affect such tasks.
+
     This Mozilla project ticket has a copy of some correspondence with New Relic:
         https://bugzilla.mozilla.org/show_bug.cgi?id=1196043
     (I am unable to access the referenced New Relic ticket.)
