@@ -13,6 +13,37 @@ ENDPOINTS = ('stops', 'stops_by_reason', 'use_of_force', 'searches', 'contraband
 DEFAULT_CUTOFF_SECS = 4
 
 
+def avoid_newrelic_bug():
+    """
+    New Relic middleware throws an exception when a web request is run in a
+    Celery task (without going through HTTP).
+
+    An AttributeError is thrown here:
+
+    https://github.com/edmorley/newrelic-python-agent/blob/v2.82.0.62/newrelic/
+    newrelic/hooks/framework_django.py#L93
+
+    AttributeError: 'BackgroundTask' object has no attribute 'rum_header_generated'
+
+    By disabling the browser_monitoring setting checked for just before the
+    AttributeError, this New Relic gets out of the way before the problem.
+
+    In production, this normally runs in a Celery task that exits when the
+    import is finished due to the Celery "--maxtasksperchild 1" parameter.
+    Even if more tasks ran in the same process, they too won't be handling
+    browser requests so the setting change won't affect such tasks.
+
+    This Mozilla project ticket has a copy of some correspondence with New Relic:
+        https://bugzilla.mozilla.org/show_bug.cgi?id=1196043
+    (I am unable to access the referenced New Relic ticket.)
+    """
+    try:
+        from newrelic.hooks.framework_django import django_settings
+        django_settings.browser_monitoring.auto_instrument = False
+    except ImportError:
+        pass
+
+
 def run(cutoff_duration_secs=None):
     """
     Prime query cache for "big" NC agencies.
@@ -37,6 +68,9 @@ def run(cutoff_duration_secs=None):
     """
     if cutoff_duration_secs is None:
         cutoff_duration_secs = DEFAULT_CUTOFF_SECS
+
+    avoid_newrelic_bug()
+
     logger.info('NC prime_cache starting')
     agencies = [
         (a.id, a.name, a.num_stops)
