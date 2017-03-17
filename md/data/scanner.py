@@ -29,6 +29,7 @@ def run(url, destination=None, download=True):
     logger.debug('Rows: {}'.format(csv_count))
     scan([csv_path])
 
+
 STRAY_RE = re.compile('(^ +|`+$| +$|^[¿`])')
 
 NA_RE = re.compile('^(NA|na|n//a|n/a)$')

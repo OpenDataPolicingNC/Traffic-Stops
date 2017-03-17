@@ -7,7 +7,7 @@ your local development system:
 
 - Python 3.4
 - NodeJS >= 4.2
-- `pip >= 1.5 <http://www.pip-installer.org/>`_
+- `pip >= 8 or so <http://www.pip-installer.org/>`_
 - `virtualenv >= 1.10 <http://www.virtualenv.org/>`_
 - `virtualenvwrapper >= 3.0 <http://pypi.python.org/pypi/virtualenvwrapper>`_
 - Postgres >= 9.3
@@ -28,6 +28,9 @@ we need to install that globally in our Python2 environment::
 
     sudo pip install fabric==1.10.0
 
+For a working ``fab encrypt`` you'll need more modules in a Python 2
+environment.  Create a new virtualenv for that and use ``requirements/fab.txt``.
+
 The deployment uses SSH with agent forwarding so you'll need to enable agent
 forwarding if it is not already by adding ``ForwardAgent yes`` to your SSH
 config.
@@ -41,8 +44,12 @@ necessary requirements::
 
     $ which python3.4  # make sure you have Python 3.4 installed
     $ mkvirtualenv --python=`which python3.4` opendatapolicing
+    (opendatapolicing)$ pip install -U pip
     (opendatapolicing)$ pip install -r requirements/dev.txt
     (opendatapolicing)$ npm install
+
+If ``npm install`` fails, make sure you're using ``npm`` from a reasonable version
+of NodeJS, as documented at the top of this document.
 
 Next, we'll set up our local environment variables. We use `django-dotenv
 <https://github.com/jpadilla/django-dotenv>`_ to help with this. It reads environment variables
@@ -63,11 +70,7 @@ Create the Postgres database and run the initial syncdb/migrate::
     (opendatapolicing)$ createdb -E UTF-8 traffic_stops_nc
     (opendatapolicing)$ createdb -E UTF-8 traffic_stops_md
     (opendatapolicing)$ createdb -E UTF-8 traffic_stops_il
-    (opendatapolicing)$ python manage.py migrate
-    (opendatapolicing)$ python manage.py migrate --database traffic_stops_nc
-    (opendatapolicing)$ python manage.py migrate --database traffic_stops_md
-    (opendatapolicing)$ python manage.py migrate --database traffic_stops_il
-
+    (opendatapolicing)$ ./migrate_all_dbs.sh
 
 Development
 -----------
@@ -88,5 +91,5 @@ When running migrations
 
 This is a multi-database project.  Whenever you have unapplied migrations,
 either added locally or via an update from the source repository, the
-migrations need to be applied to all databases, as shown in the
-``manage.py migrate`` commands above under "Create the Postgres database...".
+migrations need to be applied to all databases by running the
+``./migrate_all_dbs.sh`` command.

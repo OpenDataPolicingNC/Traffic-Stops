@@ -10,4 +10,5 @@ class AgencyLookup(ModelLookup):
         'name__icontains',
     )
 
+
 registry.register(AgencyLookup)

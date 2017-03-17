@@ -24,6 +24,8 @@ CACHES = {
     },
 }
 
+NC_AUTO_IMPORT_MONITORS = ()
+
 # Special test settings
 if 'test' in sys.argv:
     PASSWORD_HASHERS = (

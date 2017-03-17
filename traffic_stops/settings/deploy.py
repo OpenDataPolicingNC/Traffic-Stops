@@ -45,6 +45,7 @@ LOGGING['handlers']['file']['filename'] = os.path.join(
 
 CACHES = {
     'default': {
+        # Check tsdata.utils.flush_memcached when changing this.
         'BACKEND': 'caching.backends.memcached.MemcachedCache',
         'LOCATION': '%(CACHE_HOST)s' % os.environ,
     }
@@ -80,8 +81,14 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': []
 }
 
+NC_AUTO_IMPORT_DIRECTORY = '/var/www/traffic_stops/NC-automated-import'
+
 # Environment overrides
 # These should be kept to an absolute minimum
 if ENVIRONMENT.upper() == 'LOCAL':
     # Don't send emails from the Vagrant boxes
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+if ENVIRONMENT.upper() == 'PRODUCTION':
+    CELERYBEAT_SCHEDULE['automatic-nc-import']['schedule'] = \
+        crontab(day_of_month='1', hour=3, minute=0)

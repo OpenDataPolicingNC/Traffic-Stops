@@ -1,6 +1,8 @@
 # Django settings for traffic_stops project.
 import os
 
+from celery.schedules import crontab
+
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 PROJECT_ROOT = os.path.abspath(os.path.join(BASE_DIR, os.pardir))
 
@@ -59,6 +61,22 @@ TIME_ZONE = 'America/New_York'
 IL_TIME_ZONE = 'America/Chicago'
 MD_TIME_ZONE = 'America/New_York'
 NC_TIME_ZONE = 'America/New_York'
+
+IL_KEY = 'il'
+MD_KEY = 'md'
+NC_KEY = 'nc'
+
+
+class StateConfig:
+    def __init__(self, tz_name=None):
+        self.tz_name = tz_name
+
+
+STATE_CONFIG = {
+    IL_KEY: StateConfig(tz_name=IL_TIME_ZONE),
+    MD_KEY: StateConfig(tz_name=MD_TIME_ZONE),
+    NC_KEY: StateConfig(tz_name=NC_TIME_ZONE),
+}
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -268,6 +286,14 @@ LOGGING = {
     }
 }
 
+CELERYBEAT_SCHEDULE = {
+    # Production overrides the schedule
+    'automatic-nc-import': {
+        'task': 'nc.tasks.download_and_import_nc_dataset',
+        'schedule': crontab(day_of_week='monday', hour=3, minute=0),
+    },
+}
+
 # If using Celery, tell it to obey our logging configuration.
 CELERYD_HIJACK_ROOT_LOGGER = False
 
@@ -307,3 +333,9 @@ REST_FRAMEWORK_EXTENSIONS = {
 CACHE_COUNT_TIMEOUT = 60 * 60 * 24 * 60  # 60 days
 
 CENSUS_API_KEY = ''
+
+NC_AUTO_IMPORT_DIRECTORY = '/tmp/NC-automated-import'
+
+# 0, 1, or 2 e-mail addresses which will be notified after
+# automatic NC imports
+NC_AUTO_IMPORT_MONITORS = ('odp-team@caktusgroup.com',)

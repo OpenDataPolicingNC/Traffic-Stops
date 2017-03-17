@@ -15,8 +15,8 @@ from md.models import (
     PURPOSE_CHOICES, UNKNOWN_PURPOSE
 )
 from tsdata.sql import drop_constraints_and_indexes
-from tsdata.utils import (call, download_and_unzip_data, get_csv_path,
-                          get_datafile_path, line_count)
+from tsdata.utils import (call, download_and_unzip_data, flush_memcached,
+                          get_csv_path, get_datafile_path, line_count)
 
 
 logger = logging.getLogger(__name__)
@@ -372,6 +372,8 @@ def run(url, destination=None, download=True):
     drop_constraints_and_indexes(connections['traffic_stops_md'].cursor())
     # use COPY to load CSV files as quickly as possible
     copy_from(csv_path)
+    # Clear the query cache
+    flush_memcached()
 
 
 def copy_from(csv_path):

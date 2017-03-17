@@ -1,10 +1,12 @@
 from django.db import models
+from django.conf import settings
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 STATE_CHOICES = (
-    ('nc', 'North Carolina'),
-    ('md', 'Maryland'),
-    ('il', 'Illinois'),
+    (settings.NC_KEY, 'North Carolina'),
+    (settings.MD_KEY, 'Maryland'),
+    (settings.IL_KEY, 'Illinois'),
 )
 
 STATUS_CHOICES = (
@@ -13,7 +15,7 @@ STATUS_CHOICES = (
     ('finished', 'Finished'),
 )
 
-GEOGRAPY_CHOICES = (
+GEOGRAPHY_CHOICES = (
     ('county', 'County'),
     ('place', 'Place'),
 )
@@ -27,6 +29,8 @@ class Dataset(models.Model):
     url = models.URLField("URL", unique=True)
     destination = models.CharField(blank=True, max_length=1024,
                                    help_text="Absolute path to destination directory (helpful for testing)")  # noqa
+    report_email_1 = models.EmailField(blank=True)
+    report_email_2 = models.EmailField(blank=True)
 
     def __str__(self):
         return "{}: {}".format(self.get_state_display(), self.name)
@@ -45,7 +49,7 @@ class Import(models.Model):
 class CensusProfile(models.Model):
     id = models.CharField("ID", primary_key=True, max_length=16)
     location = models.CharField(max_length=255)
-    geography = models.CharField(max_length=16, choices=GEOGRAPY_CHOICES)
+    geography = models.CharField(max_length=16, choices=GEOGRAPHY_CHOICES)
     state = models.CharField(max_length=2)
     source = models.CharField(max_length=255)
     white = models.PositiveIntegerField(default=0)
@@ -73,3 +77,37 @@ class CensusProfile(models.Model):
             non_hispanic=self.non_hispanic,
             total=self.total,
         )
+
+
+class StateFacts(models.Model):
+    state_key = models.CharField(choices=STATE_CHOICES, max_length=2, unique=True)
+    total_stops = models.PositiveIntegerField(default=0)
+    total_stops_millions = models.PositiveIntegerField(default=0)
+    total_searches = models.PositiveIntegerField(default=0)
+    total_agencies = models.PositiveIntegerField(default=0)
+    start_date = models.CharField(max_length=20, default='')
+    end_date = models.CharField(max_length=20, default='')
+
+    def __str__(self):
+        return 'Facts for state %s' % self.state_key
+
+    class Meta:
+        verbose_name_plural = 'state facts'
+
+
+class TopAgencyFacts(models.Model):
+    state_facts = models.ForeignKey(StateFacts)
+    rank = models.SmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    agency_id = models.PositiveIntegerField(default=0)
+    stops = models.PositiveIntegerField(default=0)
+    name = models.CharField(max_length=255, default='')
+
+    def __str__(self):
+        return 'Facts for state %s agency %s' % (self.state_facts.state_key, self.name)
+
+    class Meta:
+        unique_together = (
+            ('state_facts', 'rank'),
+        )
+        verbose_name_plural = 'top agency facts'
+        ordering = ['state_facts__state_key', 'rank']
