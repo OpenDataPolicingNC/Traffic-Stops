@@ -9,7 +9,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument(
             '--cutoff-duration-secs',
-            dest='cutoff', default=None,
+            dest='cutoff',
             help='Stop priming cache for agencies once it takes less than this'
         )
 
