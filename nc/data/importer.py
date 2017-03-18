@@ -255,7 +255,11 @@ def update_nc_agencies(nc_csv_path, destination):
         settings.DEFAULT_FROM_EMAIL,
         settings.NC_AUTO_IMPORT_MONITORS,
         attachments=(
-            (new_nc_csv_path, open(new_nc_csv_path).read(), 'application/csv'),
+            (
+                os.path.basename(new_nc_csv_path),
+                open(new_nc_csv_path).read(),
+                'application/csv'
+            ),
         )
     )
     email.send()
