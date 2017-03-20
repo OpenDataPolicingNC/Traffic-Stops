@@ -52,9 +52,7 @@ CACHES = {
 }
 
 ADMINS = (
-    ('Colin Copeland', 'ccopeland@codeforamerica.org'),
-    ('Andy Shapiro', 'shapiromatron@gmail.com'),
-    ('Dylan Young', 'dylanjamesyoung@gmail.com'),
+    ('ODP Team', 'odp-team@caktusgroup.com'),
 )
 MANAGERS = ADMINS
 
