@@ -24,7 +24,8 @@ CACHES = {
     },
 }
 
-NC_AUTO_IMPORT_MONITORS = ()
+
+NC_AUTO_IMPORT_MONITORS = ('nc-monitor@example.com',)
 
 # Special test settings
 if 'test' in sys.argv:
@@ -36,4 +37,3 @@ if 'test' in sys.argv:
         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
     }
     EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
-    NC_AUTO_IMPORT_MONITORS = ('nc-monitor@example.com',)
