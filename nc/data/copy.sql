@@ -49,10 +49,12 @@ COPY nc_searchbasis (search_basis_id, search_id, person_id, stop_id, basis) FROM
     DELIMITER ','
     CSV HEADER;
 
--- -- populate nc_agency lookup table
-INSERT INTO nc_agency (name, census_profile_id) (
-    SELECT DISTINCT(agency_description), '' from nc_stop ORDER BY agency_description
-);
+-- -- populate nc_agency lookup table, preserving agency id from CSV
+
+COPY nc_agency (id, name, census_profile_id) from :'nc_csv_table' WITH
+    DELIMITER ','
+    CSV HEADER
+    FORCE NOT NULL census_profile_id;
 
 -- populate nc_stop.agency_id foreign key
 UPDATE nc_stop SET agency_id = nc_agency.id
@@ -60,21 +62,6 @@ FROM
    nc_agency
 WHERE
    nc_stop.agency_description = nc_agency.name;
-
--- update nc_agency with census GEOID values from the NC agency CSV
-CREATE TEMP TABLE agency_csv_table (name TEXT, geoid TEXT);
-
-COPY agency_csv_table FROM :'nc_csv_table' WITH
-    DELIMITER ','
-    NULL AS ''
-    CSV HEADER
-    FORCE NOT NULL name;
-
-UPDATE nc_agency SET census_profile_id = agency_csv_table.geoid
-    FROM agency_csv_table
-    WHERE nc_agency.name = agency_csv_table.name AND agency_csv_table.geoid IS NOT NULL;
-
-DROP TABLE agency_csv_table;
 
 ANALYZE;
 

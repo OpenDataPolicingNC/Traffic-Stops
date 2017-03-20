@@ -5,6 +5,7 @@ import os
 import sys
 
 from django.conf import settings
+from django.core.mail import EmailMessage
 from django.db import connections
 
 from tsdata.dataset_facts import compute_dataset_facts
@@ -67,10 +68,17 @@ def run(url, destination=None, zip_path=None, min_stop_id=None,
 
     # convert data files to CSV for database importing
     convert_to_csv(destination)
+
+    # find any new NC agencies and add to a copy of NC_agencies.csv
+    nc_agency_csv = update_nc_agencies(
+        os.path.join(os.path.dirname(__file__), 'NC_agencies.csv'),
+        destination
+    )
+
     # drop constraints/indexes
     drop_constraints_and_indexes(connections['traffic_stops_nc'].cursor())
     # use COPY to load CSV files as quickly as possible
-    copy_from(destination)
+    copy_from(destination, nc_agency_csv)
     logger.info("NC Data Import Complete")
 
     # Clear the query cache to get rid of NC queries made on old data
@@ -183,10 +191,84 @@ def convert_to_csv(destination):
             logger.error('CSV {}'.format(csv_count))
 
 
-def copy_from(destination):
+def update_nc_agencies(nc_csv_path, destination):
+    """
+    Agency ids need to be stable in order to have stable agency URLs.
+    See if the new Stop file has any additional agencies beyond what is
+    in our NC agencies table in the source code.  If so, build a new
+    agency table with ids assigned for the new agencies and send an
+    e-mail to admins to update the table; import will use the temporary
+    agency table.  If there are no additional agencies, import will use the
+    existing agency table.
+
+    Ids of agencies not in the permanent agency table are subject to change
+    until a developer adds the agency to the table in the source code.
+    """
+
+    with open(os.path.join(destination, 'Stop.csv')) as stop_file:
+        stops = csv.reader(stop_file)
+        next(stops)  # skip CSV header line
+        current_agencies = set()
+        for row in stops:
+            current_agencies.add(row[1])
+
+    with open(nc_csv_path) as agency_file:
+        agency_table = csv.reader(agency_file)
+        agency_table_contents = list()
+        agency_table_contents.append(next(agency_table))
+        existing_agencies = set()
+        for row in agency_table:
+            existing_agencies.add(row[1])
+            agency_table_contents.append(row)
+
+    if current_agencies.issubset(existing_agencies):
+        logger.info('No new agencies in latest NC data, using table %s',
+                    nc_csv_path)
+        return nc_csv_path
+
+    # Build an updated table to use for the import and send an e-mail to
+    # admins.
+    extra_agencies = sorted(current_agencies - existing_agencies)
+    last_agency_id = int(agency_table_contents[-1][0])
+    for agency_name in extra_agencies:
+        last_agency_id += 1
+        agency_table_contents.append([last_agency_id, agency_name, ''])
+
+    new_nc_csv_path = os.path.join(destination, 'NC_agencies.csv')
+    with open(new_nc_csv_path, 'w') as agency_file:
+        agency_table = csv.writer(agency_file)
+        for agency_info in agency_table_contents:
+            agency_table.writerow(agency_info)
+
+    logger.info('%s new agencies in latest NC data, using table %s',
+                len(extra_agencies), new_nc_csv_path)
+
+    email_body = """
+        Here are the new agencies:\n
+           %s\n
+        A new agency table is attached.  You can add census codes for the
+        the new agencies before checking in.
+    """ % ', '.join(extra_agencies)
+    email = EmailMessage(
+        'New NC agencies were discovered during import',
+        email_body,
+        settings.DEFAULT_FROM_EMAIL,
+        settings.NC_AUTO_IMPORT_MONITORS,
+        attachments=(
+            (
+                os.path.basename(new_nc_csv_path),
+                open(new_nc_csv_path).read(),
+                'application/csv'
+            ),
+        )
+    )
+    email.send()
+    return new_nc_csv_path
+
+
+def copy_from(destination, nc_csv_path):
     """Execute copy.sql to COPY csv data files into PostgreSQL database"""
     sql_file = os.path.join(os.path.dirname(__file__), 'copy.sql')
-    nc_csv_path = os.path.join(os.path.dirname(__file__), 'NC_agencies.csv')
     cmd = ['psql',
            '-v', 'data_dir={}'.format(destination),
            '-v', 'nc_time_zone={}'.format(settings.NC_TIME_ZONE),

@@ -13,8 +13,10 @@ class Command(BaseCommand):
         parser.add_argument('--max-stop-id', default=None)
 
     def handle(self, *args, **options):
+        min_stop_id = int(options['min_stop_id']) if options['min_stop_id'] else None
+        max_stop_id = int(options['max_stop_id']) if options['max_stop_id'] else None
         importer.run(
             options['url'], options['dest'],
-            min_stop_id=options['min_stop_id'],
-            max_stop_id=options['max_stop_id'],
+            min_stop_id=min_stop_id,
+            max_stop_id=max_stop_id,
         )
