@@ -1,6 +1,8 @@
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.views.generic import View, TemplateView
 
+from tsdata.dataset_facts import get_dataset_facts_context
+
 
 class HomeView(TemplateView):
     template_name = "home.html"
@@ -8,6 +10,7 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
         context['navbar_inverse'] = True
+        context.update(get_dataset_facts_context())
         return context
 
 

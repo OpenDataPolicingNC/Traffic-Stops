@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.test import TestCase
 
 from md.models import Agency, Stop
@@ -19,8 +20,8 @@ class TestDatasetFacts(TestCase):
             for _ in range(i + 1):
                 StopFactory(agency=agency)
 
-    def test(self):
-        facts = compute_dataset_facts(Agency, Stop, 'US/Eastern')
+    def test_state(self):
+        facts = compute_dataset_facts(Agency, Stop, settings.MD_KEY)
         self.assertIn('Stops: 15', facts)
         self.assertIn('Agencies: 5', facts)
         # Verify that the top 5 (only) agencies are listed in the right order

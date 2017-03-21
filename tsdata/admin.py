@@ -1,5 +1,5 @@
 from django.contrib import admin, messages
-from tsdata.models import Dataset, Import, CensusProfile
+from tsdata.models import Dataset, Import, CensusProfile, StateFacts, TopAgencyFacts
 from tsdata.tasks import import_dataset
 
 
@@ -39,6 +39,24 @@ class CensusProfileAdmin(admin.ModelAdmin):
     ordering = ('location',)
 
 
+class TopAgencyFactsInline(admin.TabularInline):
+    model = TopAgencyFacts
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
+class StateFactsAdmin(admin.ModelAdmin):
+    inlines = (TopAgencyFactsInline,)
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
 admin.site.register(Dataset, DatasetAdmin)
 admin.site.register(Import, ImportAdmin)
 admin.site.register(CensusProfile, CensusProfileAdmin)
+admin.site.register(StateFacts, StateFactsAdmin)

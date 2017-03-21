@@ -1,8 +1,8 @@
 Data Import
 ===========
 
-Stop data is imported in the same manner for all states.  Substitute the state
-abbreviation (e.g., "md") as appropriate in the NC instructions below.
+Stop data can be imported in the same manner for all states.  Substitute the state
+abbreviation (e.g., "md") as appropriate in the Generic NC instructions below.
 
 Census data for all states is imported all at once, in the same manner for all
 environments, using the ``import_census`` management command.  This must be
@@ -46,7 +46,7 @@ applied before importing.  If in doubt:
 .. code-block:: bash
 
     dropdb traffic_stops_nc && createdb -E UTF-8 traffic_stops_nc
-    python manage.py migrate --database=traffic_stops_nc --noinput
+    ./migrate_all_dbs.sh
 
 Command-line
 ++++++++++++
@@ -80,8 +80,12 @@ imported.  Setting the fields:
 - Set the URL to one of the available datasets at
   https://s3-us-west-2.amazonaws.com/openpolicingdata/ .  The normal URLs
   are stored in the source code (in ``<state_app>.data.__init__.py``).
+  For NC, if you use the magic URL ``ftp://nc.us/``, the latest available
+  dataset will be downloaded from the state and used for this import.
 - Specify a destination directory where the dataset will be downloaded and
   extracted.
+- Optionally specify one or two e-mail addresses that will be notified when
+  the import completes successfully.
 
 Once the "dataset" has been created, select the new dataset in list view and
 apply the "Import selected dataset" action.
@@ -118,24 +122,6 @@ activated prior to an import of IL data and then deactivated afterwards, as foll
     <<perform the IL data import using the appropriate mechanism>>
     sudo swapoff /swapfile
     sudo rm /swapfile
-
-After importing new state data into the database used by a running server,
-cached queries will continue to be used until they expire.  To flush the
-cache, connect to ``memcached`` using ``telnet`` or some other suitable
-client and send the ``flush_all`` command.
-
-After importing NC data on staging or production, prime the query cache via
-requests on the server box which bypass nginx::
-
-    sudo su - traffic_stops
-    /var/www/traffic_stops/manage.sh  prime_cache --host opendatapolicing.com http://127.0.0.1:8000/
-
-(Use the appropriate ``--host`` argument based on the canonical name for the
-server.)
-
-NC queries should be primed in this manner because some of them take longer than
-the nginx timeout to perform the first time, resulting in users encountering
-error pages instead of agency results.
 
 Raw NC Data
 ___________
@@ -174,6 +160,12 @@ ______________
 Updating landing page stats
 ---------------------------
 
+NC landing page stats are updated automatically after import.  This
+section applies only to other states.  (The NC command in the example
+below will work and can be used during development, but for NC it is
+not necessary to run the command and update the Django template using
+the output when you get a new set of data from the state.)
+
 Currently, various statistics on the state landing page are hard-coded
 in the Django templates for that state, including the number of stops,
 the range of dates, and the top five agencies.
@@ -204,3 +196,4 @@ management commands.  Example::
     Id 224: Raleigh Police Department 863,653
     Id 104: Greensboro Police Department 555,453
     Id 88: Fayetteville Police Department 503,013
+

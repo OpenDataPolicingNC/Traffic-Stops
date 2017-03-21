@@ -16,7 +16,7 @@
         <div class="col-sm-4">
           <!-- <h2>North Carolina</h2> -->
           <img src="{% static "svg/noun_19625_cc-white.svg" %}" class="state nc">
-          <p class='stop-count'>21+ million stops</p>
+          <p class='stop-count'>{{ nc.total_stops_millions }}+ million stops</p>
           <a href="{% url 'nc:home' %}" class="btn btn-default nc">Search NC</a>
         </div>
         <div class="col-sm-4">

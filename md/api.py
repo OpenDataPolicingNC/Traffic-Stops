@@ -21,6 +21,7 @@ GROUP_DEFAULTS = {k: 0 for k in dict(ETHNICITY_CHOICES).values()}
 class QueryKeyConstructor(DefaultObjectKeyConstructor):
     params_query = bits.QueryParamsKeyBit(['officer'])
 
+
 query_cache_key_func = QueryKeyConstructor()
 
 

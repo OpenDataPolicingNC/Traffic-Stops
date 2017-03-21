@@ -114,6 +114,34 @@ secrets:
     aWOqR9w8I7jhbievWKUXBiDvidq0F7QWiA==
     =9z5n
     -----END PGP MESSAGE-----
+  "NC_FTP_USER": |-
+    -----BEGIN PGP MESSAGE-----
+    Version: GnuPG v2
+
+    hQEMA0xWlbLrP5oyAQf+MsP+HR1Zc8ohXLxprj6zPJsJGHMngXRZBF+XCLFcHKhQ
+    f1j2D2HEP/LqWDE7iihCvXmtZlMJH/DMcGGqTNiB5FIlnutG4vTg3xbFB3RGEY5l
+    xEWCfjbhpVrfDiU9UGbaUW3JCOzFI1E0BPm00UmXu5+HXTbfMFP7ky9D3GykJEG4
+    eyfkApeWUpcpHRTIVZy19fdPc9PSSr3H8vRKLlGg2G8ZS9LHFPm58Cn3KM1dt07/
+    3aPpn4sFfhndV+GzoPA4yMcFSDA36TG6P4BNz+8Xur+u61LhnI+U6nXb0ANxJaB6
+    6KrxKxrT4CytroP1WyMiNgpNV/tX76S2NndSfCO2wdJFASfBAGJ+2hi8Q6h2FNsz
+    TyEn1CMb66UeHrS7UJmYneMv+RVnQvcF6yypdq28YDgsyR9EBGSD396x1EqRNaPX
+    EcVANTvh
+    =BZ0A
+    -----END PGP MESSAGE-----
+  "NC_FTP_PASSWORD": |-
+    -----BEGIN PGP MESSAGE-----
+    Version: GnuPG v2
+
+    hQEMA0xWlbLrP5oyAQf+OAQKVrmCn6feZTg3FuEsAf/WdyL8bZtE47TC6Lob5Vad
+    X4YW1xWL+wz5DokwKwTHy9DYS5HpCqanqMd4zZ0HZzfGRiXpriMf9NrI6LgBZwVW
+    tGjs8u9hS1EhjlQTDZdd3vIGhkXINK3niv6RoPwwMOJbbXZlT4LK/Zy7TGyF/Znz
+    yKJiVEccMYeVyJ6OJr0uH78/fyEHEM7xar6EI79TFPbOM3uIz7qtRWIIqvOifj1z
+    4CG30Xl9dX8e+9UrJ0/0/PTckedeLLWdBRKilYe6iL9Qg3VzCxCTuIvdfUPrpvtm
+    gNasYYvyHm8nLJ523wtdS7wfcyx5gvmEIPIyu7egwNJFAf3+vsvRhyU0cVDzyCPh
+    QVIT6A4H9vTU6cw3tLwB/NTlfpmG6hqEyhCZHDX7TQdJph61J0o9IGKMMKcsyDN7
+    tJmBo736
+    =VvCo
+    -----END PGP MESSAGE-----
 
 # Private deploy key. Must be GPG encrypted.
 # github_deploy_key: |-
