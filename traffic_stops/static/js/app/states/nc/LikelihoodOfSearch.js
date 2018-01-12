@@ -16,15 +16,15 @@ const LikelihoodOfSearch = C.LikelihoodOfSearchBase.extend({
   Stops: Stops,
 
   _items: function () {
-    return (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races;
+    return Stops.races;
   },
 
   _base: function () {
-    return (this.get('showEthnicity')) ? "non-hispanic" : "white"
+    return "white";
   },
 
   _defRace: function () {
-    return (this.get('showEthnicity')) ? "hispanic" : "black"
+    return "black";
   },
 
   _pprint: function (type) {

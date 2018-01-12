@@ -11,7 +11,7 @@ const CensusRatioDonut = C.CensusRatioDonutBase.extend({
   Stops: Stops,
 
   _items: function () {
-    return (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races;
+    return Stops.races;
   },
 
   _pprint: function (type) {

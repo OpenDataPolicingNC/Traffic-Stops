@@ -6,24 +6,23 @@ const StopSearchHandler = C.StopSearchHandlerBase.extend({
 
   major_type: Stops.races,
 
-  types: [Stops.races, Stops.ethnicities],
+  types: [Stops.races],
 
   _pprint: (d) => Stops.pprint.get(d)
 });
 
 const StopSearchTimeSeries = C.StopSearchTimeSeriesBase.extend({
   defaults: {
-    showEthnicity: false,
     width: 750,
     height: 375
   },
 
   Stops: Stops,
 
-  defaultEnabled: ["Total", "White", "Black", "Hispanic", "Non-hispanic"],
+  defaultEnabled: ["Total", "White", "Black"],
 
   _items: function () {
-    return (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races;
+    return Stops.races;
   },
 
   _pprint: function (type) {
