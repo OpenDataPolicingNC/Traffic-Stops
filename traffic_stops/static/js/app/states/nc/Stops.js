@@ -22,11 +22,6 @@ export const StopRatioDonut = C.StopRatioDonutBase.extend({
   _pprint: function (type) {
     return Stops.pprint.get(type);
   },
-
-  triggerRaceToggle: function (e, v) {
-    this.set('showEthnicity', v);
-    this.drawChart();
-  }
 });
 
 export const StopRatioTimeSeries = C.StopRatioTimeSeriesBase.extend({
@@ -45,11 +40,6 @@ export const StopRatioTimeSeries = C.StopRatioTimeSeriesBase.extend({
   _pprint: function (type) {
     return Stops.pprint.get(type);
   },
-
-  triggerRaceToggle: function(e, v){
-    this.set('showEthnicity', v);
-    this.drawChart();
-  }
 });
 
 export const StopsTable = C.StopsTableBase.extend({

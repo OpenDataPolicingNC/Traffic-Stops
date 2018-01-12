@@ -23,11 +23,6 @@ const ContrabandHitRateBar = C.ContrabandHitRateBarBase.extend({
   _pprint: function (type) {
     return Stops.pprint.get(type);
   },
-
-  triggerRaceToggle: function(e, v){
-    this.set('showEthnicity', v);
-    this.selector.trigger('change');
-  }
 });
 
 const ContrabandTable = C.ContrabandTableBase.extend({

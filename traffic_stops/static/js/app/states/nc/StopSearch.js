@@ -29,11 +29,6 @@ const StopSearchTimeSeries = C.StopSearchTimeSeriesBase.extend({
   _pprint: function (type) {
     return Stops.pprint.get(type);
   },
-
-  triggerRaceToggle: function(e, v){
-    this.set('showEthnicity', v);
-    this.drawChart();
-  }
 });
 
 var StopSearchTable = C.StopSearchTableBase.extend({});

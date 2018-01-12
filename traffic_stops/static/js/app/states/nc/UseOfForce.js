@@ -139,10 +139,6 @@ var UseOfForceBarChart = VisualBase.extend({
     });
     return data;
   },
-  triggerRaceToggle: function(e, v){
-    this.set('showEthnicity', v);
-    this.drawChart();
-  }
 });
 
 var UseOfForceTable = StopsTable.extend({});

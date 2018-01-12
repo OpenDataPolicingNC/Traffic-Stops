@@ -30,11 +30,6 @@ const LikelihoodOfSearch = C.LikelihoodOfSearchBase.extend({
   _pprint: function (type) {
     return Stops.pprint.get(type);
   },
-
-  triggerRaceToggle: function (e, v) {
-    this.set('showEthnicity', v);
-    this.selector.trigger('change');
-  }
 });
 
 const LikelihoodSearchTable = C.LikelihoodSearchTableBase.extend({

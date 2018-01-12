@@ -26,7 +26,6 @@ describe('base', () => {
       drawStartup: () => null,
       drawChart: () => null,
       setDefaultChart: () => null,
-      triggerRaceToggle: () => null
     })
 
     describe('constructor', () => {

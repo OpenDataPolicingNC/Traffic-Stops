@@ -19,11 +19,6 @@ const CensusRatioDonut = C.CensusRatioDonutBase.extend({
   },
 
   _process_key: process_key,
-
-  triggerRaceToggle: function (e, v) {
-    this.set('showEthnicity', v);
-    this.drawChart();
-  }
 });
 
 var CensusTable = C.CensusTableBase.extend({
