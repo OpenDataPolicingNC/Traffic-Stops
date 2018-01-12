@@ -372,8 +372,7 @@
 {% block graph-code %}
 {% comment %}<script>{% endcomment %}
 
-var showEthnicity = {{request.session.showEthnicity|lower|default:"false"}},
-    census_handler = new NC.CensusHandler({url: "{% url 'nc:agency-api-detail' object.pk %}"});
+var census_handler = new NC.CensusHandler({url: "{% url 'nc:agency-api-detail' object.pk %}"});
 {% if officer_id %}
   // Retrieve data from API using data-handlers
   var stop_handler = new NC.StopsHandler({url: "{% url 'nc:agency-api-stops' object.pk %}?officer={{officer_id|urlencode}}"}),
@@ -391,31 +390,29 @@ var showEthnicity = {{request.session.showEthnicity|lower|default:"false"}},
 {% endif %}
 var stop_search_handler = new NC.StopSearchHandler({handlers: [stop_handler, search_handler]});
 
-new NC.CensusRatioDonut({handler: census_handler, selector: "#census_pie", showEthnicity: showEthnicity});
-new NC.CensusTable({handler: census_handler, selector: "#census_data", showEthnicity: showEthnicity});
+new NC.CensusRatioDonut({handler: census_handler, selector: "#census_pie"});
+new NC.CensusTable({handler: census_handler, selector: "#census_data"});
 
-new NC.StopRatioDonut({handler: stop_handler, selector: "#stop_race_pie", showEthnicity: showEthnicity});
-new NC.StopRatioTimeSeries({handler: stop_handler, selector: "#stop_race_line", showEthnicity: showEthnicity});
-new NC.StopsTable({handler: stop_handler, selector: "#stop_race_data", showEthnicity: showEthnicity});
+new NC.StopRatioDonut({handler: stop_handler, selector: "#stop_race_pie"});
+new NC.StopRatioTimeSeries({handler: stop_handler, selector: "#stop_race_line"});
+new NC.StopsTable({handler: stop_handler, selector: "#stop_race_data"});
 
-new NC.StopSearchTimeSeries({handler: stop_search_handler, selector: "#stop_search_line", showEthnicity: showEthnicity});
-new NC.StopSearchTable({handler: stop_search_handler, selector: "#stop_search_data", showEthnicity: showEthnicity});
+new NC.StopSearchTimeSeries({handler: stop_search_handler, selector: "#stop_search_line"});
+new NC.StopSearchTable({handler: stop_search_handler, selector: "#stop_search_data"});
 
-new NC.SearchRatioDonut({handler: search_handler, selector: "#search_race_pie", showEthnicity: showEthnicity});
-new NC.SearchRatioTimeSeries({handler: search_handler, selector: "#search_race_line", showEthnicity: showEthnicity});
-new NC.SearchTable({handler: search_handler, selector: "#search_race_data", showEthnicity: showEthnicity});
+new NC.SearchRatioDonut({handler: search_handler, selector: "#search_race_pie"});
+new NC.SearchRatioTimeSeries({handler: search_handler, selector: "#search_race_line"});
+new NC.SearchTable({handler: search_handler, selector: "#search_race_data"});
 
-new NC.LikelihoodOfSearch({handler: lhs_handler, selector: "#lsb", showEthnicity: showEthnicity});
-new NC.LikelihoodSearchTable({handler: lhs_handler, selector: "#lsb_data", showEthnicity: showEthnicity});
+new NC.LikelihoodOfSearch({handler: lhs_handler, selector: "#lsb"});
+new NC.LikelihoodSearchTable({handler: lhs_handler, selector: "#lsb_data"});
 
-new NC.ContrabandHitRateBar({handler: chr_handler, selector: "#chr", showEthnicity: showEthnicity});
-new NC.ContrabandTable({handler: chr_handler, selector: "#chr_data", showEthnicity: showEthnicity});
+new NC.ContrabandHitRateBar({handler: chr_handler, selector: "#chr"});
+new NC.ContrabandTable({handler: chr_handler, selector: "#chr_data"});
 
-new NC.UseOfForceDonut({handler: uf_handler, selector: "#use_force_race_pie", showEthnicity: showEthnicity});
-new NC.UseOfForceBarChart({handler: uf_handler, selector: "#use_force_race_line", showEthnicity: showEthnicity});
-new NC.UseOfForceTable({handler: uf_handler, selector: "#use_force_race__data", showEthnicity: showEthnicity});
-
-new NC.RaceToggle("{% url 'update_session' %}", showEthnicity).render($('span.start'));
+new NC.UseOfForceDonut({handler: uf_handler, selector: "#use_force_race_pie"});
+new NC.UseOfForceBarChart({handler: uf_handler, selector: "#use_force_race_line"});
+new NC.UseOfForceTable({handler: uf_handler, selector: "#use_force_race__data"});
 
 {% comment %}</script>{% endcomment %}
 {% endblock graph-code %}
