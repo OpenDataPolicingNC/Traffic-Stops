@@ -13,6 +13,12 @@ added for additional states.
 Local/Development Environment
 -----------------------------
 
+Before running state imports, first import census data:
+
+.. code-block:: bash
+
+  python manage.py import_census
+
 
 Database Dump (quicker)
 _______________________
