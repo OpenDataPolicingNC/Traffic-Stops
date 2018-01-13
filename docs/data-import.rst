@@ -53,7 +53,11 @@ applied before importing.  If in doubt:
 
 .. code-block:: bash
 
+    # for NC
     dropdb traffic_stops_nc && createdb -E UTF-8 traffic_stops_nc
+    # for MD
+    dropdb traffic_stops_md && createdb -E UTF-8 traffic_stops_md
+
     ./migrate_all_dbs.sh
 
 
@@ -72,7 +76,12 @@ Run the import command:
 
 .. code-block:: bash
 
-    python manage.py import_nc --dest $PWD/ncdata --noprime
+    # for NC
+    rm -rf ./ncdata  # if you don't want to reuse previous download
+    python manage.py import_nc --dest $PWD/ncdata --noprime  # noprime = don't prime cache
+    # for MD
+    rm -rf ./mddata  # if you don't want to reuse previous download
+    python manage.py import_md --dest $PWD/mddata
 
 This took ~25 minutes on my laptop. Run ``tail -f traffic_stops.log`` to follow
 along.  Reusing an existing ``--dest`` directory will speed up import.  However,
