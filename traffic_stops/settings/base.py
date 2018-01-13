@@ -283,6 +283,16 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
+        'caching': {
+            'handlers': ['file', 'syslog'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'caching.invalidation': {
+            'handlers': ['file', 'syslog'],
+            'level': 'INFO',
+            'propagate': False,
+        },
     }
 }
 
