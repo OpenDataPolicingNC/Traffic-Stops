@@ -31,7 +31,7 @@ To load an existing database dump on S3, run:
     createdb -E UTF-8 traffic_stops_nc
     wget https://s3-us-west-2.amazonaws.com/openpolicingdata/traffic_stops_nc_2018_01_08.dump.zip
     unzip traffic_stops_nc_2018_01_08.dump.zip
-    pg_restore -Ox -d traffic_stops_nc traffic_stops_nc_2018_01_08.dump.zip
+    pg_restore -Ox -d traffic_stops_nc traffic_stops_nc_2018_01_08.dump
 
 Browse https://s3-us-west-2.amazonaws.com/openpolicingdata/ to see what dumps
 are available.
@@ -72,7 +72,7 @@ Run the import command:
 
 .. code-block:: bash
 
-    python manage.py import_nc --dest $PWD/ncdata
+    python manage.py import_nc --dest $PWD/ncdata --noprime
 
 This took ~25 minutes on my laptop. Run ``tail -f traffic_stops.log`` to follow
 along.  Reusing an existing ``--dest`` directory will speed up import.  However,
