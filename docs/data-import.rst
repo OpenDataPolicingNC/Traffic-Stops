@@ -76,10 +76,10 @@ Run the import command:
 
 .. code-block:: bash
 
-    # for NC
+    # for NC (~25m)
     rm -rf ./ncdata  # if you don't want to reuse previous download
     python manage.py import_nc --dest $PWD/ncdata --noprime  # noprime = don't prime cache
-    # for MD
+    # for MD (~30m)
     rm -rf ./mddata  # if you don't want to reuse previous download
     python manage.py import_md --dest $PWD/mddata
 
