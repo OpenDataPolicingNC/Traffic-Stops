@@ -1,3 +1,4 @@
+from django.db import connections
 from django.shortcuts import render
 from .models import Stop, Agency, Person
 from . import forms
@@ -31,6 +32,16 @@ def search(request):
     else:
         people = Person.objects.none()
     people = people.select_related('stop').order_by('stop__date')
+    connection = connections[people.db]
+    with connection.cursor() as cursor:
+        # Disable seq scanning when generating this count
+        # Override the count to produce this result for the pagination
+        # Might not be necessary if we adjusted the random_page_cost
+        # See https://stackoverflow.com/questions/10643215/
+        cursor.execute('SET enable_seqscan = OFF;')
+        total = people.count()
+        people.count = lambda: total
+        cursor.execute('SET enable_seqscan = ON;')
     context = {
         'form': form,
         'people': people,
