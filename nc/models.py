@@ -60,7 +60,7 @@ class Stop(CachingMixin, models.Model):
     stop_id = models.PositiveIntegerField(primary_key=True)
     agency_description = models.CharField(max_length=100)
     agency = models.ForeignKey('Agency', null=True, related_name='stops')
-    date = models.DateTimeField()
+    date = models.DateTimeField(db_index=True)
     purpose = models.PositiveSmallIntegerField(choices=PURPOSE_CHOICES)
     action = models.PositiveSmallIntegerField(choices=ACTION_CHOICES)
     driver_arrest = models.BooleanField(default=False)
