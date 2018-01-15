@@ -18,9 +18,7 @@ export default {
     'black': 'Black',
     'native_american': 'Native American',
     'asian': 'Asian',
-    'other': 'Other',
-    'hispanic': 'Hispanic',
-    'non-hispanic': 'Non-hispanic'
+    'other': 'Other'
   }),
   colors: [
     "#1C9647", // dark green
