@@ -96,6 +96,7 @@ CREATE INDEX nc_searchbasis_5fad4402 ON nc_searchbasis USING btree (search_id);
 CREATE INDEX nc_searchbasis_91455da7 ON nc_searchbasis USING btree (stop_id);
 CREATE INDEX nc_searchbasis_a8452ca7 ON nc_searchbasis USING btree (person_id);
 CREATE INDEX nc_stop_169fc544 ON nc_stop USING btree (agency_id);
+CREATE INDEX nc_stop_date_7d643c8a9c590bf7_uniq ON nc_stop USING btree (date);
 
 ANALYZE;
 COMMIT;
