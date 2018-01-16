@@ -13,27 +13,21 @@ const StopSearchHandler = C.StopSearchHandlerBase.extend({
 
 const StopSearchTimeSeries = C.StopSearchTimeSeriesBase.extend({
   defaults: {
-    showEthnicity: false,
     width: 750,
     height: 375
   },
 
   Stops: Stops,
 
-  defaultEnabled: ["Total", "White", "Black", "Hispanic", "Non-hispanic"],
+  defaultEnabled: ["Total", "White", "Black"],
 
   _items: function () {
-    return (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races;
+    return Stops.races;
   },
 
   _pprint: function (type) {
     return Stops.pprint.get(type);
   },
-
-  triggerRaceToggle: function(e, v){
-    this.set('showEthnicity', v);
-    this.drawChart();
-  }
 });
 
 var StopSearchTable = C.StopSearchTableBase.extend({});

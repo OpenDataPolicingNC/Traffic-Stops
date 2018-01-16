@@ -2,13 +2,12 @@ import Stops from './defaults.js';
 import * as C from '../../common/Stops.js';
 
 export const StopsHandler = C.StopsHandlerBase.extend({
-  types: [Stops.races, Stops.ethnicities],
+  types: [Stops.races],
   Stops: Stops
 });
 
 export const StopRatioDonut = C.StopRatioDonutBase.extend({
   defaults: {
-    showEthnicity: false,
     width: 300,
     height: 300
   },
@@ -16,22 +15,16 @@ export const StopRatioDonut = C.StopRatioDonutBase.extend({
   Stops: Stops,
 
   _items: function () {
-    return (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races;
+    return Stops.races;
   },
 
   _pprint: function (type) {
     return Stops.pprint.get(type);
   },
-
-  triggerRaceToggle: function (e, v) {
-    this.set('showEthnicity', v);
-    this.drawChart();
-  }
 });
 
 export const StopRatioTimeSeries = C.StopRatioTimeSeriesBase.extend({
   defaults: {
-    showEthnicity: false,
     width: 750,
     height: 375
   },
@@ -39,17 +32,12 @@ export const StopRatioTimeSeries = C.StopRatioTimeSeriesBase.extend({
   Stops: Stops,
 
   _items: function () {
-    return (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races;
+    return Stops.races;
   },
 
   _pprint: function (type) {
     return Stops.pprint.get(type);
   },
-
-  triggerRaceToggle: function(e, v){
-    this.set('showEthnicity', v);
-    this.drawChart();
-  }
 });
 
 export const StopsTable = C.StopsTableBase.extend({

@@ -30,8 +30,6 @@ const LikelihoodOfSearch = C.LikelihoodOfSearchBase.extend({
   _pprint: function (type) {
     return type;
   },
-
-  triggerRaceToggle: () => null
 });
 
 const LikelihoodSearchTable = C.LikelihoodSearchTableBase.extend({

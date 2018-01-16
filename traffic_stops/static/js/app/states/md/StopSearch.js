@@ -25,8 +25,6 @@ const StopSearchTimeSeries = C.StopSearchTimeSeriesBase.extend({
   _items: () => Stops.ethnicities,
 
   _pprint: (d) => d,
-
-  triggerRaceToggle: () => null
 });
 
 const StopSearchTable = C.StopSearchTableBase.extend({});
