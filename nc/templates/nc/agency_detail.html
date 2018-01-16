@@ -59,8 +59,17 @@
       <h3>Traffic Stops (percentage by race/ethnicity)</h3>
 
       <p class="help-block">
-        These graphs reflect the racial composition of drivers stopped by this
-        officer since the officer began reporting their data to the state.
+        {% comment %}
+          Display one description for the officer statistics, and another one for the department statistics
+        {% endcomment %}
+        {% if officer_id %}
+          These graphs reflect the racial composition of drivers stopped by this
+          officer since the officer began reporting their data to the state.
+        {% else %}
+          These graphs reflect the racial composition of drivers stopped by law
+          enforcement officers in the jurisdiction since the department began
+          reporting its data to the state.
+        {% endif %}
       </p>
     </div>
 
@@ -122,12 +131,31 @@
 
   <div class="row">
     <div class="col-md-12">
-      <h3>Officer Search Rate For Vehicle Stops</h3>
+      <h3>
+        {% comment %}
+          Display one title for the officer statistics, and another one for the department statistics
+        {% endcomment %}
+        {% if officer_id %}
+          Officer Search Rate For Vehicle Stops
+        {% else %}
+          Average Departmental Search Rate For Vehicle Stops
+        {% endif %}
+      </h3>
 
       <p class="help-block">
-        This graph is a longitudinal representation of the officer's search rate
-        for vehicle stops since they began reporting their data to the state.
-        The black line represents the overall search rate for all motorists.
+        {% comment %}
+          Display one description for the officer statistics, and another one for the department statistics
+        {% endcomment %}
+        {% if officer_id %}
+          This graph is a longitudinal representation of the officer's search rate
+          for vehicle stops since they began reporting their data to the state.
+          The black line represents the overall search rate for all motorists.
+        {% else %}
+          This graph is a longitudinal representation of the average departmental
+          search rate for vehicle stops since the department began reporting its
+          data to the state.  The black line represents the
+          overall search rate for all motorists.
+        {% endif %}
       </p>
     </div>
 
@@ -168,8 +196,17 @@
       <h3>Search Data by Race/Ethnicity</h3>
 
       <p class="help-block">
-        These graphs reflect the ethnic composition of drivers searched by this
-        officer since they began reporting their data to the state.
+        {% comment %}
+          Display one description for the officer statistics, and another one for the department statistics
+        {% endcomment %}
+        {% if officer_id %}
+          These graphs reflect the ethnic composition of drivers searched by this
+          officer since they began reporting their data to the state.
+        {% else %}
+          These graphs reflect the ethnic composition of drivers searched by law
+          enforcement officers in the jurisdiction since the department began
+          reporting its data to the state.
+        {% endif %}
       </p>
     </div>
 
@@ -225,10 +262,20 @@
       <h3>Likelihood of Search by "Stop Cause"</h3>
 
       <p class="help-block">
-        This graph displays the likelihood of one group being searched by this
-        officer as compared to another group for a given stop cause. Adjusting
-        the drop down menu will display the likelihood of search occurring
-        relative to another group on a year-by-year basis.
+        {% comment %}
+          Display one description for the officer statistics, and another one for the department statistics
+        {% endcomment %}
+        {% if officer_id %}
+          This graph displays the likelihood of one group being searched by this
+          officer as compared to another group for a given stop cause. Adjusting
+          the drop down menu will display the likelihood of search occurring
+          relative to another group on a year-by-year basis.
+        {% else %}
+          This graph displays the likelihood of one ethnic group being searched
+          as compared to another group for a given stop cause. Adjusting the drop
+          down menu will display the likelihood of search relative to another
+          racial or ethnic group on a year-by-year basis.
+        {% endif %}
       </p>
     </div>
 
@@ -311,9 +358,18 @@
       <h3>"Use-of-force" Data by Race/Ethnicity</h3>
 
       <p class="help-block">
-        These graphs reflect the racial composition of drivers against whom this
-        officer reported using force since they began reporting their data to the
-        NC Department of Justice.
+        {% comment %}
+          Display one description for the officer statistics, and another one for the department statistics
+        {% endcomment %}
+        {% if officer_id %}
+          These graphs reflect the racial composition of drivers against whom this
+          officer reported using force since they began reporting their data to the
+          NC Department of Justice.
+        {% else %}
+          These graphs reflect the racial composition of drivers against whom law
+          enforcement officers in the jurisdiction reported using force since the
+          department began reporting its data to the NC Department of Justice.
+        {% endif %}
       </p>
     </div>
 
