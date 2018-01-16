@@ -53,7 +53,7 @@ export const StopRatioTimeSeries = C.StopRatioTimeSeriesBase.extend({
 });
 
 export const StopsTable = C.StopsTableBase.extend({
-  types: [Stops.races],
+  types: [Stops.races, Stops.ethnicities],
 
   _get_header_rows: function () {
     return Stops.pprint.values();

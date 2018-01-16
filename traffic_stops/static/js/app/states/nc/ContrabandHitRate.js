@@ -35,7 +35,7 @@ const ContrabandTable = C.ContrabandTableBase.extend({
     return Stops.pprint.values();
   },
 
-  types: [Stops.races]
+  types: [Stops.races, Stops.ethnicities]
 });
 
 export default {

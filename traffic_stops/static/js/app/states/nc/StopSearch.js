@@ -6,7 +6,7 @@ const StopSearchHandler = C.StopSearchHandlerBase.extend({
 
   major_type: Stops.races,
 
-  types: [Stops.races],
+  types: [Stops.races, Stops.ethnicities],
 
   _pprint: (d) => Stops.pprint.get(d)
 });

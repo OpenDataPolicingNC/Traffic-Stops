@@ -38,7 +38,7 @@ const LikelihoodOfSearch = C.LikelihoodOfSearchBase.extend({
 });
 
 const LikelihoodSearchTable = C.LikelihoodSearchTableBase.extend({
-  types: [Stops.races],
+  types: [Stops.races, Stops.ethnicities],
 
   Stops: Stops,
 
