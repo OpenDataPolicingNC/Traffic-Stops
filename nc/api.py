@@ -76,16 +76,18 @@ class AgencyViewSet(viewsets.ReadOnlyModelViewSet):
                                               stop['purpose'])
                 data['purpose'] = purpose
 
-            if 'person__ethnicity' in group_by and stop['person__ethnicity'] == 'H':
+            if 'person__race' in group_by:
                 # The 'Hispanic' ethnicity option is now being aggreggated into its
                 # own race category, and its count excluded from the other counts.
-                race = GROUPS.get('H', 'H')
-                data[race] = stop['count']
-            elif 'person__race' in group_by:
-                race = GROUPS.get(stop['person__race'],
-                                  stop['person__race'])
+                if stop['person__ethnicity'] == 'H':
+                    race = GROUPS.get('H', 'H')
+                elif 'person__race' in group_by:
+                    race = GROUPS.get(stop['person__race'],
+                                      stop['person__race'])
+
                 data.setdefault(race, 0)
                 data[race] += stop['count']
+
             results.add(**data)
 
     @detail_route(methods=['get'])
