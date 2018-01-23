@@ -19,8 +19,7 @@ GROUPS = {'A': 'asian',
           'I': 'native_american',
           'U': 'other',
           'W': 'white',
-          'H': 'hispanic',
-          'N': 'non-hispanic'}
+          'H': 'hispanic'}
 
 PURPOSE_CHOICES = {1: 'Speed Limit Violation',
                    2: 'Stop Light/Sign Violation',
@@ -38,8 +37,7 @@ GROUP_DEFAULTS = {'asian': 0,
                   'native_american': 0,
                   'other': 0,
                   'white': 0,
-                  'hispanic': 0,
-                  'non-hispanic': 0}
+                  'hispanic': 0}
 
 
 class QueryKeyConstructor(DefaultObjectKeyConstructor):
@@ -77,22 +75,24 @@ class AgencyViewSet(viewsets.ReadOnlyModelViewSet):
                 purpose = PURPOSE_CHOICES.get(stop['purpose'],
                                               stop['purpose'])
                 data['purpose'] = purpose
-            if 'person__race' in group_by:
+
+            if 'person__ethnicity' in group_by and stop['person__ethnicity'] == 'H':
+                # The 'Hispanic' ethnicity option is now being aggreggated into its
+                # own race category, and its count excluded from the other counts.
+                race = GROUPS.get('H', 'H')
+                data[race] = stop['count']
+            elif 'person__race' in group_by:
                 race = GROUPS.get(stop['person__race'],
                                   stop['person__race'])
-                data[race] = stop['count']
-            if 'person__ethnicity' in group_by:
-                ethnicity = GROUPS.get(stop['person__ethnicity'],
-                                       stop['person__ethnicity'])
-                data[ethnicity] = stop['count']
+                data.setdefault(race, 0)
+                data[race] += stop['count']
             results.add(**data)
 
     @detail_route(methods=['get'])
     @cache_response(key_func=query_cache_key_func)
     def stops(self, request, pk=None):
         results = GroupedData(by='year', defaults=GROUP_DEFAULTS)
-        self.query(results, group_by=('year', 'person__race'))
-        self.query(results, group_by=('year', 'person__ethnicity'))
+        self.query(results, group_by=('year', 'person__race', 'person__ethnicity'))
         return Response(results.flatten())
 
     @detail_route(methods=['get'])
@@ -101,14 +101,11 @@ class AgencyViewSet(viewsets.ReadOnlyModelViewSet):
         response = {}
         # stops
         results = GroupedData(by=('purpose', 'year'), defaults=GROUP_DEFAULTS)
-        self.query(results, group_by=('purpose', 'year', 'person__race'))
-        self.query(results, group_by=('purpose', 'year', 'person__ethnicity'))
+        self.query(results, group_by=('purpose', 'year', 'person__race', 'person__ethnicity'))
         response['stops'] = results.flatten()
         # searches
         results = GroupedData(by=('purpose', 'year'), defaults=GROUP_DEFAULTS)
-        self.query(results, group_by=('purpose', 'year', 'person__race'),
-                   filter_=Q(search__isnull=False))
-        self.query(results, group_by=('purpose', 'year', 'person__ethnicity'),
+        self.query(results, group_by=('purpose', 'year', 'person__race', 'person__ethnicity'),
                    filter_=Q(search__isnull=False))
         response['searches'] = results.flatten()
         return Response(response)
@@ -118,8 +115,7 @@ class AgencyViewSet(viewsets.ReadOnlyModelViewSet):
     def use_of_force(self, request, pk=None):
         results = GroupedData(by='year', defaults=GROUP_DEFAULTS)
         q = Q(search__isnull=False) & Q(engage_force='t')
-        self.query(results, group_by=('year', 'person__race'), filter_=q)
-        self.query(results, group_by=('year', 'person__ethnicity'), filter_=q)
+        self.query(results, group_by=('year', 'person__race', 'person__ethnicity'), filter_=q)
         return Response(results.flatten())
 
     @detail_route(methods=['get'])
@@ -127,8 +123,7 @@ class AgencyViewSet(viewsets.ReadOnlyModelViewSet):
     def searches(self, request, pk=None):
         results = GroupedData(by='year', defaults=GROUP_DEFAULTS)
         q = Q(search__isnull=False)
-        self.query(results, group_by=('year', 'person__race'), filter_=q)
-        self.query(results, group_by=('year', 'person__ethnicity'), filter_=q)
+        self.query(results, group_by=('year', 'person__race', 'person__ethnicity'), filter_=q)
         return Response(results.flatten())
 
     @detail_route(methods=['get'])
@@ -138,13 +133,11 @@ class AgencyViewSet(viewsets.ReadOnlyModelViewSet):
         # searches
         results = GroupedData(by='year', defaults=GROUP_DEFAULTS)
         q = Q(search__isnull=False)
-        self.query(results, group_by=('year', 'person__race'), filter_=q)
-        self.query(results, group_by=('year', 'person__ethnicity'), filter_=q)
+        self.query(results, group_by=('year', 'person__race', 'person__ethnicity'), filter_=q)
         response['searches'] = results.flatten()
         # searches
         results = GroupedData(by='year', defaults=GROUP_DEFAULTS)
         q = Q(search__contraband__isnull=False)
-        self.query(results, group_by=('year', 'person__race'), filter_=q)
-        self.query(results, group_by=('year', 'person__ethnicity'), filter_=q)
+        self.query(results, group_by=('year', 'person__race', 'person__ethnicity'), filter_=q)
         response['contraband'] = results.flatten()
         return Response(response)
