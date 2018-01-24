@@ -22,11 +22,11 @@ export default {
     'hispanic'
   ],
   pprint: d3.map({
-    'white': 'White',
-    'black': 'Black',
-    'native_american': 'Native American',
-    'asian': 'Asian',
-    'other': 'Other',
+    'white': 'White*',
+    'black': 'Black*',
+    'native_american': 'Native American*',
+    'asian': 'Asian*',
+    'other': 'Other*',
     'hispanic': 'Hispanic'
   }),
   colors: [
