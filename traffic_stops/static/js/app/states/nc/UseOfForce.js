@@ -41,8 +41,8 @@ var UseOfForceHandler = DataHandlerBase.extend({
     });
     pie.set("Total", d3.map(total));
 
-    // build data for line-chart
-    [Stops.races, Stops.ethnicities].forEach(function(dataType){
+    // build data for bar-chart
+    [Stops.ethnicities].forEach(function(dataType){
       dataType.forEach(function(v){
         line.set(v, []);
       });
@@ -74,7 +74,6 @@ var UseOfForceHandler = DataHandlerBase.extend({
 var UseOfForceDonut = StopRatioDonut.extend({});
 var UseOfForceBarChart = VisualBase.extend({
   defaults: {
-    showEthnicity: false,
     width: 750,
     height: 375
   },
@@ -119,7 +118,7 @@ var UseOfForceBarChart = VisualBase.extend({
       });
   },
   _formatData: function(){
-    var items = (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races,
+    var items = Stops.ethnicities,
         subset = [],
         i = 0,
         data = [],
