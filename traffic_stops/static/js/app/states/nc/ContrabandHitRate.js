@@ -9,7 +9,6 @@ const ContrabandHitRateHandler = C.ContrabandHitRateHandlerBase.extend({
 
 const ContrabandHitRateBar = C.ContrabandHitRateBarBase.extend({
   defaults: {
-    showEthnicity: true,
     width: 750,
     height: 375
   },
@@ -17,17 +16,14 @@ const ContrabandHitRateBar = C.ContrabandHitRateBarBase.extend({
   Stops: Stops,
 
   _items: function () {
-    return (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races;
+    return Stops.ethnicities;
   },
 
   _pprint: function (type) {
     return Stops.pprint.get(type);
   },
 
-  triggerRaceToggle: function(e, v){
-    this.set('showEthnicity', v);
-    this.selector.trigger('change');
-  }
+  triggerRaceToggle: () => null
 });
 
 const ContrabandTable = C.ContrabandTableBase.extend({
@@ -35,7 +31,7 @@ const ContrabandTable = C.ContrabandTableBase.extend({
     return Stops.pprint.values();
   },
 
-  types: [Stops.races, Stops.ethnicities]
+  types: [Stops.ethnicities]
 });
 
 export default {
