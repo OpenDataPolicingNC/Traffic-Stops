@@ -2,13 +2,12 @@ import Stops from './defaults.js';
 import * as C from '../../common/LikelihoodOfSearch.js';
 
 const LikelihoodSearchHandler = C.LikelihoodSearchHandlerBase.extend({
-  types: [Stops.races, Stops.ethnicities],
+  types: [Stops.ethnicities],
   Stops: Stops
 });
 
 const LikelihoodOfSearch = C.LikelihoodOfSearchBase.extend({
   defaults: {
-    showEthnicity: true,
     width: 750,
     height: 375
   },
@@ -16,29 +15,26 @@ const LikelihoodOfSearch = C.LikelihoodOfSearchBase.extend({
   Stops: Stops,
 
   _items: function () {
-    return (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races;
+    return Stops.ethnicities;
   },
 
   _base: function () {
-    return (this.get('showEthnicity')) ? "non-hispanic" : "white"
+    return "white"
   },
 
   _defRace: function () {
-    return (this.get('showEthnicity')) ? "hispanic" : "black"
+    return "black"
   },
 
   _pprint: function (type) {
     return Stops.pprint.get(type);
   },
 
-  triggerRaceToggle: function (e, v) {
-    this.set('showEthnicity', v);
-    this.selector.trigger('change');
-  }
+  triggerRaceToggle: () => null
 });
 
 const LikelihoodSearchTable = C.LikelihoodSearchTableBase.extend({
-  types: [Stops.races, Stops.ethnicities],
+  types: [Stops.ethnicities],
 
   Stops: Stops,
 
