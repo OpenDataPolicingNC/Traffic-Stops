@@ -29,7 +29,6 @@ const StopSearchTimeSeries = C.StopSearchTimeSeriesBase.extend({
     return Stops.pprint.get(type);
   },
 
-  triggerRaceToggle: () => null
 });
 
 var StopSearchTable = C.StopSearchTableBase.extend({});

@@ -23,7 +23,6 @@ const ContrabandHitRateBar = C.ContrabandHitRateBarBase.extend({
     return Stops.pprint.get(type);
   },
 
-  triggerRaceToggle: () => null
 });
 
 const ContrabandTable = C.ContrabandTableBase.extend({

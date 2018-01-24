@@ -22,7 +22,6 @@ export const StopRatioDonut = C.StopRatioDonutBase.extend({
     return Stops.pprint.get(type);
   },
 
-  triggerRaceToggle: () => null
 });
 
 export const StopRatioTimeSeries = C.StopRatioTimeSeriesBase.extend({
@@ -41,7 +40,6 @@ export const StopRatioTimeSeries = C.StopRatioTimeSeriesBase.extend({
     return Stops.pprint.get(type);
   },
 
-  triggerRaceToggle: () => null
 });
 
 export const StopsTable = C.StopsTableBase.extend({
