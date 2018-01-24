@@ -15,6 +15,11 @@ from tsdata.tests.factories import CensusProfileFactory
 class AgencyTests(APITestCase):
     multi_db = True
 
+    # Hispanic vs non-Hispanic ethnicity is tracked separately on
+    # tickets, and thus is a separate field in the database for the NC
+    # data, but now we are breaking out individuals marked as Hispanic
+    # as a distinct racial group.
+
     def test_list_agencies(self):
         """Test Agency list"""
         agency = factories.AgencyFactory()

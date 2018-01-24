@@ -81,7 +81,7 @@ class AgencyViewSet(viewsets.ReadOnlyModelViewSet):
                 # own race category, and its count excluded from the other counts.
                 if stop['person__ethnicity'] == 'H':
                     race = GROUPS.get('H', 'H')
-                elif 'person__race' in group_by:
+                else:
                     race = GROUPS.get(stop['person__race'],
                                       stop['person__race'])
 
