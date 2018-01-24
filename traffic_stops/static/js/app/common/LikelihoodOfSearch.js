@@ -77,7 +77,6 @@ export const LikelihoodOfSearchBase = VisualBase.extend({
   _items: function () { throw "abstract method: requires override"; },
   _base: function () { throw "abstract method: requires override"; },
   _defRace: function () { throw "abstract method: requires override"; },
-  triggerRaceToggle: function () { throw "abstract method: requires override"; },
 
   setDefaultChart: function () {
     this.chart = nv.models.multiBarHorizontalChart()

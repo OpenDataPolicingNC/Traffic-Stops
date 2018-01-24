@@ -9,9 +9,17 @@ export default {
     'asian',
     'other'
   ],
-  ethnicities: [
+  census_ethnicities: [
     'hispanic',
-    'non-hispanic'
+    'non_hispanic'
+  ],
+  ethnicities: [
+    'white',
+    'black',
+    'native_american',
+    'asian',
+    'other',
+    'hispanic'
   ],
   pprint: d3.map({
     'white': 'White',
@@ -19,14 +27,14 @@ export default {
     'native_american': 'Native American',
     'asian': 'Asian',
     'other': 'Other',
-    'hispanic': 'Hispanic',
-    'non-hispanic': 'Non-hispanic'
+    'hispanic': 'Hispanic'
   }),
   colors: [
     "#1C9647", // dark green
     "#3F5EAB", // dark blue
     "#A7D16B", // light green
     "#66ACDD", // light blue
+    "#7A76B7", // purple
     "#DC8F27", // orange
   ],
   baseline_color: "black",

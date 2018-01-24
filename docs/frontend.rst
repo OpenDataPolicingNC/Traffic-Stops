@@ -37,14 +37,6 @@ Each subclass of ``VisualBase`` needs to define at least these methods:
 - ``setDefaultChart``: setting the ``this.chart`` value to an NVD3 chart with correct configuration values
 - ``drawChart``: calling ``this.chart`` to actually mount and draw the chart with the data
 
-There is also an optional ``triggerRaceToggle`` method that is triggered by the ``raceToggle.change`` event on the ``document``. This takes care of switching out the graph's data between "race" and "ethnicity" views, where this is relevant. For example, within a NC chart, this method is defined like so::
-
-    triggerRaceToggle: function (e, v) {
-      this.set('showEthnicity', v);
-      this.drawChart();
-    }
-
-From this example, you can see that a chart that allows different data sets to be selected will need to have an event handler that invokes ``this.drawChart`` in order to redraw the chart after the needed local state updates have been performed.
 
 Understanding "common" classes
 ------------------------------

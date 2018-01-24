@@ -62,7 +62,6 @@ export const ContrabandHitRateBarBase = VisualBase.extend({
   Stops: { }, // abstract property, requires override
   _items: function () { throw "abstract method: requires override"; },
   _pprint: function () { throw "abstract method: requires override"; },
-  triggerRaceToggle: function () { throw "abstract method: requires override"; },
 
   setDefaultChart: function () {
     this.chart = nv.models.multiBarHorizontalChart()

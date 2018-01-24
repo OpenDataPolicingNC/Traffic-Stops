@@ -23,7 +23,6 @@ const CensusRatioDonut = C.CensusRatioDonutBase.extend({
 
   _process_key: process_key,
 
-  triggerRaceToggle: () => null
 });
 
 var CensusTable = C.CensusTableBase.extend({
