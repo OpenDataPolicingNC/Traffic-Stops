@@ -44,7 +44,6 @@ export default Backbone.Model.extend({
     this.loader_hide();
     this.drawStartup();
     this.drawChart();
-    $(document).on('raceToggle.change', this.triggerRaceToggle.bind(this));
   },
   drawStartup: function(){
     /* istanbul ignore next */
@@ -58,5 +57,4 @@ export default Backbone.Model.extend({
     /* istanbul ignore next */
     throw "abstract method: requires override";
   },
-  triggerRaceToggle: function(e, v){}
 });

@@ -6,7 +6,6 @@ import StopSearch from './StopSearch.js';
 import LikelihoodOfSearch from './LikelihoodOfSearch.js';
 import UseOfForce from './UseOfForce.js';
 import ContrabandHitRate from './ContrabandHitRate.js';
-import RaceToggle from './RaceToggle.js';
 
 if (typeof window.NC === 'undefined') {
   window.NC = {};
@@ -22,6 +21,5 @@ Object.assign(
   StopSearch,
   LikelihoodOfSearch,
   UseOfForce,
-  ContrabandHitRate,
-  RaceToggle
+  ContrabandHitRate
 );

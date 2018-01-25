@@ -11,7 +11,7 @@ const CensusRatioDonut = C.CensusRatioDonutBase.extend({
   Stops: Stops,
 
   _items: function () {
-    return (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races;
+    return Stops.ethnicities;
   },
 
   _pprint: function (type) {
@@ -20,10 +20,6 @@ const CensusRatioDonut = C.CensusRatioDonutBase.extend({
 
   _process_key: process_key,
 
-  triggerRaceToggle: function (e, v) {
-    this.set('showEthnicity', v);
-    this.drawChart();
-  }
 });
 
 var CensusTable = C.CensusTableBase.extend({
@@ -33,7 +29,7 @@ var CensusTable = C.CensusTableBase.extend({
 
   _process_key: process_key,
 
-  types: [Stops.races, Stops.ethnicities]
+  types: [Stops.ethnicities]
 });
 
 export default {

@@ -106,7 +106,8 @@ export const StopSearchTimeSeriesBase = StopRatioTimeSeriesBase.extend({
 
     // predefine enabled/disabled lines on chart
     _.each(data, (d) => {
-      d.disabled = defaultEnabled.indexOf(d.key) === -1;
+      // Strip key values of special characters before comparing
+      d.disabled = defaultEnabled.indexOf(d.key.replace(/[^a-zA-Z ]/g, "")) === -1;
     });
 
     return data;

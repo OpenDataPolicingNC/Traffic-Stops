@@ -20,18 +20,17 @@ const LikelihoodOfSearch = C.LikelihoodOfSearchBase.extend({
   },
 
   _base: function () {
-    return "White";
+    return "white";
   },
 
   _defRace: function () {
-    return "Black";
+    return "black";
   },
 
   _pprint: function (type) {
     return type;
   },
 
-  triggerRaceToggle: () => null
 });
 
 const LikelihoodSearchTable = C.LikelihoodSearchTableBase.extend({

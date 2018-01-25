@@ -144,7 +144,9 @@ class GroupedData(object):
         group = tuple(group)
         if group not in self.data:
             self.data[group] = OrderedDict(self.defaults.copy())
-        self.data[group].update(kwargs)
+
+        for key in set(kwargs) - set(self.group_by):
+            self.data[group][key] = self.data[group].get(key, 0) + kwargs.get(key, 0)
 
     def flatten(self):
         """Transform (group, value) mapping into list of dicts"""
