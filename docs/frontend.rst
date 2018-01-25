@@ -51,14 +51,14 @@ Let's look at ``StopRatioDonutBase`` as a concrete example. This has two abstrac
 The North Carolina instance of this class defines them like this::
 
     _items: function () {
-      return (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races;
+      return Stops.ethnicities;
     },
 
     _pprint: function (type) {
       return Stops.pprint.get(type);
     }
 
-So when ``_items`` is invoked, it fetches its ``showEthnicity`` value and returns either ``Stops.ethnicities`` or ``Stops.races``. When ``_pprint`` is used, it looks up a value in ``Stops.pprint``.
+So when ``_items`` is invoked, it fetches ``Stops.ethnicities``. When ``_pprint`` is used, it looks up a value in ``Stops.pprint``.
 
 The Maryland instance is much simpler::
 
@@ -70,7 +70,7 @@ The Maryland instance is much simpler::
       return x;
     }
 
-Because Maryland has no race / ethnicity distinction, its items are simply ``Stops.ethnicities``. And because its data is "humanized" from the get-go, its ``_pprint`` function can just return the input value.
+Because its data is "humanized" from the get-go, its ``_pprint`` function can just return the input value.
 
 Other configuration
 -------------------
