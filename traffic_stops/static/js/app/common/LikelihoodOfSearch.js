@@ -150,8 +150,7 @@ export const LikelihoodOfSearchBase = VisualBase.extend({
         searches = d3.map(),
         items = this._items(),
         base = this._base(),
-        defRace = this._defRace(),
-        baseUpper = ((d) => d.charAt(0).toUpperCase() + d.slice(1))(base);
+        defRace = this._defRace();
 
     // turn arrays into maps with purpose as the key
     stops_arr.forEach((v) => {
@@ -167,7 +166,7 @@ export const LikelihoodOfSearchBase = VisualBase.extend({
 
       var bar = {
           color: this.Stops.colors[i],
-          key: `${this._pprint(race)} vs. ${baseUpper}`,
+          key: `${this._pprint(race)} vs. ${this._pprint(base)}`,
           values: [],
           disabled: (race !== defRace)
       };
