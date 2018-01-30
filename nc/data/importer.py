@@ -1,4 +1,5 @@
 import csv
+import datetime
 import glob
 import logging
 import os
@@ -7,6 +8,8 @@ import sys
 from django.conf import settings
 from django.core.mail import EmailMessage
 from django.db import connections
+
+import pytz
 
 from tsdata.dataset_facts import compute_dataset_facts
 from tsdata.sql import drop_constraints_and_indexes
@@ -278,3 +281,15 @@ def copy_from(destination, nc_csv_path):
     if settings.DATABASE_ETL_USER:
         cmd.append(settings.DATABASE_ETL_USER)
     call(cmd)
+
+    # Remove all stops and related objects that are before 1 Jan 2002, when everyone
+    # started reporting consistently.  Don't clear out the NC State Highway Petrol
+    # data, though, since they were reporting consistently before that.
+
+    nc_tz = pytz.timezone(settings.NC_TIME_ZONE)
+    agency = Agency.objects.get(name="NC State Highway Patrol")
+    Stop.objects.exclude(
+        agency=agency
+    ).filter(
+        date__lt=nc_tz.localize(datetime.datetime(2002, 1, 1))
+    ).delete()
