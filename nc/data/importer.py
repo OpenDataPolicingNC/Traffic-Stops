@@ -290,7 +290,13 @@ def copy_from(destination, nc_csv_path):
     begin_dt = nc_tz.localize(datetime.datetime(2002, 1, 1))
     agency = Agency.objects.get(name="NC State Highway Patrol")
 
-    # SearchBasis, Contraband, Search, Person, Stop
+    # Perform deletions of pre-2002 data in order by model dependencies, all tables
+    # that have a foreign key reference to another must be done beforehand:
+    #   SearchBasis (-> Search, Person, Stop),
+    #   Contraband (-> Search, Person, Stop),
+    #   Search (-> Person, Stop),
+    #   Person (-> Stop),
+    #   Stop
     SearchBasis.objects.exclude(stop__agency=agency).filter(stop__date__lt=begin_dt).delete()
     Contraband.objects.exclude(stop__agency=agency).filter(stop__date__lt=begin_dt).delete()
     Search.objects.exclude(stop__agency=agency).filter(stop__date__lt=begin_dt).delete()
