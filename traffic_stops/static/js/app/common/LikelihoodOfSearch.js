@@ -8,7 +8,6 @@ import $ from 'jquery';
 export function get_years (raw, Stops) {
   let years = d3.set(raw.stops.map((v) => v.year)).values();
 
-  years.filter((v) => (v >= Stops.start_year));
   years.push("Total");
 
   return years;

@@ -2,7 +2,6 @@ import d3 from 'd3';
 
 // Traffic Stops global defaults
 export default {
-  start_year: 2005,     // start-year for reporting requirement
   end_year: new Date().getUTCFullYear(),       // end-date for latest dataset
   races: [
     'white',

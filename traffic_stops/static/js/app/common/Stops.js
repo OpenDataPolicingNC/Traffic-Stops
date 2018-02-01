@@ -38,7 +38,7 @@ export function build_pie_data (data, total, Stops) {
   let pie = d3.map();
 
   data.forEach((v) => {
-    if (v.year >= Stops.start_year) pie.set(v.year, d3.map(v));
+    pie.set(v.year, d3.map(v));
   });
 
   pie.set('Total', d3.map(total));
@@ -62,12 +62,10 @@ export function build_line_data (data, types, Stops) {
       line.set(v, []);
     });
     data.forEach((yr) => {
-      if (yr.year >= Stops.start_year) {
-        var total = get_total_by_type(dataType, yr);
-        dataType.forEach((type) => {
-          line.get(type).push({x: yr.year, y:(yr[type] > 0 ? yr[type]/total : 0)});
-        })
-      }
+      var total = get_total_by_type(dataType, yr);
+      dataType.forEach((type) => {
+        line.get(type).push({x: yr.year, y:(yr[type] > 0 ? yr[type]/total : 0)});
+      })
     })
   });
 
