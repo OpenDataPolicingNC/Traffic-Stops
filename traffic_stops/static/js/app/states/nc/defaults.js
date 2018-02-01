@@ -1,6 +1,6 @@
 // Traffic Stops global defaults
 export default {
-  start_year: 2002,     // start-year for reporting requirement
+  start_year: null,     // start-year for reporting requirement
   end_year: new Date().getUTCFullYear(),       // end-date for latest dataset
   races: [
     'white',

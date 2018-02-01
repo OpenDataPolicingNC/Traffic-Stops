@@ -1,4 +1,5 @@
 import csv
+import datetime
 import glob
 import logging
 import os
@@ -8,10 +9,12 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 from django.db import connections
 
+import pytz
+
 from tsdata.dataset_facts import compute_dataset_facts
 from tsdata.sql import drop_constraints_and_indexes
 from tsdata.utils import call, flush_memcached, line_count, download_and_unzip_data, unzip_data
-from nc.models import Agency, Search, Stop
+from nc.models import Agency, Search, Person, Stop, Contraband, SearchBasis
 from nc.prime_cache import run as prime_cache_run
 from .download_from_nc import nc_download_and_unzip_data
 
@@ -278,3 +281,24 @@ def copy_from(destination, nc_csv_path):
     if settings.DATABASE_ETL_USER:
         cmd.append(settings.DATABASE_ETL_USER)
     call(cmd)
+
+    # Remove all stops and related objects that are before 1 Jan 2002, when everyone
+    # started reporting consistently.  Don't clear out the NC State Highway Patrol
+    # data, though, since they were reporting consistently before that.
+
+    nc_tz = pytz.timezone(settings.NC_TIME_ZONE)
+    begin_dt = nc_tz.localize(datetime.datetime(2002, 1, 1))
+    agency = Agency.objects.get(name="NC State Highway Patrol")
+
+    # Perform deletions of pre-2002 data in order by model dependencies, all tables
+    # that have a foreign key reference to another must be done beforehand:
+    #   SearchBasis (-> Search, Person, Stop),
+    #   Contraband (-> Search, Person, Stop),
+    #   Search (-> Person, Stop),
+    #   Person (-> Stop),
+    #   Stop
+    SearchBasis.objects.exclude(stop__agency=agency).filter(stop__date__lt=begin_dt).delete()
+    Contraband.objects.exclude(stop__agency=agency).filter(stop__date__lt=begin_dt).delete()
+    Search.objects.exclude(stop__agency=agency).filter(stop__date__lt=begin_dt).delete()
+    Person.objects.exclude(stop__agency=agency).filter(stop__date__lt=begin_dt).delete()
+    Stop.objects.exclude(agency=agency).filter(date__lt=begin_dt).delete()

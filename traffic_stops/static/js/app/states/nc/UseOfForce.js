@@ -37,7 +37,7 @@ var UseOfForceHandler = DataHandlerBase.extend({
 
     // build-data for pie-chart
     data.forEach(function(v){
-      if (v.year>=Stops.start_year) pie.set(v.year, d3.map(v));
+      pie.set(v.year, d3.map(v));
     });
     pie.set("Total", d3.map(total));
 
@@ -47,17 +47,15 @@ var UseOfForceHandler = DataHandlerBase.extend({
         line.set(v, []);
       });
       data.forEach(function(yr){
-        if (yr.year>=Stops.start_year){
-          dataType.forEach(function(race){
-            line
-              .get(race)
-              .push({
-                x: yr.year,
-                y: (yr[race] > 0 ? yr[race] : 0)
-              })
-            ;
-          });
-        }
+        dataType.forEach(function(race){
+          line
+            .get(race)
+            .push({
+              x: yr.year,
+              y: (yr[race] > 0 ? yr[race] : 0)
+            })
+          ;
+        });
       });
     });
 
@@ -138,7 +136,7 @@ var UseOfForceBarChart = VisualBase.extend({
     });
     return data;
   },
-  
+
 });
 
 var UseOfForceTable = StopsTable.extend({});
