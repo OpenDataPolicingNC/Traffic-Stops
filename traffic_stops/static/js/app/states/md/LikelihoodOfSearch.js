@@ -20,11 +20,11 @@ const LikelihoodOfSearch = C.LikelihoodOfSearchBase.extend({
   },
 
   _base: function () {
-    return "white";
+    return "White";
   },
 
   _defRace: function () {
-    return "black";
+    return "Black";
   },
 
   _pprint: function (type) {
