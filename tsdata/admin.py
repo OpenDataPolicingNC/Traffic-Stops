@@ -32,8 +32,7 @@ class ImportAdmin(admin.ModelAdmin):
 
 
 class CensusProfileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'location', 'state', 'geography',
-                    'white', 'black', 'hispanic', 'total', 'source')
+    list_display = ('id', 'location', 'state', 'geography', 'total', 'source')
     list_filter = ('state', 'geography', 'source')
     search_fields = ('location', 'state', 'geography')
     ordering = ('location',)
