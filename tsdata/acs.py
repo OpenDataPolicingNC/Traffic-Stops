@@ -1,14 +1,13 @@
-# American Community Survey 5-Year Data (2005-2009 to 2010-2014)
-# http://www.census.gov/data/developers/data-sets/acs-survey-5-year-data.html
+# American Community Survey 5-Year Data
+# https://www.census.gov/data/developers/data-sets/acs-5year.2016.html
 #
 # Notes:
-#  - Examples: http://api.census.gov/data/2014/acs5/examples.html
+#  - Examples: http://api.census.gov/data/2016/acs/acs5/examples.html
 #  - Places: https://www.census.gov/content/dam/Census/data/developers/understandingplace.pdf
 #
 # Fact Finder:
 #  - Home: http://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml
-#  - Baltimore: http://factfinder.census.gov/bkmk/cf/1.0/en/county/Baltimore city, Maryland/RACE_AND_HISPANIC_ORIGIN  # noqa
-#  - Baltimore Races: http://factfinder.census.gov/bkmk/table/1.0/en/ACS/14_5YR/DP05/0500000US24510
+#  - Durham city, NC: https://factfinder.census.gov/bkmk/table/1.0/en/ACS/16_5YR/DP05/1600000US3719000  # noqa
 
 import census
 import pandas as pd
@@ -18,33 +17,33 @@ from tsdata.models import CensusProfile, STATE_CHOICES
 from django.db import transaction
 
 
-# Variables: http://api.census.gov/data/2014/acs5/variables.html
+# Variables: http://api.census.gov/data/2016/acs/acs5/variables.json
 RACE_VARIABLES = {
-    'C02003_001E': 'total',
-    'C02003_003E': 'white',
-    'C02003_004E': 'black',
-    'C02003_005E': 'native_american',
-    'C02003_006E': 'asian',
-    'C02003_007E': 'native_hawaiian',
-    'C02003_008E': 'other',
-    'C02003_009E': 'two_or_more_races',
-    'B03002_012E': 'hispanic',
-    'B03002_002E': 'non_hispanic',
+    'B03002_001E': 'total',              # Estimate!!Total
+    'B03002_003E': 'white',              # Estimate!!Total!!Not Hispanic or Latino!!White alone
+    'B03002_004E': 'black',              # Estimate!!Total!!Not Hispanic or Latino!!Black or African American alone  # noqa
+    'B03002_005E': 'native_american',    # Estimate!!Total!!Not Hispanic or Latino!!American Indian and Alaska Native alone  # noqa
+    'B03002_006E': 'asian',              # Estimate!!Total!!Not Hispanic or Latino!!Asian alone
+    'B03002_007E': 'native_hawaiian',    # Estimate!!Total!!Not Hispanic or Latino!!Native Hawaiian and Other Pacific Islander alone  # noqa
+    'B03002_008E': 'other',              # Estimate!!Total!!Not Hispanic or Latino!!Some other race alone  # noqa
+    'B03002_009E': 'two_or_more_races',  # Estimate!!Total!!Not Hispanic or Latino!!Two or more races  # noqa
+    'B03002_012E': 'hispanic',           # Estimate!!Total!!Hispanic or Latino
+    'B03002_002E': 'non_hispanic',       # Estimate!!Total!!Not Hispanic or Latino
 }
 # NAME = geography/location
-# GEOID = combination of country, state, county
-VARIABLES = ['NAME', 'GEOID'] + list(RACE_VARIABLES.keys())
+# GEO_ID = combination of country, state, county
+VARIABLES = ['NAME', 'GEO_ID'] + list(RACE_VARIABLES.keys())
 
 
 class ACS(object):
     """Base class to call ACS API and normalize output"""
 
-    source = "ACS 5-Year Data (2010-2014)"
+    source = "ACS 5-Year Data (2012-2016)"
     geography = None
     drop_columns = None
 
     def __init__(self, key, state_abbr):
-        self.api = census.Census(key)
+        self.api = census.Census(key, year=2016)
         self.fips = getattr(states, state_abbr).fips
         self.state_abbr = state_abbr
 
@@ -59,7 +58,7 @@ class ACS(object):
         df['source'] = self.source
         df['geography'] = self.geography
         # rename common columns
-        df.rename(columns={'NAME': 'location', 'GEOID': 'id'}, inplace=True)
+        df.rename(columns={'NAME': 'location', 'GEO_ID': 'id'}, inplace=True)
         # replace census variable names with easier to read race labels
         df.rename(columns=RACE_VARIABLES, inplace=True)
         # convert race columns to numerics
@@ -74,8 +73,7 @@ class ACS(object):
 class ACSStateCounties(ACS):
     """
     State County Demographics
-    ex: http://api.census.gov/data/2014/acs5?get=NAME&for=county:*&in=state:24
-    code: https://github.com/sunlightlabs/census/blob/master/census/core.py#L181
+    ex: http://api.census.gov/data/2016/acs/acs5?get=NAME&for=county:*&in=state:24
     """
     geography = 'county'
     drop_columns = ['county']
@@ -87,8 +85,7 @@ class ACSStateCounties(ACS):
 class ACSStatePlaces(ACS):
     """
     State Place Demographics
-    ex: http://api.census.gov/data/2014/acs5?get=NAME&for=place:*&in=state:24
-    code: https://github.com/sunlightlabs/census/blob/master/census/core.py#L215
+    ex: http://api.census.gov/data/2016/acs/acs5?get=NAME&for=place:*&in=state:24
     """
     geography = 'place'
     drop_columns = ['place']
