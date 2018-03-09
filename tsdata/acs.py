@@ -13,12 +13,14 @@ import census
 import pandas as pd
 from us import states
 
-from tsdata.models import CensusProfile, STATE_CHOICES
+from django.conf import settings
 from django.db import transaction
+
+from tsdata.models import CensusProfile, STATE_CHOICES
 
 
 # Variables: http://api.census.gov/data/2016/acs/acs5/variables.json
-RACE_VARIABLES = {
+NC_RACE_VARS = {
     'B03002_001E': 'total',              # Estimate!!Total
     'B03002_003E': 'white',              # Estimate!!Total!!Not Hispanic or Latino!!White alone
     'B03002_004E': 'black',              # Estimate!!Total!!Not Hispanic or Latino!!Black or African American alone  # noqa
@@ -30,9 +32,25 @@ RACE_VARIABLES = {
     'B03002_012E': 'hispanic',           # Estimate!!Total!!Hispanic or Latino
     'B03002_002E': 'non_hispanic',       # Estimate!!Total!!Not Hispanic or Latino
 }
-# NAME = geography/location
-# GEO_ID = combination of country, state, county
-VARIABLES = ['NAME', 'GEO_ID'] + list(RACE_VARIABLES.keys())
+
+OTHER_RACE_VARS = {
+    'C02003_001E': 'total',
+    'C02003_003E': 'white',
+    'C02003_004E': 'black',
+    'C02003_005E': 'native_american',
+    'C02003_006E': 'asian',
+    'C02003_007E': 'native_hawaiian',
+    'C02003_008E': 'other',
+    'C02003_009E': 'two_or_more_races',
+    'B03002_012E': 'hispanic',
+    'B03002_002E': 'non_hispanic',
+}
+
+RACE_VARIABLES = {
+    settings.NC_KEY.upper(): NC_RACE_VARS,
+    settings.IL_KEY.upper(): OTHER_RACE_VARS,
+    settings.MD_KEY.upper(): OTHER_RACE_VARS,
+}
 
 
 class ACS(object):
@@ -47,6 +65,11 @@ class ACS(object):
         self.fips = getattr(states, state_abbr).fips
         self.state_abbr = state_abbr
 
+        self.race_variables = RACE_VARIABLES[state_abbr]
+        # NAME = geography/location
+        # GEO_ID = combination of country, state, county
+        self.variables = ['NAME', 'GEO_ID'] + list(self.race_variables.keys())
+
     def call_api(self):
         raise NotImplemented()
 
@@ -60,9 +83,9 @@ class ACS(object):
         # rename common columns
         df.rename(columns={'NAME': 'location', 'GEO_ID': 'id'}, inplace=True)
         # replace census variable names with easier to read race labels
-        df.rename(columns=RACE_VARIABLES, inplace=True)
+        df.rename(columns=self.race_variables, inplace=True)
         # convert race columns to numerics
-        num_cols = list(RACE_VARIABLES.values())
+        num_cols = list(self.race_variables.values())
         df[num_cols] = df[num_cols].apply(pd.to_numeric)
         # remove unused columns
         if self.drop_columns:
@@ -79,7 +102,7 @@ class ACSStateCounties(ACS):
     drop_columns = ['county']
 
     def call_api(self):
-        return self.api.acs5.state_county(VARIABLES, self.fips, census.ALL)
+        return self.api.acs5.state_county(self.variables, self.fips, census.ALL)
 
 
 class ACSStatePlaces(ACS):
@@ -91,7 +114,7 @@ class ACSStatePlaces(ACS):
     drop_columns = ['place']
 
     def call_api(self):
-        return self.api.acs5.state_place(VARIABLES, self.fips, census.ALL)
+        return self.api.acs5.state_place(self.variables, self.fips, census.ALL)
 
     def get(self):
         df = super(ACSStatePlaces, self).get()
