@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand, CommandError
 from tsdata import acs
 
 
-ACS_JSON_URL = "https://s3-us-west-2.amazonaws.com/openpolicingdata/acs.json"
+ACS_JSON_URL = "https://s3-us-west-2.amazonaws.com/openpolicingdata/acs-2016.json"
 
 
 class Command(BaseCommand):
@@ -18,7 +18,7 @@ class Command(BaseCommand):
     - Download and output saved JSON from S3 (requires no API key):
         python manage.py import_census --output --indent=4
     - Save JSON file (for uploading to S3):
-        python manage.py import_census --use-api --output > acs.json
+        python manage.py import_census --use-api --indent=4 --output > acs.json
     """
 
     help = "Import County and Place Census data"

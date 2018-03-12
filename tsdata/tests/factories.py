@@ -14,7 +14,7 @@ class CensusProfileFactory(factory.django.DjangoModelFactory):
     location = factory.Sequence(lambda n: 'Location %d' % n)
     geography = 'place'
     state = 'AA'
-    source = 'ACS 5-Year Data (2010-2014)'
+    source = 'ACS 5-Year Data (2012-2016)'
     white = factory.fuzzy.FuzzyInteger(1, 100)
     black = factory.fuzzy.FuzzyInteger(1, 100)
     native_american = factory.fuzzy.FuzzyInteger(1, 100)
