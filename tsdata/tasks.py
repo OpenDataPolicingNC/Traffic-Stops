@@ -1,12 +1,19 @@
+import csv
+import datetime
+import io
+
 from celery.utils.log import get_task_logger
+
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMessage
+from django.db.models import Max
+from django.utils import timezone
+
 from il.data.importer import run as il_run
 from md.data.importer import run as md_run
 from nc.data.importer import run as nc_run
 from traffic_stops.celery import app
 from tsdata.models import Dataset, Import
-from django.utils import timezone
 
 
 logger = get_task_logger(__name__)
@@ -47,3 +54,40 @@ def import_dataset(dataset_id):
             settings.DEFAULT_FROM_EMAIL,
             report_emails,
         )
+
+    compliance_report.delay(dataset_id)
+
+
+@app.task
+def compliance_report(dataset_id):
+    if not settings.COMPLIANCE_REPORT_LIST:
+        return
+
+    dataset = Dataset.objects.get(pk=dataset_id)
+    if dataset.state != settings.NC_KEY:
+        return
+
+    Agency = dataset.agency_model
+
+    now = timezone.now()
+    qs = Agency.objects.annotate(
+        last_reported=Max('stops__date')
+    ).filter(
+        last_reported__lt=now - datetime.timedelta(days=90)
+    ).values(
+        'id', 'name', 'last_reported'
+    ).order_by('-last_reported')
+
+    csvfile = io.StringIO()
+    writer = csv.DictWriter(csvfile, fieldnames=('id', 'name', 'last_reported'))
+    writer.writeheader()
+    writer.writerows(qs)
+
+    message = EmailMessage(
+        "{} Compliance Report, {}".format(dataset.state.upper(), now.date().isoformat()),
+        "Attached are the agencies out of compliance in the most recent data import.",
+        settings.DEFAULT_FROM_EMAIL,
+        settings.COMPLIANCE_REPORT_LIST
+    )
+    message.attach('report.csv', csvfile.getvalue(), 'text/csv')
+    message.send()

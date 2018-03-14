@@ -90,3 +90,7 @@ if ENVIRONMENT.upper() == 'LOCAL':
 if ENVIRONMENT.upper() == 'PRODUCTION':
     CELERYBEAT_SCHEDULE['automatic-nc-import']['schedule'] = \
         crontab(day_of_month='1', hour=3, minute=0)
+
+    # List of email addresses that receive the report of non-compliance of
+    # traffic stop reporting.
+    COMPLIANCE_REPORT_LIST = ('Ianmance@southerncoalition.org',)
