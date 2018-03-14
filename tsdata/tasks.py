@@ -6,7 +6,7 @@ from celery.utils.log import get_task_logger
 
 from django.conf import settings
 from django.core.mail import send_mail, EmailMessage
-from django.db.models import Max
+from django.db.models import Max, Q
 from django.utils import timezone
 
 from il.data.importer import run as il_run
@@ -73,15 +73,27 @@ def compliance_report(dataset_id):
     qs = Agency.objects.annotate(
         last_reported=Max('stops__date')
     ).filter(
-        last_reported__lt=now - datetime.timedelta(days=90)
+        Q(last_reported__lt=now - datetime.timedelta(days=90)) |
+        Q(last_reported__isnull=True)
     ).values(
         'id', 'name', 'last_reported'
     ).order_by('-last_reported')
 
+    if not qs:
+        send_mail(
+            "{} Compliance Report, {}".format(dataset.state.upper(), now.date().isoformat()),
+            "All agencies have reported within the last 90 days.",
+            settings.DEFAULT_FROM_EMAIL,
+            settings.COMPLIANCE_REPORT_LIST
+        )
+        return
+
     csvfile = io.StringIO()
     writer = csv.DictWriter(csvfile, fieldnames=('id', 'name', 'last_reported'))
     writer.writeheader()
-    writer.writerows(qs)
+    writer.writerows(filter(lambda r: r['last_reported'] is not None, qs))
+    # Sort the agencies with no stops reported last
+    writer.writerows(filter(lambda r: r['last_reported'] is None, qs))
 
     message = EmailMessage(
         "{} Compliance Report, {}".format(dataset.state.upper(), now.date().isoformat()),
