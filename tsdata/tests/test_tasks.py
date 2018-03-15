@@ -6,14 +6,8 @@ from django.core import mail
 from django.test import TestCase, override_settings
 from django.utils import timezone
 
-from il.tests.factories import (
-    AgencyFactory as ILAgencyFactory,
-    StopFactory as ILStopFactory
-)
-from md.tests.factories import (
-    AgencyFactory as MDAgencyFactory,
-    StopFactory as MDStopFactory
-)
+from il.tests.factories import AgencyFactory as ILAgencyFactory
+from md.tests.factories import AgencyFactory as MDAgencyFactory
 from nc.tests.factories import (
     AgencyFactory as NCAgencyFactory,
     StopFactory as NCStopFactory
@@ -25,13 +19,17 @@ from tsdata.tests.factories import DatasetFactory
 @override_settings(COMPLIANCE_REPORT_LIST=('compliance@example.com',))
 class ComplianceReportTests(TestCase):
     def test_not_north_carolina(self):
-        agencies = [ILAgencyFactory() for i in range(3)]
+        for i in range(3):
+            ILAgencyFactory()
+
         dataset_il = DatasetFactory(state='il')
 
         tasks.compliance_report(dataset_il.id)
         self.assertEqual(len(mail.outbox), 0)
 
-        agencies = [MDAgencyFactory() for i in range(3)]
+        for i in range(3):
+            MDAgencyFactory()
+
         dataset_md = DatasetFactory(state='md')
 
         tasks.compliance_report(dataset_md.id)
@@ -40,7 +38,7 @@ class ComplianceReportTests(TestCase):
     def test_all_agencies_good(self):
         for i in range(3):
             agency = NCAgencyFactory()
-            stop = NCStopFactory(
+            NCStopFactory(
                 agency=agency, date=timezone.now() - datetime.timedelta(days=30))
 
         dataset = DatasetFactory(state='nc')
