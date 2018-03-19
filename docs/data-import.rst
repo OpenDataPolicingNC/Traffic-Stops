@@ -9,8 +9,15 @@ environments, using the ``import_census`` management command.  This must be
 performed as part of developer and server setup as well as when census support is
 added for additional states.
 
+
 Local/Development Environment
 -----------------------------
+
+Before running state imports, first import census data:
+
+.. code-block:: bash
+
+  python manage.py import_census
 
 
 Database Dump (quicker)
@@ -22,9 +29,9 @@ To load an existing database dump on S3, run:
 
     dropdb traffic_stops_nc
     createdb -E UTF-8 traffic_stops_nc
-    wget https://s3-us-west-2.amazonaws.com/openpolicingdata/traffic_stops_nc_production_20150801.tar.zip
-    unzip traffic_stops_nc_production_20150801.tar.zip
-    pg_restore -Ox -d traffic_stops_nc traffic_stops_nc_production.tar
+    wget https://s3-us-west-2.amazonaws.com/openpolicingdata/traffic_stops_nc_2018_01_08.dump.zip
+    unzip traffic_stops_nc_2018_01_08.dump.zip
+    pg_restore -Ox -d traffic_stops_nc traffic_stops_nc_2018_01_08.dump
 
 Browse https://s3-us-west-2.amazonaws.com/openpolicingdata/ to see what dumps
 are available.
@@ -33,9 +40,10 @@ To create a new database dump, run:
 
 .. code-block:: bash
 
-    pg_dump -Ox -Ft traffic_stops > traffic_stops.tar
+    ssh dev.opendatapolicingnc.com 'sudo -u postgres pg_dump -Fc traffic_stops_nc_staging' > traffic_stops_nc.dump
 
 That can be loaded with the ``pg_restore`` command shown above.
+
 
 Raw NC Data (slower)
 ____________________
@@ -45,17 +53,35 @@ applied before importing.  If in doubt:
 
 .. code-block:: bash
 
+    # for NC
     dropdb traffic_stops_nc && createdb -E UTF-8 traffic_stops_nc
+    # for MD
+    dropdb traffic_stops_md && createdb -E UTF-8 traffic_stops_md
+
     ./migrate_all_dbs.sh
+
 
 Command-line
 ++++++++++++
+
+If loading NC, make sure to add ``NC_FTP_USER`` and ``NC_FTP_PASSWORD`` and your ``.env`` file.
+
+If on a Mac, install ``gnu-sed``:
+
+.. code-block:: bash
+
+  brew install gnu-sed --with-default-names
 
 Run the import command:
 
 .. code-block:: bash
 
-    python manage.py import_nc --dest $PWD/ncdata
+    # for NC (~25m)
+    rm -rf ./ncdata  # if you don't want to reuse previous download
+    python manage.py import_nc --dest $PWD/ncdata --noprime  # noprime = don't prime cache
+    # for MD (~30m)
+    rm -rf ./mddata  # if you don't want to reuse previous download
+    python manage.py import_md --dest $PWD/mddata
 
 This took ~25 minutes on my laptop. Run ``tail -f traffic_stops.log`` to follow
 along.  Reusing an existing ``--dest`` directory will speed up import.  However,
@@ -67,6 +93,7 @@ Now you should be able to view data with ``runserver``:
 .. code-block:: bash
 
     python manage.py runserver
+
 
 Admin
 +++++
@@ -89,6 +116,7 @@ imported.  Setting the fields:
 
 Once the "dataset" has been created, select the new dataset in list view and
 apply the "Import selected dataset" action.
+
 
 Server
 ------
@@ -123,8 +151,10 @@ activated prior to an import of IL data and then deactivated afterwards, as foll
     sudo swapoff /swapfile
     sudo rm /swapfile
 
+
 Raw NC Data
 ___________
+
 
 Command-line
 ++++++++++++
@@ -142,10 +172,12 @@ Reusing an existing ``--dest`` directory will speed up import.  However,
 if import code has changed since the last time the directory was used, don't
 reuse an existing directory.
 
+
 Admin
 +++++
 
 Follow the "Admin" instructions above under "Local/Development Environment".
+
 
 Create DB Dump
 ______________
@@ -156,6 +188,7 @@ ______________
     zip traffic_stops_nc_production.tar.zip traffic_stops_nc_production.tar
     # then on local laptop, run:
     scp opendatapolicingnc.com:traffic_stops_nc_production.tar.zip .
+
 
 Updating landing page stats
 ---------------------------
@@ -196,4 +229,3 @@ management commands.  Example::
     Id 224: Raleigh Police Department 863,653
     Id 104: Greensboro Police Department 555,453
     Id 88: Fayetteville Police Department 503,013
-

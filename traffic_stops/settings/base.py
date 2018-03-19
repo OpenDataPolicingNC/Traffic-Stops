@@ -283,6 +283,16 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
+        'caching': {
+            'handlers': ['file', 'syslog'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'caching.invalidation': {
+            'handlers': ['file', 'syslog'],
+            'level': 'INFO',
+            'propagate': False,
+        },
     }
 }
 
@@ -339,3 +349,7 @@ NC_AUTO_IMPORT_DIRECTORY = '/tmp/NC-automated-import'
 # 0, 1, or 2 e-mail addresses which will be notified after
 # automatic NC imports
 NC_AUTO_IMPORT_MONITORS = ('odp-team@caktusgroup.com',)
+
+# List of email addresses that receive the report of non-compliance of
+# traffic stop reporting.
+COMPLIANCE_REPORT_LIST = ()

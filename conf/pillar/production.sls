@@ -17,7 +17,7 @@ repo:
   branch: master
 
 postgresql_config: # from pgtune
-  work_mem: 88MB
+  work_mem: 200MB
   maintenance_work_mem: 448MB
   shared_buffers: 1792MB
   effective_cache_size: 5GB
@@ -27,8 +27,8 @@ postgresql_config: # from pgtune
 
 # Addtional public environment variables to set for the project
 env:
-  FOO: BAR
-
+    NEW_RELIC_APP_NAME: "opendatapolicing production"
+    NEW_RELIC_MONITOR_MODE: "true"
 
 # Uncomment and update username/password to enable HTTP basic auth
 # Password must be GPG encrypted.

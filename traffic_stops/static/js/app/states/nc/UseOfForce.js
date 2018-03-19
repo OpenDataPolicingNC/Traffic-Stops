@@ -37,27 +37,25 @@ var UseOfForceHandler = DataHandlerBase.extend({
 
     // build-data for pie-chart
     data.forEach(function(v){
-      if (v.year>=Stops.start_year) pie.set(v.year, d3.map(v));
+      pie.set(v.year, d3.map(v));
     });
     pie.set("Total", d3.map(total));
 
-    // build data for line-chart
-    [Stops.races, Stops.ethnicities].forEach(function(dataType){
+    // build data for bar-chart
+    [Stops.ethnicities].forEach(function(dataType){
       dataType.forEach(function(v){
         line.set(v, []);
       });
       data.forEach(function(yr){
-        if (yr.year>=Stops.start_year){
-          dataType.forEach(function(race){
-            line
-              .get(race)
-              .push({
-                x: yr.year,
-                y: (yr[race] > 0 ? yr[race] : 0)
-              })
-            ;
-          });
-        }
+        dataType.forEach(function(race){
+          line
+            .get(race)
+            .push({
+              x: yr.year,
+              y: (yr[race] > 0 ? yr[race] : 0)
+            })
+          ;
+        });
       });
     });
 
@@ -74,7 +72,6 @@ var UseOfForceHandler = DataHandlerBase.extend({
 var UseOfForceDonut = StopRatioDonut.extend({});
 var UseOfForceBarChart = VisualBase.extend({
   defaults: {
-    showEthnicity: false,
     width: 750,
     height: 375
   },
@@ -119,7 +116,7 @@ var UseOfForceBarChart = VisualBase.extend({
       });
   },
   _formatData: function(){
-    var items = (this.get('showEthnicity')) ? Stops.ethnicities : Stops.races,
+    var items = Stops.ethnicities,
         subset = [],
         i = 0,
         data = [],
@@ -139,10 +136,7 @@ var UseOfForceBarChart = VisualBase.extend({
     });
     return data;
   },
-  triggerRaceToggle: function(e, v){
-    this.set('showEthnicity', v);
-    this.drawChart();
-  }
+
 });
 
 var UseOfForceTable = StopsTable.extend({});

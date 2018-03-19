@@ -35,6 +35,22 @@ class Dataset(models.Model):
     def __str__(self):
         return "{}: {}".format(self.get_state_display(), self.name)
 
+    @property
+    def agency_model(self):
+        """Return the appropriate Agency model for this Dataset's state.
+        """
+        from il.models import Agency as ILAgency
+        from md.models import Agency as MDAgency
+        from nc.models import Agency as NCAgency
+
+        agencies = {
+            settings.IL_KEY: ILAgency,
+            settings.MD_KEY: MDAgency,
+            settings.NC_KEY: NCAgency,
+        }
+
+        return agencies.get(self.state)
+
 
 class Import(models.Model):
     dataset = models.ForeignKey(Dataset)

@@ -11,7 +11,7 @@ Id,Agency Name,GEOID
 10,Archdale Police Department,
 11,Asheboro Police Department,
 12,Ashe County Sheriff's Office,
-13,Asheville Police Department,16000US3702140
+13,Asheville Police Department,1600000US3702140
 14,Atkinson Police Department,
 15,Atlantic Beach Police Department,
 16,Avery County Sheriff's Office,
@@ -41,15 +41,15 @@ Id,Agency Name,GEOID
 40,Camden County Sheriff's Office,
 41,Cameron Police Department,
 42,Candor Police Department,
-43,Carolina Beach Police Department,16000US3710500
-44,Carrboro Police Department,16000US3710620
+43,Carolina Beach Police Department,1600000US3710500
+44,Carrboro Police Department,1600000US3710620
 45,Carteret County Sheriff's Office,
-46,Cary Police Department,16000US3710740
+46,Cary Police Department,1600000US3710740
 47,Caswell Beach Police Department,
 48,Caswell Center Hospital Police Department,
 49,Caswell County Sheriff's Office,
 50,Catawba County Sheriff's Office,
-51,Chapel Hill Police Department,16000US3711800
+51,Chapel Hill Police Department,1600000US3711800
 52,Charlotte-Mecklenburg Police Department,
 53,Chatham County Sheriff's Office,
 54,Cherokee County Sheriff's Office,
@@ -78,7 +78,7 @@ Id,Agency Name,GEOID
 77,Dunn Police Department,
 78,Duplin County Sheriff's Office,
 79,Durham County Sheriff's Office,
-80,Durham Police Department,16000US3719000
+80,Durham Police Department,1600000US3719000
 81,East Carolina University Police Department,
 82,Eden Police Department,
 83,Edgecombe County Sheriff's Office,
@@ -93,8 +93,8 @@ Id,Agency Name,GEOID
 92,Forsyth County Sheriff's Office,
 93,Foxfire Village Police Department,
 94,Franklin County Sheriff's Office,
-95,Fuquay-Varina Police Department,16000US3725300
-96,Garner Police Department,16000US3725480
+95,Fuquay-Varina Police Department,1600000US3725300
+96,Garner Police Department,1600000US3725480
 97,Gaston County Police Department,
 98,Gaston County Sheriff's Office,
 99,Gastonia Police Department,
@@ -103,7 +103,7 @@ Id,Agency Name,GEOID
 102,Graham Police Department,
 103,Granville County Sheriff's Office,
 104,Greene County Sheriff's Office,
-105,Greensboro Police Department,16000US3728000
+105,Greensboro Police Department,1600000US3728000
 106,Greenville Police Department,
 107,Guilford County Sheriff's Office,
 108,Guilford Technical Community College,
@@ -122,7 +122,7 @@ Id,Agency Name,GEOID
 121,Hoke County Sheriff's Office,
 122,Holden Beach Police Department,
 123,Holly Ridge Police Department,
-124,Holly Springs Police Department,16000US3732260
+124,Holly Springs Police Department,1600000US3732260
 125,Hope Mills Police Department,
 126,Huntersville Police Department,
 127,Hyde County Sheriff's Office,
@@ -223,7 +223,7 @@ Id,Agency Name,GEOID
 222,Pitt County Sheriff's Office,
 223,Pittsboro Police Department,
 224,Polk County Sheriff's Office,
-225,Raleigh Police Department,16000US3755000
+225,Raleigh Police Department,1600000US3755000
 226,Randolph County Sheriff's Office,
 227,Red Springs Police Department,
 228,Reidsville Police Department,
@@ -294,7 +294,7 @@ Id,Agency Name,GEOID
 293,Warren County Sheriff's Office,
 294,Warrenton Police Department,
 295,Washington County Sheriff's Office,
-296,Washington Police Department,16000US3771220
+296,Washington Police Department,1600000US3771220
 297,Watauga County Sheriff's Office,
 298,Waxhaw Police Department,
 299,Wayne County Sheriff's Office,
@@ -315,3 +315,4 @@ Id,Agency Name,GEOID
 314,Youngsville Police Department,
 315,Zebulon Police Department,
 316,Forest City Police Department,
+317,Black Mountain Police Department,
