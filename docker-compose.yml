@@ -7,7 +7,7 @@ services:
       - pgdata:/var/lib/postgresql/data
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: npm run dev -- --address=0.0.0.0 --port=8000
     environment:
       DJANGO_SETTINGS_MODULE: traffic_stops.settings.local
       PGDATABASE: traffic_stops
@@ -17,6 +17,7 @@ services:
       DATABASE_URL_NC: postgis://postgres@db:5432/traffic_stops_nc
       DATABASE_URL_MD: postgis://postgres@db:5432/traffic_stops_md
       DATABASE_URL_IL: postgis://postgres@db:5432/traffic_stops_il
+      VIRTUAL_ENV: /usr/local  # gulpfile expects Python to be in a virtualenv
     volumes:
       # mount local repository into the container
       - .:/code:delegated
