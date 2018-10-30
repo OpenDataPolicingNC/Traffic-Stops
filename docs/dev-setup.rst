@@ -72,6 +72,7 @@ Create the Postgres database and run the initial syncdb/migrate::
     (opendatapolicing)$ createdb -E UTF-8 traffic_stops_il
     (opendatapolicing)$ ./migrate_all_dbs.sh
 
+
 Development
 -----------
 
@@ -99,6 +100,14 @@ Docker
 ======
 
 You can use the provided ``docker-compose`` environment to create a local development environment.
+See previous section for more detailed instructions about how this project is configured.
+
+Setup your local development settings::
+
+  cp traffic_stops/settings/local.example.py traffic_stops/settings/local.py
+  # uncomment lines below "UNCOMMENT BELOW IF USING DOCKER SETUP" in local.py
+  echo "DJANGO_SETTINGS_MODULE=traffic_stops.settings.local" > .env
+
 For basic setup, run the following commands::
 
   docker-compose up -d db  # start the PostgreSQL container in the background
@@ -108,6 +117,12 @@ For basic setup, run the following commands::
   docker-compose run --rm web createdb -E UTF-8 traffic_stops_md
   docker-compose run --rm web createdb -E UTF-8 traffic_stops_il
   docker-compose run --rm web ./migrate_all_dbs.sh
+
+Run ``npm install`` inside the ``web`` container (you'll need to do this for any update to
+``package.json``)::
+
+  rm -rf ./node_modules  # if needed
+  docker-compose run --rm web bash -lc "npm install"
 
 You can now run the web container and tail the logs::
 
@@ -119,6 +134,8 @@ These are other useful docker-compose commands::
   # explicitly execute runserver in the foreground (for breakpoints):
   docker-compose stop web
   docker-compose run --rm --service-ports web python manage.py runserver 0.0.0.0:8000
+
+Visit http://localhost:8003/ in your browser.
 
 
 Restore Production Data

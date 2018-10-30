@@ -34,9 +34,6 @@ RUN . $NVM_DIR/nvm.sh \
     && nvm alias default $NODE_VERSION \
     && nvm use default
 
-RUN . $NVM_DIR/nvm.sh && nvm install 6 \
-        && nvm alias default 6 && nvm use default
-
 # add node and npm to path so the commands are available
 ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
 ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
@@ -45,6 +42,4 @@ ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 RUN node -v
 RUN npm -v
 
-COPY package.json /code/package.json
 RUN npm install -g gulp
-RUN npm install
