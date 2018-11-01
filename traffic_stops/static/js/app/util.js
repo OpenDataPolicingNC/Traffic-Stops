@@ -51,3 +51,7 @@ export function get_totals (a, types, reason_type) {
 
   return arr;
 }
+
+export function toTitleCase (str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}

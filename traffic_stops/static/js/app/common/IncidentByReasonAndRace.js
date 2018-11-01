@@ -1,11 +1,17 @@
 import _ from 'underscore';
 import d3 from 'd3';
 
-import { get_years, get_totals } from '../util.js';
+import { get_years, get_totals, toTitleCase } from '../util.js';
 import DataHandlerBase from '../base/DataHandlerBase.js';
 import VisualBase from '../base/VisualBase.js';
 import TableBase from '../base/TableBase.js';
 
+/*
+  NOTE: This should really be used by the StopByReasonAndRace graphs
+  instead of the LikelihoodOfSearch handler, but since that
+  would add an additional API hit, let's leave it for now.
+  For the time being it is used only in the SearchByType graphs.
+*/
 export const IRRHandlerBase = DataHandlerBase.extend({
   types: [], // abstract property, requires override
   defaults: {}, // abstract property, requires override
@@ -204,8 +210,8 @@ export const IRRTimeSeriesBase = VisualBase.extend({
       };
 
       var incidents = _.filter(
-        this._raw_data()
-      , (incident) => (String(incident.year) === year)
+        this._raw_data(),
+        (incident) => (String(incident.year) === year)
       );
 
       incidents.forEach((incident) => {
@@ -296,7 +302,7 @@ export const IRRTableBase = TableBase.extend({
 
     // create row with initial header row
     let rows = [
-      ["Year", this.incident_type.charAt(0).toUpperCase() + this.incident_type.slice(1) + "-reason", ...this._get_header_rows()]
+      ["Year", toTitleCase(this.incident_type) + "-reason", ...this._get_header_rows()]
     ];
 
     let reasons = this.Stops[this.reason_order_key].keys().filter(reason_filter);
