@@ -1,52 +1,10 @@
 import _ from 'underscore';
 import d3 from 'd3';
 
+import { get_years, get_totals } from '../util.js';
 import DataHandlerBase from '../base/DataHandlerBase.js';
 import VisualBase from '../base/VisualBase.js';
 import TableBase from '../base/TableBase.js';
-
-export function get_years (data, Stops) {
-  let years = d3.set(data.map((v) => v.year)).values();
-
-  years.filter((v) => (v >= Stops.start_year));
-  years.push("Total");
-
-  return years;
-}
-
-export function get_totals (a, types, reason_type) {
-  // calculate total for all years by purpose; push to array
-  let arr = _.clone(a);
-
-  var reasons = d3.nest()
-                   .key((d) => d[reason_type])
-                   .entries(arr);
-
-  reasons.forEach((v) => {
-    // create new totals object, and reset race/ethnicity-values
-    var total = _.clone(v.values[0]);
-
-    _.keys(total).forEach((key) => {
-      if (_.some(types, (t) => t.indexOf(key) >= 0)) {
-        total[key] = 0;
-      }
-    });
-
-    // sum data from all years
-    v.values.forEach((year) => {
-      _.keys(year).forEach((key) => {
-        if (_.some(types, (t) => t.indexOf(key) >= 0)) {
-          total[key] += year[key];
-        }
-      });
-    });
-
-    total["year"] = "Total";
-    arr.push(total);
-  });
-
-  return arr;
-}
 
 export const IRRHandlerBase = DataHandlerBase.extend({
   types: [], // abstract property, requires override
