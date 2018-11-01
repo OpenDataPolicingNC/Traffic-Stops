@@ -142,7 +142,16 @@ class AgencyViewSet(viewsets.ReadOnlyModelViewSet):
     def searches_by_type(self, request, pk=None):
         results = GroupedData(by=('search_type', 'year'), defaults=GROUP_DEFAULTS)
         q = Q(search__isnull=False)
-        self.query(results, group_by=('search__type', 'year', 'person__race', 'person__ethnicity'), filter_=q)
+        self.query(
+            results,
+            group_by=(
+                'search__type',
+                'year',
+                'person__race',
+                'person__ethnicity',
+            ),
+            filter_=q,
+        )
         return Response(results.flatten())
 
     @detail_route(methods=['get'])
