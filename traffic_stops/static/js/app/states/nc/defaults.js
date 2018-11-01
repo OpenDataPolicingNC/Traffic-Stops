@@ -51,4 +51,11 @@ export default {
     'Seat Belt Violation': 8,
     'Checkpoint': 9  // todo: use a list and indexOf instead of map
   }),
+  search_type_order: d3.map({
+    'Consent': 0,
+    'Search Warrant': 1,
+    'Probable Cause': 2,
+    'Search Incident to Arrest': 3,
+    'Protective Frisk': 4
+  })
 };

@@ -1,13 +1,88 @@
 import _ from 'underscore';
 import d3 from 'd3';
 
+import DataHandlerBase from '../base/DataHandlerBase.js';
 import VisualBase from '../base/VisualBase.js';
 import TableBase from '../base/TableBase.js';
 
+export function get_years (data, Stops) {
+  let years = d3.set(data.map((v) => v.year)).values();
+
+  years.filter((v) => (v >= Stops.start_year));
+  years.push("Total");
+
+  return years;
+}
+
+export function get_totals (a, types, reason_type) {
+  // calculate total for all years by purpose; push to array
+  let arr = _.clone(a);
+
+  var reasons = d3.nest()
+                   .key((d) => d[reason_type])
+                   .entries(arr);
+
+  reasons.forEach((v) => {
+    // create new totals object, and reset race/ethnicity-values
+    var total = _.clone(v.values[0]);
+
+    _.keys(total).forEach((key) => {
+      if (_.some(types, (t) => t.indexOf(key) >= 0)) {
+        total[key] = 0;
+      }
+    });
+
+    // sum data from all years
+    v.values.forEach((year) => {
+      _.keys(year).forEach((key) => {
+        if (_.some(types, (t) => t.indexOf(key) >= 0)) {
+          total[key] += year[key];
+        }
+      });
+    });
+
+    total["year"] = "Total";
+    arr.push(total);
+  });
+
+  return arr;
+}
+
+export const IRRHandlerBase = DataHandlerBase.extend({
+  types: [], // abstract property, requires override
+  defaults: {}, // abstract property, requires override
+  Stops: {}, // abstract property, requires override
+  reason_type: '', // abstract property, requires override
+
+  clean_data: function () {
+    let raw = this.get("raw_data");
+    let years = get_years(raw, this.Stops);
+
+    if (raw.stops && raw.stops.length>0) {
+      raw.stops = get_totals(raw.stops, this.types, this.reason_type);
+    }
+
+    if (raw.searches && raw.searches.length > 0 ) {
+      raw.searches = get_totals(raw.searches, this.types);
+    }
+
+    if (!(raw.stops || raw.searches)) {
+      raw = get_totals(raw, this.types, this.reason_type);
+    }
+
+    // set cleaned-data to handler
+    this.set("data", {
+      years: years,
+      raw: raw
+    });
+  }
+});
+
 export const IRRTimeSeriesBase = VisualBase.extend({
   Stops: { }, // abstract property, requires override
-  _incident_type: '', // abstract property, requires override
-  _incident_type_plural: '', // abstract property, requires override
+  incident_type: '', // abstract property, requires override
+  incident_type_plural: '', // abstract property, requires override
+  reason_type: '', // abstract property, requires override
   _items: function () { throw "abstract method: requires override"; },
   _pprint: function () { throw "abstract method: requires override"; },
   _raw_data: function () { throw "abstract method: requires override"; },
@@ -34,16 +109,16 @@ export const IRRTimeSeriesBase = VisualBase.extend({
 
   drawStartup: function () {
     var $selector = $('<select>');
-    var purposes = d3.set(_.pluck(this._raw_data(), 'purpose'));
+    var reasons = d3.set(_.pluck(this._raw_data(), this.reason_type));
     var $opts = [$('<option value="All">All</option>')].concat(
-      purposes
+      reasons
         .values()
         .sort()
         .map((p) => $(`<option value="${p}">${p}</option>`))
     )
     var update = () => {
       var val = $selector.val() || 'All';
-      this.dataset = this._getByPurpose(val);
+      this.dataset = this._getByReason(val);
       this.drawChart();
     }
 
@@ -85,19 +160,19 @@ export const IRRTimeSeriesBase = VisualBase.extend({
   }),
 
   /***
-   * Pure function to return the dataset sorted by "type" and stop purpose.
+   * Pure function to return the dataset sorted by "type" and incident reason.
    */
-  _getByPurpose: _.memoize(function (purpose) {
+  _getByReason: _.memoize(function (reason) {
     var types = this._items();
     var years = this._years();
     var raw_data, data;
 
     /***
-     * "All" is not a purpose found in the data, so we compute it on the fly
-     * using the helper method _purposeAll.
+     * "All" is not a reason found in the data, so we compute it on the fly
+     * using the helper method _reasonAll.
      */
-    if (purpose === 'All') {
-      raw_data = this._purposeAll();
+    if (reason === 'All') {
+      raw_data = this._reasonAll();
     } else {
       raw_data = this._raw_data();
     }
@@ -124,7 +199,7 @@ export const IRRTimeSeriesBase = VisualBase.extend({
         x: year
       , y: (_.find(raw_data, (incident) => (
           String(incident.year) === year
-            && incident.purpose === purpose
+            && incident[this.reason_type] === reason
         )) || {})[type] || 0
     }))
     , color: this.Stops.colors[i]
@@ -156,18 +231,18 @@ export const IRRTimeSeriesBase = VisualBase.extend({
   },
 
   /***
-   * Pure function to create a virtual "All" purpose data object for each year.
+   * Pure function to create a virtual "All" reason data object for each year.
    * Iterates through each year returned by _years and sums up the counts for
    * each race/ethnicity.
    */
-  _purposeAll: _.memoize(function () {
+  _reasonAll: _.memoize(function () {
     var data = [];
     var years = this._years();
 
     years.forEach((year) => {
       var totals = {
-        year
-      , purpose: 'All'
+        year,
+        [this.reason_type]: 'All'
       };
 
       var incidents = _.filter(
@@ -178,7 +253,7 @@ export const IRRTimeSeriesBase = VisualBase.extend({
       incidents.forEach((incident) => {
         var keys = _.chain(incident)
           .keys()
-          .without('year', 'purpose').
+          .without('year', this.reason_type).
           value();
 
         keys.forEach((k) => {
@@ -199,16 +274,21 @@ export const IRRTimeSeriesBase = VisualBase.extend({
 
 export const IRRTableBase = TableBase.extend({
   Stops: { }, // abstract property, requires override
+  incident_type: '', // abstract property, requires override
+  incident_type_plural: '', // abstract property, requires override
+  reason_type: '', // abstract property, requires override
+  reason_order_key: '', // abstract property, requires override
   types: [],
   _get_header_rows: function () { throw "abstract method: requires override"; },
+  _raw_data: function () { throw "abstract method: requires override"; },
 
   draw_table: function () {
     TableBase.prototype.draw_table.apply(this, arguments);
     this.add_select();
   },
 
-  _purposes: _.memoize(function () {
-    return d3.set(_.pluck(this._raw_data(), 'purpose'));
+  _reasons: _.memoize(function () {
+    return d3.set(_.pluck(this._raw_data(), this.reason_type));
   }),
 
   add_select: function () {
@@ -218,9 +298,9 @@ export const IRRTableBase = TableBase.extend({
     if (div.find('select').length) { return true; }
 
     let $selector = $('<select id="srr-table-select">');
-    let purposes = this._purposes();
+    let reasons = this._reasons();
     let $opts = [$('<option value="All">All</option>')].concat(
-      purposes
+      reasons
         .values()
         .sort()
         .map((p) => $(`<option value="${p}">${p}</option>`))
@@ -251,17 +331,17 @@ export const IRRTableBase = TableBase.extend({
   },
 
   get_tabular_data: function () {
-    let purpose_filter = (purpose) =>
+    let reason_filter = (reason) =>
       !this.get('filter')
       || this.get('filter') === 'All'
-      || purpose === this.get('filter');
+      || reason === this.get('filter');
 
     // create row with initial header row
     let rows = [
       ["Year", this.incident_type.charAt(0).toUpperCase() + this.incident_type.slice(1) + "-reason", ...this._get_header_rows()]
     ];
 
-    let purposes = this.Stops.purpose_order.keys().filter(purpose_filter);
+    let reasons = this.Stops[this.reason_order_key].keys().filter(reason_filter);
     let incidents = this._raw_data();
 
     function create_cell (incident_counts={}, race) {
@@ -274,9 +354,9 @@ export const IRRTableBase = TableBase.extend({
     this.data.years.forEach((yr) => {
       let incidents_by_yr = incidents.filter((d) => d.year == yr);
 
-      purposes.forEach((purp) => {
-        let row = [yr, purp];
-        let incident_counts = _.find(incidents_by_yr, (d) =>  d.purpose == purp);
+      reasons.forEach((reason) => {
+        let row = [yr, reason];
+        let incident_counts = _.find(incidents_by_yr, (d) =>  d[this.reason_type] == reason);
 
         this.types.forEach((type) => {
           type.forEach((race) => {
