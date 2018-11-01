@@ -4,10 +4,13 @@ import d3 from 'd3';
 import VisualBase from '../base/VisualBase.js';
 import TableBase from '../base/TableBase.js';
 
-export const SRRTimeSeriesBase = VisualBase.extend({
+export const IRRTimeSeriesBase = VisualBase.extend({
   Stops: { }, // abstract property, requires override
+  _incident_type: '', // abstract property, requires override
+  _incident_type_plural: '', // abstract property, requires override
   _items: function () { throw "abstract method: requires override"; },
   _pprint: function () { throw "abstract method: requires override"; },
+  _raw_data: function () { throw "abstract method: requires override"; },
 
   setDefaultChart: function () {
     this.chart = nv.models.lineChart()
@@ -25,13 +28,13 @@ export const SRRTimeSeriesBase = VisualBase.extend({
         .tickFormat(d3.format('.0d'));
 
     this.chart.yAxis
-        .axisLabel('Number of stops by race')
+        .axisLabel('Number of ' + self.incident_type_plural + ' by race')
         .tickFormat(d3.format(',.0d'));
   },
 
   drawStartup: function () {
     var $selector = $('<select>');
-    var purposes = d3.set(_.pluck(this.data.raw.stops, 'purpose'));
+    var purposes = d3.set(_.pluck(this._raw_data(), 'purpose'));
     var $opts = [$('<option value="All">All</option>')].concat(
       purposes
         .values()
@@ -76,7 +79,7 @@ export const SRRTimeSeriesBase = VisualBase.extend({
    * Pure function to return array of years present in dataset.
    */
   _years: _.memoize(function () {
-    var years_all = d3.set(_.pluck(this.data.raw.stops, 'year')).values();
+    var years_all = d3.set(_.pluck(this._raw_data(), 'year')).values();
     var years = _.without(years_all, 'Total');
     return years;
   }),
@@ -96,7 +99,7 @@ export const SRRTimeSeriesBase = VisualBase.extend({
     if (purpose === 'All') {
       raw_data = this._purposeAll();
     } else {
-      raw_data = this.data.raw.stops;
+      raw_data = this._raw_data();
     }
 
     /***
@@ -119,9 +122,9 @@ export const SRRTimeSeriesBase = VisualBase.extend({
       key: this._pprint(type)
     , values: years.map((year) => ({
         x: year
-      , y: (_.find(raw_data, (stop) => (
-          String(stop.year) === year
-            && stop.purpose === purpose
+      , y: (_.find(raw_data, (incident) => (
+          String(incident.year) === year
+            && incident.purpose === purpose
         )) || {})[type] || 0
     }))
     , color: this.Stops.colors[i]
@@ -167,13 +170,13 @@ export const SRRTimeSeriesBase = VisualBase.extend({
       , purpose: 'All'
       };
 
-      var stops = _.filter(
-        this.data.raw.stops
-      , (stop) => (String(stop.year) === year)
+      var incidents = _.filter(
+        this._raw_data()
+      , (incident) => (String(incident.year) === year)
       );
 
-      stops.forEach((stop) => {
-        var keys = _.chain(stop)
+      incidents.forEach((incident) => {
+        var keys = _.chain(incident)
           .keys()
           .without('year', 'purpose').
           value();
@@ -183,7 +186,7 @@ export const SRRTimeSeriesBase = VisualBase.extend({
             totals[k] = 0;
           }
 
-          totals[k] += stop[k];
+          totals[k] += incident[k];
         });
       });
 
@@ -194,7 +197,7 @@ export const SRRTimeSeriesBase = VisualBase.extend({
   })
 });
 
-export const SRRTableBase = TableBase.extend({
+export const IRRTableBase = TableBase.extend({
   Stops: { }, // abstract property, requires override
   types: [],
   _get_header_rows: function () { throw "abstract method: requires override"; },
@@ -205,7 +208,7 @@ export const SRRTableBase = TableBase.extend({
   },
 
   _purposes: _.memoize(function () {
-    return d3.set(_.pluck(this.data.raw.stops, 'purpose'));
+    return d3.set(_.pluck(this._raw_data(), 'purpose'));
   }),
 
   add_select: function () {
@@ -255,29 +258,29 @@ export const SRRTableBase = TableBase.extend({
 
     // create row with initial header row
     let rows = [
-      ["Year", "Stop-reason", ...this._get_header_rows()]
+      ["Year", this.incident_type.charAt(0).toUpperCase() + this.incident_type.slice(1) + "-reason", ...this._get_header_rows()]
     ];
 
     let purposes = this.Stops.purpose_order.keys().filter(purpose_filter);
-    let stops = this.data.raw.stops;
+    let incidents = this._raw_data();
 
-    function create_cell (stop_counts={}, race) {
-      let stop_count = stop_counts[race] || 0;
+    function create_cell (incident_counts={}, race) {
+      let incident_count = incident_counts[race] || 0;
 
-      return stop_count.toLocaleString();
+      return incident_count.toLocaleString();
     }
 
     // create data rows
     this.data.years.forEach((yr) => {
-      let stops_by_yr = stops.filter((d) => d.year == yr);
+      let incidents_by_yr = incidents.filter((d) => d.year == yr);
 
       purposes.forEach((purp) => {
         let row = [yr, purp];
-        let stop_counts = _.find(stops_by_yr, (d) =>  d.purpose == purp);
+        let incident_counts = _.find(incidents_by_yr, (d) =>  d.purpose == purp);
 
         this.types.forEach((type) => {
           type.forEach((race) => {
-            row.push(create_cell(stop_counts, race));
+            row.push(create_cell(incident_counts, race));
           })
         })
 
