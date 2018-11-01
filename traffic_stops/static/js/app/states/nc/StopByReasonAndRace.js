@@ -15,7 +15,7 @@ export const SRRTimeSeries = C.SRRTimeSeriesBase.extend({
 
   _pprint: function (type) {
     return Stops.pprint.get(type);
-  },
+  }
 });
 
 const SRRTable = C.SRRTableBase.extend({
