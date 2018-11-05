@@ -1,3 +1,4 @@
+import StopByReasonAndRace from './StopByReasonAndRace.js';
 import Stops from './defaults.js';
 import StopsGraphs from './Stops.js';
 import Search from './Search.js';
@@ -15,6 +16,7 @@ if (typeof window.NC === 'undefined') {
 Object.assign(
   window.NC,
 
+  StopByReasonAndRace,
   {Stops},
   StopsGraphs,
   Search,

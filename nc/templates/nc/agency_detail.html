@@ -167,6 +167,47 @@
 </div>
 {% endblock search-count-display %}
 
+{% block stop-count-display %}
+  <div class="row">
+    <div class="col-md-12">
+    <h3>Departmental Stop Count</h3>
+
+    <p class="help-block">
+      This graph displays the number of traffic stops broken down by stop
+      purpose and ethnicity. Adjusting the drop down menu will display the
+      individual stop counts relative to ethnic groups on a year-by-year basis.
+    </p>
+  </div>
+
+    <div class="col-md-10">
+      <div role="tabpanel">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active">
+            <a href="#srr_line_div" role="tab" data-toggle="tab">Chart</a></li>
+          <li role="presentation">
+            <a href="#srr_data" role="tab" data-toggle="tab">Data</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="srr_line_div">
+            <svg id="srr_line"></svg>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="srr_data">
+          </div>
+        </div>
+      </div>
+
+      <p class="graph-help-block">
+        Drag the cursor over the graph to see the racial breakdown for any
+        given year. Some percentages may be based on low levels of observation.
+        Click the “Data” tab to review the raw stop data.
+      </p>
+    </div>
+  </div>
+{% endblock stop-count-display %}
+
 {% block search-rate-display %}
   <div class="row">
     <div class="col-md-12 headline">
@@ -534,6 +575,9 @@ new NC.ContrabandTable({handler: chr_handler, selector: "#chr_data", showEthnici
 new NC.UseOfForceDonut({handler: uf_handler, selector: "#use_force_race_pie", showEthnicity: showEthnicity});
 new NC.UseOfForceBarChart({handler: uf_handler, selector: "#use_force_race_line", showEthnicity: showEthnicity});
 new NC.UseOfForceTable({handler: uf_handler, selector: "#use_force_race__data", showEthnicity: showEthnicity});
+
+new NC.SRRTimeSeries({handler: lhs_handler, selector: '#srr_line'});
+new NC.SRRTable({handler: lhs_handler, selector: '#srr_data'});
 
 {% comment %}</script>{% endcomment %}
 {% endblock graph-code %}
