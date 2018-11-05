@@ -44,5 +44,5 @@ export default {
     'Equipment': 0,
     'Moving Violation': 1,
     'Registration': 2,
-  }),
+  })
 };

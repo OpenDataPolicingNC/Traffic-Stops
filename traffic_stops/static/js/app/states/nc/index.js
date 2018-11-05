@@ -2,6 +2,7 @@ import StopByReasonAndRace from './StopByReasonAndRace.js';
 import Stops from './defaults.js';
 import StopsGraphs from './Stops.js';
 import Search from './Search.js';
+import SearchByType from './SearchByType.js';
 import Census from './Census.js';
 import StopSearch from './StopSearch.js';
 import LikelihoodOfSearch from './LikelihoodOfSearch.js';
@@ -19,6 +20,7 @@ Object.assign(
   {Stops},
   StopsGraphs,
   Search,
+  SearchByType,
   Census,
   StopSearch,
   LikelihoodOfSearch,

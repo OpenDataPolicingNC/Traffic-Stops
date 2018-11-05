@@ -1,8 +1,11 @@
 import Stops from './defaults.js';
-import * as C from '../../common/StopByReasonAndRace.js';
+import * as C from '../../common/IncidentByReasonAndRace.js';
 
-export const SRRTimeSeries = C.SRRTimeSeriesBase.extend({
+export const SRRTimeSeries = C.IRRTimeSeriesBase.extend({
   Stops: Stops,
+  incident_type: 'stop',
+  incident_type_plural: 'stops',
+  reason_type: 'purpose',
 
   defaults: {
     width: 750,
@@ -15,16 +18,28 @@ export const SRRTimeSeries = C.SRRTimeSeriesBase.extend({
 
   _pprint: function (x) {
     return x;
+  },
+
+  _raw_data: function () {
+    return this.data.raw.stops;
   }
 });
 
-const SRRTable = C.SRRTableBase.extend({
+const SRRTable = C.IRRTableBase.extend({
   types: [Stops.ethnicities],
 
   Stops: Stops,
+  incident_type: 'stop',
+  incident_type_plural: 'stops',
+  reason_type: 'purpose',
+  reason_order_key: 'purpose_order',
 
   _get_header_rows: function () {
     return Stops.ethnicities
+  },
+
+  _raw_data: function () {
+    return this.data.raw.stops;
   }
 });
 
