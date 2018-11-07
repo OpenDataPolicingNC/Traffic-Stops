@@ -1,189 +1,189 @@
 Id,Agency Name,GEOID
-1,Aberdeen Police Department,
-2,Alamance County Sheriff's Office,
-3,Albemarle Police Department,
-4,Alexander County Sheriff's Office,
-5,Alleghany County Sheriff's Office,
-6,Andrews Police Department,
-7,Anson County Sheriff's Office,
-8,Apex Police Department,
+1,Aberdeen Police Department,1600000US3700160
+2,Alamance County Sheriff's Office,0500000US37001
+3,Albemarle Police Department,1600000US3700680
+4,Alexander County Sheriff's Office,0500000US37003
+5,Alleghany County Sheriff's Office,0500000US37005
+6,Andrews Police Department,1600000US3701380
+7,Anson County Sheriff's Office,0500000US37007
+8,Apex Police Department,1600000US3701520
 9,Appalachian State University Police Department,
-10,Archdale Police Department,
-11,Asheboro Police Department,
-12,Ashe County Sheriff's Office,
+10,Archdale Police Department,1600000US3701720
+11,Asheboro Police Department,1600000US3702080
+12,Ashe County Sheriff's Office,0500000US37009
 13,Asheville Police Department,1600000US3702140
-14,Atkinson Police Department,
-15,Atlantic Beach Police Department,
-16,Avery County Sheriff's Office,
-17,Bailey Police Department,
-18,Bald Head Island Police Department,
-19,Banner Elk Police Department,
-20,Beaufort County Sheriff's Office,
-21,Beech Mountain Police Department,
+14,Atkinson Police Department,1600000US3702460
+15,Atlantic Beach Police Department,1600000US3702500
+16,Avery County Sheriff's Office,0500000US37011
+17,Bailey Police Department,1600000US3703020
+18,Bald Head Island Police Department,1600000US3703150
+19,Banner Elk Police Department,1600000US3703500
+20,Beaufort County Sheriff's Office,0500000US37013
+21,Beech Mountain Police Department,1600000US3704510
 22,Belmont Police Department,
-23,Bertie County Sheriff's Office,
-24,Biltmore Forest Police Department,
-25,Biscoe Police Department,
-26,Bladen County Sheriff's Office,
-27,Blowing Rock Police Department,
-28,Boone Police Department,
+23,Bertie County Sheriff's Office,0500000US37015
+24,Biltmore Forest Police Department,1600000US3705880
+25,Biscoe Police Department,1600000US3706000
+26,Bladen County Sheriff's Office,0500000US37017
+27,Blowing Rock Police Department,1600000US3706500
+28,Boone Police Department,1600000US3707080
 29,Broughton Hospital Police Department,
 30,Brunswick Community College,
-31,Brunswick County Sheriff's Office,
-32,Buncombe County Sheriff's Office,
-33,Bunn Police Department,
+31,Brunswick County Sheriff's Office,0500000US37019
+32,Buncombe County Sheriff's Office,0500000US37021
+33,Bunn Police Department,1600000US3708860
 34,Burgaw Police Department,
-35,Burke County Sheriff's Office,
-36,Burlington Police Department,
-37,Butner Public Safety,
-38,Cabarrus County Sheriff's Office,
-39,Caldwell County Sheriff's Office,
-40,Camden County Sheriff's Office,
-41,Cameron Police Department,
-42,Candor Police Department,
+35,Burke County Sheriff's Office,0500000US37023
+36,Burlington Police Department,1600000US3709060
+37,Butner Public Safety,1600000US3709360
+38,Cabarrus County Sheriff's Office,0500000US37025
+39,Caldwell County Sheriff's Office,0500000US37027
+40,Camden County Sheriff's Office,0500000US37029
+41,Cameron Police Department,1600000US3709800
+42,Candor Police Department,1600000US3710120
 43,Carolina Beach Police Department,1600000US3710500
 44,Carrboro Police Department,1600000US3710620
-45,Carteret County Sheriff's Office,
+45,Carteret County Sheriff's Office,0500000US37031
 46,Cary Police Department,1600000US3710740
-47,Caswell Beach Police Department,
+47,Caswell Beach Police Department,1600000US3710960
 48,Caswell Center Hospital Police Department,
-49,Caswell County Sheriff's Office,
-50,Catawba County Sheriff's Office,
+49,Caswell County Sheriff's Office,0500000US37033
+50,Catawba County Sheriff's Office,0500000US37035
 51,Chapel Hill Police Department,1600000US3711800
-52,Charlotte-Mecklenburg Police Department,
-53,Chatham County Sheriff's Office,
-54,Cherokee County Sheriff's Office,
+52,Charlotte-Mecklenburg Police Department,1600000US3712000
+53,Chatham County Sheriff's Office,0500000US37037
+54,Cherokee County Sheriff's Office,0500000US37039
 55,Cherry O'Berry Hospital Police Department,
-56,Chowan County Sheriff's Office,
-57,Claremont Police Department,
-58,Clay County Sheriff's Office,
-59,Clayton Police Department,
-60,Cleveland County Sheriff's Office,
-61,Cleveland Police Department,
-62,Columbus County Sheriff's Office,
-63,Columbus Police Department,
-64,Concord Police Department,
-65,Conover Police Department,
-66,Cornelius Police Department,
-67,Craven County Sheriff's Office,
-68,Creedmoor Police Department,
-69,Cumberland County Sheriff's Office,
-70,Currituck County Sheriff's Office,
-71,Dare County Sheriff's Office,
-72,Davidson County Sheriff's Office,
-73,Davidson Police Department,
-74,Davie County Sheriff's Office,
+56,Chowan County Sheriff's Office,0500000US37041
+57,Claremont Police Department,1600000US3712720
+58,Clay County Sheriff's Office,0500000US37043
+59,Clayton Police Department,1600000US3712860
+60,Cleveland County Sheriff's Office,0500000US37045
+61,Cleveland Police Department,1600000US3713000
+62,Columbus County Sheriff's Office,0500000US37047
+63,Columbus Police Department,1600000US3713980
+64,Concord Police Department,1600000US3714100
+65,Conover Police Department,1600000US3714340
+66,Cornelius Police Department,1600000US3714700
+67,Craven County Sheriff's Office,0500000US37049
+68,Creedmoor Police Department,1600000US3715320
+69,Cumberland County Sheriff's Office,0500000US37051
+70,Currituck County Sheriff's Office,0500000US37053
+71,Dare County Sheriff's Office,0500000US37055
+72,Davidson County Sheriff's Office,0500000US37057
+73,Davidson Police Department,1600000US3716400
+74,Davie County Sheriff's Office,0500000US37059
 75,DHHS Police - Black Mountain,
-76,Duck Police Department,
-77,Dunn Police Department,
-78,Duplin County Sheriff's Office,
-79,Durham County Sheriff's Office,
+76,Duck Police Department,1600000US3718060
+77,Dunn Police Department,1600000US3718320
+78,Duplin County Sheriff's Office,0500000US37061
+79,Durham County Sheriff's Office,0500000US37063
 80,Durham Police Department,1600000US3719000
 81,East Carolina University Police Department,
-82,Eden Police Department,
-83,Edgecombe County Sheriff's Office,
-84,Elizabeth City Police Department,
+82,Eden Police Department,1600000US3720080
+83,Edgecombe County Sheriff's Office,0500000US37065
+84,Elizabeth City Police Department,1600000US3720580
 85,Elizabeth City State University Police Department,
-86,Elk Park Police Department,
-87,Enfield Police Department,
-88,Fairmont Department of Public Safety,
-89,Fayetteville Police Department,
+86,Elk Park Police Department,1600000US3720700
+87,Enfield Police Department,1600000US3721360
+88,Fairmont Department of Public Safety,1600000US3722360
+89,Fayetteville Police Department,1600000US3722920
 90,Fayetteville State University Police Department,
-91,Fletcher Police Department,
-92,Forsyth County Sheriff's Office,
-93,Foxfire Village Police Department,
-94,Franklin County Sheriff's Office,
+91,Fletcher Police Department,1600000US3723760
+92,Forsyth County Sheriff's Office,0500000US37067
+93,Foxfire Village Police Department,1600000US3724570
+94,Franklin County Sheriff's Office,0500000US37069
 95,Fuquay-Varina Police Department,1600000US3725300
 96,Garner Police Department,1600000US3725480
-97,Gaston County Police Department,
-98,Gaston County Sheriff's Office,
-99,Gastonia Police Department,
-100,Gates County Sheriff's Office,
-101,Goldsboro Police Department,
-102,Graham Police Department,
-103,Granville County Sheriff's Office,
-104,Greene County Sheriff's Office,
+97,Gaston County Police Department,0500000US37071
+98,Gaston County Sheriff's Office,0500000US37071
+99,Gastonia Police Department,1600000US3725580
+100,Gates County Sheriff's Office,0500000US37073
+101,Goldsboro Police Department,1600000US3726880
+102,Graham Police Department,1600000US3727280
+103,Granville County Sheriff's Office,0500000US37077
+104,Greene County Sheriff's Office,0500000US37079
 105,Greensboro Police Department,1600000US3728000
-106,Greenville Police Department,
-107,Guilford County Sheriff's Office,
+106,Greenville Police Department,1600000US3728080
+107,Guilford County Sheriff's Office,0500000US37081
 108,Guilford Technical Community College,
-109,Halifax County Sheriff's Office,
-110,Harnett County Sheriff's Office,
-111,Havelock Police Department,
-112,Haywood County Sheriff's Office,
-113,Henderson County Sheriff's Office,
-114,Henderson Police Department,
-115,Hendersonville Police Department,
-116,Hertford County Sheriff's Office,
-117,Hickory Police Department,
-118,Highlands Police Department,
-119,High Point Police Department,
+109,Halifax County Sheriff's Office,0500000US37083
+110,Harnett County Sheriff's Office,0500000US37085
+111,Havelock Police Department,1600000US3730120
+112,Haywood County Sheriff's Office,0500000US37087
+113,Henderson County Sheriff's Office,0500000US37089
+114,Henderson Police Department,1600000US3730660
+115,Hendersonville Police Department,1600000US3730720
+116,Hertford County Sheriff's Office,0500000US37091
+117,Hickory Police Department,1600000US3731060
+118,Highlands Police Department,1600000US3731360
+119,High Point Police Department,1600000US3731400
 120,Hillsborough Police Department,
-121,Hoke County Sheriff's Office,
-122,Holden Beach Police Department,
-123,Holly Ridge Police Department,
+121,Hoke County Sheriff's Office,0500000US37093
+122,Holden Beach Police Department,1600000US3731960
+123,Holly Ridge Police Department,1600000US3732180
 124,Holly Springs Police Department,1600000US3732260
-125,Hope Mills Police Department,
-126,Huntersville Police Department,
-127,Hyde County Sheriff's Office,
-128,Indian Beach Police Department,
-129,Iredell County Sheriff's Office,
-130,Jackson County Sheriff's Office,
-131,Jacksonville Police Department,
-132,Johnston County Sheriff's Office,
-133,Jones County Sheriff's Office,
-134,Jonesville Police Department,
-135,Kannapolis Police Department,
-136,Kenansville Police Department,
-137,Kenly Police Department,
-138,Kernersville Police Department,
-139,Kings Mountain Police Department,
-140,Kinston Police Department,
-141,Kitty Hawk Police Department,
+125,Hope Mills Police Department,1600000US3732640
+126,Huntersville Police Department,1600000US3733120
+127,Hyde County Sheriff's Office,0500000US37095
+128,Indian Beach Police Department,1600000US3733460
+129,Iredell County Sheriff's Office,0500000US37097
+130,Jackson County Sheriff's Office,0500000US37099
+131,Jacksonville Police Department,1600000US3734200
+132,Johnston County Sheriff's Office,0500000US37101
+133,Jones County Sheriff's Office,0500000US37103
+134,Jonesville Police Department,1600000US3734840
+135,Kannapolis Police Department,1600000US3735200
+136,Kenansville Police Department,1600000US3735460
+137,Kenly Police Department,1600000US3735540
+138,Kernersville Police Department,1600000US3735600
+139,Kings Mountain Police Department,1600000US3735880
+140,Kinston Police Department,1600000US3735920
+141,Kitty Hawk Police Department,1600000US3736060
 142,Knightdale Police Department,
-143,Kure Beach Police Department,
-144,Lake Lure Police Department,
-145,Laurinburg Police Department,
-146,Lee County Sheriff's Office,
-147,Leland Police Department,
-148,Lenoir County Sheriff's Office,
-149,Lenoir Police Department,
-150,Lexington Police Department,
-151,Lincoln County Sheriff's Office,
-152,Lincolnton Police Department,
-153,Littleton Police Department,
-154,Lumberton Police Department,
-155,Macon County Sheriff's Office,
-156,Madison County Sheriff's Office,
-157,Madison Police Department,
-158,Maggie Valley Police Department,
-159,Manteo Police Department,
-160,Marshall Police Department,
+143,Kure Beach Police Department,1600000US3736220
+144,Lake Lure Police Department,1600000US3736500
+145,Laurinburg Police Department,1600000US3737220
+146,Lee County Sheriff's Office,0500000US37105
+147,Leland Police Department,1600000US3737680
+148,Lenoir County Sheriff's Office,0500000US37107
+149,Lenoir Police Department,1600000US3737760
+150,Lexington Police Department,1600000US3738060
+151,Lincoln County Sheriff's Office,0500000US37109
+152,Lincolnton Police Department,1600000US3738320
+153,Littleton Police Department,1600000US3738680
+154,Lumberton Police Department,1600000US3739700
+155,Macon County Sheriff's Office,0500000US37113
+156,Madison County Sheriff's Office,0500000US37115
+157,Madison Police Department,1600000US3740560
+158,Maggie Valley Police Department,1600000US3740600
+159,Manteo Police Department,1600000US3741060
+160,Marshall Police Department,1600000US3741580
 161,Mars Hill Police Department,
-162,Martin County Sheriff's Office,
-163,Matthews Police Department,
-164,Mayodan Police Department,
-165,McAdenville Police Department,
-166,McDowell County Sheriff's Office,
-167,Mebane Police Department,
-168,Mecklenburg County Sheriff's Office,
-169,Middlesex Police Department,
-170,Mint Hill Police Department,
-171,Mitchell County Sheriff's Office,
-172,Monroe Police Department,
-173,Montgomery County Sheriff's Office,
-174,Montreat Police Department,
-175,Moore County Sheriff's Office,
-176,Mooresville Police Department,
-177,Morganton Police Department,
-178,Morrisville Police Department,
-179,Mount Airy Police Department,
-180,Mount Gilead Police Department,
-181,Mount Holly Police Department,
-182,Murfreesboro Police Department,
-183,Murphy Police Department,
-184,Nags Head Police Department,
-185,Nash County Sheriff's Office,
+162,Martin County Sheriff's Office,0500000US37117
+163,Matthews Police Department,1600000US3741960
+164,Mayodan Police Department,1600000US3742060
+165,McAdenville Police Department,1600000US3739880
+166,McDowell County Sheriff's Office,0500000US37111
+167,Mebane Police Department,1600000US3742240
+168,Mecklenburg County Sheriff's Office,0500000US37119
+169,Middlesex Police Department,1600000US3742700
+170,Mint Hill Police Department,1600000US3743480
+171,Mitchell County Sheriff's Office,0500000US37121
+172,Monroe Police Department,1600000US3743920
+173,Montgomery County Sheriff's Office,0500000US37123
+174,Montreat Police Department,1600000US3744100
+175,Moore County Sheriff's Office,0500000US37125
+176,Mooresville Police Department,1600000US3744220
+177,Morganton Police Department,1600000US3744400
+178,Morrisville Police Department,1600000US3744520
+179,Mount Airy Police Department,1600000US3744800
+180,Mount Gilead Police Department,1600000US3744900
+181,Mount Holly Police Department,1600000US3744960
+182,Murfreesboro Police Department,1600000US3745640
+183,Murphy Police Department,1600000US3745660
+184,Nags Head Police Department,1600000US3745880
+185,Nash County Sheriff's Office,0500000US37127
 186,NC Alcohol Law Enforcement,
 187,NC Arboretum Campus Police,
 188,NC A&T University Police Department,
@@ -196,86 +196,86 @@ Id,Agency Name,GEOID
 195,NC State Parks,
 196,NC State University Police Department,
 197,NC Wildlife Enforcement,
-198,New Bern Police Department,
-199,New Hanover County Sheriff's Office,
-200,Newland Police Department,
-201,Newton Police Department,
-202,Norlina Police Department,
-203,Northampton County Sheriff's Office,
-204,North Topsail Beach Police Department,
-205,North Wilkesboro Police Department,
-206,Ocean Isle Beach Police Department,
-207,Old Fort Police Department,
-208,Onslow County Sheriff's Office,
-209,Orange County Sheriff's Office,
-210,Pamlico County Sheriff's Office,
-211,Parkton Police Department,
-212,Pasquotank County Sheriff's Office,
-213,Pembroke Police Department,
-214,Pender County Sheriff's Office,
-215,Perquimans County Sheriff's Office,
-216,Person County Sheriff's Office,
-217,Pilot Mountain Police Department,
-218,Pinehurst Police Department,
-219,Pine Knoll Shores Police Department,
-220,Pinetops Police Department,
-221,Pineville Police Department,
-222,Pitt County Sheriff's Office,
-223,Pittsboro Police Department,
-224,Polk County Sheriff's Office,
+198,New Bern Police Department,1600000US3746340
+199,New Hanover County Sheriff's Office,0500000US37129
+200,Newland Police Department,1600000US3746740
+201,Newton Police Department,1600000US3747000
+202,Norlina Police Department,1600000US3747240
+203,Northampton County Sheriff's Office,0500000US37131
+204,North Topsail Beach Police Department,1600000US3747845
+205,North Wilkesboro Police Department,1600000US3747880
+206,Ocean Isle Beach Police Department,1600000US3748700
+207,Old Fort Police Department,1600000US3748920
+208,Onslow County Sheriff's Office,0500000US37133
+209,Orange County Sheriff's Office,0500000US37135
+210,Pamlico County Sheriff's Office,0500000US37137
+211,Parkton Police Department,1600000US3750340
+212,Pasquotank County Sheriff's Office,0500000US37139
+213,Pembroke Police Department,1600000US3751080
+214,Pender County Sheriff's Office,0500000US37141
+215,Perquimans County Sheriff's Office,0500000US37143
+216,Person County Sheriff's Office,0500000US37145
+217,Pilot Mountain Police Department,1600000US3751820
+218,Pinehurst Police Department,1600000US3751940
+219,Pine Knoll Shores Police Department,1600000US3752000
+220,Pinetops Police Department,1600000US3752140
+221,Pineville Police Department,1600000US3752220
+222,Pitt County Sheriff's Office,0500000US37147
+223,Pittsboro Police Department,1600000US3752660
+224,Polk County Sheriff's Office,0500000US37149
 225,Raleigh Police Department,1600000US3755000
-226,Randolph County Sheriff's Office,
-227,Red Springs Police Department,
-228,Reidsville Police Department,
-229,Richlands Police Department,
-230,Richmond County Sheriff's Office,
-231,Roanoke Rapids Police Department,
-232,Robbins Police Department,
-233,Robersonville Police Department,
-234,Robeson County Sheriff's Office,
-235,Rockingham County Sheriff's Office,
-236,Rocky Mount Police Department,
-237,Rolesville Police Department,
-238,Rowan County Sheriff's Office,
-239,Rowland Police Department,
-240,Rutherford County Sheriff's Office,
-241,Saint Pauls Police Department,
-242,Salisbury Police Department,
-243,Saluda Police Department,
-244,Sampson County Sheriff's Office,
-245,Sanford Police Department,
-246,Scotland County Sheriff's Office,
-247,Seven Devils Police Department,
-248,Shallotte Police Department,
+226,Randolph County Sheriff's Office,0500000US37151
+227,Red Springs Police Department,1600000US3755660
+228,Reidsville Police Department,1600000US3755900
+229,Richlands Police Department,1600000US3756360
+230,Richmond County Sheriff's Office,0500000US37153
+231,Roanoke Rapids Police Department,1600000US3756900
+232,Robbins Police Department,1600000US3757000
+233,Robersonville Police Department,1600000US3757100
+234,Robeson County Sheriff's Office,0500000US37155
+235,Rockingham County Sheriff's Office,0500000US37157
+236,Rocky Mount Police Department,1600000US3757500
+237,Rolesville Police Department,1600000US3757640
+238,Rowan County Sheriff's Office,0500000US37159
+239,Rowland Police Department,1600000US3758140
+240,Rutherford County Sheriff's Office,0500000US37161
+241,Saint Pauls Police Department,1600000US3758720
+242,Salisbury Police Department,1600000US3758860
+243,Saluda Police Department,1600000US3758920
+244,Sampson County Sheriff's Office,0500000US37163
+245,Sanford Police Department,1600000US3759280
+246,Scotland County Sheriff's Office,0500000US37165
+247,Seven Devils Police Department,1600000US3760505
+248,Shallotte Police Department,1600000US3760800
 249,Sharpsburg Police Department,
-250,Shelby Police Department,
+250,Shelby Police Department,1600000US3761200
 251,SHP - Motor Carrier Enforcement Section,
-252,Smithfield Police Department,
-253,Southern Pines Police Department,
-254,Spring Lake Police Department,
-255,Spruce Pine Police Department,
-256,Stallings Police Department,
-257,Stanly County Sheriff's Office,
-258,Stantonsburg Police Department,
-259,Star Police Department,
+252,Smithfield Police Department,1600000US3762520
+253,Southern Pines Police Department,1600000US3763120
+254,Spring Lake Police Department,1600000US3764180
+255,Spruce Pine Police Department,1600000US3764260
+256,Stallings Police Department,1600000US3764420
+257,Stanly County Sheriff's Office,0500000US37167
+258,Stantonsburg Police Department,1600000US3764560
+259,Star Police Department,1600000US3764580
 260,State Capitol Police,
-261,Statesville Police Department,
-262,Stokes County Sheriff's Office,
-263,Stoneville Police Department,
-264,Sugar Mountain Police Department,
-265,Sunset Beach Police Department,
-266,Surf City Police Department,
-267,Surry County Sheriff's Office,
-268,Swain County Sheriff's Office,
-269,Sylva Police Department,
-270,Tarboro Police Department,
-271,Taylorsville Police Department,
-272,Thomasville Police Department,
-273,Topsail Beach Police Department,
-274,Transylvania County Sheriff's Office,
-275,Troutman Police Department,
+261,Statesville Police Department,1600000US3764740
+262,Stokes County Sheriff's Office,0500000US37169
+263,Stoneville Police Department,1600000US3765100
+264,Sugar Mountain Police Department,1600000US3765530
+265,Sunset Beach Police Department,1600000US3765900
+266,Surf City Police Department,1600000US3766040
+267,Surry County Sheriff's Office,0500000US37171
+268,Swain County Sheriff's Office,0500000US37173
+269,Sylva Police Department,1600000US3766500
+270,Tarboro Police Department,1600000US3766700
+271,Taylorsville Police Department,1600000US3766960
+272,Thomasville Police Department,1600000US3767420
+273,Topsail Beach Police Department,1600000US3768040
+274,Transylvania County Sheriff's Office,0500000US37175
+275,Troutman Police Department,1600000US3768500
 276,Tryon Police Department,
-277,Tyrrell County Sheriff's Office,
+277,Tyrrell County Sheriff's Office,0500000US37177
 278,UNC Asheville University Police Department,
 279,UNC Chapel Hill University Police Department,
 280,UNC Charlotte University Police Department,
@@ -283,36 +283,36 @@ Id,Agency Name,GEOID
 282,UNC Pembroke University Police Department,
 283,UNC School of the Arts Police Department,
 284,UNC Wilmington Police Department,
-285,Union County Sheriff's Office,
-286,Vance County Sheriff's Office,
-287,Vass Police Department,
-288,Village of Misenheimer Police Department,
-289,Wadesboro Police Department,
-290,Wake County Sheriff's Office,
-291,Wake Forest Police Department,
-292,Walnut Creek Police Department,
-293,Warren County Sheriff's Office,
-294,Warrenton Police Department,
-295,Washington County Sheriff's Office,
+285,Union County Sheriff's Office,0500000US37179
+286,Vance County Sheriff's Office,0500000US37181
+287,Vass Police Department,1600000US3769840
+288,Village of Misenheimer Police Department,1600000US3743580
+289,Wadesboro Police Department,1600000US3770380
+290,Wake County Sheriff's Office,0500000US37183
+291,Wake Forest Police Department,1600000US3770540
+292,Walnut Creek Police Department,1600000US3770820
+293,Warren County Sheriff's Office,0500000US37185
+294,Warrenton Police Department,1600000US3771100
+295,Washington County Sheriff's Office,0500000US37187
 296,Washington Police Department,1600000US3771220
-297,Watauga County Sheriff's Office,
-298,Waxhaw Police Department,
-299,Wayne County Sheriff's Office,
-300,Weldon Police Department,
+297,Watauga County Sheriff's Office,0500000US37189
+298,Waxhaw Police Department,1600000US3771460
+299,Wayne County Sheriff's Office,0500000US37191
+300,Weldon Police Department,1600000US3771780
 301,Western Carolina University Police Department,
-302,West Jefferson Police Department,
-303,White Lake Police Department,
-304,Wilkesboro Police Department,
-305,Wilkes County Sheriff's Office,
-306,Wilmington Police Department,
-307,Wilson County Sheriff's Office,
-308,Wilson Police Department,
-309,Winston-Salem Police Department,
+302,West Jefferson Police Department,1600000US3772540
+303,White Lake Police Department,1600000US3773300
+304,Wilkesboro Police Department,1600000US3774020
+305,Wilkes County Sheriff's Office,0500000US37193
+306,Wilmington Police Department,1600000US3774440
+307,Wilson County Sheriff's Office,0500000US37195
+308,Wilson Police Department,1600000US3774540
+309,Winston-Salem Police Department,1600000US3775000
 310,Winston-Salem State University Police Department,
-311,Wrightsville Beach Police Department,
-312,Yadkin County Sheriff's Office,
-313,Yancey County Sheriff's Office,
-314,Youngsville Police Department,
-315,Zebulon Police Department,
+311,Wrightsville Beach Police Department,1600000US3775820
+312,Yadkin County Sheriff's Office,0500000US37197
+313,Yancey County Sheriff's Office,0500000US37199
+314,Youngsville Police Department,1600000US3776200
+315,Zebulon Police Department,1600000US3776220
 316,Forest City Police Department,
 317,Black Mountain Police Department,
