@@ -38,6 +38,10 @@ const SRRTable = C.IRRTableBase.extend({
     return Stops.ethnicities
   },
 
+  _pprint: function (type) {
+    return Stops.pprint.get(type);
+  },
+
   _raw_data: function () {
     return this.data.raw.stops;
   }
