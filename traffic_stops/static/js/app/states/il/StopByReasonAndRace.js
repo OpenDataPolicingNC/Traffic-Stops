@@ -27,12 +27,12 @@ export const SRRTimeSeries = C.IRRTimeSeriesBase.extend({
 
 const SRRTable = C.IRRTableBase.extend({
   types: [Stops.ethnicities],
+
+  Stops: Stops,
   incident_type: 'stop',
   incident_type_plural: 'stops',
   reason_type: 'purpose',
   reason_order_key: 'purpose_order',
-
-  Stops: Stops,
 
   _get_header_rows: function () {
     return Stops.ethnicities

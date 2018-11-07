@@ -115,18 +115,18 @@ export const IRRTimeSeriesBase = VisualBase.extend({
   },
 
   /***
-   * Pure function to return array of years present in dataset.
+   * Function to return array of years present in dataset.
    */
-  _years: _.memoize(function () {
+  _years: function () {
     var years_all = d3.set(_.pluck(this._raw_data(), 'year')).values();
     var years = _.without(years_all, 'Total');
     return years;
-  }),
+  },
 
   /***
-   * Pure function to return the dataset sorted by "type" and incident reason.
+   * Function to return the dataset sorted by "type" and incident reason.
    */
-  _getByReason: _.memoize(function (reason) {
+  _getByReason: function (reason) {
     var types = this._items();
     var years = this._years();
     var raw_data, data;
@@ -170,7 +170,7 @@ export const IRRTimeSeriesBase = VisualBase.extend({
     }));
 
     return this._checkThreshold(data);
-  }),
+  },
 
   /***
    * Helper function to identify data that should not be displayed on
@@ -195,11 +195,11 @@ export const IRRTimeSeriesBase = VisualBase.extend({
   },
 
   /***
-   * Pure function to create a virtual "All" reason data object for each year.
+   * Function to create a virtual "All" reason data object for each year.
    * Iterates through each year returned by _years and sums up the counts for
    * each race/ethnicity.
    */
-  _reasonAll: _.memoize(function () {
+  _reasonAll: function () {
     var data = [];
     var years = this._years();
 
@@ -233,7 +233,7 @@ export const IRRTimeSeriesBase = VisualBase.extend({
     });
 
     return data;
-  })
+  }
 });
 
 export const IRRTableBase = TableBase.extend({
@@ -251,9 +251,9 @@ export const IRRTableBase = TableBase.extend({
     this.add_select();
   },
 
-  _reasons: _.memoize(function () {
+  _reasons: function () {
     return d3.set(_.pluck(this._raw_data(), this.reason_type));
-  }),
+  },
 
   add_select: function () {
     let div = $(this.get("selector"));
@@ -261,7 +261,7 @@ export const IRRTableBase = TableBase.extend({
     // select input  only needs to be added once
     if (div.find('select').length) { return true; }
 
-    let $selector = $('<select id="srr-table-select">');
+    let $selector = $(`<select id="${this.get('selector').replace('#', '')}_select">`);
     let reasons = this._reasons();
     let $opts = [$('<option value="All">All</option>')].concat(
       reasons
