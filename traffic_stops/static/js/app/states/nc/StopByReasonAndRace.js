@@ -16,8 +16,8 @@ export const SRRTimeSeries = C.IRRTimeSeriesBase.extend({
     return Stops.ethnicities;
   },
 
-  _pprint: function (x) {
-    return x;
+  _pprint: function (type) {
+    return Stops.pprint.get(type);
   },
 
   _raw_data: function () {
@@ -35,7 +35,11 @@ const SRRTable = C.IRRTableBase.extend({
   reason_order_key: 'purpose_order',
 
   _get_header_rows: function () {
-    return Stops.ethnicities
+    return Stops.pprint.values();
+  },
+
+  _pprint: function (type) {
+    return Stops.pprint.get(type);
   },
 
   _raw_data: function () {

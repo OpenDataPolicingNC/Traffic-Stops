@@ -6,7 +6,11 @@ import pytz
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from nc.models import PURPOSE_CHOICES, RACE_CHOICES
+from nc.models import (
+    PURPOSE_CHOICES,
+    RACE_CHOICES,
+    SEARCH_TYPE_CHOICES,
+)
 from nc.tests import factories
 from nc.api import GROUPS
 from tsdata.tests.factories import CensusProfileFactory
@@ -243,6 +247,86 @@ class AgencyTests(APITestCase):
         self.assertEqual(response.data[1]['black'], 0)
         self.assertEqual(response.data[1]['native_american'], 1)
         self.assertEqual(response.data[1]['hispanic'], 3)
+
+    def test_searches_by_reason(self):
+        agency = factories.AgencyFactory()
+        url = reverse('nc:agency-api-searches-by-type', args=[agency.pk])
+
+        type_code, type_label = SEARCH_TYPE_CHOICES[2]
+
+        # Create the following racial data for 2015: 1 black
+        p1 = factories.PersonFactory(race='B', ethnicity='N', stop__agency=agency,
+                                     stop__year=2015)
+        factories.SearchFactory(
+            person=p1,
+            stop=p1.stop,
+            type=type_code,
+        )
+
+        # Create the following racial data for 2016: 1 native american, 3 hispanic
+        p2 = factories.PersonFactory(race='W', ethnicity='H', stop__agency=agency,
+                                     stop__year=2016)
+        factories.SearchFactory(
+            person=p2,
+            stop=p2.stop,
+            type=type_code,
+        )
+        p3 = factories.PersonFactory(race='B', ethnicity='H', stop__agency=agency,
+                                     stop__year=2016)
+        factories.SearchFactory(
+            person=p3,
+            stop=p3.stop,
+            type=type_code,
+        )
+        p4 = factories.PersonFactory(race='B', ethnicity='H', stop__agency=agency,
+                                     stop__year=2016)
+        factories.SearchFactory(
+            person=p4,
+            stop=p4.stop,
+            type=type_code,
+        )
+        p5 = factories.PersonFactory(race='I', ethnicity='N', stop__agency=agency,
+                                     stop__year=2016)
+        factories.SearchFactory(
+            person=p5,
+            stop=p5.stop,
+            type=type_code,
+        )
+
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # Two years = two items
+        self.assertEqual(len(response.data), 2)
+
+        searches = response.data
+        self.assertEqual(
+            searches[0]['year'],
+            2015,
+        )
+        self.assertEqual(
+            searches[0]['black'],
+            1,
+        )
+        self.assertEqual(
+            searches[0]['search_type'],
+            type_label,
+        )
+        self.assertEqual(
+            searches[1]['year'],
+            2016,
+        )
+        self.assertEqual(
+            searches[1]['hispanic'],
+            3,
+        )
+        self.assertEqual(
+            searches[1]['native_american'],
+            1,
+        )
+        self.assertEqual(
+            searches[1]['search_type'],
+            type_label,
+        )
 
     def test_contraband_hit_rate(self):
         agency = factories.AgencyFactory()

@@ -10,6 +10,7 @@ from rest_framework_extensions.key_constructor import bits
 from rest_framework_extensions.key_constructor.constructors import DefaultObjectKeyConstructor
 
 from nc.models import Agency, Stop
+from nc.models import SEARCH_TYPE_CHOICES as SEARCH_TYPE_CHOICES_TUPLES
 from nc import serializers
 from tsdata.utils import GroupedData
 
@@ -38,6 +39,8 @@ GROUP_DEFAULTS = {'asian': 0,
                   'other': 0,
                   'white': 0,
                   'hispanic': 0}
+
+SEARCH_TYPE_CHOICES = dict(SEARCH_TYPE_CHOICES_TUPLES)
 
 
 class QueryKeyConstructor(DefaultObjectKeyConstructor):
@@ -75,6 +78,12 @@ class AgencyViewSet(viewsets.ReadOnlyModelViewSet):
                 purpose = PURPOSE_CHOICES.get(stop['purpose'],
                                               stop['purpose'])
                 data['purpose'] = purpose
+
+            if 'search__type' in group_by:
+                data['search_type'] = SEARCH_TYPE_CHOICES.get(
+                    stop['search__type'],
+                    stop['search__type'],
+                )
 
             if 'person__race' in group_by:
                 # The 'Hispanic' ethnicity option is now being aggreggated into its
@@ -126,6 +135,23 @@ class AgencyViewSet(viewsets.ReadOnlyModelViewSet):
         results = GroupedData(by='year', defaults=GROUP_DEFAULTS)
         q = Q(search__isnull=False)
         self.query(results, group_by=('year', 'person__race', 'person__ethnicity'), filter_=q)
+        return Response(results.flatten())
+
+    @detail_route(methods=['get'])
+    @cache_response(key_func=query_cache_key_func)
+    def searches_by_type(self, request, pk=None):
+        results = GroupedData(by=('search_type', 'year'), defaults=GROUP_DEFAULTS)
+        q = Q(search__isnull=False)
+        self.query(
+            results,
+            group_by=(
+                'search__type',
+                'year',
+                'person__race',
+                'person__ethnicity',
+            ),
+            filter_=q,
+        )
         return Response(results.flatten())
 
     @detail_route(methods=['get'])

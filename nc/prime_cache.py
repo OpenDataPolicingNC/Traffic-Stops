@@ -9,7 +9,14 @@ from django.test.client import Client
 from nc.models import Agency
 
 logger = logging.getLogger(__name__)
-ENDPOINTS = ('stops', 'stops_by_reason', 'use_of_force', 'searches', 'contraband_hit_rate')
+ENDPOINTS = (
+    'stops',
+    'stops_by_reason',
+    'use_of_force',
+    'searches',
+    'searches_by_type',
+    'contraband_hit_rate',
+)
 DEFAULT_CUTOFF_SECS = 4
 
 
